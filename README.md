@@ -1,15 +1,14 @@
-# cpsc-436-project
-CPSC 436I
+# Project: *Coder Community* (tentative title)
+![Diagram](sketches/Home.png)
 
-Team: Team Red
-
+CPSC 436i Summer 2020
+Team: Team Red (tentative name)
 Members:
 - Dara Nguyen x3n1b
 - Yang Yang c7x2b
 - Zhuoting Xie k6y2b
 - John Zou r6m2b
 
-## Project: "Coder Community"
 
 ### Description
 Targeting programmers or anyone who are interested in programming, **Coder Community** is a social network for programmers to connect with each other, share ideas, write articles.
@@ -55,3 +54,15 @@ Targeting programmers or anyone who are interested in programming, **Coder Commu
   -	Write back end API service in NodeJS
   -	Configure NodeJS middleware for authentication
   -	Create Web interface for login/registration
+
+### More prototypes/sketches
+https://www.figma.com/file/ehowTfq9OAMUdMf3Qbngi0/Programmers-Social-Network?node-id=0%3A1
+
+#### Profile
+![Diagram](sketches/View%20profile.png)
+
+#### Create New Post
+![Diagram](sketches/Create%20new%20post.png)
+
+#### Post Detail
+![Diagram](sketches/Post%20Detail.png)
