@@ -23,16 +23,15 @@ Targeting programmers or anyone who are interested in programming, **Coder Commu
 ### Project task requirements:
 ####	3-5 minimal requirements (will definitely complete)
   - Login and authentication system
-  - A blog which allows users to create/edit/delete articles
-  - Allows users to upload videos
-  - Allows users to upload photos or pics
+  - Allows users to upload videos, photos, pics, and create, delete, update posts
   - Allows users to comment on other users’ blogs
+  - Implements server following RESTful principles with basic functions (including GET PUT POST DELETE) being supported.
+  - Connects to MongoDB and be able to store and retrieve user comments when requested.
   
 #### 3-7 "standard" requirements (will most likely complete)
   - Show posts in categories (tags) and popularity 
   - Create groups which people can join
-  - Implements server following RESTful principles with basic functions (including GET PUT POST DELETE) being supported.
-  - Connects to MongoDB and be able to store and retrieve user comments when requested.
+
   - Supports user authentication using passport or other packages
   - Deploys using heroku or other cloud services
 
