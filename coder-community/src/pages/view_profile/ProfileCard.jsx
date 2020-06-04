@@ -22,12 +22,14 @@ const useStyles = makeStyles((theme) =>
       margin: "0 100px",
     },
     editProfileBtn: {
+      marginTop: "1.4em",
       fontWeight: "bold",
       borderRadius: "10px",
       borderColor: "black",
     },
     title: {
       marginBottom: "15px",
+      fontWeight: "bolder",
     },
     num: {
       fontWeight: "bold",
@@ -41,7 +43,6 @@ const useStyles = makeStyles((theme) =>
 
 export function ProfileCard({ profile }) {
   const classes = useStyles();
-  const [isEditMode, setIsEditMode] = useState(false);
   const {
     firstName,
     lastName,
@@ -100,7 +101,7 @@ export function ProfileCard({ profile }) {
           <Button
             variant="outlined"
             className={classes.editProfileBtn}
-            onClick={() => setIsEditMode(true)}
+            onClick={() => console.log("Edit Profile clicked")}
           >
             Edit profile
           </Button>
