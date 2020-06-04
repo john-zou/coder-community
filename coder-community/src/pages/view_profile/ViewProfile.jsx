@@ -17,7 +17,9 @@ const useStyles = makeStyles(() =>
         "banner banner banner"
         "card board space"
       `,
-      gridTemplateColumns: "1fr 1fr 1fr",
+      gridTemplateColumns: "1fr 1.5fr 1fr",
+      backgroundColor: "#E5E5E5",
+      height: "80vh",
     },
     banner: {
       gridArea: "banner",

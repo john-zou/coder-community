@@ -15,14 +15,26 @@ const useStyles = makeStyles((theme) =>
       width: theme.spacing(7),
       height: theme.spacing(7),
     },
-    profileCardContainer: {
+    container: {
       borderRadius: "15px",
       padding: "1.5em",
+      backgroundColor: "white",
+      margin: "0 100px",
     },
     editProfileBtn: {
       fontWeight: "bold",
       borderRadius: "10px",
       borderColor: "black",
+    },
+    title: {
+      marginBottom: "15px",
+    },
+    num: {
+      fontWeight: "bold",
+    },
+    tiny: {
+      fontWeight: "light",
+      fontSize: "0.8em",
     },
   })
 );
@@ -41,7 +53,7 @@ export function ProfileCard({ profile }) {
   } = profile;
 
   return (
-    <div className={classes.profileCardContainer}>
+    <div className={classes.container}>
       <Grid container direction="column" alignItems="center">
         <Grid item>
           <Avatar
@@ -54,23 +66,33 @@ export function ProfileCard({ profile }) {
           <Typography variant="h6">{`${firstName.toUpperCase()} ${lastName.toUpperCase()}`}</Typography>
         </Grid>
         <Grid item>
-          <Typography variant="subtitle1">{title}</Typography>
+          <Typography variant="body2" className={classes.title}>
+            {title}
+          </Typography>
         </Grid>
         <Grid item container>
           <Grid item container direction="column" xs={6} alignItems="center">
             <Grid item>
-              <Typography variant="h5">{numFollowers}</Typography>
+              <Typography variant="h6" className={classes.num}>
+                {numFollowers}
+              </Typography>
             </Grid>
             <Grid item>
-              <Typography variant="body1">followers</Typography>
+              <Typography variant="body1" className={classes.tiny}>
+                followers
+              </Typography>
             </Grid>
           </Grid>
           <Grid item container direction="column" xs={6} alignItems="center">
             <Grid item>
-              <Typography variant="h5">{numPosts}</Typography>
+              <Typography variant="h6" className={classes.num}>
+                {numPosts}
+              </Typography>
             </Grid>
             <Grid item>
-              <Typography variant="body1">posts</Typography>
+              <Typography variant="body1" className={classes.tiny}>
+                posts
+              </Typography>
             </Grid>
           </Grid>
         </Grid>
