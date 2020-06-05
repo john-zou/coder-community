@@ -52,7 +52,7 @@ const useStyles = makeStyles((theme) => ({
   search: {
     position: "relative",
     borderRadius: theme.shape.borderRadius,
-    backgroundColor: "#E5E5E5",
+    backgroundColor: "#F5F5F5",
     marginRight: theme.spacing(2),
     marginLeft: 0,
     width: "100%",
@@ -80,10 +80,12 @@ const useStyles = makeStyles((theme) => ({
     transition: theme.transitions.create("width"),
     width: "100%",
     [theme.breakpoints.up("sm")]: {
-      widthh: "80vw",
+      width: "80vw",
+      height: "2.5em",
     },
     [theme.breakpoints.up("md")]: {
-      width: "40vw",
+      width: "25em",
+      height: "2.5em",
     },
   },
   sectionDesktop: {
@@ -111,6 +113,8 @@ const useStyles = makeStyles((theme) => ({
     height: "1.6em",
   },
   navbarItems: {
+    display: "flex",
+    justifyItems: "flex-end",
     [theme.breakpoints.down("sm")]: {
       display: "none",
     },
@@ -228,6 +232,7 @@ export default function Header(props) {
               inputProps={{ "aria-label": "search" }}
             />
           </div>
+          <div className={classes.grow} />
           <ListItem className={classes.navbarItems}>
             <Link to="/" className={classes.homeLink}>
               Home
@@ -253,7 +258,6 @@ export default function Header(props) {
               </Badge>
             </IconButton>
           </ListItem>
-          <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
             <IconButton
               edge="end"
