@@ -5,7 +5,6 @@ import Toolbar from '@material-ui/core/Toolbar';
 // import IconButton from '@material-ui/core/IconButton';
 import Fab from '@material-ui/core/Fab';
 // import MenuIcon from '@material-ui/icons/Menu';
-
 import AddIcon from '@material-ui/icons/Add';
 // import SearchIcon from '@material-ui/icons/Search';
 // import MoreIcon from '@material-ui/icons/MoreVert';
@@ -15,7 +14,6 @@ import FolderIcon from '@material-ui/icons/Folder';
 import RestoreIcon from '@material-ui/icons/Restore';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
-
 
 const useStyles = makeStyles(theme => ({
   root: {

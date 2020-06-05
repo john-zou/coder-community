@@ -13,14 +13,15 @@ import Menu from '@material-ui/core/Menu';
 import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 import AccountCircle from '@material-ui/icons/AccountCircle';
-import MailIcon from '@material-ui/icons/Mail';
+//import MailIcon from '@material-ui/icons/Mail';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
-import WifiIcon from '@material-ui/icons/Wifi';
-import BluetoothIcon from '@material-ui/icons/Bluetooth';
-
+//import WifiIcon from '@material-ui/icons/Wifi';
+//import BluetoothIcon from '@material-ui/icons/Bluetooth';
+import MessageIcon from '@material-ui/icons/Message';
+import Link from '@material-ui/core/Link';
 
 const drawerWidth = 240;
 const useStyles = makeStyles(theme => ({
@@ -29,7 +30,7 @@ const useStyles = makeStyles(theme => ({
   },
   toolbar: theme.mixins.toolbar,
   drawerPaper: {
-    width: drawerWidth
+    width: drawerWidth,
   },
   grow: {
     flexGrow: 1,
@@ -41,7 +42,7 @@ const useStyles = makeStyles(theme => ({
     },
   },
   title: {
-    width: 425,
+    width: 1200,
     display: 'none',
     [theme.breakpoints.up('sm')]: {
       display: 'block',
@@ -50,7 +51,8 @@ const useStyles = makeStyles(theme => ({
   search: {
     position: 'relative',
     borderRadius: theme.shape.borderRadius,
-    backgroundColor: fade(theme.palette.common.white, 0.15),
+    //backgroundColor: fade(theme.palette.common.white, 0.15),
+    backgroundColor:'#F2F2F2',
     '&:hover': {
       backgroundColor: fade(theme.palette.common.white, 0.25),
     },
@@ -72,7 +74,6 @@ const useStyles = makeStyles(theme => ({
     justifyContent: 'center',
   },
   inputRoot: {
-//    color: '#7dce94',
       color: 'inherit',
   },
   inputInput: {
@@ -80,7 +81,7 @@ const useStyles = makeStyles(theme => ({
     transition: theme.transitions.create('width'),
     width: '100%',
     [theme.breakpoints.up('md')]: {
-      width: 250,
+      width: 550,
     },
   },
   sectionDesktop: {
@@ -150,9 +151,9 @@ export default function Header(props) {
       onClose={handleMobileMenuClose}
     >
       <MenuItem>
-        <IconButton aria-label="show 2 new mails" color="inherit">
+        <IconButton aria-label="show 2 new messages" color="inherit">
           <Badge badgeContent={2} color="secondary">
-            <MailIcon />
+            <MessageIcon />
           </Badge>
         </IconButton>
         <p>Messages</p>
@@ -181,25 +182,24 @@ export default function Header(props) {
 
   return (
     <div>
-
       <AppBar position="fixed" className={classes.appBar}>
         <Toolbar>
           <IconButton
             edge="start"
-            color="inherit"
             aria-label="Open drawer"
             onClick={props.handleDrawerToggle}
             className={classes.menuButton}
           >
             <MenuIcon />
           </IconButton>
-          <Typography className={classes.title} variant="h6" noWrap>
+          <Typography className={classes.title} variant="h6" fontFamily="Roboto" noWrap>
             Coder-Community
           </Typography>
           <div className={classes.search}>
             <div className={classes.searchIcon}>
               <SearchIcon />
             </div>
+            <Typography>
             <InputBase
               placeholder="Search…"
               classes={{
@@ -208,22 +208,25 @@ export default function Header(props) {
               }}
               inputProps={{ 'aria-label': 'search' }}
             />
+            </Typography>
           </div>
 
           <ListItem>
             <ListItemIcon>
-              <WifiIcon />
-            </ListItemIcon>
-            <ListItemIcon>
-              <BluetoothIcon />
+              <Link
+              href="#"
+              color='textPrimary'
+              variant="h6"
+              fontFamily="Roboto"
+              >Home</Link>
             </ListItemIcon>
           </ListItem>
 
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
-            <IconButton aria-label="show 2 new mails" color="inherit">
+            <IconButton aria-label="show 2 new messages" color="inherit">
               <Badge badgeContent={2} color="secondary">
-                <MailIcon />
+                <MessageIcon />
               </Badge>
             </IconButton>
             <IconButton aria-label="show 1 new notifications" color="inherit">
@@ -260,4 +263,3 @@ export default function Header(props) {
     </div>
   );
 }
-

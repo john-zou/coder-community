@@ -1,11 +1,13 @@
 import React from 'react';
 import Header from './containers/header/header';
 import Footer from './containers/footer/footer';
+import CssBaseline from "@material-ui/core/CssBaseline";
 
 export default function App() {
 
   return (
     <React.Fragment>
+    <CssBaseline />
         <Header />
         <Footer />
     </React.Fragment>
