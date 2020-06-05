@@ -1,26 +1,27 @@
-import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import IconButton from "@material-ui/core/IconButton";
-import Typography from "@material-ui/core/Typography";
-import InputBase from "@material-ui/core/InputBase";
-import Badge from "@material-ui/core/Badge";
-import MenuItem from "@material-ui/core/MenuItem";
-import Menu from "@material-ui/core/Menu";
-import MenuIcon from "@material-ui/icons/Menu";
-import SearchIcon from "@material-ui/icons/Search";
-import AccountCircle from "@material-ui/icons/AccountCircle";
-import MailIcon from "@material-ui/icons/Mail";
-import NotificationsIcon from "@material-ui/icons/Notifications";
-import MoreIcon from "@material-ui/icons/MoreVert";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import BellIcon from "../../assets/bell_icon.png";
-import ChatBubbleIcon from "../../assets/chat_bubble_icon.png";
-
-import { Link } from "react-router-dom";
-import { Avatar } from "@material-ui/core";
+import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
+import {render} from 'react-dom';
+import { fade, makeStyles } from '@material-ui/core/styles';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import IconButton from '@material-ui/core/IconButton';
+import Typography from '@material-ui/core/Typography';
+import InputBase from '@material-ui/core/InputBase';
+import Badge from '@material-ui/core/Badge';
+import MenuItem from '@material-ui/core/MenuItem';
+import Menu from '@material-ui/core/Menu';
+import MenuIcon from '@material-ui/icons/Menu';
+import SearchIcon from '@material-ui/icons/Search';
+import AccountCircle from '@material-ui/icons/AccountCircle';
+//import MailIcon from '@material-ui/icons/Mail';
+import NotificationsIcon from '@material-ui/icons/Notifications';
+import MoreIcon from '@material-ui/icons/MoreVert';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+//import WifiIcon from '@material-ui/icons/Wifi';
+//import BluetoothIcon from '@material-ui/icons/Bluetooth';
+import MessageIcon from '@material-ui/icons/Message';
+import Link from '@material-ui/core/Link';
 
 const drawerWidth = 240;
 const useStyles = makeStyles((theme) => ({
@@ -38,86 +39,66 @@ const useStyles = makeStyles((theme) => ({
   },
   menuButton: {
     marginRight: theme.spacing(2),
-    [theme.breakpoints.up("sm")]: {
-      display: "none",
+    [theme.breakpoints.up('sm')]: {
+      display: 'none',
     },
   },
   title: {
-    width: 425,
-    display: "none",
-    [theme.breakpoints.up("sm")]: {
-      display: "block",
+    width: 1200,
+    display: 'none',
+    [theme.breakpoints.up('sm')]: {
+      display: 'block',
     },
   },
   search: {
-    position: "relative",
+    position: 'relative',
     borderRadius: theme.shape.borderRadius,
-    backgroundColor: "#F5F5F5",
+    //backgroundColor: fade(theme.palette.common.white, 0.15),
+    backgroundColor:'#F2F2F2',
+    '&:hover': {
+      backgroundColor: fade(theme.palette.common.white, 0.25),
+    },
+
     marginRight: theme.spacing(2),
     marginLeft: 0,
-    width: "100%",
-    maxWidth: "120%",
-    [theme.breakpoints.up("sm")]: {
+    width: '100%',
+    [theme.breakpoints.up('sm')]: {
       marginLeft: theme.spacing(3),
-      width: "auto",
+      width: 'auto',
+    maxWidth: "120%",
     },
   },
   searchIcon: {
     width: theme.spacing(7),
-    height: "100%",
-    position: "absolute",
-    pointerEvents: "none",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
+    height: '100%',
+    position: 'absolute',
+    pointerEvents: 'none',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   inputRoot: {
-    //    color: '#7dce94',
-    color: "inherit",
+      color: 'inherit',
   },
   inputInput: {
     padding: theme.spacing(1, 1, 1, 7),
-    transition: theme.transitions.create("width"),
-    width: "100%",
-    [theme.breakpoints.up("sm")]: {
-      width: "80vw",
-      height: "2.5em",
-    },
-    [theme.breakpoints.up("md")]: {
-      width: "25em",
-      height: "2.5em",
+    transition: theme.transitions.create('width'),
+    width: '100%',
+    [theme.breakpoints.up('md')]: {
+      width: 550,
     },
   },
   sectionDesktop: {
-    display: "none",
-    [theme.breakpoints.up("md")]: {
-      display: "flex",
+    display: 'none',
+    [theme.breakpoints.up('md')]: {
+      display: 'flex',
     },
   },
   sectionMobile: {
-    fontSize: "2em",
-    display: "flex",
-    [theme.breakpoints.up("md")]: {
-      display: "none",
-    },
-  },
-  homeLink: {
-    textDecoration: "none",
-    color: "black",
-    fontWeight: "bold",
-    fontSize: "1.2em",
-    marginLeft: "1em",
-    marginRight: "2em",
-  },
-  navbarIcon: {
-    height: "1.6em",
-  },
-  navbarItems: {
-    display: "flex",
-    justifyItems: "flex-end",
-    [theme.breakpoints.down("sm")]: {
-      display: "none",
-    },
+    display: 'flex',
+    [theme.breakpoints.up('md')]: {
+      display: 'none',
+      },
   },
 }));
 
@@ -129,7 +110,8 @@ export default function Header(props) {
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
-  const handleProfileMenuOpen = (event) => {
+
+  const handleProfileMenuOpen = event => {
     setAnchorEl(event.currentTarget);
   };
 
@@ -142,18 +124,18 @@ export default function Header(props) {
     handleMobileMenuClose();
   };
 
-  const handleMobileMenuOpen = (event) => {
+  const handleMobileMenuOpen = event => {
     setMobileMoreAnchorEl(event.currentTarget);
   };
 
-  const menuId = "primary-search-account-menu";
+  const menuId = 'primary-search-account-menu';
   const renderMenu = (
     <Menu
       anchorEl={anchorEl}
-      anchorOrigin={{ vertical: "top", horizontal: "right" }}
+      anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
       id={menuId}
       keepMounted
-      transformOrigin={{ vertical: "top", horizontal: "right" }}
+      transformOrigin={{ vertical: 'top', horizontal: 'right' }}
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
@@ -162,21 +144,21 @@ export default function Header(props) {
     </Menu>
   );
 
-  const mobileMenuId = "primary-search-account-menu-mobile";
+  const mobileMenuId = 'primary-search-account-menu-mobile';
   const renderMobileMenu = (
     <Menu
       anchorEl={mobileMoreAnchorEl}
-      anchorOrigin={{ vertical: "top", horizontal: "right" }}
+      anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
       id={mobileMenuId}
       keepMounted
-      transformOrigin={{ vertical: "top", horizontal: "right" }}
+      transformOrigin={{ vertical: 'top', horizontal: 'right' }}
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
       <MenuItem>
-        <IconButton aria-label="show 2 new mails" color="inherit">
+        <IconButton aria-label="show 2 new messages" color="inherit">
           <Badge badgeContent={2} color="secondary">
-            <MailIcon />
+            <MessageIcon />
           </Badge>
         </IconButton>
         <p>Messages</p>
@@ -216,49 +198,49 @@ export default function Header(props) {
           >
             <MenuIcon />
           </IconButton>
-          <Typography className={classes.title} variant="h6" noWrap>
+          <Typography className={classes.title} variant="h6" fontFamily="Roboto" noWrap>
             Coder-Community
           </Typography>
           <div className={classes.search}>
             <div className={classes.searchIcon}>
               <SearchIcon />
             </div>
+            <Typography>
             <InputBase
               placeholder="Search…"
               classes={{
                 root: classes.inputRoot,
                 input: classes.inputInput,
               }}
-              inputProps={{ "aria-label": "search" }}
+
+              inputProps={{ 'aria-label': 'search' }}
             />
+            </Typography>
           </div>
-          <div className={classes.grow} />
-          <ListItem className={classes.navbarItems}>
-            <Link to="/" className={classes.homeLink}>
-              Home
-            </Link>
+
+          <ListItem>
             <ListItemIcon>
-              <IconButton
-                aria-label="show 2 new mails"
-                color="inherit"
-                className={classes.navbarIcon}
-              >
-                <Badge badgeContent={2} color="secondary">
-                  <img src={ChatBubbleIcon} alt="chat icon" />
-                </Badge>
-              </IconButton>
+              <Link
+              href="#"
+              color='textPrimary'
+              variant="h6"
+              fontFamily="Roboto"
+              >Home</Link>
             </ListItemIcon>
-            <IconButton
-              aria-label="show 1 new notifications"
-              color="inherit"
-              className={classes.navbarIcon}
-            >
-              <Badge badgeContent={1} color="secondary">
-                <img src={BellIcon} alt="bell icon" />
+          </ListItem>
+
+          <div className={classes.grow} />
+          <div className={classes.sectionDesktop}>
+            <IconButton aria-label="show 2 new messages" color="inherit">
+              <Badge badgeContent={2} color="secondary">
+                <MessageIcon />
               </Badge>
             </IconButton>
-          </ListItem>
-          <div className={classes.sectionDesktop}>
+            <IconButton aria-label="show 1 new notifications" color="inherit">
+              <Badge badgeContent={1} color="secondary">
+                <NotificationsIcon />
+              </Badge>
+            </IconButton>   
             <IconButton
               edge="end"
               aria-label="account of current user"
@@ -267,10 +249,20 @@ export default function Header(props) {
               onClick={handleProfileMenuOpen}
               color="inherit"
             >
-              <Avatar alt="Red"></Avatar>
+              <AccountCircle />
             </IconButton>
           </div>
-          <div className={classes.sectionMobile}>...</div>
+          <div className={classes.sectionMobile}>
+            <IconButton
+              aria-label="show more"
+              aria-controls={mobileMenuId}
+              aria-haspopup="true"
+              onClick={handleMobileMenuOpen}
+              color="inherit"
+            >
+              <MoreIcon />
+            </IconButton>
+          </div>
         </Toolbar>
       </AppBar>
       {renderMobileMenu}
