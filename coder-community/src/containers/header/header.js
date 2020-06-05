@@ -1,7 +1,5 @@
-import React, { Component } from "react";
-import ReactDOM from "react-dom";
-import { render } from "react-dom";
-import { fade, makeStyles } from "@material-ui/core/styles";
+import React from "react";
+import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import IconButton from "@material-ui/core/IconButton";
@@ -18,13 +16,18 @@ import NotificationsIcon from "@material-ui/icons/Notifications";
 import MoreIcon from "@material-ui/icons/MoreVert";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
-import WifiIcon from "@material-ui/icons/Wifi";
-import BluetoothIcon from "@material-ui/icons/Bluetooth";
+import BellIcon from "../../assets/bell_icon.png";
+import ChatBubbleIcon from "../../assets/chat_bubble_icon.png";
+
+import { Link } from "react-router-dom";
+import { Avatar } from "@material-ui/core";
 
 const drawerWidth = 240;
 const useStyles = makeStyles((theme) => ({
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
+    color: "black",
+    backgroundColor: "white",
   },
   toolbar: theme.mixins.toolbar,
   drawerPaper: {
@@ -49,13 +52,11 @@ const useStyles = makeStyles((theme) => ({
   search: {
     position: "relative",
     borderRadius: theme.shape.borderRadius,
-    backgroundColor: fade(theme.palette.common.white, 0.15),
-    "&:hover": {
-      backgroundColor: fade(theme.palette.common.white, 0.25),
-    },
+    backgroundColor: "#E5E5E5",
     marginRight: theme.spacing(2),
     marginLeft: 0,
     width: "100%",
+    maxWidth: "120%",
     [theme.breakpoints.up("sm")]: {
       marginLeft: theme.spacing(3),
       width: "auto",
@@ -78,8 +79,11 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(1, 1, 1, 7),
     transition: theme.transitions.create("width"),
     width: "100%",
+    [theme.breakpoints.up("sm")]: {
+      widthh: "80vw",
+    },
     [theme.breakpoints.up("md")]: {
-      width: 250,
+      width: "40vw",
     },
   },
   sectionDesktop: {
@@ -89,8 +93,25 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   sectionMobile: {
+    fontSize: "2em",
     display: "flex",
     [theme.breakpoints.up("md")]: {
+      display: "none",
+    },
+  },
+  homeLink: {
+    textDecoration: "none",
+    color: "black",
+    fontWeight: "bold",
+    fontSize: "1.2em",
+    marginLeft: "1em",
+    marginRight: "2em",
+  },
+  navbarIcon: {
+    height: "1.6em",
+  },
+  navbarItems: {
+    [theme.breakpoints.down("sm")]: {
       display: "none",
     },
   },
@@ -180,7 +201,7 @@ export default function Header(props) {
 
   return (
     <div>
-      <AppBar className={classes.appBar}>
+      <AppBar position="fixed" className={classes.appBar}>
         <Toolbar>
           <IconButton
             edge="start"
@@ -207,28 +228,33 @@ export default function Header(props) {
               inputProps={{ "aria-label": "search" }}
             />
           </div>
-
-          <ListItem>
+          <ListItem className={classes.navbarItems}>
+            <Link to="/" className={classes.homeLink}>
+              Home
+            </Link>
             <ListItemIcon>
-              <WifiIcon />
+              <IconButton
+                aria-label="show 2 new mails"
+                color="inherit"
+                className={classes.navbarIcon}
+              >
+                <Badge badgeContent={2} color="secondary">
+                  <img src={ChatBubbleIcon} alt="chat icon" />
+                </Badge>
+              </IconButton>
             </ListItemIcon>
-            <ListItemIcon>
-              <BluetoothIcon />
-            </ListItemIcon>
+            <IconButton
+              aria-label="show 1 new notifications"
+              color="inherit"
+              className={classes.navbarIcon}
+            >
+              <Badge badgeContent={1} color="secondary">
+                <img src={BellIcon} alt="bell icon" />
+              </Badge>
+            </IconButton>
           </ListItem>
-
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
-            <IconButton aria-label="show 2 new mails" color="inherit">
-              <Badge badgeContent={2} color="secondary">
-                <MailIcon />
-              </Badge>
-            </IconButton>
-            <IconButton aria-label="show 1 new notifications" color="inherit">
-              <Badge badgeContent={1} color="secondary">
-                <NotificationsIcon />
-              </Badge>
-            </IconButton>
             <IconButton
               edge="end"
               aria-label="account of current user"
@@ -237,20 +263,10 @@ export default function Header(props) {
               onClick={handleProfileMenuOpen}
               color="inherit"
             >
-              <AccountCircle />
+              <Avatar alt="Red"></Avatar>
             </IconButton>
           </div>
-          <div className={classes.sectionMobile}>
-            <IconButton
-              aria-label="show more"
-              aria-controls={mobileMenuId}
-              aria-haspopup="true"
-              onClick={handleMobileMenuOpen}
-              color="inherit"
-            >
-              <MoreIcon />
-            </IconButton>
-          </div>
+          <div className={classes.sectionMobile}>...</div>
         </Toolbar>
       </AppBar>
       {renderMobileMenu}
