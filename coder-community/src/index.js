@@ -6,22 +6,28 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import { ThemeProvider } from '@material-ui/core/styles';
 import theme from './theme';
 
+import "./index.css";
+import { Provider } from "react-redux";
+import { createStore } from "redux";
+import { rootReducer } from "./reducers";
+
+const store = createStore(rootReducer);
+
+// Mina
+// ReactDOM.render(
+// <ThemeProvider theme={theme}>
+//     {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
+//     <CssBaseline />
+//     <App />
+//   </ThemeProvider>,
+//   document.querySelector('#root'),
+// );
+
 ReactDOM.render(
-<ThemeProvider theme={theme}>
-    {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
-    <CssBaseline />
-    <App />
-  </ThemeProvider>,
-  document.querySelector('#root'),
+  <React.StrictMode>
+    <Provider store={store}>
+      <App />
+    </Provider>
+  </React.StrictMode>,
+  document.getElementById("root")
 );
-
-
-
-
-//<App />,
-//document.getElementById('root'));
-
-
-
-
-

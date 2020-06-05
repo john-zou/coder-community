@@ -24,9 +24,11 @@ import MessageIcon from '@material-ui/icons/Message';
 import Link from '@material-ui/core/Link';
 
 const drawerWidth = 240;
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
+    color: "black",
+    backgroundColor: "white",
   },
   toolbar: theme.mixins.toolbar,
   drawerPaper: {
@@ -62,6 +64,7 @@ const useStyles = makeStyles(theme => ({
     [theme.breakpoints.up('sm')]: {
       marginLeft: theme.spacing(3),
       width: 'auto',
+    maxWidth: "120%",
     },
   },
   searchIcon: {
@@ -94,7 +97,7 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
     [theme.breakpoints.up('md')]: {
       display: 'none',
-    },
+      },
   },
 }));
 
@@ -105,6 +108,7 @@ export default function Header(props) {
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+
 
   const handleProfileMenuOpen = event => {
     setAnchorEl(event.currentTarget);
@@ -186,6 +190,7 @@ export default function Header(props) {
         <Toolbar>
           <IconButton
             edge="start"
+            color="inherit"
             aria-label="Open drawer"
             onClick={props.handleDrawerToggle}
             className={classes.menuButton}
@@ -206,6 +211,7 @@ export default function Header(props) {
                 root: classes.inputRoot,
                 input: classes.inputInput,
               }}
+
               inputProps={{ 'aria-label': 'search' }}
             />
             </Typography>
@@ -233,7 +239,7 @@ export default function Header(props) {
               <Badge badgeContent={1} color="secondary">
                 <NotificationsIcon />
               </Badge>
-            </IconButton>
+            </IconButton>   
             <IconButton
               edge="end"
               aria-label="account of current user"
