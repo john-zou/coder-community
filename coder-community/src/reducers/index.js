@@ -1,5 +1,5 @@
 import { combineReducers } from "redux";
-import { login } from "./login";
+import { user } from "./user";
 import { posts } from "./posts";
 import { groups } from "./groups";
 import { messages } from "./messages";
@@ -8,7 +8,7 @@ import { tags } from "./tags";
 import { videos } from "./videos";
 
 export const rootReducer = combineReducers({
-  login,
+  user,
   posts,
   groups,
   messages,
