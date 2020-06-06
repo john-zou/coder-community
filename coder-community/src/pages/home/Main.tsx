@@ -3,15 +3,13 @@ import { makeStyles } from "@material-ui/core/styles";
 import Card from "./Card";
 
 const useStyles = makeStyles({
-  root: {
+  main: {
     paddingTop: "3em",
     display: "flex",
     flex: 1,
     flexDirection: "column",
     height: "90vh",
     alignItems: "center",
-    overflow: "scroll",
-    cursor: "pointer",
     overflowY: "scroll",
   },
 });
@@ -19,7 +17,7 @@ const useStyles = makeStyles({
 export default function Main() {
   const classes = useStyles();
   return (
-    <div className={classes.root}>
+    <div className={classes.main}>
       <Card />
       <Card />
       <Card />

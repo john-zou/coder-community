@@ -8,7 +8,6 @@ const useStyles = makeStyles({
     flexDirection: "column",
     // backgroundColor: "white",
     height: "94vh",
-    overflow: "scroll",
     cursor: "pointer",
     paddingLeft: "2em",
   },

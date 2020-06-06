@@ -5,7 +5,7 @@ import RightSideBar from "./RightSideBar";
 import Main from "./Main";
 
 const useStyles = makeStyles({
-  root: {
+  home: {
     paddingTop: "7vh",
     paddingBottom: "7vh",
     display: "flex",
@@ -15,7 +15,7 @@ const useStyles = makeStyles({
 export default function Home() {
   const classes = useStyles();
   return (
-    <div className={classes.root}>
+    <div className={classes.home}>
       <LeftSideBar />
       <Main />
       <RightSideBar />

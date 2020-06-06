@@ -82,7 +82,7 @@ export default function SimpleCard() {
                 color: "#5DCBAF",
               }}
             >
-              Nick Lee
+              Nick Lee&nbsp;
             </span>
             posted
             <span style={{ fontWeight: "bold" }}> CSS Trick</span>
