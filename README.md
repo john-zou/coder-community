@@ -1,3 +1,27 @@
+# Project Progress 2
+## Completed Tasks:
+### A component structure of the app / at least 5 components:
+![Diagram](deliverables/component_structure.png)
+
+### A component for the main item (post) and styling / progress towards completing one of our minimal goals:
+![Diagram](deliverables/components.png)
+
+### Optional: Redux setup
+![Diagram](deliverables/redux_setup.png)
+
+### Additionally: React Router setup
+![Diagram](deliverables/router_setup.png)
+
+### Responsive Navbar
+![Diagram](deliverables/responsive_navbar.png)
+![Diagram](deliverables/responsive_navbar2.png)
+![Diagram](deliverables/responsive_navbar3.png)
+
+
+----
+
+----
+
 # Project: *Coder Community* (tentative title)
 ![Diagram](sketches/Home.png)
 
