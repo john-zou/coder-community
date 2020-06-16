@@ -24,3 +24,6 @@ yarn-error.log*
 
 # VSCode history extension
 .history
+
+# Use yarn
+package-lock.json
