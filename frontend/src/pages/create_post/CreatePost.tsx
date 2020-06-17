@@ -6,7 +6,7 @@ import TagP from "./TagPanel";
 import PeopleP from "./PeoplePanel";
 
 const useStyles = makeStyles({
-  home: {
+  createPost: {
     paddingTop: "7vh",
     paddingBottom: "7vh",
     // paddingTop: "3em",
@@ -19,14 +19,14 @@ const useStyles = makeStyles({
   },
 });
 
-export default function Home() {
+export default function CreatePost() {
   const classes = useStyles();
   return (
-    <div className={classes.home}>
-      <ImgP/>
-      <TextP/>
-      <TagP/>
-      <PeopleP/>
+    <div className={classes.createPost}>
+      <ImgP />
+      <TextP />
+      <TagP />
+      <PeopleP />
     </div>
   );
 }
