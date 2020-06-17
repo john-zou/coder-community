@@ -9,6 +9,45 @@ const initialData = {
     status: "work at Microsoft",
     followers: ["evan_you", "gaeron"],
   },
+  trendingPosts: [
+    //the 10 most trending posts shown on home page (trending = newest + most liked + most commented on)
+    {
+      authorID: "nick_lee", //for viewing author's public profile
+      postID: "css-tricks", //when user interacts with the post (such as clicking, liking it)
+      title: "CCS Tricks",
+      previewContent: "CSS grid is cool!",
+      tags: ["css", "frontend"],
+      featuredImg: randomImage(),
+      create_at: "1 hours ago",
+      likes: 100,
+      comments: 29,
+    },
+    {
+      authorID: "evan_you",
+      authorName: "Evan You",
+      postID: "vue-js-is-great-too",
+      title: "Vue JS is great too",
+      previewContent:
+        "I figured, what if I could just extract the part that I really liked about React and build something really lightweight without all the extra concepts involved? I was also curious as to how its internal implementation worked. I started this experiment just trying to replicate this minimal feature set, like declarative data binding. That was basically how Vue started.",
+      tags: ["vuejs"],
+      featuredImg: randomImage(),
+      create_at: "1 hours ago",
+      likes: 70,
+      comments: 21,
+    },
+    {
+      authorID: "gaeron",
+      authorName: "Dan Abamov",
+      postID: "reactjs-is-great",
+      title: "ReactJS is great!",
+      previewContent: "ReactJS is great!",
+      tags: ["reactjs"],
+      featuredImg: randomImage(),
+      create_at: "2 hours ago",
+      likes: 40,
+      comments: 21,
+    },
+  ],
   posts: [
     {
       title: "CCS Tricks",
