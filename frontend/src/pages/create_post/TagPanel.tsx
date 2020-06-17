@@ -16,7 +16,7 @@ const useStyles = makeStyles({
     paddingRight: "1.5em",
   },
   h4: {
-    marginBottom: "0.5em"
+    marginBottom: "0.5em",
   },
   display: {
     fontWeight: "bold",
@@ -28,32 +28,32 @@ const useStyles = makeStyles({
     border: "none",
     outline: "none",
     background: "white",
-    '&:hover': {
-       backgroundColor: "#F2F2F2",
+    "&:hover": {
+      backgroundColor: "#F2F2F2",
     },
   },
   tags: {
     display: "flex",
     flexDirection: "row",
     margin: "0 0",
-    padding: "0 0"
+    padding: "0 0",
   },
 });
 
 const _onChange = (event) => {
-	// this.cur = event.target.value;
-        // this.props.load(event.target.value);
-}
+  // this.cur = event.target.value;
+  // this.props.load(event.target.value);
+};
 
 const _onSubmit = (event) => {
-        event.preventDefault();
-        // this.props.store('MESS_ADD', this.props.input);
-	// this.props.setTag(this.cur);
-}
+  event.preventDefault();
+  // this.props.store('MESS_ADD', this.props.input);
+  // this.props.setTag(this.cur);
+};
 
 const _onDel = (event) => {
-	event.preventDefault();
-}
+  event.preventDefault();
+};
 
 export default function TagPanel() {
   const classes = useStyles();
@@ -62,15 +62,23 @@ export default function TagPanel() {
     <div className={classes.cptag}>
       <form id="tagform">
         <h4 className={classes.h4}>Add tags</h4>
-	<hr className={classes.display}></hr>
-	<ul className={classes.tags}>
-	   <Tag/>
-	</ul>
-	<input className={classes.input} onChange={_onChange} placeholder="Type here"></input>
-	<br></br>
-	<button id="submit" onClick={_onSubmit}>Submit</button>
+        <hr className={classes.display}></hr>
+        <ul className={classes.tags}>
+          <Tag />
+        </ul>
+        <input
+          className={classes.input}
+          onChange={_onChange}
+          placeholder="Type here"
+        ></input>
+        <br></br>
+        <button id="submit" onClick={_onSubmit}>
+          Submit
+        </button>
       </form>
-      <ul id="tags" onClick={_onDel}>{alltags}</ul>
+      <ul id="tags" onClick={_onDel}>
+        {alltags}
+      </ul>
     </div>
   );
 }
