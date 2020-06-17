@@ -1,6 +1,6 @@
 /**
  * Handles login
  */
-export function user(state = { isLoggedIn: true, username: "Red" }, action) {
+export function user(state = null, action) {
   return state;
 }
