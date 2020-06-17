@@ -3,7 +3,7 @@ import Header from "./containers/header/Header";
 import Footer from "./containers/footer/Footer";
 import "./App.css";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import Home from "./pages/home/Home";
+import Home from "./pages/home";
 import { ViewProfile } from "./pages/view_profile/ViewProfile";
 import CreatePost from "./pages/create_post/CreatePost";
 

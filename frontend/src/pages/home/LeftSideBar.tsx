@@ -1,6 +1,7 @@
 import React from "react";
 import GroupList from "./GroupList";
 import { makeStyles } from "@material-ui/core/styles";
+import { connect } from "react-redux";
 
 const useStyles = makeStyles({
   root: {
@@ -32,18 +33,14 @@ const useStyles = makeStyles({
   },
 });
 
-export default function LeftSideBar() {
+const LeftSideBar = ({ user }) => {
   const classes = useStyles();
-
+  console.log(user);
   return (
     <div className={classes.root}>
       <div className={classes.diplayAccount}>
-        <img
-          className={classes.displayImg}
-          src="https://picsum.photos/200/200"
-          alt=""
-        />
-        <h3 className={classes.displayName}>Nick Lee</h3>
+        <img className={classes.displayImg} src={user.profilePic} alt="" />
+        <h3 className={classes.displayName}>{user.name}</h3>
       </div>
       <div className={classes.groupLinks}>
         <h3>Daily Challenge</h3>
@@ -53,4 +50,10 @@ export default function LeftSideBar() {
       </div>
     </div>
   );
-}
+};
+const mapStateToProps = (state) => {
+  return {
+    user: state.user,
+  };
+};
+export default connect(mapStateToProps)(LeftSideBar);
