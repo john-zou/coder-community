@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) =>
       fontWeight: "bold",
     },
     tiny: {
-      fontWeight: "light",
+      fontWeight: "lighter",
       fontSize: "0.8em",
     },
   })
