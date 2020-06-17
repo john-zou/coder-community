@@ -1,5 +1,7 @@
 import React from "react";
+import { connect } from "react-redux";
 import { fade, makeStyles } from "@material-ui/core/styles";
+import { npText, npTitle } from '../../actions';
 
 const useStyles = makeStyles({
   cptext: {
@@ -44,20 +46,20 @@ const useStyles = makeStyles({
   },
 });
 
+// let title = '';
+// let text = '';
+
 const _onTitle = (event) => {
-      
+      this.props.npTitle(event.target.value);
+      // title = event.target.value;
 }
 
 const _onText = (event) => {
-    // this.props.load(event.target.value);
+      this.props.npText(event.target.value);
+      // text = event.target.value;
 }
 
-const _onSubmit = (event) => {
-    // event.preventDefault();
-    // this.props.store('MESS_ADD', this.props.input);
-}
-
-export default function TextPanel() {
+function TextPanel() {
   const classes = useStyles();
   return (
     <div className={classes.cptext}>
@@ -69,3 +71,9 @@ export default function TextPanel() {
     </div>
   );
 }
+
+const mapStateToProps = (state) => {
+    return {};
+}
+
+export default connect(mapStateToProps, { npText, npTitle })(TextPanel);

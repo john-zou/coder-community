@@ -1,6 +1,8 @@
 import React from "react";
+import { connect } from "react-redux";
 import Tag from "./Tag";
 import { fade, makeStyles } from "@material-ui/core/styles";
+import { setTag, delTag } from '../../actions';
 
 const useStyles = makeStyles({
   cptag: {
@@ -68,7 +70,6 @@ export default function TagPanel() {
 	</ul>
 	<input className={classes.input} onChange={_onChange} placeholder="Type here"></input>
 	<br></br>
-	<button id="submit" onClick={_onSubmit}>Submit</button>
       </form>
       <ul id="tags" onClick={_onDel}>{alltags}</ul>
     </div>

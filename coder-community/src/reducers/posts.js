@@ -13,6 +13,18 @@ const loadImgReducer = (imgurl = '', action) => {
     return imgurl;
 };
 
+const loadTxtReducer = (text = '', action) => {
+    if (action.type === 'NP_TXT')
+	return action.txt;
+    return text;
+}
+
+const loadTitleReducer = (title = '', action) => {
+    if (action.type === 'NP_TITLE')
+	return action.title;
+    return title;
+}
+
 const loadTagReducer = (tags = [], action) => {
     if (action.type === 'TAG_LOAD')
 	return [...tags, action.tag];

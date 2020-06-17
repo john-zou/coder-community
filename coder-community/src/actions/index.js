@@ -6,6 +6,20 @@ export const setImg = url => {
     };
 }
 
+export const npTitle = title => {
+    return {
+	type: 'NP_TITLE',
+	title: title
+    };
+}
+
+export const npText = txt => {
+    return {
+	type: 'NP_TXT',
+	txt: txt
+    };
+}
+
 export const setTag = tag => {
     return {
 	type: 'TAG_LOAD',
