@@ -4,6 +4,8 @@ import HeartIcon from "../../icons/heartIcon.svg";
 import CommentIcon from "../../icons/commentIcon.svg";
 import { TrendingPost } from "../../initialData";
 import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { savePost } from "../../actions/home";
 
 const useStyles = makeStyles({
   root: {
@@ -68,6 +70,7 @@ type Props = {
 
 const Card = ({ trendingPost }: Props) => {
   const classes = useStyles();
+  const dispatch = useDispatch();
 
   return (
     <div className={classes.root}>
@@ -94,7 +97,7 @@ const Card = ({ trendingPost }: Props) => {
               </Link>
             </span>
           </p>
-          <p style={{ marginTop: "-0.8em" }}>{trendingPost.createAt}</p>
+          <p style={{ marginTop: "-0.8em" }}>{trendingPost.createdAt}</p>
         </div>
       </div>
 
@@ -119,7 +122,14 @@ const Card = ({ trendingPost }: Props) => {
               </h4>
             </Link>
 
-            <h4 style={{ color: "#5D67E9" }}>Save for later</h4>
+            <h4
+              style={{ color: "#5D67E9", cursor: "pointer" }}
+              onClick={() => {
+                dispatch(savePost(trendingPost));
+              }}
+            >
+              Save for later
+            </h4>
           </div>
         </div>
       </div>
