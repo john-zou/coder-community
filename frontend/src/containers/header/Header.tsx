@@ -17,6 +17,7 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import MessageIcon from "@material-ui/icons/Message";
 import { Link } from "react-router-dom";
+import PurpleButton from "../../pages/common/PurpleButton";
 
 const drawerWidth = 240;
 const useStyles = makeStyles((theme) => ({
@@ -48,8 +49,9 @@ const useStyles = makeStyles((theme) => ({
   search: {
     position: "relative",
     borderRadius: theme.shape.borderRadius,
-    //backgroundColor: fade(theme.palette.common.white, 0.15),
-    backgroundColor: "#F2F2F2",
+    backgroundColor: "#FAFAFA",
+    paddingTop: "10px",
+    paddingBottom: "10px",
     "&:hover": {
       backgroundColor: fade(theme.palette.common.white, 0.25),
     },
@@ -65,12 +67,11 @@ const useStyles = makeStyles((theme) => ({
   },
   searchIcon: {
     width: theme.spacing(7),
-    height: "100%",
     position: "absolute",
     pointerEvents: "none",
     display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
+    marginTop: "0.5em",
+    marginLeft: "1em",
   },
   inputRoot: {
     color: "inherit",
@@ -219,6 +220,14 @@ export default function Header(props) {
               <Link to="/" className={classes.link}>
                 <h3>Home</h3>
               </Link>
+              <div
+                style={{
+                  marginTop: "10px",
+                  marginLeft: "1em",
+                }}
+              >
+                <PurpleButton content="Add a post" />
+              </div>
             </ListItemIcon>
           </ListItem>
 
