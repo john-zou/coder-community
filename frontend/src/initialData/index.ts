@@ -191,9 +191,6 @@ export type User = typeof initialData.user;
 export type Group = typeof initialData.groups[0];
 export type TrendingPost = typeof initialData.trendingPosts[0];
 export type CurrentViewedPost = typeof initialData.currentViewedPost;
-
-export type RootState = typeof initialData;
-export type User = typeof initialData.user;
 export type CurrentViewedProfile = typeof initialData.currentViewedProfile;
 export type Post = typeof initialData.posts[0];
 
