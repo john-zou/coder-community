@@ -1,4 +1,9 @@
-import { randomImage, randomBackgroundImage } from "../util/helpers";
+import {
+  randomImage,
+  randomBackgroundImage,
+  howLongAgo,
+} from "../util/helpers";
+
 const initialData = {
   user: {
     isLoggedIn: true,
@@ -20,7 +25,7 @@ const initialData = {
       previewContent: "CSS grid is cool!",
       tags: ["css", "frontend"],
       featuredImg: randomImage(),
-      createAt: "1 hours ago",
+      createAt: howLongAgo(Date.now() - 1000000),
       likes: 100,
       comments: 29,
     },
@@ -34,7 +39,7 @@ const initialData = {
         "I figured, what if I could just extract the part that I really liked about React and build something really lightweight without all the extra concepts involved?",
       tags: ["vuejs"],
       featuredImg: randomImage(),
-      createAt: "1 hours ago",
+      createAt: howLongAgo(Date.now() - 2000000),
       likes: 70,
       comments: 30,
     },
@@ -47,7 +52,7 @@ const initialData = {
       previewContent: "ReactJS is great!",
       tags: ["reactjs"],
       featuredImg: randomImage(),
-      createAt: "2 hours ago",
+      createAt: howLongAgo(Date.now() - 1003000),
       likes: 40,
       comments: 30,
     },
@@ -58,7 +63,7 @@ const initialData = {
       content: "CSS grid is cool!",
       tags: ["css", "frontend"],
       featuredImg: randomImage(),
-      createAt: Date.parse("2020-05-02 5:55"),
+      createAt: howLongAgo(Date.now() - 2005000),
       likes: 19,
       comments: [
         {
@@ -66,14 +71,14 @@ const initialData = {
           authorName: "Evan You",
           authorImg: randomImage(),
           comment: "Great article!",
-          timeStamp: Date.parse("2020-06-17 5:55"),
+          createAt: howLongAgo(Date.now() - 2000000),
         },
         {
           authorID: "gaeron",
           authorName: "Dan Abramov",
           authorImg: randomImage(),
           comment: "Cool!",
-          timeStamp: Date.parse("2020-06-17 7:00"),
+          createAt: howLongAgo(Date.now() - 1500000),
         },
       ],
     },
@@ -83,7 +88,7 @@ const initialData = {
         "I figured, what if I could just extract the part that I really liked about React and build something really lightweight without all the extra concepts involved? I was also curious as to how its internal implementation worked. I started this experiment just trying to replicate this minimal feature set, like declarative data binding. That was basically how Vue started.",
       tags: ["vue js"],
       featuredImg: randomImage(),
-      createAt: Date.parse("2020-05-07 8:08"),
+      createAt: howLongAgo(Date.now() - 1202000),
       likes: 89,
       comments: [
         {
@@ -91,14 +96,14 @@ const initialData = {
           authorName: "Evan You",
           authorImg: randomImage(),
           comment: "Great article!",
-          timeStamp: Date.parse("2020-06-17 5:55"),
+          createAt: howLongAgo(Date.now() - 1200000),
         },
         {
           authorID: "gaeron",
           authorName: "Dan Abramov",
           authorImg: randomImage(),
           comment: "Cool!",
-          timeStamp: Date.parse("2020-06-17 7:00"),
+          createAt: howLongAgo(Date.now() - 2500000),
         },
       ],
     },
@@ -144,14 +149,14 @@ const initialData = {
         authorName: "Evan You",
         authorImg: randomImage(),
         comment: "Great article!",
-        timeStamp: Date.parse("2020-06-17 5:55"),
+        createAt: howLongAgo(Date.now() - 1000000),
       },
       {
         authorID: "gaeron",
         authorName: "Dan Abramov",
         authorImg: randomImage(),
         comment: "Cool!",
-        timeStamp: Date.parse("2020-06-17 7:00"),
+        createAt: howLongAgo(Date.now() - 5000000),
       },
     ],
   },
