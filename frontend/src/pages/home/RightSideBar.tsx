@@ -29,7 +29,7 @@ export default function RightSideBar() {
   return (
     <div className={classes.root}>
       <h3># Recent posts</h3>
-      <h3># Saved posts</h3>
+      <h3 style={{ marginBottom: "-0.5em" }}># Saved posts</h3>
       {savedPosts.map((sp) => (
         <div key={sp.postID}>
           <Avatar post={sp} extraText=""></Avatar>
