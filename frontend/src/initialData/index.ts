@@ -75,4 +75,8 @@ const initialData = {
   },
 };
 
+export type RootState = typeof initialData;
+export type User = typeof initialData.user;
+export type CurrentViewedProfile = typeof initialData.currentViewedProfile;
+
 export default initialData;
