@@ -2,6 +2,36 @@
 
 ## Completed Tasks:
 
+## Put some default data for your “main” data in your reducer(s).
+
+![image](https://user-images.githubusercontent.com/61474884/85080419-f48b0000-b17d-11ea-9209-df1d850de80c.png)
+
+![image](https://user-images.githubusercontent.com/61474884/85080465-1c7a6380-b17e-11ea-8d2a-8a56f180b986.png)
+
+## Connect the default data to at least one component in order to display it.
+
+It has been connected to the component for the Home (`/`), Post (`/post/<post-id>`), and User (`u/<user-id>`) pages.
+
+### Home:
+
+![image](https://user-images.githubusercontent.com/61474884/85080534-47fd4e00-b17e-11ea-91f8-90545c01dc0a.png)
+
+### Post:
+
+![image](https://user-images.githubusercontent.com/61474884/85080660-acb8a880-b17e-11ea-87f2-92007c41ed8c.png)
+
+### User:
+
+![image](https://user-images.githubusercontent.com/61474884/85080627-9579bb00-b17e-11ea-9932-c07514a0573f.png)
+
+## Create a minimum of 3 actions that manipulate your store.
+
+![image](https://user-images.githubusercontent.com/61474884/85080794-f1444400-b17e-11ea-892a-b0bb0c011c6a.png)
+
+These are working on the pages above.
+
+---
+
 ---
 
 # Project Progress 2
