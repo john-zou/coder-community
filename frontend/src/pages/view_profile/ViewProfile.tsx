@@ -5,7 +5,7 @@ import { ProfileCard } from "./ProfileCard";
 import { ProfileBoard } from "./ProfileBoard";
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { RootState, User, CurrentViewedProfile } from "../../initialData";
+import { RootState, User, CurrentViewedProfile, Post } from "../../initialData";
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -41,6 +41,7 @@ export function ViewProfile() {
   const profile = useSelector<RootState, CurrentViewedProfile>(
     (state) => state.currentViewedProfile
   );
+  const posts = useSelector<RootState, Post[]>((state) => state.posts);
 
   const classes = useStyles();
   const isUser = username === currentUserID;
@@ -55,7 +56,7 @@ export function ViewProfile() {
         <ProfileCard profile={profile} isUser={isUser}></ProfileCard>
       </div>
       <div className={classes.board}>
-        <ProfileBoard username={username} isUser={isUser}></ProfileBoard>
+        <ProfileBoard isUser={isUser} posts={posts}></ProfileBoard>
       </div>
     </div>
   );
