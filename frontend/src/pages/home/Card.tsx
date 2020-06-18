@@ -132,7 +132,7 @@ const Card = ({ trendingPost, key }: Props) => {
           <img className={classes.heartIcon} src={HeartIcon} alt="" />
           <p>&nbsp;{trendingPost.likes}</p>
           <img className={classes.commentIcon} src={CommentIcon} alt="" />
-          <p>&nbsp;{trendingPost.comments.toString.length}</p>
+          <p>&nbsp;{trendingPost.comments}</p>
         </div>
       </div>
     </div>

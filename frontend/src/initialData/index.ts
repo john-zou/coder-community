@@ -36,22 +36,7 @@ const initialData = {
       featuredImg: randomImage(),
       createAt: "1 hours ago",
       likes: 70,
-      comments: [
-        {
-          authorID: "evan_you",
-          authorName: "Evan You",
-          authorImg: randomImage(),
-          comment: "Great article!",
-          timeStamp: Date.parse("2020-06-17 5:55"),
-        },
-        {
-          authorID: "gaeron",
-          authorName: "Dan Abramov",
-          authorImg: randomImage(),
-          comment: "Cool!",
-          timeStamp: Date.parse("2020-06-17 7:00"),
-        },
-      ],
+      comments: 30,
     },
     {
       authorID: "gaeron",
@@ -64,22 +49,7 @@ const initialData = {
       featuredImg: randomImage(),
       createAt: "2 hours ago",
       likes: 40,
-      comments: [
-        {
-          authorID: "evan_you",
-          authorName: "Evan You",
-          authorImg: randomImage(),
-          comment: "Great article!",
-          timeStamp: Date.parse("2020-06-17 5:55"),
-        },
-        {
-          authorID: "gaeron",
-          authorName: "Dan Abramov",
-          authorImg: randomImage(),
-          comment: "Cool!",
-          timeStamp: Date.parse("2020-06-17 7:00"),
-        },
-      ],
+      comments: 30,
     },
   ],
   posts: [
@@ -185,6 +155,18 @@ const initialData = {
       },
     ],
   },
+  savedPosts: [
+    {
+      authorID: "nick_lee", //for viewing author's public profile
+      authorName: "Nick Lee",
+      authorImg: randomImage(),
+      postID: "css-tricks", //when user interacts with the post (such as clicking, liking it)
+      title: "CCS Tricks",
+      createAt: "1 hours ago",
+      likes: 100,
+      comments: 29,
+    },
+  ],
 };
 export type RootState = typeof initialData;
 export type User = typeof initialData.user;

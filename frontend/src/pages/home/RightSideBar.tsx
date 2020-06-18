@@ -15,6 +15,7 @@ const useStyles = makeStyles({
 
 export default function RightSideBar() {
   const classes = useStyles();
+
   return (
     <div className={classes.root}>
       <h3># Recent posts</h3>
