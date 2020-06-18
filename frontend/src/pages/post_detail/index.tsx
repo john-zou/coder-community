@@ -6,7 +6,6 @@ import { useParams } from "react-router-dom";
 import HeartIcon from "../../icons/heartIcon.svg";
 import ShareIcon from "../../icons/shareIcon.svg";
 import NewComment from "./NewComment";
-import Comment from "./Comment";
 import Avatar from "../common/Avatar";
 
 const useStyles = makeStyles({
