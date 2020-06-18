@@ -30,7 +30,7 @@ const NewComment = () => {
         placeholder="Type comment"
       />
       <input className={classes.name} placeholder="Name" />
-      <PurpleButton content="Post"></PurpleButton>
+      <PurpleButton content="Post comment"></PurpleButton>
     </form>
   );
 };

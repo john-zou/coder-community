@@ -8,8 +8,8 @@ export default function GroupList() {
   return (
     <>
       <h3>Groups</h3>
-      {groups.map((group) => {
-        return <p>&nbsp;&nbsp;&nbsp;&nbsp;{group.name}</p>;
+      {groups.map((group, idx) => {
+        return <p key={idx}>&nbsp;&nbsp;&nbsp;&nbsp;{group.name}</p>;
       })}
     </>
   );
