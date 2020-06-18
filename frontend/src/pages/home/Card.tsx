@@ -65,6 +65,9 @@ const useStyles = makeStyles({
   link: {
     textDecoration: "none",
   },
+  tagText: {
+    fontFamily: "Overpass Mono, monospace",
+  },
 });
 
 export const handleViewPost = (
@@ -167,7 +170,9 @@ const Card = ({ trendingPost }: Props) => {
 
       <div className={classes.interactions}>
         {trendingPost.tags.map((tag) => (
-          <p key={trendingPost.postID}>#{tag}&nbsp;</p>
+          <p key={trendingPost.postID} className={classes.tagText}>
+            #{tag}&nbsp;
+          </p>
         ))}
         <div style={{ display: "flex", flex: 1 }}></div>
         <div className={classes.interactionsIcons}>
