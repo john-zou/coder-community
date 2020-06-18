@@ -1,7 +1,9 @@
 import React from "react";
 import { connect } from "react-redux";
 import { fade, makeStyles } from "@material-ui/core/styles";
-import { npText, npTitle } from '../../actions';
+import { setTitle, setText } from '../../actions';
+// import { useSelector } from 'react-redux';
+// import { RootState, Post } from '../../initialData';
 
 const useStyles = makeStyles({
   cptext: {
@@ -46,21 +48,18 @@ const useStyles = makeStyles({
   },
 });
 
-// let title = '';
-// let text = '';
-
 const _onTitle = (event) => {
-      this.props.npTitle(event.target.value);
-      // title = event.target.value;
+    this.props.setTitle(event.target.value);
 }
 
 const _onText = (event) => {
-      this.props.npText(event.target.value);
-      // text = event.target.value;
+    this.props.setText(event.target.value);
 }
 
 function TextPanel() {
   const classes = useStyles();
+  // const posts = useSelector<RootState, Post[]>(
+  //	(state) => state.posts);
   return (
     <div className={classes.cptext}>
        <form>
@@ -76,4 +75,4 @@ const mapStateToProps = (state) => {
     return {};
 }
 
-export default connect(mapStateToProps, { npText, npTitle })(TextPanel);
+export default connect(mapStateToProps, { setTitle, setText })(TextPanel);
