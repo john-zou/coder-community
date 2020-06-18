@@ -118,7 +118,7 @@ export function ProfileBoard({ isUser, posts }: Props) {
                     </span>
                   </p>
                   <p style={{ marginTop: "-0.8em" }}>
-                    {howLongAgo(post.create_at)}
+                    {howLongAgo(post.createAt)}
                   </p>
                 </div>
 
