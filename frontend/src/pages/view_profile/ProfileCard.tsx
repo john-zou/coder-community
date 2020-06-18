@@ -20,7 +20,8 @@ const useStyles = makeStyles((theme) =>
       borderRadius: "15px",
       padding: "1.5em",
       backgroundColor: "white",
-      margin: "0 100px",
+      margin: "0 auto",
+      width: "250px",
     },
     editProfileBtn: {
       marginTop: "1.4em",
