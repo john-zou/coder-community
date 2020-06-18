@@ -4,10 +4,12 @@ const useStyles = makeStyles({
   root: {
     backgroundColor: "#5D67E9",
     color: "white",
-    width: "5em",
+    width: "fit-content",
     height: "3em",
     border: "none",
     borderRadius: "10px",
+    fontSize: "medium",
+    padding: "10px",
   },
 });
 

@@ -10,7 +10,7 @@ const useStyles = makeStyles({
     display: "flex",
     flex: 1,
     flexDirection: "column",
-    height: "90vh",
+    height: "96vh",
     alignItems: "center",
     overflowY: "scroll",
   },

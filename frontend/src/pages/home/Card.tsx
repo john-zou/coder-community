@@ -2,10 +2,10 @@ import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import HeartIcon from "../../icons/heartIcon.svg";
 import CommentIcon from "../../icons/commentIcon.svg";
-import { TrendingPost } from "../../initialData";
+import { TrendingPost, RootState, CurrentViewedPost } from "../../initialData";
 import { Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { savePost, likePost } from "../../actions/home";
+import { useDispatch, useSelector } from "react-redux";
+import { savePost, likePost, viewPost } from "../../actions/home";
 
 const useStyles = makeStyles({
   root: {
@@ -61,18 +61,36 @@ const useStyles = makeStyles({
     marginLeft: "2em",
     display: "flex",
     flexDirection: "row",
-    justifyContent: "center",
   },
   link: {
     textDecoration: "none",
   },
+  tagText: {
+    fontFamily: "Overpass Mono, monospace",
+  },
 });
+
+export const handleViewPost = (
+  currViewedPost: CurrentViewedPost,
+  trendingPost,
+  dispatch
+) => {
+  const postToView = {
+    ...trendingPost,
+    content: currViewedPost.content,
+    comments: currViewedPost.comments,
+  };
+  dispatch(viewPost(postToView));
+};
 
 type Props = {
   trendingPost: TrendingPost;
 };
 
 const Card = ({ trendingPost }: Props) => {
+  const currViewedPost = useSelector<RootState, CurrentViewedPost>(
+    (state) => state.currentViewedPost
+  );
   const classes = useStyles();
   const dispatch = useDispatch();
 
@@ -99,6 +117,9 @@ const Card = ({ trendingPost }: Props) => {
               <Link
                 to={`/post/${trendingPost.postID}`}
                 className={classes.link}
+                onClick={() => {
+                  handleViewPost(currViewedPost, trendingPost, dispatch);
+                }}
               >
                 {trendingPost.title}
               </Link>
@@ -117,7 +138,13 @@ const Card = ({ trendingPost }: Props) => {
         <div>
           <p style={{ marginLeft: "2em" }}>{trendingPost.previewContent}</p>
           <div className={classes.readSave}>
-            <Link to={`/post/${trendingPost.postID}`} className={classes.link}>
+            <Link
+              to={`/post/${trendingPost.postID}`}
+              className={classes.link}
+              onClick={() => {
+                handleViewPost(currViewedPost, trendingPost, dispatch);
+              }}
+            >
               <h4
                 style={{
                   marginRight: "2em",
@@ -143,7 +170,9 @@ const Card = ({ trendingPost }: Props) => {
 
       <div className={classes.interactions}>
         {trendingPost.tags.map((tag) => (
-          <p>#{tag}&nbsp;</p>
+          <p key={trendingPost.postID} className={classes.tagText}>
+            #{tag}&nbsp;
+          </p>
         ))}
         <div style={{ display: "flex", flex: 1 }}></div>
         <div className={classes.interactionsIcons}>
