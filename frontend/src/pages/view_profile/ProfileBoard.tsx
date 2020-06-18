@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import { Tabs, Paper, Tab, makeStyles, Divider } from "@material-ui/core";
+import { Tabs, Tab, makeStyles, Divider } from "@material-ui/core";
 import HeartIcon from "../../icons/heartIcon.svg";
 import CommentIcon from "../../icons/commentIcon.svg";
-import { Post } from "../../initialData";
-import { howLongAgo } from "../../util/helpers";
+import { Post, SavedPost } from "../../initialData";
 import Avatar from "../common/Avatar";
+import { Avatar as MuiAvatar } from "@material-ui/core";
+import { Link } from "react-router-dom";
 
 // For tabs
 const Posts = "Posts";
@@ -13,7 +14,6 @@ const Saved = "Saved";
 const useStyles = makeStyles({
   root: {
     minHeight: "fit-content",
-    // minHeight: "20vh",
     display: "flex",
     flexDirection: "column",
     width: "40vw",
@@ -68,7 +68,54 @@ const useStyles = makeStyles({
   },
 });
 
-function postComponent(post, classes) {
+function savedPostComponent(savedPost: SavedPost, classes) {
+  return (
+    <>
+      <div className={classes.root}>
+        <div style={{ display: "flex", flexDirection: "row" }}>
+          <div className={classes.nameTime}>
+            <div style={{ display: "flex", marginTop: "1em" }}>
+              <Avatar post={savedPost} extraText=""></Avatar>
+            </div>
+          </div>
+          <p style={{ width: "70%" }}>
+            <p
+              style={{
+                fontWeight: "bold",
+                fontSize: "1.8em",
+                margin: "1em",
+                flex: 1,
+                textAlign: "center",
+              }}
+            >
+              {savedPost.title}
+            </p>
+            <p style={{ paddingLeft: "5em" }}>
+              {savedPost.title} ...Here's why: Lorem ipsum, dolor sit amet
+              consectetur adipisicing elit. Dolorum earum amet odit eveniet iure
+              dolore ab quae. Non vitae laudantium optio rerum? A obcaecati
+              blanditiis sit, impedit delectus quod ipsam.
+            </p>
+          </p>
+        </div>
+        <div className={classes.readSave}>
+          <h4 style={{ marginRight: "2em", color: "#5D67E9" }}>Read More</h4>
+        </div>
+        <div className={classes.interactions}>
+          <div style={{ display: "flex", flex: 1 }}></div>
+          <div className={classes.interactionsIcons}>
+            <img className={classes.heartIcon} src={HeartIcon} />
+            <p>&nbsp;{savedPost.likes}</p>
+            <img className={classes.commentIcon} src={CommentIcon} />
+            <p>&nbsp;{savedPost.comments}</p>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
+
+function postComponent(post, classes, isOwnPost = false) {
   return (
     <>
       <div className={classes.root}>
@@ -78,7 +125,7 @@ function postComponent(post, classes) {
               {post.title}
             </span>
           </p>
-          <p style={{ marginTop: "-0.8em" }}>{howLongAgo(post.createAt)}</p>
+          <p style={{ marginTop: "-0.8em" }}>{post.createAt}</p>
         </div>
 
         <div className={classes.imgTitle}>
@@ -89,7 +136,9 @@ function postComponent(post, classes) {
               <h4 style={{ marginRight: "2em", color: "#5D67E9" }}>
                 Read More
               </h4>
-              <h4 style={{ color: "#5D67E9" }}>Save for later</h4>
+              {!isOwnPost && (
+                <h4 style={{ color: "#5D67E9" }}>Save for later</h4>
+              )}
             </div>
           </div>
         </div>
@@ -122,7 +171,7 @@ type Props =
   | {
       isUser: true;
       posts: Post[];
-      savedPosts: Post[];
+      savedPosts: SavedPost[];
     }
   | {
       isUser: false;
@@ -168,11 +217,11 @@ export function ProfileBoard(props: Props) {
         </Tabs>
         {tabIdx === 0 ? (
           <div style={{ marginTop: "1rem" }}>
-            {posts.map((post) => postComponent(post, classes))}
+            {posts.map((post) => postComponent(post, classes, true))}
           </div>
         ) : (
           <div style={{ marginTop: "1rem" }}>
-            {savedPosts.map((post) => postComponent(post, classes))}
+            {savedPosts.map((post) => savedPostComponent(post, classes))}
           </div>
         )}
       </>
