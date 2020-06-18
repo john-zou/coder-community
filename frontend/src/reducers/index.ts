@@ -4,9 +4,11 @@ import { posts } from "./posts";
 import { groups } from "./groups";
 import { tags } from "./tags";
 import { videos } from "./videos";
+import { currentViewedProfile } from "./currentViewedProfile";
 
 export const rootReducer = combineReducers({
   user,
+  currentViewedProfile,
   posts,
   groups,
   tags,

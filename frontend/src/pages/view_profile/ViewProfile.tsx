@@ -4,10 +4,8 @@ import { ProfileBanner } from "./ProfileBanner";
 import { ProfileCard } from "./ProfileCard";
 import { ProfileBoard } from "./ProfileBoard";
 import { useParams } from "react-router-dom";
-import { useUserInfo } from "../../hooks/useUserInfo";
-import { Loading } from "../common/Loading";
-import { NotFoundError } from "../common/NotFoundError";
-import { ServerError } from "../common/ServerError";
+import { useSelector } from "react-redux";
+import { RootState, User, CurrentViewedProfile } from "../../initialData";
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -18,40 +16,35 @@ const useStyles = makeStyles(() =>
         "card board space"
       `,
       gridTemplateColumns: "1fr 1.5fr 1fr",
+      gridTemplateRows: "min-content auto",
       backgroundColor: "#E5E5E5",
-      height: "80vh",
+      height: "100%",
     },
     banner: {
       gridArea: "banner",
+      marginBottom: "1rem",
     },
     card: {
       gridArea: "card",
     },
     board: {
       gridArea: "board",
-      backgroundColor: "red",
     },
   })
 );
 
 export function ViewProfile() {
   const { username } = useParams();
-  const [profile, loading, error] = useUserInfo(username);
+  const currentUserID = useSelector<RootState, string>(
+    (state) => state.user.userID
+  );
+  const profile = useSelector<RootState, CurrentViewedProfile>(
+    (state) => state.currentViewedProfile
+  );
+
   const classes = useStyles();
-
-  if (loading) {
-    console.log("Loading!");
-    return <Loading></Loading>;
-  }
-  if (error) {
-    if (error.status === 404) {
-      return <NotFoundError></NotFoundError>;
-    } else {
-      return <ServerError></ServerError>;
-    }
-  }
-
-  const { isUser, bannerImgSrc } = profile;
+  const isUser = username === currentUserID;
+  const bannerImgSrc = profile.backgroundImg;
 
   return (
     <div className={classes.container}>
@@ -59,7 +52,7 @@ export function ViewProfile() {
         <ProfileBanner imgSrc={bannerImgSrc} isUser={isUser}></ProfileBanner>
       </div>
       <div className={classes.card}>
-        <ProfileCard profile={profile}></ProfileCard>
+        <ProfileCard profile={profile} isUser={isUser}></ProfileCard>
       </div>
       <div className={classes.board}>
         <ProfileBoard username={username} isUser={isUser}></ProfileBoard>
