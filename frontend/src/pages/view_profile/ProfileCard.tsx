@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 import Avatar from "@material-ui/core/Avatar";
 import { Grid, Typography, Button } from "@material-ui/core";
+import { CurrentViewedProfile } from "../../initialData";
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -19,7 +20,8 @@ const useStyles = makeStyles((theme) =>
       borderRadius: "15px",
       padding: "1.5em",
       backgroundColor: "white",
-      margin: "0 100px",
+      margin: "0 auto",
+      width: "250px",
     },
     editProfileBtn: {
       marginTop: "1.4em",
@@ -41,41 +43,33 @@ const useStyles = makeStyles((theme) =>
   })
 );
 
-export function ProfileCard({ profile }) {
+type Props = {
+  profile: CurrentViewedProfile;
+  isUser: boolean;
+};
+export function ProfileCard({ profile, isUser }: Props) {
   const classes = useStyles();
-  const {
-    firstName,
-    lastName,
-    isUser,
-    numFollowers,
-    numPosts,
-    title,
-    avatarImgSrc,
-  } = profile;
+  const { name, followers, posts, status, profilePic } = profile;
 
   return (
     <div className={classes.container}>
       <Grid container direction="column" alignItems="center">
         <Grid item>
-          <Avatar
-            alt={`${firstName} ${lastName}`}
-            src={avatarImgSrc}
-            className={classes.large}
-          />
+          <Avatar alt={name} src={profilePic} className={classes.large} />
         </Grid>
         <Grid item>
-          <Typography variant="h6">{`${firstName.toUpperCase()} ${lastName.toUpperCase()}`}</Typography>
+          <Typography variant="h6">{name.toUpperCase()}</Typography>
         </Grid>
         <Grid item>
           <Typography variant="body2" className={classes.title}>
-            {title}
+            {status}
           </Typography>
         </Grid>
         <Grid item container>
           <Grid item container direction="column" xs={6} alignItems="center">
             <Grid item>
               <Typography variant="h6" className={classes.num}>
-                {numFollowers}
+                {followers}
               </Typography>
             </Grid>
             <Grid item>
@@ -87,7 +81,7 @@ export function ProfileCard({ profile }) {
           <Grid item container direction="column" xs={6} alignItems="center">
             <Grid item>
               <Typography variant="h6" className={classes.num}>
-                {numPosts}
+                {posts}
               </Typography>
             </Grid>
             <Grid item>
