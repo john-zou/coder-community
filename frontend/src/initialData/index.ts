@@ -27,7 +27,7 @@ const initialData = {
       featuredImg: randomImage(),
       createdAt: howLongAgo(Date.now() - 1000000),
       likes: 100,
-      comments: 29,
+      comments: 2,
     },
     {
       authorID: "nick_lee",
@@ -41,7 +41,7 @@ const initialData = {
       featuredImg: randomImage(),
       createdAt: howLongAgo(Date.now() - 2000000),
       likes: 70,
-      comments: 30,
+      comments: 2,
     },
     {
       authorID: "gaeron",
@@ -54,7 +54,7 @@ const initialData = {
       featuredImg: randomImage(),
       createdAt: howLongAgo(Date.now() - 1003000),
       likes: 40,
-      comments: 30,
+      comments: 2,
     },
   ],
   posts: [
@@ -165,6 +165,7 @@ const initialData = {
       authorID: "gaeron",
       authorName: "Dan Abramov",
       authorImg: randomImage(),
+      featuredImg: randomImage(),
       postID: "reactjs-is-great",
       title: "ReactJS is great!",
       createdAt: howLongAgo(Date.now() - 1003000),
@@ -175,6 +176,7 @@ const initialData = {
       authorID: "evan-you",
       authorName: "Evan You",
       authorImg: randomImage(),
+      featuredImg: randomImage(),
       postID: "vue-js-is-great-too",
       title: "VueJS is great too",
       createdAt: howLongAgo(Date.now() - 4000000),
