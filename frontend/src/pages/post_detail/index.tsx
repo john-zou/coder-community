@@ -4,6 +4,7 @@ import { RootState, CurrentViewedPost } from "../../initialData";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import HeartIcon from "../../icons/heartIcon.svg";
+import CommentIcon from "../../icons/commentIcon.svg";
 import ShareIcon from "../../icons/shareIcon.svg";
 import NewComment from "./NewComment";
 import Avatar from "../common/Avatar";
@@ -56,10 +57,15 @@ const PostDetail = () => {
         <Avatar post={post} extraText="follow"></Avatar>
 
         <p>{post.content}</p>
+
         <div className={classes.interactionsIcons}>
           <span>
             <img className={classes.heartIcon} src={HeartIcon} alt="" />
-            &nbsp;&nbsp;Like
+            &nbsp;&nbsp;{post.likes}
+          </span>
+          <span>
+            <img className={classes.shareIcon} src={CommentIcon} alt="" />
+            &nbsp;&nbsp;{post.comments.length}
           </span>
           <span>
             <img className={classes.shareIcon} src={ShareIcon} alt="" />

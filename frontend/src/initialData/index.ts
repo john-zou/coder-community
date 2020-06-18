@@ -1,4 +1,9 @@
-import { randomImage, randomBackgroundImage } from "../util/helpers";
+import {
+  randomImage,
+  randomBackgroundImage,
+  howLongAgo,
+} from "../util/helpers";
+
 const initialData = {
   user: {
     isLoggedIn: true,
@@ -20,7 +25,7 @@ const initialData = {
       previewContent: "CSS grid is cool!",
       tags: ["css", "frontend"],
       featuredImg: randomImage(),
-      createAt: "1 hours ago",
+      createdAt: howLongAgo(Date.now() - 1000000),
       likes: 100,
       comments: 29,
     },
@@ -34,24 +39,9 @@ const initialData = {
         "I figured, what if I could just extract the part that I really liked about React and build something really lightweight without all the extra concepts involved?",
       tags: ["vuejs"],
       featuredImg: randomImage(),
-      createAt: "1 hours ago",
+      createdAt: howLongAgo(Date.now() - 2000000),
       likes: 70,
-      comments: [
-        {
-          authorID: "evan_you",
-          authorName: "Evan You",
-          authorImg: randomImage(),
-          comment: "Great article!",
-          timeStamp: Date.parse("2020-06-17 5:55"),
-        },
-        {
-          authorID: "gaeron",
-          authorName: "Dan Abramov",
-          authorImg: randomImage(),
-          comment: "Cool!",
-          timeStamp: Date.parse("2020-06-17 7:00"),
-        },
-      ],
+      comments: 30,
     },
     {
       authorID: "gaeron",
@@ -62,24 +52,9 @@ const initialData = {
       previewContent: "ReactJS is great!",
       tags: ["reactjs"],
       featuredImg: randomImage(),
-      createAt: "2 hours ago",
+      createdAt: howLongAgo(Date.now() - 1003000),
       likes: 40,
-      comments: [
-        {
-          authorID: "evan_you",
-          authorName: "Evan You",
-          authorImg: randomImage(),
-          comment: "Great article!",
-          timeStamp: Date.parse("2020-06-17 5:55"),
-        },
-        {
-          authorID: "gaeron",
-          authorName: "Dan Abramov",
-          authorImg: randomImage(),
-          comment: "Cool!",
-          timeStamp: Date.parse("2020-06-17 7:00"),
-        },
-      ],
+      comments: 30,
     },
   ],
   posts: [
@@ -88,7 +63,7 @@ const initialData = {
       content: "CSS grid is cool!",
       tags: ["css", "frontend"],
       featuredImg: randomImage(),
-      createAt: Date.parse("2020-05-02 5:55"),
+      createdAt: howLongAgo(Date.now() - 2005000),
       likes: 19,
       comments: [
         {
@@ -96,14 +71,14 @@ const initialData = {
           authorName: "Evan You",
           authorImg: randomImage(),
           comment: "Great article!",
-          timeStamp: Date.parse("2020-06-17 5:55"),
+          createdAt: howLongAgo(Date.now() - 2000000),
         },
         {
           authorID: "gaeron",
           authorName: "Dan Abramov",
           authorImg: randomImage(),
           comment: "Cool!",
-          timeStamp: Date.parse("2020-06-17 7:00"),
+          createdAt: howLongAgo(Date.now() - 1500000),
         },
       ],
     },
@@ -113,7 +88,7 @@ const initialData = {
         "I figured, what if I could just extract the part that I really liked about React and build something really lightweight without all the extra concepts involved? I was also curious as to how its internal implementation worked. I started this experiment just trying to replicate this minimal feature set, like declarative data binding. That was basically how Vue started.",
       tags: ["vue js"],
       featuredImg: randomImage(),
-      createAt: Date.parse("2020-05-07 8:08"),
+      createdAt: howLongAgo(Date.now() - 1202000),
       likes: 89,
       comments: [
         {
@@ -121,14 +96,14 @@ const initialData = {
           authorName: "Evan You",
           authorImg: randomImage(),
           comment: "Great article!",
-          timeStamp: Date.parse("2020-06-17 5:55"),
+          createdAt: howLongAgo(Date.now() - 1200000),
         },
         {
           authorID: "gaeron",
           authorName: "Dan Abramov",
           authorImg: randomImage(),
           comment: "Cool!",
-          timeStamp: Date.parse("2020-06-17 7:00"),
+          createdAt: howLongAgo(Date.now() - 2500000),
         },
       ],
     },
@@ -166,7 +141,7 @@ const initialData = {
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc id velit eu mi egestas ornare. Proin ac velit quam. Nulla et nisi tellus. Etiam sodales nisi a ex accumsan aliquam at vitae lectus. In hac habitasse platea dictumst. In sit amet urna nec enim ultricies egestas eu at ipsum. Mauris luctus id velit eget rhoncus. Praesent eget consequat est. Nulla velit tellus, posuere in tortor ut, dapibus ornare augue. Sed fringilla libero eu commodo fermentum. Suspendisse non dolor vulputate, lobortis nulla eget, suscipit ipsum. Quisque nec nulla ac dui vehicula fringilla in non mi. Duis id vehicula libero. Morbi eget neque dignissim, sodales arcu sed, posuere arcu. Suspendisse fringilla, nulla ac accumsan dapibus, neque turpis dignissim massa, vitae efficitur neque urna non eros. Fusce blandit rhoncus mauris, ac aliquet purus consectetur ac. Suspendisse fermentum dictum turpis, vitae semper turpis. Suspendisse placerat magna eget ipsum tincidunt semper. Sed magna elit, tincidunt sit amet sapien at, auctor convallis diam. Morbi congue nisl lectus, quis dictum velit mattis ut. Ut eu tincidunt urna. Donec eu sem nec purus accumsan bibendum vel in diam. Mauris convallis tincidunt neque quis congue. Praesent a augue viverra, faucibus eros vel, vulputate est. Phasellus pharetra lorem et turpis varius egestas. Nullam in rhoncus massa. Aenean ac elit massa. Maecenas eleifend placerat turpis in malesuada. Nulla lacinia velit et libero dignissim tempor. Ut ullamcorper leo non euismod fermentum. Maecenas sodales, nibh vitae tincidunt lobortis, erat urna tincidunt neque, nec accumsan urna augue id nibh. Etiam consequat lorem non augue interdum, a gravida risus egestas. Sed odio eros, ultrices id odio nec, iaculis lacinia magna. Proin id leo sed libero scelerisque mattis at a magna. Morbi quis libero fermentum, scelerisque velit pulvinar, interdum turpis.",
     tags: ["vuejs"],
     featuredImg: randomBackgroundImage(),
-    createAt: "1 hours ago",
+    createdAt: howLongAgo(Date.now() - 4000000),
     likes: 70,
     comments: [
       {
@@ -174,18 +149,41 @@ const initialData = {
         authorName: "Evan You",
         authorImg: randomImage(),
         comment: "Great article!",
-        timeStamp: Date.parse("2020-06-17 5:55"),
+        createdAt: howLongAgo(Date.now() - 1000000),
       },
       {
         authorID: "gaeron",
         authorName: "Dan Abramov",
         authorImg: randomImage(),
         comment: "Cool!",
-        timeStamp: Date.parse("2020-06-17 7:00"),
+        createdAt: howLongAgo(Date.now() - 5000000),
       },
     ],
   },
+  savedPosts: [
+    {
+      authorID: "gaeron",
+      authorName: "Dan Abramov",
+      authorImg: randomImage(),
+      postID: "reactjs-is-great",
+      title: "ReactJS is great!",
+      createdAt: howLongAgo(Date.now() - 1003000),
+      likes: 40,
+      comments: 30,
+    },
+    {
+      authorID: "evan-you",
+      authorName: "Evan You",
+      authorImg: randomImage(),
+      postID: "vue-js-is-great-too",
+      title: "VueJS is great too",
+      createdAt: howLongAgo(Date.now() - 4000000),
+      likes: 40,
+      comments: 30,
+    },
+  ],
 };
+
 export type RootState = typeof initialData;
 export type User = typeof initialData.user;
 export type Group = typeof initialData.groups[0];
@@ -193,5 +191,6 @@ export type TrendingPost = typeof initialData.trendingPosts[0];
 export type CurrentViewedPost = typeof initialData.currentViewedPost;
 export type CurrentViewedProfile = typeof initialData.currentViewedProfile;
 export type Post = typeof initialData.posts[0];
+export type SavedPost = typeof initialData.savedPosts[0];
 
 export default initialData;
