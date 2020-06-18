@@ -141,7 +141,7 @@ const initialData = {
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc id velit eu mi egestas ornare. Proin ac velit quam. Nulla et nisi tellus. Etiam sodales nisi a ex accumsan aliquam at vitae lectus. In hac habitasse platea dictumst. In sit amet urna nec enim ultricies egestas eu at ipsum. Mauris luctus id velit eget rhoncus. Praesent eget consequat est. Nulla velit tellus, posuere in tortor ut, dapibus ornare augue. Sed fringilla libero eu commodo fermentum. Suspendisse non dolor vulputate, lobortis nulla eget, suscipit ipsum. Quisque nec nulla ac dui vehicula fringilla in non mi. Duis id vehicula libero. Morbi eget neque dignissim, sodales arcu sed, posuere arcu. Suspendisse fringilla, nulla ac accumsan dapibus, neque turpis dignissim massa, vitae efficitur neque urna non eros. Fusce blandit rhoncus mauris, ac aliquet purus consectetur ac. Suspendisse fermentum dictum turpis, vitae semper turpis. Suspendisse placerat magna eget ipsum tincidunt semper. Sed magna elit, tincidunt sit amet sapien at, auctor convallis diam. Morbi congue nisl lectus, quis dictum velit mattis ut. Ut eu tincidunt urna. Donec eu sem nec purus accumsan bibendum vel in diam. Mauris convallis tincidunt neque quis congue. Praesent a augue viverra, faucibus eros vel, vulputate est. Phasellus pharetra lorem et turpis varius egestas. Nullam in rhoncus massa. Aenean ac elit massa. Maecenas eleifend placerat turpis in malesuada. Nulla lacinia velit et libero dignissim tempor. Ut ullamcorper leo non euismod fermentum. Maecenas sodales, nibh vitae tincidunt lobortis, erat urna tincidunt neque, nec accumsan urna augue id nibh. Etiam consequat lorem non augue interdum, a gravida risus egestas. Sed odio eros, ultrices id odio nec, iaculis lacinia magna. Proin id leo sed libero scelerisque mattis at a magna. Morbi quis libero fermentum, scelerisque velit pulvinar, interdum turpis.",
     tags: ["vuejs"],
     featuredImg: randomBackgroundImage(),
-    createAt: "1 hours ago",
+    createAt: howLongAgo(Date.now() - 4000000),
     likes: 70,
     comments: [
       {
@@ -162,14 +162,24 @@ const initialData = {
   },
   savedPosts: [
     {
-      authorID: "nick_lee", //for viewing author's public profile
-      authorName: "Nick Lee",
+      authorID: "gaeron",
+      authorName: "Dan Abramov",
       authorImg: randomImage(),
-      postID: "css-tricks", //when user interacts with the post (such as clicking, liking it)
-      title: "CCS Tricks",
-      createAt: "1 hours ago",
-      likes: 100,
-      comments: 29,
+      postID: "reactjs-is-great",
+      title: "ReactJS is great!",
+      createAt: howLongAgo(Date.now() - 1003000),
+      likes: 40,
+      comments: 30,
+    },
+    {
+      authorID: "evan-you",
+      authorName: "Evan You",
+      authorImg: randomImage(),
+      postID: "vue-js-is-great-too",
+      title: "VueJS is great too",
+      createAt: howLongAgo(Date.now() - 4000000),
+      likes: 40,
+      comments: 30,
     },
   ],
 };
