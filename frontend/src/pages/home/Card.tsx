@@ -62,6 +62,9 @@ const useStyles = makeStyles({
     flexDirection: "row",
     justifyContent: "center",
   },
+  link: {
+    textDecoration: "none",
+  },
 });
 
 type Props = {
@@ -91,8 +94,11 @@ const Card = ({ trendingPost }: Props) => {
               {trendingPost.authorName}&nbsp;
             </span>
             posted&nbsp;
-            <span style={{ fontWeight: "bolder", textDecoration: "none" }}>
-              <Link to={`/post/${trendingPost.postID}`}>
+            <span style={{ fontWeight: "bolder" }}>
+              <Link
+                to={`/post/${trendingPost.postID}`}
+                className={classes.link}
+              >
                 {trendingPost.title}
               </Link>
             </span>
@@ -110,7 +116,7 @@ const Card = ({ trendingPost }: Props) => {
         <div>
           <p style={{ marginLeft: "2em" }}>{trendingPost.previewContent}</p>
           <div className={classes.readSave}>
-            <Link to={`/post/${trendingPost.postID}`}>
+            <Link to={`/post/${trendingPost.postID}`} className={classes.link}>
               <h4
                 style={{
                   marginRight: "2em",

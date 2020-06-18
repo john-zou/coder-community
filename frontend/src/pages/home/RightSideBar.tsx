@@ -15,6 +15,9 @@ const useStyles = makeStyles({
     paddingLeft: "2em",
     paddingTop: "10vh",
   },
+  link: {
+    textDecoration: "none",
+  },
 });
 
 export default function RightSideBar() {
@@ -30,7 +33,7 @@ export default function RightSideBar() {
       {savedPosts.map((sp) => (
         <div key={sp.postID}>
           <Avatar post={sp} extraText=""></Avatar>
-          <Link to={`/post/${sp.postID}`}>
+          <Link to={`/post/${sp.postID}`} className={classes.link}>
             <p style={{ marginTop: "-0.5em", fontWeight: "bold" }}>
               {sp.title}
             </p>
