@@ -4,6 +4,8 @@ import HeartIcon from "../../icons/heartIcon.svg";
 import CommentIcon from "../../icons/commentIcon.svg";
 import { TrendingPost } from "../../initialData";
 import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { savePost, likePost } from "../../actions/home";
 
 const useStyles = makeStyles({
   root: {
@@ -45,6 +47,7 @@ const useStyles = makeStyles({
   commentIcon: {
     marginLeft: "2em",
     width: "2em",
+    marginBottom: "-1.5em",
   },
   heartIcon: {
     width: "2em",
@@ -60,6 +63,9 @@ const useStyles = makeStyles({
     flexDirection: "row",
     justifyContent: "center",
   },
+  link: {
+    textDecoration: "none",
+  },
 });
 
 type Props = {
@@ -68,6 +74,7 @@ type Props = {
 
 const Card = ({ trendingPost }: Props) => {
   const classes = useStyles();
+  const dispatch = useDispatch();
 
   return (
     <div className={classes.root}>
@@ -88,13 +95,16 @@ const Card = ({ trendingPost }: Props) => {
               {trendingPost.authorName}&nbsp;
             </span>
             posted&nbsp;
-            <span style={{ fontWeight: "bolder", textDecoration: "none" }}>
-              <Link to={`/post/${trendingPost.postID}`}>
+            <span style={{ fontWeight: "bolder" }}>
+              <Link
+                to={`/post/${trendingPost.postID}`}
+                className={classes.link}
+              >
                 {trendingPost.title}
               </Link>
             </span>
           </p>
-          <p style={{ marginTop: "-0.8em" }}>{trendingPost.createAt}</p>
+          <p style={{ marginTop: "-0.8em" }}>{trendingPost.createdAt}</p>
         </div>
       </div>
 
@@ -107,7 +117,7 @@ const Card = ({ trendingPost }: Props) => {
         <div>
           <p style={{ marginLeft: "2em" }}>{trendingPost.previewContent}</p>
           <div className={classes.readSave}>
-            <Link to={`/post/${trendingPost.postID}`}>
+            <Link to={`/post/${trendingPost.postID}`} className={classes.link}>
               <h4
                 style={{
                   marginRight: "2em",
@@ -119,7 +129,14 @@ const Card = ({ trendingPost }: Props) => {
               </h4>
             </Link>
 
-            <h4 style={{ color: "#5D67E9" }}>Save for later</h4>
+            <h4
+              style={{ color: "#5D67E9", cursor: "pointer" }}
+              onClick={() => {
+                dispatch(savePost(trendingPost));
+              }}
+            >
+              Save for later
+            </h4>
           </div>
         </div>
       </div>
@@ -130,10 +147,19 @@ const Card = ({ trendingPost }: Props) => {
         ))}
         <div style={{ display: "flex", flex: 1 }}></div>
         <div className={classes.interactionsIcons}>
-          <img className={classes.heartIcon} src={HeartIcon} alt="" />
+          <img
+            className={classes.heartIcon}
+            src={HeartIcon}
+            alt=""
+            onClick={() => {
+              dispatch(likePost(trendingPost));
+            }}
+          />
           <p>&nbsp;{trendingPost.likes}</p>
-          <img className={classes.commentIcon} src={CommentIcon} alt="" />
-          <p>&nbsp;{trendingPost.comments.toString.length}</p>
+          <Link to={`/post/${trendingPost.postID}`} className={classes.link}>
+            <img className={classes.commentIcon} src={CommentIcon} alt="" />
+          </Link>
+          <p>&nbsp;{trendingPost.comments}</p>
         </div>
       </div>
     </div>

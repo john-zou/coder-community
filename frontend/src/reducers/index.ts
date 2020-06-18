@@ -7,6 +7,7 @@ import { videos } from "./videos";
 import { currentViewedProfile } from "./currentViewedProfile";
 import { trendingPosts } from "./trendingPosts";
 import { currentViewedPost } from "./currentViewedPost";
+import { savedPosts } from "./savedPosts";
 
 export const rootReducer = combineReducers({
   user,
@@ -17,4 +18,5 @@ export const rootReducer = combineReducers({
   videos,
   trendingPosts,
   currentViewedPost,
+  savedPosts,
 });
