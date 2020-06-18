@@ -4,8 +4,6 @@ import HeartIcon from "../../icons/heartIcon.svg";
 import CommentIcon from "../../icons/commentIcon.svg";
 import { Post, SavedPost } from "../../initialData";
 import Avatar from "../common/Avatar";
-import { Avatar as MuiAvatar } from "@material-ui/core";
-import { Link } from "react-router-dom";
 
 // For tabs
 const Posts = "Posts";
@@ -78,7 +76,14 @@ function savedPostComponent(savedPost: SavedPost, classes) {
               <Avatar post={savedPost} extraText=""></Avatar>
             </div>
           </div>
-          <p style={{ width: "70%" }}>
+          <p style={{ width: "70%", textAlign: "center" }}>
+            <img
+              alt={savedPost.title}
+              src={savedPost.featuredImg}
+              width={300}
+              height={200}
+              style={{ objectFit: "cover" }}
+            ></img>
             <p
               style={{
                 fontWeight: "bold",
@@ -115,7 +120,7 @@ function savedPostComponent(savedPost: SavedPost, classes) {
   );
 }
 
-function postComponent(post, classes, isOwnPost = false) {
+function postComponent(post: Post, classes, isOwnPost = false) {
   return (
     <>
       <div className={classes.root}>
@@ -125,7 +130,7 @@ function postComponent(post, classes, isOwnPost = false) {
               {post.title}
             </span>
           </p>
-          <p style={{ marginTop: "-0.8em" }}>{post.createAt}</p>
+          <p style={{ marginTop: "-0.8em" }}>{post.createdAt}</p>
         </div>
 
         <div className={classes.imgTitle}>
