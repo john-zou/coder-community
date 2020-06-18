@@ -30,34 +30,29 @@ const useStyles = makeStyles((theme) => ({
   drawerPaper: {
     width: drawerWidth,
   },
-  grow: {
-    flexGrow: 1,
-  },
   menuButton: {
-    marginRight: theme.spacing(2),
+    // marginRight: theme.spacing(2),
     [theme.breakpoints.up("sm")]: {
       display: "none",
     },
   },
   title: {
-    width: 1200,
+    // width: 400,
     display: "none",
     [theme.breakpoints.up("sm")]: {
       display: "block",
     },
   },
   search: {
-    position: "relative",
     borderRadius: theme.shape.borderRadius,
     backgroundColor: "#FAFAFA",
     paddingTop: "10px",
     paddingBottom: "10px",
-    "&:hover": {
-      backgroundColor: fade(theme.palette.common.white, 0.25),
-    },
+    // "&:hover": {
+    //   backgroundColor: fade(theme.palette.common.white, 0.25),
+    // },
 
-    marginRight: theme.spacing(2),
-    marginLeft: 0,
+    marginRight: "auto",
     width: "100%",
     [theme.breakpoints.up("sm")]: {
       marginLeft: theme.spacing(3),
@@ -69,7 +64,6 @@ const useStyles = makeStyles((theme) => ({
     width: theme.spacing(7),
     position: "absolute",
     pointerEvents: "none",
-    display: "flex",
     marginTop: "0.5em",
     marginLeft: "1em",
   },
@@ -185,7 +179,11 @@ export default function Header(props) {
 
   return (
     <div>
-      <AppBar position="fixed" className={classes.appBar}>
+      <AppBar
+        position="fixed"
+        className={classes.appBar}
+        style={{ display: "flex" }}
+      >
         <Toolbar>
           <IconButton
             edge="start"
@@ -214,24 +212,26 @@ export default function Header(props) {
               />
             </Typography>
           </div>
-
-          <ListItem>
+          <div style={{ display: "flex", flex: 1 }}></div>
+          <ListItem style={{ width: "unset" }}>
             <ListItemIcon>
               <Link to="/" className={classes.link}>
-                <h3>Home</h3>
+                <h4>Home</h4>
               </Link>
               <div
                 style={{
                   marginTop: "10px",
                   marginLeft: "1em",
+                  marginRight: "1em",
                 }}
               >
-                <PurpleButton content="Add a post" />
+                <Link to="/create-post" className={classes.link}>
+                  <PurpleButton content="Add a Post" />
+                </Link>
               </div>
             </ListItemIcon>
           </ListItem>
 
-          <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
             <IconButton aria-label="show 2 new messages" color="inherit">
               <Badge badgeContent={2} color="secondary">

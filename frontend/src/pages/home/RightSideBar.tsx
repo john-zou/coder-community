@@ -1,9 +1,11 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { useSelector } from "react-redux";
-import { RootState, SavedPost } from "../../initialData";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState, SavedPost, CurrentViewedPost } from "../../initialData";
 import Avatar from "../common/Avatar";
 import { Link } from "react-router-dom";
+import { handleViewPost } from "./Card";
+import { currentViewedPost } from "../../reducers/currentViewedPost";
 
 const useStyles = makeStyles({
   root: {
@@ -28,6 +30,10 @@ const useStyles = makeStyles({
 
 export default function RightSideBar() {
   const classes = useStyles();
+  const dispatch = useDispatch();
+  const currViewedPost = useSelector<RootState, CurrentViewedPost>(
+    (state) => state.currentViewedPost
+  );
   const savedPosts = useSelector<RootState, SavedPost[]>(
     (state) => state.savedPosts
   );
@@ -38,7 +44,13 @@ export default function RightSideBar() {
       {savedPosts.map((sp) => (
         <div key={sp.postID}>
           <Avatar post={sp} extraText=""></Avatar>
-          <Link to={`/post/${sp.postID}`} className={classes.link}>
+          <Link
+            to={`/post/${sp.postID}`}
+            className={classes.link}
+            onClick={() => {
+              handleViewPost(currViewedPost, sp, dispatch);
+            }}
+          >
             <p style={{ marginTop: "-0.5em", fontWeight: "bold" }}>
               {sp.title}
             </p>
