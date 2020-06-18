@@ -64,10 +64,9 @@ const useStyles = makeStyles({
 
 type Props = {
   trendingPost: TrendingPost;
-  key: string;
 };
 
-const Card = ({ trendingPost, key }: Props) => {
+const Card = ({ trendingPost }: Props) => {
   const classes = useStyles();
 
   return (
@@ -90,7 +89,9 @@ const Card = ({ trendingPost, key }: Props) => {
             </span>
             posted&nbsp;
             <span style={{ fontWeight: "bolder", textDecoration: "none" }}>
-              <Link to={`/post/${key}`}>{trendingPost.title}</Link>
+              <Link to={`/post/${trendingPost.postID}`}>
+                {trendingPost.title}
+              </Link>
             </span>
           </p>
           <p style={{ marginTop: "-0.8em" }}>{trendingPost.createAt}</p>
@@ -106,7 +107,7 @@ const Card = ({ trendingPost, key }: Props) => {
         <div>
           <p style={{ marginLeft: "2em" }}>{trendingPost.previewContent}</p>
           <div className={classes.readSave}>
-            <Link to={`/post/${key}`}>
+            <Link to={`/post/${trendingPost.postID}`}>
               <h4
                 style={{
                   marginRight: "2em",
