@@ -16,7 +16,7 @@ import MoreIcon from "@material-ui/icons/MoreVert";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import MessageIcon from "@material-ui/icons/Message";
-import Link from "@material-ui/core/Link";
+import { Link } from "react-router-dom";
 
 const drawerWidth = 240;
 const useStyles = makeStyles((theme) => ({
@@ -94,6 +94,9 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.up("md")]: {
       display: "none",
     },
+  },
+  link: {
+    textDecoration: "none",
   },
 }));
 
@@ -213,8 +216,8 @@ export default function Header(props) {
 
           <ListItem>
             <ListItemIcon>
-              <Link href="#" color="textPrimary" variant="h6">
-                Home
+              <Link to="/" className={classes.link}>
+                <h3>Home</h3>
               </Link>
             </ListItemIcon>
           </ListItem>

@@ -9,3 +9,8 @@ export const likePost = (post: TrendingPost) => ({
   type: "LIKE_POST",
   post,
 });
+
+export const viewPost = (post: TrendingPost) => ({
+  type: "VIEW_POST",
+  post,
+});

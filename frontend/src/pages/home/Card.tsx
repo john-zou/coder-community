@@ -5,7 +5,7 @@ import CommentIcon from "../../icons/commentIcon.svg";
 import { TrendingPost } from "../../initialData";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { savePost, likePost } from "../../actions/home";
+import { savePost, likePost, viewPost } from "../../actions/home";
 
 const useStyles = makeStyles({
   root: {
@@ -61,7 +61,6 @@ const useStyles = makeStyles({
     marginLeft: "2em",
     display: "flex",
     flexDirection: "row",
-    justifyContent: "center",
   },
   link: {
     textDecoration: "none",
@@ -75,6 +74,10 @@ type Props = {
 const Card = ({ trendingPost }: Props) => {
   const classes = useStyles();
   const dispatch = useDispatch();
+
+  const handleViewPost = (e) => {
+    console.log(e);
+  };
 
   return (
     <div className={classes.root}>
@@ -99,6 +102,7 @@ const Card = ({ trendingPost }: Props) => {
               <Link
                 to={`/post/${trendingPost.postID}`}
                 className={classes.link}
+                onClick={handleViewPost}
               >
                 {trendingPost.title}
               </Link>
@@ -143,7 +147,7 @@ const Card = ({ trendingPost }: Props) => {
 
       <div className={classes.interactions}>
         {trendingPost.tags.map((tag) => (
-          <p>#{tag}&nbsp;</p>
+          <p key={trendingPost.postID}>#{tag}&nbsp;</p>
         ))}
         <div style={{ display: "flex", flex: 1 }}></div>
         <div className={classes.interactionsIcons}>
