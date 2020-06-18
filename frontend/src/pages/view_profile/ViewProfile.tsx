@@ -42,6 +42,9 @@ export function ViewProfile() {
     (state) => state.currentViewedProfile
   );
   const posts = useSelector<RootState, Post[]>((state) => state.posts);
+  const savedPosts = useSelector<RootState, Post[]>(
+    (state) => state.savedPosts
+  );
 
   const classes = useStyles();
   const isUser = username === currentUserID;
@@ -56,7 +59,15 @@ export function ViewProfile() {
         <ProfileCard profile={profile} isUser={isUser}></ProfileCard>
       </div>
       <div className={classes.board}>
-        <ProfileBoard isUser={isUser} posts={posts}></ProfileBoard>
+        {isUser ? (
+          <ProfileBoard
+            isUser={isUser}
+            posts={posts}
+            savedPosts={savedPosts}
+          ></ProfileBoard>
+        ) : (
+          <ProfileBoard isUser={false} posts={posts}></ProfileBoard>
+        )}
       </div>
     </div>
   );
