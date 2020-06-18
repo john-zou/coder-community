@@ -6,6 +6,7 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Home from "./pages/home";
 import { ViewProfile } from "./pages/view_profile/ViewProfile";
 import CreatePost from "./pages/create_post/CreatePost";
+import PostDetail from "./pages/post_detail";
 
 export default function App() {
   return (
@@ -20,6 +21,9 @@ export default function App() {
         </Route>
         <Route path="/create-post">
           <CreatePost />
+        </Route>
+        <Route path="/post/:postID">
+          <PostDetail />
         </Route>
       </Switch>
       <Footer></Footer>
