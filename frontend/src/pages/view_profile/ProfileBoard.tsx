@@ -1,9 +1,10 @@
 import React, { useState } from "react";
-import { Tabs, Paper, Tab, makeStyles } from "@material-ui/core";
+import { Tabs, Paper, Tab, makeStyles, Divider } from "@material-ui/core";
 import HeartIcon from "../../icons/heartIcon.svg";
 import CommentIcon from "../../icons/commentIcon.svg";
 import { Post } from "../../initialData";
 import { howLongAgo } from "../../util/helpers";
+import Avatar from "../common/Avatar";
 
 // For tabs
 const Posts = "Posts";
@@ -95,6 +96,7 @@ export function ProfileBoard({ isUser, posts }: Props) {
             fontFamily: "roboto",
             textTransform: "none",
             fontWeight: tabIdx === 0 ? "bold" : "lighter",
+            fontSize: "1.2rem",
           }}
         />
         <Tab
@@ -103,6 +105,7 @@ export function ProfileBoard({ isUser, posts }: Props) {
             fontFamily: "roboto",
             textTransform: "none",
             fontWeight: tabIdx === 1 ? "bold" : "lighter",
+            fontSize: "1.2rem",
           }}
         />
       </Tabs>
@@ -145,12 +148,16 @@ export function ProfileBoard({ isUser, posts }: Props) {
                     <p>&nbsp;{post.comments.length}</p>
                   </div>
                 </div>
-              </div>
-              {post.comments.map((comment) => (
-                <div style={{ display: "flex", flexDirection: "column" }}>
-                  <h1>COMMENT GOES HERE</h1>
+                <Divider></Divider>
+                <div>
+                  {post.comments.map((comment) => (
+                    <div>
+                      <Avatar post={comment} extraText="reply"></Avatar>
+                      <p>{comment.comment}</p>
+                    </div>
+                  ))}
                 </div>
-              ))}
+              </div>
             </>
           ))}
         </div>
