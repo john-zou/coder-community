@@ -7,6 +7,7 @@ import Home from "./pages/home";
 import { ViewProfile } from "./pages/view_profile/ViewProfile";
 import CreatePost from "./pages/create_post/CreatePost";
 import PostDetail from "./pages/post_detail";
+import { LoginRegistrationPage } from "./pages/login_registration/LoginRegistrationPage";
 
 export default function App() {
   return (
@@ -24,6 +25,9 @@ export default function App() {
         </Route>
         <Route path="/post/:postID">
           <PostDetail />
+        </Route>
+        <Route path="/welcome">
+          <LoginRegistrationPage />
         </Route>
       </Switch>
       <Footer></Footer>
