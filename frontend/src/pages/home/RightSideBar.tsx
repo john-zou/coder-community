@@ -6,10 +6,10 @@ const useStyles = makeStyles({
     minWidth: "20vw",
     display: "flex",
     flexDirection: "column",
-    // backgroundColor: "white",
     height: "94vh",
     cursor: "pointer",
     paddingLeft: "2em",
+    paddingTop: "10vh",
   },
 });
 
@@ -17,9 +17,8 @@ export default function RightSideBar() {
   const classes = useStyles();
   return (
     <div className={classes.root}>
-      <h3># Most popular</h3>
-      <hr></hr>
-      <h3># Recent Posts</h3>
+      <h3># Recent posts</h3>
+      <h3># Saved posts</h3>
     </div>
   );
 }

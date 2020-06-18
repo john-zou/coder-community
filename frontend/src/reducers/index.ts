@@ -5,6 +5,8 @@ import { groups } from "./groups";
 import { tags } from "./tags";
 import { videos } from "./videos";
 import { currentViewedProfile } from "./currentViewedProfile";
+import { trendingPosts } from "./trendingPosts";
+import { currentViewedPost } from "./currentViewedPost";
 
 export const rootReducer = combineReducers({
   user,
@@ -13,4 +15,6 @@ export const rootReducer = combineReducers({
   groups,
   tags,
   videos,
+  trendingPosts,
+  currentViewedPost,
 });

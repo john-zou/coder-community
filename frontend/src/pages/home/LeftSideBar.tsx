@@ -1,14 +1,14 @@
 import React from "react";
 import GroupList from "./GroupList";
 import { makeStyles } from "@material-ui/core/styles";
-import { connect } from "react-redux";
+import { useSelector } from "react-redux";
+import { RootState, User } from "../../initialData";
 
 const useStyles = makeStyles({
   root: {
     width: "14vw",
     display: "flex",
     flexDirection: "column",
-    // backgroundColor: "white",
     height: "94vh",
     cursor: "pointer",
     paddingLeft: "7em",
@@ -33,9 +33,10 @@ const useStyles = makeStyles({
   },
 });
 
-const LeftSideBar = ({ user }) => {
+const LeftSideBar = () => {
   const classes = useStyles();
-  console.log(user);
+  const user = useSelector<RootState, User>((state) => state.user);
+
   return (
     <div className={classes.root}>
       <div className={classes.diplayAccount}>
@@ -45,15 +46,10 @@ const LeftSideBar = ({ user }) => {
       <div className={classes.groupLinks}>
         <h3>Daily Challenge</h3>
         <h3>Messages</h3>
-        <h3>Saved posts</h3>
         <GroupList />
       </div>
     </div>
   );
 };
-const mapStateToProps = (state) => {
-  return {
-    user: state.user,
-  };
-};
-export default connect(mapStateToProps)(LeftSideBar);
+
+export default LeftSideBar;
