@@ -16,7 +16,9 @@ import MoreIcon from "@material-ui/icons/MoreVert";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import MessageIcon from "@material-ui/icons/Message";
-import Link from "@material-ui/core/Link";
+import { Link } from "react-router-dom";
+import PurpleButton from "../../pages/common/PurpleButton";
+import Logo from "../../assets/ccLogo.svg";
 
 const drawerWidth = 240;
 const useStyles = makeStyles((theme) => ({
@@ -29,33 +31,29 @@ const useStyles = makeStyles((theme) => ({
   drawerPaper: {
     width: drawerWidth,
   },
-  grow: {
-    flexGrow: 1,
-  },
   menuButton: {
-    marginRight: theme.spacing(2),
+    // marginRight: theme.spacing(2),
     [theme.breakpoints.up("sm")]: {
       display: "none",
     },
   },
   title: {
-    width: 1200,
+    // width: 400,
     display: "none",
     [theme.breakpoints.up("sm")]: {
       display: "block",
     },
   },
   search: {
-    position: "relative",
     borderRadius: theme.shape.borderRadius,
-    //backgroundColor: fade(theme.palette.common.white, 0.15),
-    backgroundColor: "#F2F2F2",
-    "&:hover": {
-      backgroundColor: fade(theme.palette.common.white, 0.25),
-    },
+    backgroundColor: "#FAFAFA",
+    paddingTop: "10px",
+    paddingBottom: "10px",
+    // "&:hover": {
+    //   backgroundColor: fade(theme.palette.common.white, 0.25),
+    // },
 
-    marginRight: theme.spacing(2),
-    marginLeft: 0,
+    marginRight: "auto",
     width: "100%",
     [theme.breakpoints.up("sm")]: {
       marginLeft: theme.spacing(3),
@@ -65,12 +63,10 @@ const useStyles = makeStyles((theme) => ({
   },
   searchIcon: {
     width: theme.spacing(7),
-    height: "100%",
     position: "absolute",
     pointerEvents: "none",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
+    marginTop: "0.5em",
+    marginLeft: "1em",
   },
   inputRoot: {
     color: "inherit",
@@ -94,6 +90,9 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.up("md")]: {
       display: "none",
     },
+  },
+  link: {
+    textDecoration: "none",
   },
 }));
 
@@ -181,7 +180,11 @@ export default function Header(props) {
 
   return (
     <div>
-      <AppBar position="fixed" className={classes.appBar}>
+      <AppBar
+        position="fixed"
+        className={classes.appBar}
+        style={{ display: "flex" }}
+      >
         <Toolbar>
           <IconButton
             edge="start"
@@ -192,9 +195,7 @@ export default function Header(props) {
           >
             <MenuIcon />
           </IconButton>
-          <Typography className={classes.title} variant="h6" noWrap>
-            Coder-Community
-          </Typography>
+          <img src={Logo} style={{ width: "5em" }} />
           <div className={classes.search}>
             <div className={classes.searchIcon}>
               <SearchIcon />
@@ -210,16 +211,26 @@ export default function Header(props) {
               />
             </Typography>
           </div>
-
-          <ListItem>
+          <div style={{ display: "flex", flex: 1 }}></div>
+          <ListItem style={{ width: "unset" }}>
             <ListItemIcon>
-              <Link href="#" color="textPrimary" variant="h6">
-                Home
+              <Link to="/" className={classes.link}>
+                <h4>Home</h4>
               </Link>
+              <div
+                style={{
+                  marginTop: "10px",
+                  marginLeft: "1em",
+                  marginRight: "1em",
+                }}
+              >
+                <Link to="/create-post" className={classes.link}>
+                  <PurpleButton content="Add a Post" />
+                </Link>
+              </div>
             </ListItemIcon>
           </ListItem>
 
-          <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
             <IconButton aria-label="show 2 new messages" color="inherit">
               <Badge badgeContent={2} color="secondary">

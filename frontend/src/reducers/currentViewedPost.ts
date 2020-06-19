@@ -1,3 +1,8 @@
 export function currentViewedPost(state = null, action) {
-  return state;
+  switch (action.type) {
+    case "VIEW_POST":
+      return action.post;
+    default:
+      return state;
+  }
 }

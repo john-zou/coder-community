@@ -40,7 +40,7 @@ const Avatar = ({ post, extraText }) => {
           </span>
           <span style={{ color: "#5D67E9" }}>{extraText}</span>
         </p>
-        <p style={{ marginTop: "-0.8em" }}>{post.createAt}</p>
+        <p style={{ marginTop: "-0.8em" }}>{post.createdAt}</p>
       </div>
     </div>
   );

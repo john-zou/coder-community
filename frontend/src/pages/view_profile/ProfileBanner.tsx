@@ -13,5 +13,9 @@ const useStyles = makeStyles(() =>
 
 export function ProfileBanner({ imgSrc, isUser }) {
   const classes = useStyles();
-  return <img className={classes.bannerImg} src={imgSrc}></img>;
+  return (
+    <div style={{ height: "300px" }}>
+      <img className={classes.bannerImg} src={imgSrc}></img>
+    </div>
+  );
 }

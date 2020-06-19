@@ -2,8 +2,10 @@ import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import HeartIcon from "../../icons/heartIcon.svg";
 import CommentIcon from "../../icons/commentIcon.svg";
-import { TrendingPost } from "../../initialData";
+import { TrendingPost, RootState, CurrentViewedPost } from "../../initialData";
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { savePost, likePost, viewPost } from "../../actions/home";
 
 const useStyles = makeStyles({
   root: {
@@ -45,6 +47,7 @@ const useStyles = makeStyles({
   commentIcon: {
     marginLeft: "2em",
     width: "2em",
+    marginBottom: "-1.5em",
   },
   heartIcon: {
     width: "2em",
@@ -58,16 +61,38 @@ const useStyles = makeStyles({
     marginLeft: "2em",
     display: "flex",
     flexDirection: "row",
-    justifyContent: "center",
+  },
+  link: {
+    textDecoration: "none",
+  },
+  tagText: {
+    fontFamily: "Overpass Mono, monospace",
   },
 });
+
+export const handleViewPost = (
+  currViewedPost: CurrentViewedPost,
+  trendingPost,
+  dispatch
+) => {
+  const postToView = {
+    ...trendingPost,
+    content: currViewedPost.content,
+    comments: currViewedPost.comments,
+  };
+  dispatch(viewPost(postToView));
+};
 
 type Props = {
   trendingPost: TrendingPost;
 };
 
 const Card = ({ trendingPost }: Props) => {
+  const currViewedPost = useSelector<RootState, CurrentViewedPost>(
+    (state) => state.currentViewedPost
+  );
   const classes = useStyles();
+  const dispatch = useDispatch();
 
   return (
     <div className={classes.root}>
@@ -88,13 +113,19 @@ const Card = ({ trendingPost }: Props) => {
               {trendingPost.authorName}&nbsp;
             </span>
             posted&nbsp;
-            <span style={{ fontWeight: "bolder", textDecoration: "none" }}>
-              <Link to={`/post/${trendingPost.postID}`}>
+            <span style={{ fontWeight: "bolder" }}>
+              <Link
+                to={`/post/${trendingPost.postID}`}
+                className={classes.link}
+                onClick={() => {
+                  handleViewPost(currViewedPost, trendingPost, dispatch);
+                }}
+              >
                 {trendingPost.title}
               </Link>
             </span>
           </p>
-          <p style={{ marginTop: "-0.8em" }}>{trendingPost.createAt}</p>
+          <p style={{ marginTop: "-0.8em" }}>{trendingPost.createdAt}</p>
         </div>
       </div>
 
@@ -107,7 +138,13 @@ const Card = ({ trendingPost }: Props) => {
         <div>
           <p style={{ marginLeft: "2em" }}>{trendingPost.previewContent}</p>
           <div className={classes.readSave}>
-            <Link to={`/post/${trendingPost.postID}`}>
+            <Link
+              to={`/post/${trendingPost.postID}`}
+              className={classes.link}
+              onClick={() => {
+                handleViewPost(currViewedPost, trendingPost, dispatch);
+              }}
+            >
               <h4
                 style={{
                   marginRight: "2em",
@@ -119,21 +156,39 @@ const Card = ({ trendingPost }: Props) => {
               </h4>
             </Link>
 
-            <h4 style={{ color: "#5D67E9" }}>Save for later</h4>
+            <h4
+              style={{ color: "#5D67E9", cursor: "pointer" }}
+              onClick={() => {
+                dispatch(savePost(trendingPost));
+              }}
+            >
+              Save for later
+            </h4>
           </div>
         </div>
       </div>
 
       <div className={classes.interactions}>
         {trendingPost.tags.map((tag) => (
-          <p>#{tag}&nbsp;</p>
+          <p key={trendingPost.postID} className={classes.tagText}>
+            #{tag}&nbsp;
+          </p>
         ))}
         <div style={{ display: "flex", flex: 1 }}></div>
         <div className={classes.interactionsIcons}>
-          <img className={classes.heartIcon} src={HeartIcon} alt="" />
+          <img
+            className={classes.heartIcon}
+            src={HeartIcon}
+            alt=""
+            onClick={() => {
+              dispatch(likePost(trendingPost));
+            }}
+          />
           <p>&nbsp;{trendingPost.likes}</p>
-          <img className={classes.commentIcon} src={CommentIcon} alt="" />
-          <p>&nbsp;{trendingPost.comments.toString.length}</p>
+          <Link to={`/post/${trendingPost.postID}`} className={classes.link}>
+            <img className={classes.commentIcon} src={CommentIcon} alt="" />
+          </Link>
+          <p>&nbsp;{trendingPost.comments}</p>
         </div>
       </div>
     </div>
