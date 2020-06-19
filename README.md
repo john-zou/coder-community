@@ -14,15 +14,15 @@ It has been connected to the component for the Home (`/`), Post (`/post/<post-id
 
 ### Home:
 
-![image](https://user-images.githubusercontent.com/61474884/85080534-47fd4e00-b17e-11ea-91f8-90545c01dc0a.png)
+![image](https://user-images.githubusercontent.com/61474884/85084780-ab8d7880-b18a-11ea-8f23-917764998751.png)
 
 ### Post:
 
-![image](https://user-images.githubusercontent.com/61474884/85080660-acb8a880-b17e-11ea-87f2-92007c41ed8c.png)
+![image](https://user-images.githubusercontent.com/61474884/85084804-b9db9480-b18a-11ea-86e9-b17d8013d996.png)
 
 ### User:
 
-![image](https://user-images.githubusercontent.com/61474884/85080627-9579bb00-b17e-11ea-9932-c07514a0573f.png)
+![image](https://user-images.githubusercontent.com/61474884/85084829-d081eb80-b18a-11ea-8074-ce022888b906.png)
 
 ## Create a minimum of 3 actions that manipulate your store.
 
