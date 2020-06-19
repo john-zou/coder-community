@@ -7,7 +7,6 @@ import Main from "./Main";
 const useStyles = makeStyles({
   home: {
     paddingTop: "7vh",
-    paddingBottom: "7vh",
     display: "flex",
   },
 });
