@@ -26,7 +26,7 @@ It has been connected to the component for the Home (`/`), Post (`/post/<post-id
 
 ## Create a minimum of 3 actions that manipulate your store.
 
-![image](https://user-images.githubusercontent.com/61474884/85080794-f1444400-b17e-11ea-892a-b0bb0c011c6a.png)
+![image](https://user-images.githubusercontent.com/61474884/85085023-6158c700-b18b-11ea-9b1a-313ba7da2981.png)
 
 These are working on the pages above.
 
