@@ -28,6 +28,7 @@ const initialData = {
       createdAt: howLongAgo(Date.now() - 1000000),
       likes: 100,
       comments: 2,
+      likedByUser: false,
     },
     {
       authorID: "nick_lee",
@@ -42,6 +43,7 @@ const initialData = {
       createdAt: howLongAgo(Date.now() - 2000000),
       likes: 70,
       comments: 2,
+      likedByUser: false,
     },
     {
       authorID: "gaeron",
@@ -55,6 +57,7 @@ const initialData = {
       createdAt: howLongAgo(Date.now() - 1003000),
       likes: 40,
       comments: 2,
+      likedByUser: false,
     },
   ],
   posts: [
@@ -143,6 +146,7 @@ const initialData = {
     featuredImg: randomBackgroundImage(),
     createdAt: howLongAgo(Date.now() - 4000000),
     likes: 70,
+    likedByUser: false,
     comments: [
       {
         authorID: "evan_you",

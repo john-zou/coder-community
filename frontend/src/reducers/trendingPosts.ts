@@ -5,7 +5,14 @@ export function trendingPosts(state = [], action) {
       const likedPostIndex = copiedTrendingPosts.findIndex(
         (post) => post.postID === action.post.postID
       );
-      copiedTrendingPosts[likedPostIndex].likes++;
+      if (action.isLiked) {
+        copiedTrendingPosts[likedPostIndex].likedByUser = true;
+        copiedTrendingPosts[likedPostIndex].likes++;
+      }
+      else {
+        copiedTrendingPosts[likedPostIndex].likedByUser = false;
+        copiedTrendingPosts[likedPostIndex].likes--;
+      }
       return copiedTrendingPosts;
     default:
       return state;
