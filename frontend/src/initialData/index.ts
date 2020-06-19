@@ -184,6 +184,19 @@ const initialData = {
       comments: 30,
     },
   ],
+  tags: [
+    "c",
+    "c++",
+    "css",
+    "backend",
+    "frontend",
+    "java",
+    "javascript",
+    "mongodb",
+    "nodejs",
+    "react",
+    "redux",
+  ],
 };
 
 export type RootState = typeof initialData;
@@ -194,5 +207,6 @@ export type CurrentViewedPost = typeof initialData.currentViewedPost;
 export type CurrentViewedProfile = typeof initialData.currentViewedProfile;
 export type Post = typeof initialData.posts[0];
 export type SavedPost = typeof initialData.savedPosts[0];
+export type Tag = typeof initialData.tags[0];
 
 export default initialData;

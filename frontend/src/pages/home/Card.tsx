@@ -104,14 +104,19 @@ const Card = ({ trendingPost }: Props) => {
         />
         <div className={classes.nameTime}>
           <p>
-            <span
-              style={{
-                fontWeight: "bold",
-                color: "#5DCBAF",
-              }}
+            <Link
+              to={`/user/${trendingPost.authorID}`}
+              className={classes.link}
             >
-              {trendingPost.authorName}&nbsp;
-            </span>
+              <span
+                style={{
+                  fontWeight: "bold",
+                  color: "#5DCBAF",
+                }}
+              >
+                {trendingPost.authorName}&nbsp;
+              </span>
+            </Link>
             posted&nbsp;
             <span style={{ fontWeight: "bolder" }}>
               <Link

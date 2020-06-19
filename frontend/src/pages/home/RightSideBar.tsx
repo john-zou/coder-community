@@ -12,16 +12,30 @@ const useStyles = makeStyles({
     width: "20vw",
     display: "flex",
     flexDirection: "column",
-    height: "96vh",
+    // height: "100%",
     cursor: "pointer",
     paddingLeft: "2em",
     paddingTop: "5vh",
     marginRight: "5vw",
+  },
+  mostPopularSection: {
+    height: "56vh",
+    display: "flex",
+    flexDirection: "column",
+    overflowY: "scroll",
+  },
+  savePostSection: {
+    display: "flex",
+    flexDirection: "column",
+    height: "40vh",
     overflowY: "scroll",
   },
   savePostText: {
     marginBottom: "-0.2em",
     borderBottom: "solid 1px lightgray",
+    fontSize: "large",
+    fontFamily: "Passion One, cursive",
+    color: "#707070",
   },
   link: {
     textDecoration: "none",
@@ -40,23 +54,28 @@ export default function RightSideBar() {
 
   return (
     <div className={classes.root}>
-      <h3 className={classes.savePostText}># Saved posts</h3>
-      {savedPosts.map((sp) => (
-        <div key={sp.postID}>
-          <Avatar post={sp} extraText=""></Avatar>
-          <Link
-            to={`/post/${sp.postID}`}
-            className={classes.link}
-            onClick={() => {
-              handleViewPost(currViewedPost, sp, dispatch);
-            }}
-          >
-            <p style={{ marginTop: "-0.5em", fontWeight: "bold" }}>
-              {sp.title}
-            </p>
-          </Link>
-        </div>
-      ))}
+      <p className={classes.savePostText}># SAVED POSTS</p>
+      <div className={classes.savePostSection}>
+        {savedPosts.map((sp) => (
+          <div key={sp.postID}>
+            <Avatar post={sp} extraText=""></Avatar>
+            <Link
+              to={`/post/${sp.postID}`}
+              className={classes.link}
+              onClick={() => {
+                handleViewPost(currViewedPost, sp, dispatch);
+              }}
+            >
+              <p style={{ marginTop: "-0.5em", fontWeight: "bold" }}>
+                {sp.title}
+              </p>
+            </Link>
+          </div>
+        ))}
+      </div>
+
+      <p className={classes.savePostText}># MOST POPULAR</p>
+      <div className={classes.mostPopularSection}></div>
     </div>
   );
 }
