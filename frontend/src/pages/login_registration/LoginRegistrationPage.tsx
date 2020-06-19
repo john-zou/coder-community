@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useReducer, useState } from "react";
 import { makeStyles } from "@material-ui/core";
-import Login from "./Login";
-import Register from "./Register";
+import Terminal from "react-console-emulator";
+
+// Work in Progress
 
 const useStyles = makeStyles(() => ({
   container: {
@@ -10,13 +11,39 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
+type Command = {
+  description: string;
+  usage?: string;
+  fn: () => string;
+};
+
+const WelcomeMessage = "Welcome to Coder Community! Type 'login' or 'register'";
+
+const PromptLabel = "user@CC:~$";
+
 export function LoginRegistrationPage() {
   const classes = useStyles();
+  const [state, setState] = useState();
+
+  const commands: { [key: string]: Command } = {
+    login: {
+      description: "Log into Coder Community",
+      fn: () => "Welcome back!",
+    },
+    register: {
+      description: "Register for Coder Community",
+      fn: () => "Welcome to Coder Community!",
+    },
+  };
 
   return (
     <div className={classes.container}>
-      <Login></Login>
-      <Register></Register>
+      <Terminal
+        commands={commands}
+        welcomeMessage={WelcomeMessage}
+        promptLabel={PromptLabel}
+        style={{ fontSize: "3rem", margin: 200 }}
+      ></Terminal>
     </div>
   );
 }
