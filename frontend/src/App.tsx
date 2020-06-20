@@ -26,6 +26,9 @@ export default function App() {
         <Route path="/post/:postID">
           <PostDetail />
         </Route>
+	<Route path="/result">
+	  <SearchResult />
+	</Route>
         <Route path="/video_management">
           <Upload />
         </Route>
