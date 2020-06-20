@@ -30,6 +30,14 @@ It has been connected to the component for the Home (`/`), Post (`/post/<post-id
 
 These are working on the pages above.
 
+## Additionally, video upload page:
+
+![image](https://user-images.githubusercontent.com/61474884/85196204-64d47700-b28d-11ea-832f-11bf5ef1b90c.png)
+
+## Back end initial setup / repo structuring for full stack app:
+
+![image](https://user-images.githubusercontent.com/61474884/85196229-9baa8d00-b28d-11ea-8deb-c6946474acb9.png)
+
 ---
 
 ---
