@@ -5,9 +5,10 @@ export const savePost = (post: TrendingPost) => ({
   post,
 });
 
-export const likePost = (post: TrendingPost) => ({
+export const likePost = (post, isLiked) => ({
   type: "LIKE_POST",
   post,
+  isLiked,
 });
 
 //set the currenViewedPost given the trending post

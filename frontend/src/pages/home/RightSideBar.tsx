@@ -31,7 +31,7 @@ const useStyles = makeStyles({
     overflowY: "scroll",
   },
   savePostText: {
-    marginBottom: "-0.2em",
+    marginBottom: "-1px",
     borderBottom: "solid 1px lightgray",
     fontSize: "large",
     fontFamily: "Passion One, cursive",
