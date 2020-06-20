@@ -4,6 +4,7 @@ import ImgP from "./ImgPanel";
 import TextP from "./TextPanel";
 import TagP from "./TagPanel";
 import PeopleP from "./PeoplePanel";
+import Submit from "./Submit";
 
 const useStyles = makeStyles({
   createPost: {
@@ -16,7 +17,7 @@ const useStyles = makeStyles({
     height: "110vh",
     alignItems: "center",
     // overflowY: "scroll",
-  },
+  }
 });
 
 export default function CreatePost() {
@@ -27,6 +28,7 @@ export default function CreatePost() {
       <TextP />
       <TagP />
       <PeopleP />
+      <Submit />
     </div>
   );
 }
