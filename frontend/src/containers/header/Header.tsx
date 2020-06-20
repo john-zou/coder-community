@@ -18,6 +18,7 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import MessageIcon from "@material-ui/icons/Message";
 import { Link } from "react-router-dom";
 import PurpleButton from "../../pages/common/PurpleButton";
+import Logo from "../../assets/ccLogo.svg";
 
 const drawerWidth = 240;
 const useStyles = makeStyles((theme) => ({
@@ -194,9 +195,7 @@ export default function Header(props) {
           >
             <MenuIcon />
           </IconButton>
-          <Typography className={classes.title} variant="h6" noWrap>
-            Coder-Community
-          </Typography>
+          <img src={Logo} style={{ width: "5em" }} />
           <div className={classes.search}>
             <div className={classes.searchIcon}>
               <SearchIcon />

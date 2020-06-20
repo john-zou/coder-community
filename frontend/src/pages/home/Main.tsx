@@ -6,11 +6,12 @@ import { RootState, TrendingPost } from "../../initialData";
 
 const useStyles = makeStyles({
   main: {
-    paddingTop: "3em",
+    marginTop: "3vh",
     display: "flex",
     flex: 1,
+    marginBottom: "0",
+    height: "120vh",
     flexDirection: "column",
-    height: "96vh",
     alignItems: "center",
     overflowY: "scroll",
   },
