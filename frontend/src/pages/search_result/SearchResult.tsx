@@ -1,6 +1,5 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import LeftSideBar from "./LeftSideBar";
 import RightSideBar from "./RightSideBar";
 import Main from "./Main";
 
@@ -15,7 +14,6 @@ export default function Home() {
   const classes = useStyles();
   return (
     <div className={classes.home}>
-      <LeftSideBar />
       <Main />
       <RightSideBar />
     </div>

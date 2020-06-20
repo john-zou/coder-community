@@ -8,6 +8,7 @@ import { ViewProfile } from "./pages/view_profile/ViewProfile";
 import CreatePost from "./pages/create_post/CreatePost";
 import PostDetail from "./pages/post_detail";
 import Upload from "./pages/video_management/Upload";
+import SearchResult from "./pages/search_result/SearchResult";
 
 export default function App() {
   return (
