@@ -18,16 +18,16 @@ const useStyles = makeStyles({
     paddingTop: "5vh",
     marginRight: "5vw",
   },
-  mostPopularSection: {
-    height: "56vh",
-    display: "flex",
-    flexDirection: "column",
-    overflowY: "scroll",
-  },
+  // mostPopularSection: {
+  //   height: "56vh",
+  //   display: "flex",
+  //   flexDirection: "column",
+  //   overflowY: "scroll",
+  // },
   savePostSection: {
     display: "flex",
     flexDirection: "column",
-    height: "40vh",
+    height: "100vh",
     overflowY: "scroll",
   },
   savePostText: {
@@ -74,8 +74,8 @@ export default function RightSideBar() {
         ))}
       </div>
 
-      <p className={classes.savePostText}># MOST POPULAR</p>
-      <div className={classes.mostPopularSection}></div>
+      {/* <p className={classes.savePostText}># MOST POPULAR</p>
+      <div className={classes.mostPopularSection}></div> */}
     </div>
   );
 }
