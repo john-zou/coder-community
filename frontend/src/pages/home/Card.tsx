@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import HeartIcon from "../../icons/heartIcon.svg";
+import HeartIconRed from "../../icons/heartIconRed.svg";
 import CommentIcon from "../../icons/commentIcon.svg";
 import { TrendingPost, RootState, CurrentViewedPost } from "../../initialData";
 import { Link } from "react-router-dom";
@@ -104,14 +105,19 @@ const Card = ({ trendingPost }: Props) => {
         />
         <div className={classes.nameTime}>
           <p>
-            <span
-              style={{
-                fontWeight: "bold",
-                color: "#5DCBAF",
-              }}
+            <Link
+              to={`/user/${trendingPost.authorID}`}
+              className={classes.link}
             >
-              {trendingPost.authorName}&nbsp;
-            </span>
+              <span
+                style={{
+                  fontWeight: "bold",
+                  color: "#5DCBAF",
+                }}
+              >
+                {trendingPost.authorName}&nbsp;
+              </span>
+            </Link>
             posted&nbsp;
             <span style={{ fontWeight: "bolder" }}>
               <Link
@@ -178,10 +184,10 @@ const Card = ({ trendingPost }: Props) => {
         <div className={classes.interactionsIcons}>
           <img
             className={classes.heartIcon}
-            src={HeartIcon}
+            src={trendingPost.likedByUser ? HeartIconRed : HeartIcon}
             alt=""
             onClick={() => {
-              dispatch(likePost(trendingPost));
+              dispatch(likePost(trendingPost, !trendingPost.likedByUser));
             }}
           />
           <p>&nbsp;{trendingPost.likes}</p>
