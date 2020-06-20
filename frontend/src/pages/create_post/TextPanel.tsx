@@ -29,7 +29,7 @@ const useStyles = makeStyles({
     width: "100%",
     height: "10vh",
     fontFamily: "Arial",
-    fontSize: "3em"
+    fontSize: "2em"
   },
   cpcontent: {
     border: "none",

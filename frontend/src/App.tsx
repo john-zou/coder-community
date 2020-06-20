@@ -7,7 +7,7 @@ import Home from "./pages/home";
 import { ViewProfile } from "./pages/view_profile/ViewProfile";
 import CreatePost from "./pages/create_post/CreatePost";
 import PostDetail from "./pages/post_detail";
-import SearchResult from "./pages/search_result/SearchResult";
+import Upload from "./pages/video_management/Upload";
 
 export default function App() {
   return (
@@ -29,6 +29,9 @@ export default function App() {
 	<Route path="/result">
 	  <SearchResult />
 	</Route>
+        <Route path="/video_management">
+          <Upload />
+        </Route>
       </Switch>
       <Footer></Footer>
     </Router>
