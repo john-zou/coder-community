@@ -7,6 +7,7 @@ import Home from "./pages/home";
 import { ViewProfile } from "./pages/view_profile/ViewProfile";
 import CreatePost from "./pages/create_post/CreatePost";
 import PostDetail from "./pages/post_detail";
+import SearchResult from "./pages/search_result/SearchResult";
 
 export default function App() {
   return (
@@ -25,6 +26,9 @@ export default function App() {
         <Route path="/post/:postID">
           <PostDetail />
         </Route>
+	<Route path="/result">
+	  <SearchResult />
+	</Route>
       </Switch>
       <Footer></Footer>
     </Router>
