@@ -1,12 +1,15 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { RootState, CurrentViewedPost } from "../../initialData";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import HeartIcon from "../../icons/heartIcon.svg";
+import HeartIconRed from "../../icons/heartIconRed.svg";
+import CommentIcon from "../../icons/commentIcon.svg";
 import ShareIcon from "../../icons/shareIcon.svg";
 import NewComment from "./NewComment";
 import Avatar from "../common/Avatar";
+import { likePost } from "../../actions/home";
 
 const useStyles = makeStyles({
   root: {
@@ -41,6 +44,7 @@ const useStyles = makeStyles({
 const PostDetail = () => {
   const { postID } = useParams(); //get the url param to render the appropriate post
   const classes = useStyles();
+  const dispatch = useDispatch();
   const post = useSelector<RootState, CurrentViewedPost>(
     (state) => state.currentViewedPost
   );
@@ -56,10 +60,17 @@ const PostDetail = () => {
         <Avatar post={post} extraText="follow"></Avatar>
 
         <p>{post.content}</p>
+
         <div className={classes.interactionsIcons}>
           <span>
-            <img className={classes.heartIcon} src={HeartIcon} alt="" />
-            &nbsp;&nbsp;Like
+            <img className={classes.heartIcon} src={post.likedByUser ? HeartIconRed : HeartIcon} alt="" onClick={() => {
+              dispatch(likePost(post, !post.likedByUser));
+            }} />
+            &nbsp;&nbsp;{post.likes}
+          </span>
+          <span>
+            <img className={classes.shareIcon} src={CommentIcon} alt="" />
+            &nbsp;&nbsp;{post.comments.length}
           </span>
           <span>
             <img className={classes.shareIcon} src={ShareIcon} alt="" />

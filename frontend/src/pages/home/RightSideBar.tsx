@@ -1,24 +1,81 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState, SavedPost, CurrentViewedPost } from "../../initialData";
+import Avatar from "../common/Avatar";
+import { Link } from "react-router-dom";
+import { handleViewPost } from "./Card";
+import { currentViewedPost } from "../../reducers/currentViewedPost";
 
 const useStyles = makeStyles({
   root: {
-    minWidth: "20vw",
+    width: "20vw",
     display: "flex",
     flexDirection: "column",
-    height: "94vh",
+    // height: "100%",
     cursor: "pointer",
     paddingLeft: "2em",
-    paddingTop: "10vh",
+    paddingTop: "5vh",
+    marginRight: "5vw",
+  },
+  mostPopularSection: {
+    height: "56vh",
+    display: "flex",
+    flexDirection: "column",
+    overflowY: "scroll",
+  },
+  savePostSection: {
+    display: "flex",
+    flexDirection: "column",
+    height: "40vh",
+    overflowY: "scroll",
+  },
+  savePostText: {
+    marginBottom: "-1px",
+    borderBottom: "solid 1px lightgray",
+    fontSize: "large",
+    fontFamily: "Passion One, cursive",
+    color: "#707070",
+  },
+  link: {
+    textDecoration: "none",
   },
 });
 
 export default function RightSideBar() {
   const classes = useStyles();
+  const dispatch = useDispatch();
+  const currViewedPost = useSelector<RootState, CurrentViewedPost>(
+    (state) => state.currentViewedPost
+  );
+  const savedPosts = useSelector<RootState, SavedPost[]>(
+    (state) => state.savedPosts
+  );
+
   return (
     <div className={classes.root}>
-      <h3># Recent posts</h3>
-      <h3># Saved posts</h3>
+      <p className={classes.savePostText}># SAVED POSTS</p>
+      <div className={classes.savePostSection}>
+        {savedPosts.map((sp) => (
+          <div key={sp.postID}>
+            <Avatar post={sp} extraText=""></Avatar>
+            <Link
+              to={`/post/${sp.postID}`}
+              className={classes.link}
+              onClick={() => {
+                handleViewPost(currViewedPost, sp, dispatch);
+              }}
+            >
+              <p style={{ marginTop: "-0.5em", fontWeight: "bold" }}>
+                {sp.title}
+              </p>
+            </Link>
+          </div>
+        ))}
+      </div>
+
+      <p className={classes.savePostText}># MOST POPULAR</p>
+      <div className={classes.mostPopularSection}></div>
     </div>
   );
 }
