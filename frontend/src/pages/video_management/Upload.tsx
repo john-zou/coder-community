@@ -7,18 +7,28 @@ import PeopleP from "../create_post/PeoplePanel";
 
 export default function Upload() {
     return (
+    <div>
     <div
      style={{
           alignItems: "center",
            display: "flex",
            flex: 1,
            paddingTop: "7vh",
-           paddingBottom: "7vh",
            flexDirection: "column",
           }}
     >
       <VideoPanel />
-     <div style={{height: "50vh"}}>
+      </div>
+     <div
+     style={{
+       alignItems: "center",
+        display: "flex",
+        flex: 1,
+        paddingBottom: "3vh",
+        flexDirection: "column",
+        height: "100vh"
+       }}
+       >
       <TextP />
        <TagP />
        <PeopleP />

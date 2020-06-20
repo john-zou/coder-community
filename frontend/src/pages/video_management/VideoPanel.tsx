@@ -44,7 +44,7 @@ class VideoPanel extends React.Component<IProps, IState> {
 
   closeOverlay() {
     this.setState({
-      overlayActive: true
+      overlayActive: false
     });
   }
 
