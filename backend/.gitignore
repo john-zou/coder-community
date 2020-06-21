@@ -35,3 +35,6 @@ lerna-debug.log*
 
 # Use Yarn
 package-lock.json
+
+# OAuth Client Secrets
+secrets.js
