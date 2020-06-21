@@ -1,5 +1,5 @@
 // These are used by `AuthService` on the back end, and during the Login process on the front end
-// There are two copies of this file, one in `backend/src` and one in `frontend/src`
+// There are two copies of this file, one in `backend` and one in `frontend/src`
 
 export const GitHubOAuthClientID = 'f397e7312eb6205b3256';
 export const GoogleOAuthClientID =
