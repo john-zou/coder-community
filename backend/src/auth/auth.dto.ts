@@ -3,6 +3,7 @@ import { Type } from '@nestjs/common';
 
 export class GitHubLoginBody {
   code: string;
+  state: string;
 }
 
 export class GoogleLoginBody {
@@ -17,8 +18,6 @@ export class LogOutSuccess {
   // TODO
 }
 
-export type LoginMethod = 'GitHub' | 'Google';
-
 export class LoginSuccess {
   @ApiProperty({
     description: 'The CoderCommunity JWT',
@@ -31,9 +30,4 @@ export class LoginSuccess {
   userID: string;
 
   isNewUser: boolean;
-
-  @ApiProperty({
-    example: 'GitHub',
-  })
-  loginMethod: LoginMethod;
 }
