@@ -20,9 +20,9 @@ Back End
 - (3) Exchange user's code for JWT with Social provider
   - This is handled by `AuthController` from `auth/auth.controller.ts`
 - (4) Create CoderCommunity JWT (different from GitHub/Google JWT) and send to Front End
-  - This will be handled by `AuthService` from `auth/auth.service.ts`
+  - This is handled by `AuthService` from `auth/auth.service.ts`
 - (4a) Creates new CoderCommunity account in MongoDB for user if user is new
-  - This will be handled by `UserService` (which does not exist at this time)
+  - This will be handled by `UserService`
 
 Front End (e.g. `<LoginGithub />` Component)
 
@@ -32,4 +32,4 @@ Front End (e.g. `<LoginGithub />` Component)
 Back End
 
 - (7) Checks CoderCommunity JWT before granting access to personal API endpoints
-  - This will be handled by `AuthGuard` in `auth/auth.guard.ts` (which does not exist at this time)
+  - This is handled by `UserAuthGuard` in `auth/guards/user.guard.ts`
