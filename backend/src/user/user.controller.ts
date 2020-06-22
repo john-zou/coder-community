@@ -1,6 +1,6 @@
 import { Controller, Get, UseGuards } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { UserAuthGuard } from 'src/auth/guards/user.guard';
+import { UserAuthGuard } from '../auth/guards/user.guard';
 
 @ApiTags('User')
 @Controller('api/user')
