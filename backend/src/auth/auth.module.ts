@@ -1,20 +1,17 @@
 import { HttpModule, Module } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { UserModule } from '../user/user.module';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
-import { CoderCommunityJwtSecretProperty } from './constants';
 import { JwtStrategy } from './jwt.strategy';
+import { Secrets } from '../secrets';
 
 @Module({
   imports: [
     HttpModule, // For social OAuth
-    JwtModule.registerAsync({
-      useFactory: async (configService: ConfigService) => ({
-        secret: configService.get(CoderCommunityJwtSecretProperty),
-      }),
+    JwtModule.register({
+      secret: Secrets.CoderCommunityJwtSecret,
     }), // For signing CoderCommunity jwt
     UserModule, // For creation of new user
     PassportModule, // For validating CoderCommunity jwt

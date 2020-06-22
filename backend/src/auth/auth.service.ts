@@ -1,5 +1,4 @@
 import { Injectable, HttpService, HttpException } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import {
   GitHubLoginBody,
@@ -8,12 +7,10 @@ import {
   LogOut,
 } from './auth.dto';
 
-import {
-  GitHubOAuthClientID,
-  GitHubOAuthClientSecretProperty,
-} from './constants';
+import { GitHubOAuthClientID } from './constants';
 
 import { UserService } from '../user/user.service';
+import { Secrets } from '../secrets';
 
 const GitHubAccessTokenUrl = 'https://github.com/login/oauth/access_token';
 const GitHubApi = 'https://api.github.com/user';
@@ -72,7 +69,6 @@ export class AuthService {
     private readonly jwtService: JwtService,
     private readonly httpService: HttpService,
     private readonly userService: UserService,
-    private readonly configService: ConfigService,
   ) {}
 
   logOut(
@@ -101,9 +97,7 @@ export class AuthService {
         GitHubAccessTokenUrl,
         {
           client_id: GitHubOAuthClientID,
-          client_secret: this.configService.get(
-            GitHubOAuthClientSecretProperty,
-          ),
+          client_secret: Secrets.GitHubOAuthClientSecret,
           code,
           state,
         },

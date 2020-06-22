@@ -1,18 +1,13 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { AuthService } from './auth.service';
-import { HttpService, HttpModule } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import {
-  GitHubOAuthClientID,
-  GitHubOAuthClientSecretProperty,
-} from './constants';
-
-import { Observable } from 'rxjs';
-import { AxiosResponse } from 'axios';
-import { UserModule } from '../user/user.module';
+import { HttpModule, HttpService } from '@nestjs/common';
 import { JwtModule, JwtService } from '@nestjs/jwt';
+import { Test, TestingModule } from '@nestjs/testing';
+import { AxiosResponse } from 'axios';
+import { Observable } from 'rxjs';
+import { UserModule } from '../user/user.module';
 import { UserService } from '../user/user.service';
-import { ConfigModule } from '@nestjs/config';
+import { AuthService } from './auth.service';
+import { GitHubOAuthClientID } from './constants';
+import { Secrets } from '../secrets';
 
 const GitHubAccessTokenUrl = 'https://github.com/login/oauth/access_token';
 const GitHubApi = 'https://api.github.com/user';
@@ -23,7 +18,6 @@ describe('AuthService', () => {
   let httpService: HttpService;
   let userService: UserService;
   let jwtService: JwtService;
-  let configService: ConfigService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -31,7 +25,6 @@ describe('AuthService', () => {
         HttpModule, // For social OAuth
         JwtModule.register({ secret: FakeCoderCommunityJwtSecret }), // For signing CoderCommunity jwt
         UserModule, // For creation of new user
-        ConfigModule,
       ],
       providers: [AuthService],
     }).compile();
@@ -40,7 +33,6 @@ describe('AuthService', () => {
     httpService = module.get<HttpService>(HttpService);
     userService = module.get<UserService>(UserService);
     jwtService = module.get<JwtService>(JwtService);
-    configService = module.get<ConfigService>(ConfigService);
   });
 
   describe('GitHub auth', () => {
@@ -62,7 +54,7 @@ describe('AuthService', () => {
           expect(url).toEqual(GitHubAccessTokenUrl);
           expect(data).toEqual({
             client_id: GitHubOAuthClientID,
-            client_secret: configService.get(GitHubOAuthClientSecretProperty),
+            client_secret: Secrets.GitHubOAuthClientSecret,
             code,
             state,
           });
@@ -108,7 +100,7 @@ describe('AuthService', () => {
           expect(url).toEqual(GitHubAccessTokenUrl);
           expect(data).toEqual({
             client_id: GitHubOAuthClientID,
-            client_secret: configService.get(GitHubOAuthClientSecretProperty),
+            client_secret: Secrets.GitHubOAuthClientSecret,
             code,
             state,
           });
