@@ -1,4 +1,4 @@
-import { Controller, Post, Param, Body } from '@nestjs/common';
+import { Controller, Post, Body } from '@nestjs/common';
 import {
   GitHubLoginBody,
   GoogleLoginBody,
@@ -28,6 +28,9 @@ export class AuthController {
     return await this.authService.authenticateGoogleLogin(googleLogin);
   }
 
+  /**
+   * This is not a high priority. It may be implemented in the future when we allow a user to end all of their sessions
+   */
   @Post('logout')
   async logOut(@Body() logOut: LogOut): Promise<LogOutSuccess> {
     return await this.authService.logOut(logOut);
