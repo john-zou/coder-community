@@ -40,4 +40,4 @@ package-lock.json
 .env
 
 # generated API client zip
-./scripts/generated-api-client.zip
+/scripts/generated-api-client.zip
