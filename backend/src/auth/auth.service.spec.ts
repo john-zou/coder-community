@@ -1,7 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AuthService } from './auth.service';
 import { HttpService, HttpModule } from '@nestjs/common';
-import { LoginSuccess } from './auth.dto';
 import { GitHubOAuthClientID } from './constants';
 import { GitHubOAuthClientSecret } from '../../secrets';
 import { Observable } from 'rxjs';
