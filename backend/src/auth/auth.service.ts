@@ -1,4 +1,4 @@
-import { Injectable, HttpService } from '@nestjs/common';
+import { Injectable, HttpService, HttpException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import {
   GitHubLoginBody,
@@ -9,7 +9,7 @@ import {
 
 import { GitHubOAuthClientID } from './constants';
 import { GitHubOAuthClientSecret } from '../../secrets';
-import { UserService } from 'src/user/user.service';
+import { UserService } from '../user/user.service';
 
 const GitHubAccessTokenUrl = 'https://github.com/login/oauth/access_token';
 const GitHubApi = 'https://api.github.com/user';
@@ -107,6 +107,10 @@ export class AuthService {
         },
       )
       .toPromise();
+
+    if (!res.data) {
+      throw new HttpException('There was an issue with the GitHub OAuth', 401);
+    }
 
     const gitHubToken: string = res.data.access_token;
     const userInfo: Partial<GitHubUser> = await this.httpService
