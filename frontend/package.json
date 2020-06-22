@@ -25,6 +25,7 @@
     "typescript": "^3.9.5"
   },
   "scripts": {
+    "gen": "cd ../backend && yarn gen",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
