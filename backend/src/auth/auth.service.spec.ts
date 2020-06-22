@@ -88,7 +88,7 @@ describe('AuthService', () => {
       expect(actual.userID).toEqual(fakeGitHubLogin);
     });
 
-    it('should throw HttpError and not create a user when GitHub rejects the code', async () => {
+    it('should reject with a message that mentions GitHub, and not create a user, when GitHub rejects the code', async () => {
       const code = 'abc';
       const state = 'def';
 
