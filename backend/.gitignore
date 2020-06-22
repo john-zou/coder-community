@@ -35,3 +35,6 @@ lerna-debug.log*
 
 # Use Yarn
 package-lock.json
+
+#.env will be used for secrets
+.env
