@@ -1,17 +1,16 @@
-import React from "react";
 import { createStyles, makeStyles } from "@material-ui/core/styles";
-import { ProfileBanner } from "./ProfileBanner";
-import { ProfileCard } from "./ProfileCard";
-import { ProfileBoard } from "./ProfileBoard";
-import { useParams } from "react-router-dom";
+import React from "react";
 import { useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
 import {
-  RootState,
-  User,
   CurrentViewedProfile,
   Post,
+  RootState,
   SavedPost,
 } from "../../initialData";
+import { ProfileBanner } from "./ProfileBanner";
+import { ProfileBoard } from "./ProfileBoard";
+import { ProfileCard } from "./ProfileCard";
 
 const useStyles = makeStyles(() =>
   createStyles({
