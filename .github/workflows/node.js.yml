@@ -1,11 +1,11 @@
 # This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
 # For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
 
-name: Node.js backend CI
+name: build test
 
 on:
   pull_request:
-    branches: [ master ]
+    branches: [master]
 
 jobs:
   backend:
@@ -17,30 +17,28 @@ jobs:
         node-version: [12.x]
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node-version }}
-    - run: cd backend
-    - run: yarn install
-    - run: yarn build
-    - run: yarn test:ci
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: cd backend && yarn install
+      - run: cd backend && yarn build
+      - run: cd backend && yarn test:ci
 
   frontend:
     name: front end
     runs-on: ubuntu-latest
-    
+
     strategy:
       matrix:
         node-version: [12.x]
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node-version }}
-    - run: cd frontend
-    - run: yarn install
-    - run: yarn start
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: cd frontend && yarn install
+      - run: cd frontend && yarn start
