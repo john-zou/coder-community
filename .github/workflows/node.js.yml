@@ -24,7 +24,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - run: cd backend && yarn install
       - run: cd backend && yarn build
-      - run: cd backend && yarn test:ci
+      - run: cd backend && yarn test:cov
 
   frontend:
     name: front end
@@ -41,4 +41,5 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - run: cd frontend && yarn install
-      - run: cd frontend && yarn start
+      - run: cd frontend && yarn build
+      - run: cd frontend && yarn test:ci
