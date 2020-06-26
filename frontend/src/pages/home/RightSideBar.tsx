@@ -5,7 +5,6 @@ import { RootState, SavedPost, CurrentViewedPost } from "../../initialData";
 import Avatar from "../common/Avatar";
 import { Link } from "react-router-dom";
 import { handleViewPost } from "./Card";
-import { currentViewedPost } from "../../reducers/currentViewedPost";
 
 const useStyles = makeStyles({
   root: {

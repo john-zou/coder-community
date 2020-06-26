@@ -1,5 +1,4 @@
 import { combineReducers } from "redux";
-import React from "react";
 
 export function posts(state = [], action) {
   return state;
@@ -32,10 +31,10 @@ const setPeopleReducer = (people = [], action) => {
 };
 
 // ** **
-const pageReducer = (page = 0, action) => {
-  if (action.type === "PAGE_SELECT") return action.cho;
-  return page;
-};
+// const pageReducer = (page = 0, action) => {
+//   if (action.type === "PAGE_SELECT") return action.cho;
+//   return page;
+// };
 
 
 

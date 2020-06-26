@@ -1,11 +1,7 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState, SavedPost, CurrentViewedPost, Tag } from "../../initialData";
-import Avatar from "../common/Avatar";
-import { Link } from "react-router-dom";
-import { handleViewPost } from "./Card";
-import { currentViewedPost } from "../../reducers/currentViewedPost";
+// import { useDispatch, useSelector } from "react-redux";
+// import { RootState, SavedPost, CurrentViewedPost, Tag } from "../../initialData";
 import TagCard from "./TagCard";
 
 const useStyles = makeStyles({
@@ -45,15 +41,15 @@ const useStyles = makeStyles({
 
 export default function RightSideBar() {
   const classes = useStyles();
-  const dispatch = useDispatch();
-  const currViewedPost = useSelector<RootState, CurrentViewedPost>(
-    (state) => state.currentViewedPost
-  );
-  const savedPosts = useSelector<RootState, SavedPost[]>(
-    (state) => state.savedPosts
-  );
+  // const dispatch = useDispatch();
+  // const currViewedPost = useSelector<RootState, CurrentViewedPost>(
+  //   (state) => state.currentViewedPost
+  // );
+  // const savedPosts = useSelector<RootState, SavedPost[]>(
+  //   (state) => state.savedPosts
+  // );
 
-  const tags = useSelector<RootState, Tag[]>((state) => state.tags);
+  // const tags = useSelector<RootState, Tag[]>((state) => state.tags);
 
   return (
     <div className={classes.rightbar}>

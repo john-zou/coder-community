@@ -1,7 +1,7 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { useSelector } from "react-redux";
-import { RootState, User, Tag } from "../../initialData";
+import { RootState, Tag } from "../../initialData";
 
 const useStyles = makeStyles({
   root: {

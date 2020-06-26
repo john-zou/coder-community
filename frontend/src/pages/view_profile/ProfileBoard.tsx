@@ -109,9 +109,17 @@ function savedPostComponent(savedPost: SavedPost, classes) {
         <div className={classes.interactions}>
           <div style={{ display: "flex", flex: 1 }}></div>
           <div className={classes.interactionsIcons}>
-            <img className={classes.heartIcon} src={HeartIcon} />
+            <img
+              className={classes.heartIcon}
+              src={HeartIcon}
+              alt="toggle like"
+            />
             <p>&nbsp;{savedPost.likes}</p>
-            <img className={classes.commentIcon} src={CommentIcon} />
+            <img
+              className={classes.commentIcon}
+              src={CommentIcon}
+              alt="comments"
+            />
             <p>&nbsp;{savedPost.comments}</p>
           </div>
         </div>
@@ -134,7 +142,7 @@ function postComponent(post: Post, classes, isOwnPost = false) {
         </div>
 
         <div className={classes.imgTitle}>
-          <img src="https://picsum.photos/300/200" />
+          <img src="https://picsum.photos/300/200" alt="title" />
           <div>
             <p style={{ marginLeft: "2em" }}>{post.content}</p>
             <div className={classes.readSave}>
@@ -152,9 +160,17 @@ function postComponent(post: Post, classes, isOwnPost = false) {
           <p>{post.tags.map((tag) => "#" + tag).join(" ")}</p>
           <div style={{ display: "flex", flex: 1 }}></div>
           <div className={classes.interactionsIcons}>
-            <img className={classes.heartIcon} src={HeartIcon} />
+            <img
+              className={classes.heartIcon}
+              src={HeartIcon}
+              alt="like or dislike"
+            />
             <p>&nbsp;{post.likes}</p>
-            <img className={classes.commentIcon} src={CommentIcon} />
+            <img
+              className={classes.commentIcon}
+              src={CommentIcon}
+              alt="comments"
+            />
             <p>&nbsp;{post.comments.length}</p>
           </div>
         </div>
