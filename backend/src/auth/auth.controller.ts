@@ -1,4 +1,4 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import { Controller, Post, Body, Req, Res } from '@nestjs/common';
 import {
   GitHubLoginBody,
   GoogleLoginBody,
@@ -12,12 +12,10 @@ import { ApiTags } from '@nestjs/swagger';
 @ApiTags('Authentication')
 @Controller('api')
 export class AuthController {
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService) { }
 
   @Post('login/github')
-  async loginGitHub(
-    @Body() gitHubLogin: GitHubLoginBody,
-  ): Promise<LoginSuccess> {
+  async loginGitHub(@Body() gitHubLogin: GitHubLoginBody): Promise<LoginSuccess> {
     return await this.authService.authenticateGitHubLogin(gitHubLogin);
   }
 
