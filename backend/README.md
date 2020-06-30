@@ -48,3 +48,7 @@ yarn test:e2e
 # test coverage
 yarn test:cov
 ```
+## Create NestJS module 
+```bash
+yarn nest generate module [module_name]
+```
