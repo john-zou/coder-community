@@ -69,7 +69,7 @@ export class AuthService {
     private readonly jwtService: JwtService,
     private readonly httpService: HttpService,
     private readonly userService: UserService,
-  ) {}
+  ) { }
 
   logOut(
     logOut: LogOut,
@@ -127,7 +127,7 @@ export class AuthService {
     const userID = userInfo.login;
 
     const isNewUser: boolean = await this.userService.createOrUpdateUser(
-      userID,
+      userID, userInfo.id
     );
 
     const jwt = await this.signCoderCommunityJwt(userInfo.login);

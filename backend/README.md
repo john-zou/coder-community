@@ -29,6 +29,12 @@ yarn start:prod
 ```bash
 yarn gen
 ```
+## Generating `backend/docs`
+
+```bash
+yarn doc
+```
+See backend/docs/index.html
 
 ## Test
 
