@@ -1,3 +1,4 @@
+require('dotenv').config();
 import { HttpModule, HttpService } from '@nestjs/common';
 import { JwtModule, JwtService } from '@nestjs/jwt';
 import { Test, TestingModule } from '@nestjs/testing';
@@ -6,8 +7,9 @@ import { Observable } from 'rxjs';
 import { UserModule } from '../user/user.module';
 import { UserService } from '../user/user.service';
 import { AuthService } from './auth.service';
-import { GitHubOAuthClientID } from './constants';
+import { GitHubOAuthClientID, MONGODB_URI } from './constants';
 import { Secrets } from '../secrets';
+import { TypegooseModule } from 'nestjs-typegoose';
 
 const GitHubAccessTokenUrl = 'https://github.com/login/oauth/access_token';
 const GitHubApi = 'https://api.github.com/user';
@@ -22,6 +24,10 @@ describe('AuthService', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [
+        TypegooseModule.forRoot(MONGODB_URI, {
+          useNewUrlParser: true,
+          useUnifiedTopology: true,
+        }),
         HttpModule, // For social OAuth
         JwtModule.register({ secret: FakeCoderCommunityJwtSecret }), // For signing CoderCommunity jwt
         UserModule, // For creation of new user

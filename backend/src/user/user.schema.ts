@@ -1,21 +1,43 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, Mongoose } from 'mongoose';
+import { prop, Ref } from '@typegoose/typegoose';
+import { TimeStamps } from '@typegoose/typegoose/lib/defaultClasses';
+import { Group } from '../groups/group.schema';
+import { Post } from '../posts/post.schema';
+import { Tag } from '../tags/tag.schema';
 
-@Schema()
-export class User extends Document {//mapped to MongoDb collection 'users"
-  @Prop({ required: true })
+export class User extends TimeStamps {//mapped to MongoDb collection 'users"
+  @prop({ required: true })
   userID: string;
-  @Prop({ required: true })
-  name: string;
-  @Prop()
-  profilePic: string;
-  @Prop()
-  backgroundImg: string;
-  @Prop()
-  status: string;
-  @Prop()
-  followers: User[]; //array of userID's
-  followings: string[];
-}
 
-export const UserSchema = SchemaFactory.createForClass(User);
+  @prop({ required: true })
+  gitHubID: number;
+
+  @prop({ required: true })
+  name: string;
+
+  @prop()
+  profilePic?: string;
+
+  @prop()
+  backgroundImg?: string;
+
+  @prop()
+  status?: string;
+
+  @prop({ ref: User })
+  followers: Ref<User>[];
+
+  @prop({ ref: User })
+  followings: Ref<User>[];
+
+  @prop({ ref: Group })
+  groups: Ref<Group>[];
+
+  @prop({ ref: Post })
+  savedPosts: Ref<Post>[];
+
+  @prop({ ref: Tag })
+  tags: Ref<Tag>[];
+
+  @prop()
+  lastLoggedIn: Date;
+}
