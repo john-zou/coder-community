@@ -5,7 +5,7 @@ import { UserService } from './user.service';
 import { User } from './user.schema';
 
 @ApiTags('User')
-@Controller('api/user')
+@Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) { }
 
