@@ -13,6 +13,12 @@ export class Video extends TimeStamps {
   @prop()
   description: string;
 
+  @prop()
+  content: 
+  
+  @prop()
+  fileSize: number;
+
   @prop({ ref: User })
   likedByUsers: Ref<User>[];
 
