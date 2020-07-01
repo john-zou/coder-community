@@ -6,6 +6,7 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
+    "reseed-mongodb": "nest build && node dist/reseed-mongodb.js",
     "nestgen": "nest generate",
     "gen": "nest build && node scripts/generate-api",
     "prebuild": "rimraf dist",
@@ -16,11 +17,13 @@
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
-    "test": "jest --watch",
-    "test:cov": "jest --coverage",
+    "test": "jest --watch --runInBand --detectOpenHandles",
+    "test:cov": "jest --coverage --runInBand --detectOpenHandles",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "doc": "typedoc --out docs src"
+    "typedoc": "typedoc --out typedoc src",
+    "doc": "compodoc src -p tsconfig.json -d docs -n Backend --hideGenerator",
+    "doc:cn": "compodoc src -p tsconfig.json -d docs-cn -n Backend --hideGenerator --language zh-CN"
   },
   "dependencies": {
     "@nestjs/common": "^7.0.0",
@@ -45,6 +48,7 @@
     "swagger-ui-express": "^4.1.4"
   },
   "devDependencies": {
+    "@compodoc/compodoc": "^1.1.11",
     "@nestjs/cli": "^7.2.0",
     "@nestjs/schematics": "^7.0.1",
     "@nestjs/testing": "^7.0.0",
@@ -62,6 +66,8 @@
     "eslint-plugin-import": "^2.20.1",
     "extract-zip": "^2.0.1",
     "jest": "26.0.1",
+    "mock-mongoose": "^8.0.1-a",
+    "mongodb": "^3.5.9",
     "prettier": "^1.19.1",
     "supertest": "^4.0.2",
     "ts-jest": "26.1.0",
