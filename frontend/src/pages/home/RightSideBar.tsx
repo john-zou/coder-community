@@ -26,7 +26,7 @@ const useStyles = makeStyles({
   savePostSection: {
     display: "flex",
     flexDirection: "column",
-    height: "100vh",
+    height: "50vh",
     overflowY: "scroll",
   },
   savePostText: {
@@ -53,7 +53,7 @@ export default function RightSideBar() {
 
   return (
     <div className={classes.root}>
-      <p className={classes.savePostText}># SAVED POSTS</p>
+      <p className={classes.savePostText}># TRENDING POSTS</p>
       <div className={classes.savePostSection}>
         {savedPosts.map((sp) => (
           <div key={sp.postID}>
@@ -73,6 +73,7 @@ export default function RightSideBar() {
         ))}
       </div>
 
+      <p className={classes.savePostText}># WHO TO FOLLOW</p>
       {/* <p className={classes.savePostText}># MOST POPULAR</p>
       <div className={classes.mostPopularSection}></div> */}
     </div>
