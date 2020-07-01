@@ -1,22 +1,34 @@
-require('dotenv').config();
 import { Test, TestingModule } from '@nestjs/testing';
 import { UserService } from './user.service';
-import { User } from './user.schema';
-import { MONGODB_URI } from '../auth/constants';
 import { TypegooseModule } from 'nestjs-typegoose';
+import { User } from './user.schema';
+import { LOCAL_MONGODB } from '../auth/constants';
+import { MockMongo } from '../util/mock-mongo';
 
 describe('UserService', () => {
+  let module: TestingModule;
   let service: UserService;
 
+  beforeAll(MockMongo);
+  afterAll(MockMongo);
+
   beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
+    module = await Test.createTestingModule({
       imports: [
-        TypegooseModule.forRoot(MONGODB_URI),
-        TypegooseModule.forFeature([User])],
+        TypegooseModule.forRoot(LOCAL_MONGODB, {
+          useNewUrlParser: true,
+          useUnifiedTopology: true,
+        }),
+        TypegooseModule.forFeature([User]),
+      ],
       providers: [UserService],
     }).compile();
 
     service = module.get<UserService>(UserService);
+  });
+
+  afterEach(async () => {
+    await module.close();
   });
 
   it('should be defined', () => {
@@ -24,11 +36,11 @@ describe('UserService', () => {
   });
 
   it('createOrUpdateUser', async () => {
-    const isNew = await service.createOrUpdateUser("octocat", 1);
+    const isNew = await service.createOrUpdateUser('octocat', 1);
     expect(isNew).toBe(true);
-    const isNewSecondTime = await service.createOrUpdateUser("octopus", 1);
+    const isNewSecondTime = await service.createOrUpdateUser('octopus', 1);
     expect(isNewSecondTime).toBe(false);
-  })
+  });
 
   // it('create new user', async () => {
   //   const newUser = {

@@ -14,7 +14,7 @@
 yarn install
 ```
 
-## Running the server on port 3000
+## Running the server on port 3001
 
 ```bash
 # development (watch mode)
@@ -29,12 +29,23 @@ yarn start:prod
 ```bash
 yarn gen
 ```
-## Generating `backend/docs`
+
+## Generating `backend/docs` (English)
 
 ```bash
 yarn doc
+
 ```
+
 See backend/docs/index.html
+
+## Generating `backend/docs-cn` (Chinese)
+
+```bash
+yarn doc:cn
+```
+
+See backend/docs-cn/index.html
 
 ## Test
 
