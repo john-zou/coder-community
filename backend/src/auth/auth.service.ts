@@ -125,22 +125,24 @@ export class AuthService {
       .then(res => res.data);
 
     const userID = userInfo.login;
+    const gitHubID = userInfo.id;
 
-    const isNewUser: boolean = await this.userService.createOrUpdateUser(
-      userID, userInfo.id
+    const { isNewUser, _id } = await this.userService.createOrUpdateUser(
+      userID, gitHubID
     );
 
-    const jwt = await this.signCoderCommunityJwt(userInfo.login);
+    const jwt = await this.signCoderCommunityJwt(_id);
 
     return {
       isNewUser,
       jwt,
-      userID: userInfo.login,
+      userID,
+      _id,
     };
   }
 
-  private signCoderCommunityJwt(userID: string) {
-    const payload = { userID };
+  private signCoderCommunityJwt(_id: string) {
+    const payload = { _id };
     return this.jwtService.signAsync(payload);
   }
 }
