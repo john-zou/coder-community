@@ -1,12 +1,15 @@
-require('dotenv').config();
 import { Test, TestingModule } from '@nestjs/testing';
 import { UserService } from './user.service';
+import { TypegooseModule } from 'nestjs-typegoose';
 import { User } from './user.schema';
 import { MONGODB_URI } from '../auth/constants';
-import { TypegooseModule } from 'nestjs-typegoose';
+import { MockMongo } from '../util/mock-mongo';
 
 describe('UserService', () => {
   let service: UserService;
+
+  beforeAll(MockMongo);
+  afterAll(MockMongo);
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -24,11 +27,11 @@ describe('UserService', () => {
   });
 
   it('createOrUpdateUser', async () => {
-    const isNew = await service.createOrUpdateUser("octocat", 1);
+    const isNew = await service.createOrUpdateUser('octocat', 1);
     expect(isNew).toBe(true);
-    const isNewSecondTime = await service.createOrUpdateUser("octopus", 1);
+    const isNewSecondTime = await service.createOrUpdateUser('octopus', 1);
     expect(isNewSecondTime).toBe(false);
-  })
+  });
 
   // it('create new user', async () => {
   //   const newUser = {

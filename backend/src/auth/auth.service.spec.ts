@@ -1,4 +1,3 @@
-require('dotenv').config();
 import { HttpModule, HttpService } from '@nestjs/common';
 import { JwtModule, JwtService } from '@nestjs/jwt';
 import { Test, TestingModule } from '@nestjs/testing';
@@ -8,7 +7,8 @@ import { UserModule } from '../user/user.module';
 import { UserService } from '../user/user.service';
 import { AuthService } from './auth.service';
 import { GitHubOAuthClientID, MONGODB_URI } from './constants';
-import { Secrets } from '../secrets';
+import { MockMongo } from '../util/mock-mongo';
+import { User } from '../user/user.schema';
 import { TypegooseModule } from 'nestjs-typegoose';
 
 const GitHubAccessTokenUrl = 'https://github.com/login/oauth/access_token';
@@ -21,16 +21,18 @@ describe('AuthService', () => {
   let userService: UserService;
   let jwtService: JwtService;
 
+  beforeAll(MockMongo);
+  afterAll(MockMongo);
+
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [
-        TypegooseModule.forRoot(MONGODB_URI, {
-          useNewUrlParser: true,
-          useUnifiedTopology: true,
-        }),
         HttpModule, // For social OAuth
         JwtModule.register({ secret: FakeCoderCommunityJwtSecret }), // For signing CoderCommunity jwt
-        UserModule, // For creation of new user
+        TypegooseModule.forRoot(MONGODB_URI),
+        TypegooseModule.forFeature([User]),
+        UserModule,
+ // For creation of new user
       ],
       providers: [AuthService],
     }).compile();
@@ -60,7 +62,7 @@ describe('AuthService', () => {
           expect(url).toEqual(GitHubAccessTokenUrl);
           expect(data).toEqual({
             client_id: GitHubOAuthClientID,
-            client_secret: Secrets.GitHubOAuthClientSecret,
+            client_secret: undefined, // because no access to client secret
             code,
             state,
           });
@@ -106,7 +108,7 @@ describe('AuthService', () => {
           expect(url).toEqual(GitHubAccessTokenUrl);
           expect(data).toEqual({
             client_id: GitHubOAuthClientID,
-            client_secret: Secrets.GitHubOAuthClientSecret,
+            client_secret: undefined,
             code,
             state,
           });
