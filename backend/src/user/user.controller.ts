@@ -1,8 +1,8 @@
 import { Controller, Get, UseGuards, Post, Body } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { UserAuthGuard } from '../auth/guards/user.guard';
 import { UserService } from './user.service';
 import { User } from './user.schema';
+import { Personal } from '../auth/guards/personal.decorator';
 
 @ApiTags('User')
 @Controller('user')
@@ -14,7 +14,7 @@ export class UserController {
   //   return this.userService.create(createUserDto);
   // }
 
-  @UseGuards(UserAuthGuard)
+  @Personal()
   test(): string {
     return 'Hello!';
   }
