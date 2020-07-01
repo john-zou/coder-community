@@ -6,6 +6,7 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
+    "seed": "nest build && node dist/scripts/seed",
     "nestgen": "nest generate",
     "gen": "nest build && node scripts/generate-api",
     "prebuild": "rimraf dist",
