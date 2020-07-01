@@ -3,6 +3,8 @@ import { StorageService } from '../storage/storage.service';
 
 @Injectable()
 export class UploadService {
+  constructor(private readonly storageService: StorageService) {}
+
   uploadProfilePic(_id: string, file: Express.Multer.File): Promise<import("./upload.dto").UploadSuccess> {
     throw new Error("Method not implemented.");
   }
@@ -18,7 +20,5 @@ export class UploadService {
   uploadPrivateFile(_id: string, file: Express.Multer.File): Promise<import("./upload.dto").UploadSuccess> {
     throw new Error("Method not implemented.");
   }
-  constructor(private readonly storageService: StorageService) {}
-
   
 }
