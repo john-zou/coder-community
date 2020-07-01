@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { UserService } from './user.service';
 import { TypegooseModule } from 'nestjs-typegoose';
 import { User } from './user.schema';
-import { MONGODB_URI } from '../auth/constants';
+import { LOCAL_MONGODB } from '../auth/constants';
 import { MockMongo } from '../util/mock-mongo';
 
 describe('UserService', () => {
@@ -14,7 +14,7 @@ describe('UserService', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [
-        TypegooseModule.forRoot(MONGODB_URI),
+        TypegooseModule.forRoot(LOCAL_MONGODB),
         TypegooseModule.forFeature([User])],
       providers: [UserService],
     }).compile();

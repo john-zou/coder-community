@@ -22,6 +22,9 @@ const mockMongeese: Record<number, MockMongoose> = {};
  *
  */
 export async function MockMongo(): Promise<void> {
+  if (process.env.CI) {
+    return;
+  }
   if (!mockMongeese[process.pid]) {
     // Setup
     console.log('Setting up Mock Mongoose on process', process.pid);

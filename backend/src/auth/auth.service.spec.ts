@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 import { UserModule } from '../user/user.module';
 import { UserService } from '../user/user.service';
 import { AuthService } from './auth.service';
-import { GitHubOAuthClientID, MONGODB_URI } from './constants';
+import { GitHubOAuthClientID, LOCAL_MONGODB } from './constants';
 import { MockMongo } from '../util/mock-mongo';
 import { User } from '../user/user.schema';
 import { TypegooseModule } from 'nestjs-typegoose';
@@ -29,7 +29,7 @@ describe('AuthService', () => {
       imports: [
         HttpModule, // For social OAuth
         JwtModule.register({ secret: FakeCoderCommunityJwtSecret }), // For signing CoderCommunity jwt
-        TypegooseModule.forRoot(MONGODB_URI),
+        TypegooseModule.forRoot(LOCAL_MONGODB),
         TypegooseModule.forFeature([User]),
         UserModule,
  // For creation of new user
