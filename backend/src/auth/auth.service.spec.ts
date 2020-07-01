@@ -16,6 +16,7 @@ const GitHubApi = 'https://api.github.com/user';
 const FakeCoderCommunityJwtSecret = '123';
 
 describe('AuthService', () => {
+  let module: TestingModule;
   let authService: AuthService;
   let httpService: HttpService;
   let userService: UserService;
@@ -25,14 +26,17 @@ describe('AuthService', () => {
   afterAll(MockMongo);
 
   beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
+    module = await Test.createTestingModule({
       imports: [
         HttpModule, // For social OAuth
         JwtModule.register({ secret: FakeCoderCommunityJwtSecret }), // For signing CoderCommunity jwt
-        TypegooseModule.forRoot(LOCAL_MONGODB),
+        TypegooseModule.forRoot(LOCAL_MONGODB, {
+          useNewUrlParser: true,
+          useUnifiedTopology: true,
+        }),
         TypegooseModule.forFeature([User]),
         UserModule,
- // For creation of new user
+        // For creation of new user
       ],
       providers: [AuthService],
     }).compile();
@@ -41,6 +45,10 @@ describe('AuthService', () => {
     httpService = module.get<HttpService>(HttpService);
     userService = module.get<UserService>(UserService);
     jwtService = module.get<JwtService>(JwtService);
+  });
+
+  afterEach(async () => {
+    await module.close();
   });
 
   describe('GitHub auth', () => {

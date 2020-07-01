@@ -1,7 +1,8 @@
 import * as mongoose from 'mongoose';
 import { MockMongoose } from 'mock-mongoose';
 
-const mockMongeese: Record<number, MockMongoose> = {};
+let started = false;
+let mockMongoose: MockMongoose;
 
 /**
  * Set up in-memory database for use in testing when used in beforeAll; tears it down in after-all
@@ -23,19 +24,23 @@ const mockMongeese: Record<number, MockMongoose> = {};
  */
 export async function MockMongo(): Promise<void> {
   if (process.env.CI) {
-    return;
-  }
-  if (!mockMongeese[process.pid]) {
-    // Setup
-    console.log('Setting up Mock Mongoose on process', process.pid);
-    const mockMongoose = new MockMongoose(mongoose);
-    mockMongeese[process.pid] = mockMongoose;
-    await mockMongoose.prepareStorage();
+    // GitHub action, true local MongoDB
+    if (!started) {
+      started = true;
+    } else {
+      // tear down
+      await mongoose.disconnect();
+      started = false;
+    }
   } else {
-    // Teardown
-    console.log('Tearing down Mock Mongoose on process', process.pid);
-    const mockMongoose = mockMongeese[process.pid];
-    delete mockMongeese[process.pid];
-    await mockMongoose.killMongo();
+    // In-memory database
+    if (!started) {
+      mockMongoose = new MockMongoose(mongoose);
+      await mockMongoose.prepareStorage();
+      started = true;
+    } else {
+      await mockMongoose.killMongo();
+      started = false;
+    }
   }
 }
