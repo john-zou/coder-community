@@ -15,7 +15,8 @@ import { UploadModule } from './upload/upload.module';
 @Module({
   imports: [AuthModule, UserModule, TypegooseModule.forRoot(MONGODB_URI, {
     useNewUrlParser: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
+    useFindAndModify: false,
   }), TagsModule, PostsModule, CommentsModule, VideosModule, GroupsModule, StorageModule, UploadModule],
   controllers: [AppController],
   providers: [AppService],
