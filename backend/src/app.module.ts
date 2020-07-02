@@ -12,11 +12,14 @@ import { VideosModule } from './videos/videos.module';
 import { GroupsModule } from './groups/groups.module';
 import { StorageModule } from './storage/storage.module';
 import { UploadModule } from './upload/upload.module';
+import { MessagesModule } from './messages/messages.module';
+import { ConversationsModule } from './conversations/conversations.module';
+import { AttachmentsModule } from './attachments/attachments.module';
 @Module({
   imports: [AuthModule, UserModule, TypegooseModule.forRoot(MONGODB_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true
-  }), TagsModule, PostsModule, CommentsModule, VideosModule, GroupsModule, StorageModule, UploadModule],
+  }), TagsModule, PostsModule, CommentsModule, VideosModule, GroupsModule, MessagesModule, ConversationsModule, AttachmentsModule, StorageModule, UploadModule],
   controllers: [AppController],
   providers: [AppService],
 })

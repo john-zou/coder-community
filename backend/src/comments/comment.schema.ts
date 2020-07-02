@@ -1,5 +1,5 @@
 import { TimeStamps } from "@typegoose/typegoose/lib/defaultClasses";
-import { prop, Ref } from "@typegoose/typegoose";
+import { prop, Ref, getModelForClass } from "@typegoose/typegoose";
 import { User } from "../user/user.schema";
 import { Post } from "../posts/post.schema";
 import { Video } from "../videos/video.schema";
@@ -23,6 +23,9 @@ export class Comment extends TimeStamps {
   @prop({ enum: CommentRoot })
   commentRoot: CommentRoot;
 
+  @prop({ ref: User })
+  likedByUsers: Ref<User>[];
+
   @prop({ ref: Post })
   parentPost?: Ref<Post>;
 
@@ -32,3 +35,5 @@ export class Comment extends TimeStamps {
   @prop({ ref: Video })
   parentVideo?: Ref<Video>;
 }
+
+export const CommentModel = getModelForClass(Comment);
