@@ -4,14 +4,17 @@ export class CreatePostDto {
   content: string;
 }
 
-export class GetInitialPostDataDto { //for frontend to render 
-  author: string;
+//for showing initial posts on the home page
+export class GetInitialPostDataDto {
+  authorName: string;
+  authorImg: string;
   title: string;
-  description: string;
-  content: string;
+  previewContent: string;
+  // content: string;
   tags: string[];
   featuredImg: string;
-  likedByUsers: number;
-  commentsCount: number;
-  comments: string[];
+  likes: number;
+  comments: number;
+  // comments: string[];
+  createdAt: string;
 }

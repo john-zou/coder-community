@@ -11,7 +11,6 @@ import { Personal } from '../auth/guards/personal.decorator';
 export class TrendingService {
   constructor(@InjectModel(Post) private postModel: ReturnModelType<typeof Post>, @InjectModel(User) private userModel: ReturnModelType<typeof User>, private readonly httpService: HttpService) { }
 
-  getInitialData(): InitialDataDto {
-    return null;
-  }
+  // getInitialData(): InitialDataDto {
+  // }
 }

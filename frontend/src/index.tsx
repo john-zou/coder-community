@@ -14,21 +14,27 @@ import { TrendingApiFactory } from "./api";
 
 const Root = () => {
   const [initialState, setInitialState] = useState({});
+  // useEffect(() => {
+  //   async function getInitialData() {
+  //     const trendingPosts = await TrendingApiFactory().trendingControllerGetTrending();
+  //     const initialData = { trendingPosts };
+  //     setInitialState(initialData);
+  //   }
+  //   getInitialData();
+  // }, []);
+
   useEffect(() => {
-    async function getInitialData() {
-      const initialData = await TrendingApiFactory().trendingControllerGetTrending();
-      setInitialState(initialData);
-    }
-    getInitialData();
-    // fetch("http://localhost:3001/api/initialData?loggedIn=true").then((res) => {
-    //   res.json().then((dataFromBackend => {
-    //     setInitialState(dataFromBackend);
-    //   }))
-    // }).catch(err => {
-    //   console.log(err);
-    // })
+    fetch("http://localhost:3001/api/trending").then((res) => {
+      res.json().then((trendingPosts => {
+        const initialData = { trendingPosts };
+        setInitialState(initialData);
+      }))
+    }).catch(err => {
+      console.log(err);
+    })
   }, []);
 
+  console.log(initialState);
   if (Object.keys(initialState).length === 0) {
     return <Loading />
   }

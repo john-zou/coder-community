@@ -1,6 +1,5 @@
 import { Controller, Get } from '@nestjs/common';
 import { AppService } from './app.service';
-import { InitialDataDto } from './trending/initialData.dto';
 
 @Controller()
 export class AppController {

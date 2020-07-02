@@ -17,7 +17,7 @@ const initialData = {
   trendingPosts: [
     //the 10 most trending posts shown on home page (trending = newest + most liked + most commented on)
     {
-      authorID: "nick_lee", //for viewing author's public profile
+      authorID: "nick_lee",
       authorName: "Nick Lee",
       authorImg: randomImage(),
       postID: "css-tricks", //when user interacts with the post (such as clicking, liking it)

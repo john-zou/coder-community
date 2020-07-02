@@ -4,7 +4,7 @@ import { PostsService } from "./posts.service";
 import { GetInitialPostDataDto } from "./dto/posts.dto";
 
 @ApiTags('Posts')
-@Controller('/posts')
+@Controller('posts')
 export class PostsController {
   constructor(private readonly postsService: PostsService) { }
 
