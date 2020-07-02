@@ -80,6 +80,19 @@ export class RequiredError extends Error {
 /**
  * 
  * @export
+ * @interface FileUploadDto
+ */
+export interface FileUploadDto {
+    /**
+     * 
+     * @type {any}
+     * @memberof FileUploadDto
+     */
+    file: any;
+}
+/**
+ * 
+ * @export
  * @interface GitHubLoginBody
  */
 export interface GitHubLoginBody {
@@ -130,7 +143,13 @@ export interface LoginSuccess {
      */
     jwt: string;
     /**
-     * 
+     * The MongoDB user _id
+     * @type {string}
+     * @memberof LoginSuccess
+     */
+    id: string;
+    /**
+     * The visible User ID
      * @type {string}
      * @memberof LoginSuccess
      */
@@ -141,6 +160,19 @@ export interface LoginSuccess {
      * @memberof LoginSuccess
      */
     isNewUser: boolean;
+}
+/**
+ * 
+ * @export
+ * @interface UploadSuccess
+ */
+export interface UploadSuccess {
+    /**
+     * The relative static URL of the file
+     * @type {string}
+     * @memberof UploadSuccess
+     */
+    url: string;
 }
 /**
  * AuthenticationApi - fetch parameter creator
@@ -159,7 +191,7 @@ export const AuthenticationApiFetchParamCreator = function (configuration?: Conf
             if (body === null || body === undefined) {
                 throw new RequiredError('body','Required parameter body was null or undefined when calling authControllerLogOut.');
             }
-            const localVarPath = `/api/logout`;
+            const localVarPath = `/logout`;
             const localVarUrlObj = url.parse(localVarPath, true);
             const localVarRequestOptions = Object.assign({ method: 'POST' }, options);
             const localVarHeaderParameter = {} as any;
@@ -190,7 +222,7 @@ export const AuthenticationApiFetchParamCreator = function (configuration?: Conf
             if (body === null || body === undefined) {
                 throw new RequiredError('body','Required parameter body was null or undefined when calling authControllerLoginGitHub.');
             }
-            const localVarPath = `/api/login/github`;
+            const localVarPath = `/login/github`;
             const localVarUrlObj = url.parse(localVarPath, true);
             const localVarRequestOptions = Object.assign({ method: 'POST' }, options);
             const localVarHeaderParameter = {} as any;
@@ -221,7 +253,7 @@ export const AuthenticationApiFetchParamCreator = function (configuration?: Conf
             if (body === null || body === undefined) {
                 throw new RequiredError('body','Required parameter body was null or undefined when calling authControllerLoginGoogle.');
             }
-            const localVarPath = `/api/login/google`;
+            const localVarPath = `/login/google`;
             const localVarUrlObj = url.parse(localVarPath, true);
             const localVarRequestOptions = Object.assign({ method: 'POST' }, options);
             const localVarHeaderParameter = {} as any;
@@ -396,7 +428,7 @@ export const DefaultApiFetchParamCreator = function (configuration?: Configurati
          * @throws {RequiredError}
          */
         appControllerGetHello(options: any = {}): FetchArgs {
-            const localVarPath = `/`;
+            const localVarPath = `/hello`;
             const localVarUrlObj = url.parse(localVarPath, true);
             const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
             const localVarHeaderParameter = {} as any;
@@ -477,20 +509,20 @@ export class DefaultApi extends BaseAPI {
 
 }
 /**
- * UserApi - fetch parameter creator
+ * UploadApi - fetch parameter creator
  * @export
  */
-export const UserApiFetchParamCreator = function (configuration?: Configuration) {
+export const UploadApiFetchParamCreator = function (configuration?: Configuration) {
     return {
         /**
          * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        userControllerTest(options: any = {}): FetchArgs {
-            const localVarPath = `/api/user`;
+        uploadControllerUploadPrivateFile(options: any = {}): FetchArgs {
+            const localVarPath = `/upload/private/file`;
             const localVarUrlObj = url.parse(localVarPath, true);
-            const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
+            const localVarRequestOptions = Object.assign({ method: 'POST' }, options);
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
@@ -504,22 +536,169 @@ export const UserApiFetchParamCreator = function (configuration?: Configuration)
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @param {FileUploadDto} body 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        uploadControllerUploadProfileBannerPic(body: FileUploadDto, options: any = {}): FetchArgs {
+            // verify required parameter 'body' is not null or undefined
+            if (body === null || body === undefined) {
+                throw new RequiredError('body','Required parameter body was null or undefined when calling uploadControllerUploadProfileBannerPic.');
+            }
+            const localVarPath = `/upload/profile-banner-pic`;
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'POST' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+            const needsSerialization = (<any>"FileUploadDto" !== "string") || localVarRequestOptions.headers['Content-Type'] === 'application/json';
+            localVarRequestOptions.body =  needsSerialization ? JSON.stringify(body || {}) : (body || "");
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {FileUploadDto} body 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        uploadControllerUploadProfilePic(body: FileUploadDto, options: any = {}): FetchArgs {
+            // verify required parameter 'body' is not null or undefined
+            if (body === null || body === undefined) {
+                throw new RequiredError('body','Required parameter body was null or undefined when calling uploadControllerUploadProfilePic.');
+            }
+            const localVarPath = `/upload/profile-pic`;
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'POST' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+            const needsSerialization = (<any>"FileUploadDto" !== "string") || localVarRequestOptions.headers['Content-Type'] === 'application/json';
+            localVarRequestOptions.body =  needsSerialization ? JSON.stringify(body || {}) : (body || "");
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {FileUploadDto} body 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        uploadControllerUploadPublicAsset(body: FileUploadDto, options: any = {}): FetchArgs {
+            // verify required parameter 'body' is not null or undefined
+            if (body === null || body === undefined) {
+                throw new RequiredError('body','Required parameter body was null or undefined when calling uploadControllerUploadPublicAsset.');
+            }
+            const localVarPath = `/upload/public/asset`;
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'POST' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+            const needsSerialization = (<any>"FileUploadDto" !== "string") || localVarRequestOptions.headers['Content-Type'] === 'application/json';
+            localVarRequestOptions.body =  needsSerialization ? JSON.stringify(body || {}) : (body || "");
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
 /**
- * UserApi - functional programming interface
+ * UploadApi - functional programming interface
  * @export
  */
-export const UserApiFp = function(configuration?: Configuration) {
+export const UploadApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        userControllerTest(options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<string> {
-            const localVarFetchArgs = UserApiFetchParamCreator(configuration).userControllerTest(options);
+        uploadControllerUploadPrivateFile(options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<UploadSuccess> {
+            const localVarFetchArgs = UploadApiFetchParamCreator(configuration).uploadControllerUploadPrivateFile(options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * 
+         * @param {FileUploadDto} body 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        uploadControllerUploadProfileBannerPic(body: FileUploadDto, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<UploadSuccess> {
+            const localVarFetchArgs = UploadApiFetchParamCreator(configuration).uploadControllerUploadProfileBannerPic(body, options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * 
+         * @param {FileUploadDto} body 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        uploadControllerUploadProfilePic(body: FileUploadDto, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<UploadSuccess> {
+            const localVarFetchArgs = UploadApiFetchParamCreator(configuration).uploadControllerUploadProfilePic(body, options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * 
+         * @param {FileUploadDto} body 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        uploadControllerUploadPublicAsset(body: FileUploadDto, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<UploadSuccess> {
+            const localVarFetchArgs = UploadApiFetchParamCreator(configuration).uploadControllerUploadPublicAsset(body, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -534,37 +713,97 @@ export const UserApiFp = function(configuration?: Configuration) {
 };
 
 /**
- * UserApi - factory interface
+ * UploadApi - factory interface
  * @export
  */
-export const UserApiFactory = function (configuration?: Configuration, fetch?: FetchAPI, basePath?: string) {
+export const UploadApiFactory = function (configuration?: Configuration, fetch?: FetchAPI, basePath?: string) {
     return {
         /**
          * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        userControllerTest(options?: any) {
-            return UserApiFp(configuration).userControllerTest(options)(fetch, basePath);
+        uploadControllerUploadPrivateFile(options?: any) {
+            return UploadApiFp(configuration).uploadControllerUploadPrivateFile(options)(fetch, basePath);
+        },
+        /**
+         * 
+         * @param {FileUploadDto} body 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        uploadControllerUploadProfileBannerPic(body: FileUploadDto, options?: any) {
+            return UploadApiFp(configuration).uploadControllerUploadProfileBannerPic(body, options)(fetch, basePath);
+        },
+        /**
+         * 
+         * @param {FileUploadDto} body 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        uploadControllerUploadProfilePic(body: FileUploadDto, options?: any) {
+            return UploadApiFp(configuration).uploadControllerUploadProfilePic(body, options)(fetch, basePath);
+        },
+        /**
+         * 
+         * @param {FileUploadDto} body 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        uploadControllerUploadPublicAsset(body: FileUploadDto, options?: any) {
+            return UploadApiFp(configuration).uploadControllerUploadPublicAsset(body, options)(fetch, basePath);
         },
     };
 };
 
 /**
- * UserApi - object-oriented interface
+ * UploadApi - object-oriented interface
  * @export
- * @class UserApi
+ * @class UploadApi
  * @extends {BaseAPI}
  */
-export class UserApi extends BaseAPI {
+export class UploadApi extends BaseAPI {
     /**
      * 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof UserApi
+     * @memberof UploadApi
      */
-    public userControllerTest(options?: any) {
-        return UserApiFp(this.configuration).userControllerTest(options)(this.fetch, this.basePath);
+    public uploadControllerUploadPrivateFile(options?: any) {
+        return UploadApiFp(this.configuration).uploadControllerUploadPrivateFile(options)(this.fetch, this.basePath);
+    }
+
+    /**
+     * 
+     * @param {FileUploadDto} body 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UploadApi
+     */
+    public uploadControllerUploadProfileBannerPic(body: FileUploadDto, options?: any) {
+        return UploadApiFp(this.configuration).uploadControllerUploadProfileBannerPic(body, options)(this.fetch, this.basePath);
+    }
+
+    /**
+     * 
+     * @param {FileUploadDto} body 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UploadApi
+     */
+    public uploadControllerUploadProfilePic(body: FileUploadDto, options?: any) {
+        return UploadApiFp(this.configuration).uploadControllerUploadProfilePic(body, options)(this.fetch, this.basePath);
+    }
+
+    /**
+     * 
+     * @param {FileUploadDto} body 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UploadApi
+     */
+    public uploadControllerUploadPublicAsset(body: FileUploadDto, options?: any) {
+        return UploadApiFp(this.configuration).uploadControllerUploadPublicAsset(body, options)(this.fetch, this.basePath);
     }
 
 }
