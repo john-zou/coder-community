@@ -12,42 +12,36 @@ export class UploadController {
   constructor(private readonly uploadService: UploadService) {}
 
   @Post('profile-pic')
-  uploadProfilePic(
+  async uploadProfilePic(
     @UploadedFile() file: Express.Multer.File,
     @UserObjectID() _id: string,
   ): Promise<UploadSuccess> {
-    return this.uploadService.uploadProfilePic(_id, file);
+    return {
+      url: await this.uploadService.uploadProfilePic(_id, file),
+    };
   }
 
   @Post('profile-banner-pic')
-  uploadProfileBannerPic(
+  async uploadProfileBannerPic(
     @UploadedFile() file: Express.Multer.File,
     @UserObjectID() _id: string,
   ): Promise<UploadSuccess> {
-    return this.uploadService.uploadProfileBannerPic(_id, file);
+    return { url: await this.uploadService.uploadProfileBannerPic(_id, file) };
   }
 
-  @Post('public/image')
-  uploadPublicImage(
+  @Post('public/asset')
+  async uploadPublicAsset(
     @UploadedFile() file: Express.Multer.File,
     @UserObjectID() _id: string,
   ): Promise<UploadSuccess> {
-    return this.uploadService.uploadPublicImage(_id, file);
-  }
-
-  @Post('public/video')
-  uploadPublicVideo(
-    @UploadedFile() file: Express.Multer.File,
-    @UserObjectID() _id: string,
-  ): Promise<UploadSuccess> {
-    return this.uploadService.uploadPublicVideo(_id, file);
+    return { url: await this.uploadService.uploadPublicAsset(_id, file) };
   }
 
   @Post('private/file')
-  uploadPrivateFile(
+  async uploadPrivateFile(
     @UploadedFile() file: Express.Multer.File,
     @UserObjectID() _id: string,
   ): Promise<UploadSuccess> {
-    return this.uploadService.uploadPrivateFile(_id, file);
+    return { url: await this.uploadService.uploadPrivateFile(_id, file) };
   }
 }
