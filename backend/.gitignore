@@ -48,3 +48,7 @@ public/*
 !public/README.md
 private/*
 !private/README.md
+
+docs
+docs-cn
+typedoc
