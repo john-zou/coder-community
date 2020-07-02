@@ -19,6 +19,7 @@ type User = {
 
 const initialState = {
   user: {},
+  loggedIn: false,
   loading: false,
   error: null,
 }

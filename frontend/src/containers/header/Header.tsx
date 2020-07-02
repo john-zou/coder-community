@@ -19,6 +19,9 @@ import MessageIcon from "@material-ui/icons/Message";
 import { Link } from "react-router-dom";
 import PurpleButton from "../../pages/common/PurpleButton";
 import Logo from "../../assets/ccLogo.svg";
+import { RootState, IsLoggedIn } from "../../initialData";
+import { useSelector } from "react-redux";
+import styled from '@emotion/styled';
 
 const drawerWidth = 240;
 const useStyles = makeStyles((theme) => ({
@@ -96,7 +99,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+
 export default function Header(props) {
+  const ListItemDiv = styled.div`
+  margin-top: 17px;
+  margin-right: 0.7em;
+  cursor: pointer;
+`;
+  const isLoggedIn = useSelector<RootState, IsLoggedIn>((state) => state.isLoggedIn);
+
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
@@ -195,7 +206,7 @@ export default function Header(props) {
           >
             <MenuIcon />
           </IconButton>
-          <img src={Logo} style={{ width: "5em" }} />
+          <img src={Logo} style={{ width: "5em" }} alt="" />
           <div className={classes.search}>
             <div className={classes.searchIcon}>
               <SearchIcon />
@@ -212,47 +223,61 @@ export default function Header(props) {
             </Typography>
           </div>
           <div style={{ display: "flex", flex: 1 }}></div>
+
           <ListItem style={{ width: "unset" }}>
             <ListItemIcon>
+
               <Link to="/" className={classes.link}>
-                <h4>Home</h4>
+                <h4 style={{ marginRight: "0.7em" }}>Home</h4>
               </Link>
-              <div
-                style={{
-                  marginTop: "10px",
-                  marginLeft: "1em",
-                  marginRight: "1em",
-                }}
-              >
-                <Link to="/create-post" className={classes.link}>
-                  <PurpleButton content="Add a Post" />
-                </Link>
-              </div>
+
+              {isLoggedIn &&
+                <ListItemDiv>
+                  <Link to="/create-post" className={classes.link}>
+                    <PurpleButton content="Add a Post" />
+                  </Link>
+                </ListItemDiv>}
+
+              {!isLoggedIn &&
+                <>
+                  <ListItemDiv>
+                    <PurpleButton content="Log In" />
+                  </ListItemDiv>
+                  <ListItemDiv>
+                    <PurpleButton content="Sign Up" />
+                  </ListItemDiv></>}
+
             </ListItemIcon>
           </ListItem>
 
+          {isLoggedIn &&
+            <div className={classes.sectionDesktop}>
+              <IconButton aria-label="show 2 new messages" color="inherit">
+                <Badge badgeContent={2} color="secondary">
+                  <MessageIcon />
+                </Badge>
+              </IconButton>
+              <IconButton aria-label="show 1 new notifications" color="inherit">
+                <Badge badgeContent={1} color="secondary">
+                  <NotificationsIcon />
+                </Badge>
+              </IconButton>
+              <IconButton
+                edge="end"
+                aria-label="account of current user"
+                aria-controls={menuId}
+                aria-haspopup="true"
+                onClick={handleProfileMenuOpen}
+                color="inherit"
+              >
+                <AccountCircle />
+              </IconButton>
+            </div>}
+
           <div className={classes.sectionDesktop}>
-            <IconButton aria-label="show 2 new messages" color="inherit">
-              <Badge badgeContent={2} color="secondary">
-                <MessageIcon />
-              </Badge>
-            </IconButton>
-            <IconButton aria-label="show 1 new notifications" color="inherit">
-              <Badge badgeContent={1} color="secondary">
-                <NotificationsIcon />
-              </Badge>
-            </IconButton>
-            <IconButton
-              edge="end"
-              aria-label="account of current user"
-              aria-controls={menuId}
-              aria-haspopup="true"
-              onClick={handleProfileMenuOpen}
-              color="inherit"
-            >
-              <AccountCircle />
-            </IconButton>
+
           </div>
+
           <div className={classes.sectionMobile}>
             <IconButton
               aria-label="show more"
@@ -268,6 +293,6 @@ export default function Header(props) {
       </AppBar>
       {renderMobileMenu}
       {renderMenu}
-    </div>
+    </div >
   );
 }

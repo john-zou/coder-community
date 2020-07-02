@@ -5,33 +5,26 @@ import { ThemeProvider } from "@material-ui/core/styles";
 import theme from "./theme";
 
 import "./index.css";
-import { Provider } from "react-redux";
+import { Provider, useSelector } from "react-redux";
 import { createStore } from "redux";
 import { rootReducer } from "./reducers";
 import { Loading } from "./pages/common/Loading";
-import { TrendingApiFactory } from "./api";
+import { TrendingApi } from "./api";
+import { RootState, IsLoggedIn } from "./initialData";
 // import initialData from "./initialData";
 
 const Root = () => {
   const [initialState, setInitialState] = useState({});
-  // useEffect(() => {
-  //   async function getInitialData() {
-  //     const trendingPosts = await TrendingApiFactory().trendingControllerGetTrending();
-  //     const initialData = { trendingPosts };
-  //     setInitialState(initialData);
-  //   }
-  //   getInitialData();
-  // }, []);
+  // const isLoggedIn = useSelector<RootState, IsLoggedIn>(state => state.isLoggedIn)
 
   useEffect(() => {
-    fetch("http://localhost:3001/api/trending").then((res) => {
-      res.json().then((trendingPosts => {
-        const initialData = { trendingPosts };
-        setInitialState(initialData);
-      }))
-    }).catch(err => {
-      console.log(err);
-    })
+    async function getInitialData() {
+      const api = new TrendingApi();
+      const trendingPosts = await api.trendingControllerGetTrending();
+      const initialData = { trendingPosts };
+      setInitialState(initialData);
+    }
+    getInitialData();
   }, []);
 
   console.log(initialState);

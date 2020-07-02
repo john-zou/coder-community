@@ -5,6 +5,7 @@ import {
 } from "../util/helpers";
 
 const initialData = {
+  isLoggedIn: false,
   user: {
     isLoggedIn: true,
     userID: "nick_lee", //should be unique for querying mongodb
@@ -212,5 +213,6 @@ export type CurrentViewedProfile = typeof initialData.currentViewedProfile;
 export type Post = typeof initialData.posts[0];
 export type SavedPost = typeof initialData.savedPosts[0];
 export type Tag = typeof initialData.tags[0];
+export type IsLoggedIn = typeof initialData.isLoggedIn;
 
 export default initialData;

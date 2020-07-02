@@ -1,7 +1,7 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState, SavedPost, CurrentViewedPost } from "../../initialData";
+import { RootState, SavedPost, CurrentViewedPost, IsLoggedIn } from "../../initialData";
 import Avatar from "../common/Avatar";
 import { Link } from "react-router-dom";
 import { handleViewPost } from "./Card";
@@ -50,32 +50,34 @@ export default function RightSideBar() {
   const savedPosts = useSelector<RootState, SavedPost[]>(
     (state) => state.savedPosts
   );
+  const isLoggedIn = useSelector<RootState, IsLoggedIn>((state) => state.isLoggedIn);
 
   return (
     <div className={classes.root}>
-      <p className={classes.savePostText}># TRENDING POSTS</p>
-      <div className={classes.savePostSection}>
-        {savedPosts.map((sp) => (
-          <div key={sp.postID}>
-            <Avatar post={sp} extraText=""></Avatar>
-            <Link
-              to={`/post/${sp.postID}`}
-              className={classes.link}
-              onClick={() => {
-                handleViewPost(currViewedPost, sp, dispatch);
-              }}
-            >
-              <p style={{ marginTop: "-0.5em", fontWeight: "bold" }}>
-                {sp.title}
-              </p>
-            </Link>
-          </div>
-        ))}
-      </div>
+      {isLoggedIn && <div>
+        <p className={classes.savePostText}># TRENDING POSTS</p>
+        <div className={classes.savePostSection}>
+          {savedPosts.map((sp) => (
+            <div key={sp.postID}>
+              <Avatar post={sp} extraText=""></Avatar>
+              <Link
+                to={`/post/${sp.postID}`}
+                className={classes.link}
+                onClick={() => {
+                  handleViewPost(currViewedPost, sp, dispatch);
+                }}
+              >
+                <p style={{ marginTop: "-0.5em", fontWeight: "bold" }}>
+                  {sp.title}
+                </p>
+              </Link>
+            </div>
+          ))}
+        </div>
 
-      <p className={classes.savePostText}># WHO TO FOLLOW</p>
-      {/* <p className={classes.savePostText}># MOST POPULAR</p>
-      <div className={classes.mostPopularSection}></div> */}
+        <p className={classes.savePostText}># WHO TO FOLLOW</p>
+      </div>}
+
     </div>
   );
 }

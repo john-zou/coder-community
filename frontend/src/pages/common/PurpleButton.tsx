@@ -5,11 +5,13 @@ const useStyles = makeStyles({
     backgroundColor: "#5D67E9",
     color: "white",
     width: "fit-content",
-    height: "3em",
+    height: "2em",
     border: "none",
     borderRadius: "10px",
-    fontSize: "medium",
+    fontSize: "15px",
     padding: "10px",
+    display: "flex",
+    alignItems: "center",
   },
 });
 

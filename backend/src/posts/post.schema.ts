@@ -24,7 +24,7 @@ export class Post extends TimeStamps {//mapped to MongoDb collection 'posts"
   featuredImg: string;
 
   @prop({ ref: 'User' })
-  likedByUsers: Ref<User>[];
+  likes: Ref<User>[];
 
   @prop({ ref: 'Comment' })
   comments: Ref<Comment>[];

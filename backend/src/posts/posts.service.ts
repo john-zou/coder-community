@@ -57,11 +57,6 @@ const DevToApiUrlComments = "https://dev.to/api/comments";
 export class PostsService {
   constructor(@InjectModel(Post) private postModel: ReturnModelType<typeof Post>, private readonly httpService: HttpService) { }
 
-  // create(createUserDto: CreateUserDto): Promise<User> {
-  //   const createdUser = new this.userModel(createUserDto);
-  //   return createdUser.save();
-  // }
-
   // https://docs.dev.to/api/#tag/articles
   async getDevToArticles(): Promise<GetInitialPostDataDto[]> {
     const res = await this.httpService.get(DevToApiUrlArticles, {
@@ -77,16 +72,6 @@ export class PostsService {
     }));
   }
 
-  // https://docs.dev.to/api/#operation/getArticleById?
-  // async getContent(id: number): Promise<string> {
-  //   const res = await this.httpService.get(DevToApiUrlArticles + id, {
-  //     headers: {
-
-  //     }
-  //   }).toPromise();
-  //   return res.data.body_markdown;
-  // }
-
   async convertToPostsDto(data: DevToArticle): Promise<GetInitialPostDataDto> {
     // const content = "Nullam quis feugiat est, vitae fermentum nunc. Ut ac nunc hendrerit, malesuada massa quis, pharetra ante. Praesent volutpat rhoncus risus a congue. Integer ultrices risus massa, a sodales sem mollis in. Fusce massa lectus, rhoncus at fermentum ac, eleifend ut diam. Donec a iaculis orci. Etiam cursus vel odio porta molestie. Maecenas elit ligula, ultricies vitae hendrerit nec, tincidunt nec urna. Sed tristique, nibh et lobortis mattis, sem magna dictum mauris, a viverra felis nunc quis lorem. Fusce elementum pellentesque diam, at eleifend nisi gravida nec. Aenean tempus lacus vel urna blandit ornare. Mauris id ante vitae tellus tempus vulputate quis quis diam. Nulla tellus ligula, scelerisque finibus elit quis, malesuada tempus nisi.";
     // const comments = ["Sed blandit sagittis sapien, id bibendum libero facilisis eget. Nullam eget nisi quam. Integer aliquet lectus mi, sit amet molestie est finibus vel.", "Maecenas commodo mauris quam, in laoreet nulla commodo vitae.", "Proin pulvinar scelerisque viverra."]
@@ -98,7 +83,7 @@ export class PostsService {
       // content,
       tags: data.tag_list,
       featuredImg: data.cover_image,
-      createdAt: data.created_at,
+      createdAt: new Date(data.created_at),
       likes: data.public_reactions_count,
       comments: data.comments_count,
       // comments,
