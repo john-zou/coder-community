@@ -9,21 +9,26 @@ import { Provider } from "react-redux";
 import { createStore } from "redux";
 import { rootReducer } from "./reducers";
 import { Loading } from "./pages/common/Loading";
+import { TrendingApiFactory } from "./api";
 // import initialData from "./initialData";
 
 const Root = () => {
   const [initialState, setInitialState] = useState({});
-  //load maximum of 20 posts from db in initial load 
   useEffect(() => {
-    fetch("http://localhost:3001/api/posts").then((res) => {
-      res.json().then((dataFromBackend => {
-        setInitialState(dataFromBackend);
-      }))
-    }).catch(err => {
-      console.log(err);
-    })
+    async function getInitialData() {
+      const initialData = await TrendingApiFactory().trendingControllerGetTrending();
+      setInitialState(initialData);
+    }
+    getInitialData();
+    // fetch("http://localhost:3001/api/initialData?loggedIn=true").then((res) => {
+    //   res.json().then((dataFromBackend => {
+    //     setInitialState(dataFromBackend);
+    //   }))
+    // }).catch(err => {
+    //   console.log(err);
+    // })
   }, []);
-  // console.log(initialState);
+
   if (Object.keys(initialState).length === 0) {
     return <Loading />
   }

@@ -80,6 +80,98 @@ export class RequiredError extends Error {
 /**
  * 
  * @export
+ * @interface GetInitialPostDataDto
+ */
+export interface GetInitialPostDataDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof GetInitialPostDataDto
+     */
+    author: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetInitialPostDataDto
+     */
+    title: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetInitialPostDataDto
+     */
+    description: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetInitialPostDataDto
+     */
+    content: string;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof GetInitialPostDataDto
+     */
+    tags: Array<string>;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetInitialPostDataDto
+     */
+    featuredImg: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof GetInitialPostDataDto
+     */
+    likedByUsers: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof GetInitialPostDataDto
+     */
+    commentsCount: number;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof GetInitialPostDataDto
+     */
+    comments: Array<string>;
+}
+/**
+ * 
+ * @export
+ * @interface GetInitialUserDataDto
+ */
+export interface GetInitialUserDataDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof GetInitialUserDataDto
+     */
+    userID: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof GetInitialUserDataDto
+     */
+    gitHubID: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetInitialUserDataDto
+     */
+    name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetInitialUserDataDto
+     */
+    profilePic: string;
+}
+/**
+ * 
+ * @export
  * @interface GitHubLoginBody
  */
 export interface GitHubLoginBody {
@@ -102,6 +194,25 @@ export interface GitHubLoginBody {
  * @interface GoogleLoginBody
  */
 export interface GoogleLoginBody {
+}
+/**
+ * 
+ * @export
+ * @interface InitialDataDto
+ */
+export interface InitialDataDto {
+    /**
+     * 
+     * @type {GetInitialUserDataDto}
+     * @memberof InitialDataDto
+     */
+    user: GetInitialUserDataDto;
+    /**
+     * 
+     * @type {Array<GetInitialPostDataDto>}
+     * @memberof InitialDataDto
+     */
+    posts: Array<GetInitialPostDataDto>;
 }
 /**
  * 
@@ -396,9 +507,119 @@ export const DefaultApiFetchParamCreator = function (configuration?: Configurati
          * @throws {RequiredError}
          */
         appControllerGetHello(options: any = {}): FetchArgs {
-            const localVarPath = `/`;
+            const localVarPath = `/api`;
             const localVarUrlObj = url.parse(localVarPath, true);
             const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        uploadControllerUploadPrivateFile(options: any = {}): FetchArgs {
+            const localVarPath = `/api/upload/private/file`;
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'POST' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        uploadControllerUploadProfileBannerPic(options: any = {}): FetchArgs {
+            const localVarPath = `/api/upload/profile-banner-pic`;
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'POST' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        uploadControllerUploadProfilePic(options: any = {}): FetchArgs {
+            const localVarPath = `/api/upload/profile-pic`;
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'POST' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        uploadControllerUploadPublicImage(options: any = {}): FetchArgs {
+            const localVarPath = `/api/upload/public/image`;
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'POST' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        uploadControllerUploadPublicVideo(options: any = {}): FetchArgs {
+            const localVarPath = `/api/upload/public/video`;
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'POST' }, options);
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
@@ -438,6 +659,91 @@ export const DefaultApiFp = function(configuration?: Configuration) {
                 });
             };
         },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        uploadControllerUploadPrivateFile(options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Response> {
+            const localVarFetchArgs = DefaultApiFetchParamCreator(configuration).uploadControllerUploadPrivateFile(options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response;
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        uploadControllerUploadProfileBannerPic(options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Response> {
+            const localVarFetchArgs = DefaultApiFetchParamCreator(configuration).uploadControllerUploadProfileBannerPic(options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response;
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        uploadControllerUploadProfilePic(options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Response> {
+            const localVarFetchArgs = DefaultApiFetchParamCreator(configuration).uploadControllerUploadProfilePic(options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response;
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        uploadControllerUploadPublicImage(options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Response> {
+            const localVarFetchArgs = DefaultApiFetchParamCreator(configuration).uploadControllerUploadPublicImage(options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response;
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        uploadControllerUploadPublicVideo(options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Response> {
+            const localVarFetchArgs = DefaultApiFetchParamCreator(configuration).uploadControllerUploadPublicVideo(options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response;
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
     }
 };
 
@@ -454,6 +760,46 @@ export const DefaultApiFactory = function (configuration?: Configuration, fetch?
          */
         appControllerGetHello(options?: any) {
             return DefaultApiFp(configuration).appControllerGetHello(options)(fetch, basePath);
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        uploadControllerUploadPrivateFile(options?: any) {
+            return DefaultApiFp(configuration).uploadControllerUploadPrivateFile(options)(fetch, basePath);
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        uploadControllerUploadProfileBannerPic(options?: any) {
+            return DefaultApiFp(configuration).uploadControllerUploadProfileBannerPic(options)(fetch, basePath);
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        uploadControllerUploadProfilePic(options?: any) {
+            return DefaultApiFp(configuration).uploadControllerUploadProfilePic(options)(fetch, basePath);
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        uploadControllerUploadPublicImage(options?: any) {
+            return DefaultApiFp(configuration).uploadControllerUploadPublicImage(options)(fetch, basePath);
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        uploadControllerUploadPublicVideo(options?: any) {
+            return DefaultApiFp(configuration).uploadControllerUploadPublicVideo(options)(fetch, basePath);
         },
     };
 };
@@ -475,20 +821,70 @@ export class DefaultApi extends BaseAPI {
         return DefaultApiFp(this.configuration).appControllerGetHello(options)(this.fetch, this.basePath);
     }
 
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    public uploadControllerUploadPrivateFile(options?: any) {
+        return DefaultApiFp(this.configuration).uploadControllerUploadPrivateFile(options)(this.fetch, this.basePath);
+    }
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    public uploadControllerUploadProfileBannerPic(options?: any) {
+        return DefaultApiFp(this.configuration).uploadControllerUploadProfileBannerPic(options)(this.fetch, this.basePath);
+    }
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    public uploadControllerUploadProfilePic(options?: any) {
+        return DefaultApiFp(this.configuration).uploadControllerUploadProfilePic(options)(this.fetch, this.basePath);
+    }
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    public uploadControllerUploadPublicImage(options?: any) {
+        return DefaultApiFp(this.configuration).uploadControllerUploadPublicImage(options)(this.fetch, this.basePath);
+    }
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    public uploadControllerUploadPublicVideo(options?: any) {
+        return DefaultApiFp(this.configuration).uploadControllerUploadPublicVideo(options)(this.fetch, this.basePath);
+    }
+
 }
 /**
- * UserApi - fetch parameter creator
+ * PostsApi - fetch parameter creator
  * @export
  */
-export const UserApiFetchParamCreator = function (configuration?: Configuration) {
+export const PostsApiFetchParamCreator = function (configuration?: Configuration) {
     return {
         /**
          * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        userControllerTest(options: any = {}): FetchArgs {
-            const localVarPath = `/api/user`;
+        postsControllerGetPostsFromDevTo(options: any = {}): FetchArgs {
+            const localVarPath = `/api/posts`;
             const localVarUrlObj = url.parse(localVarPath, true);
             const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
             const localVarHeaderParameter = {} as any;
@@ -508,18 +904,18 @@ export const UserApiFetchParamCreator = function (configuration?: Configuration)
 };
 
 /**
- * UserApi - functional programming interface
+ * PostsApi - functional programming interface
  * @export
  */
-export const UserApiFp = function(configuration?: Configuration) {
+export const PostsApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        userControllerTest(options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<string> {
-            const localVarFetchArgs = UserApiFetchParamCreator(configuration).userControllerTest(options);
+        postsControllerGetPostsFromDevTo(options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Array<GetInitialPostDataDto>> {
+            const localVarFetchArgs = PostsApiFetchParamCreator(configuration).postsControllerGetPostsFromDevTo(options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -534,37 +930,129 @@ export const UserApiFp = function(configuration?: Configuration) {
 };
 
 /**
- * UserApi - factory interface
+ * PostsApi - factory interface
  * @export
  */
-export const UserApiFactory = function (configuration?: Configuration, fetch?: FetchAPI, basePath?: string) {
+export const PostsApiFactory = function (configuration?: Configuration, fetch?: FetchAPI, basePath?: string) {
     return {
         /**
          * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        userControllerTest(options?: any) {
-            return UserApiFp(configuration).userControllerTest(options)(fetch, basePath);
+        postsControllerGetPostsFromDevTo(options?: any) {
+            return PostsApiFp(configuration).postsControllerGetPostsFromDevTo(options)(fetch, basePath);
         },
     };
 };
 
 /**
- * UserApi - object-oriented interface
+ * PostsApi - object-oriented interface
  * @export
- * @class UserApi
+ * @class PostsApi
  * @extends {BaseAPI}
  */
-export class UserApi extends BaseAPI {
+export class PostsApi extends BaseAPI {
     /**
      * 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof UserApi
+     * @memberof PostsApi
      */
-    public userControllerTest(options?: any) {
-        return UserApiFp(this.configuration).userControllerTest(options)(this.fetch, this.basePath);
+    public postsControllerGetPostsFromDevTo(options?: any) {
+        return PostsApiFp(this.configuration).postsControllerGetPostsFromDevTo(options)(this.fetch, this.basePath);
+    }
+
+}
+/**
+ * TrendingApi - fetch parameter creator
+ * @export
+ */
+export const TrendingApiFetchParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        trendingControllerGetTrending(options: any = {}): FetchArgs {
+            const localVarPath = `/api/trending`;
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * TrendingApi - functional programming interface
+ * @export
+ */
+export const TrendingApiFp = function(configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        trendingControllerGetTrending(options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<InitialDataDto> {
+            const localVarFetchArgs = TrendingApiFetchParamCreator(configuration).trendingControllerGetTrending(options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+    }
+};
+
+/**
+ * TrendingApi - factory interface
+ * @export
+ */
+export const TrendingApiFactory = function (configuration?: Configuration, fetch?: FetchAPI, basePath?: string) {
+    return {
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        trendingControllerGetTrending(options?: any) {
+            return TrendingApiFp(configuration).trendingControllerGetTrending(options)(fetch, basePath);
+        },
+    };
+};
+
+/**
+ * TrendingApi - object-oriented interface
+ * @export
+ * @class TrendingApi
+ * @extends {BaseAPI}
+ */
+export class TrendingApi extends BaseAPI {
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TrendingApi
+     */
+    public trendingControllerGetTrending(options?: any) {
+        return TrendingApiFp(this.configuration).trendingControllerGetTrending(options)(this.fetch, this.basePath);
     }
 
 }

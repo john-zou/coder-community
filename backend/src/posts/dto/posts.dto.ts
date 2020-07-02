@@ -4,7 +4,7 @@ export class CreatePostDto {
   content: string;
 }
 
-export class GetAllPostsDto { //for frontend to render 
+export class GetInitialPostDataDto { //for frontend to render 
   author: string;
   title: string;
   description: string;

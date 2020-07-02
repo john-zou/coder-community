@@ -1,7 +1,7 @@
 import { ApiTags } from "@nestjs/swagger";
-import { Controller, Get, Header } from "@nestjs/common";
+import { Controller, Get } from "@nestjs/common";
 import { PostsService } from "./posts.service";
-import { GetAllPostsDto } from "./dto/posts.dto";
+import { GetInitialPostDataDto } from "./dto/posts.dto";
 
 @ApiTags('Posts')
 @Controller('/posts')
@@ -10,7 +10,7 @@ export class PostsController {
 
   //to be replaced with actual posts in mongoDB later after create posts is implemented
   @Get()
-  getPostsFromDevTo(): Promise<GetAllPostsDto[]> {
+  getPostsFromDevTo(): Promise<GetInitialPostDataDto[]> {
     return this.postsService.getDevToArticles();
   }
 }

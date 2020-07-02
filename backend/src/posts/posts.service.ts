@@ -2,7 +2,7 @@ import { Injectable, HttpService } from '@nestjs/common';
 import { Post } from './post.schema';
 import { InjectModel } from 'nestjs-typegoose';
 import { ReturnModelType } from '@typegoose/typegoose';
-import { GetAllPostsDto } from './dto/posts.dto';
+import { GetInitialPostDataDto } from './dto/posts.dto';
 
 type DevToArticle = {
   "type_of": "article",
@@ -63,7 +63,7 @@ export class PostsService {
   // }
 
   // https://docs.dev.to/api/#tag/articles
-  async getDevToArticles(): Promise<GetAllPostsDto[]> {
+  async getDevToArticles(): Promise<GetInitialPostDataDto[]> {
     const res = await this.httpService.get(DevToApiUrlArticles, {
       headers: {
         'api_key': DevToApiKey
@@ -87,7 +87,7 @@ export class PostsService {
   //   return res.data.body_markdown;
   // }
 
-  async convertToPostsDto(data: DevToArticle): Promise<GetAllPostsDto> {
+  async convertToPostsDto(data: DevToArticle): Promise<GetInitialPostDataDto> {
     const content = "Nullam quis feugiat est, vitae fermentum nunc. Ut ac nunc hendrerit, malesuada massa quis, pharetra ante. Praesent volutpat rhoncus risus a congue. Integer ultrices risus massa, a sodales sem mollis in. Fusce massa lectus, rhoncus at fermentum ac, eleifend ut diam. Donec a iaculis orci. Etiam cursus vel odio porta molestie. Maecenas elit ligula, ultricies vitae hendrerit nec, tincidunt nec urna. Sed tristique, nibh et lobortis mattis, sem magna dictum mauris, a viverra felis nunc quis lorem. Fusce elementum pellentesque diam, at eleifend nisi gravida nec. Aenean tempus lacus vel urna blandit ornare. Mauris id ante vitae tellus tempus vulputate quis quis diam. Nulla tellus ligula, scelerisque finibus elit quis, malesuada tempus nisi.";
     const comments = ["Sed blandit sagittis sapien, id bibendum libero facilisis eget. Nullam eget nisi quam. Integer aliquet lectus mi, sit amet molestie est finibus vel.", "Maecenas commodo mauris quam, in laoreet nulla commodo vitae.", "Proin pulvinar scelerisque viverra."]
     return {

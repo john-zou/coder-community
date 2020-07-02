@@ -15,11 +15,12 @@ import { UploadModule } from './upload/upload.module';
 import { MessagesModule } from './messages/messages.module';
 import { ConversationsModule } from './conversations/conversations.module';
 import { AttachmentsModule } from './attachments/attachments.module';
+import { TrendingModule } from './trending/trending.module';
 @Module({
   imports: [AuthModule, UserModule, TypegooseModule.forRoot(MONGODB_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true
-  }), TagsModule, PostsModule, CommentsModule, VideosModule, GroupsModule, MessagesModule, ConversationsModule, AttachmentsModule, StorageModule, UploadModule],
+  }), TagsModule, PostsModule, CommentsModule, VideosModule, GroupsModule, MessagesModule, ConversationsModule, AttachmentsModule, StorageModule, UploadModule, TrendingModule],
   controllers: [AppController],
   providers: [AppService],
 })
