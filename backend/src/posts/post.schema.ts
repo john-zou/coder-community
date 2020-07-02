@@ -5,24 +5,27 @@ import { User } from "../user/user.schema";
 import { Comment } from "../comments/comment.schema";
 
 export class Post extends TimeStamps {//mapped to MongoDb collection 'posts"
-  @prop({ ref: User })
+  @prop({ ref: () => User })
   author: Ref<User>;
 
   @prop()
   title: string;
 
   @prop()
+  description: string;
+
+  @prop()
   content: string;
 
-  @prop({ ref: Tag })
+  @prop({ ref: () => Tag })
   tags: Ref<Tag>[];
 
   @prop()
   featuredImg: string;
 
-  @prop({ ref: User })
+  @prop({ ref: () => User })
   likedByUsers: Ref<User>[];
 
-  @prop({ ref: Comment })
+  @prop({ ref: () => Comment })
   comments: Ref<Comment>[];
 }
