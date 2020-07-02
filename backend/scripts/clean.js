@@ -17,6 +17,6 @@ del.sync(['./private/*'], {
 });
 
 console.log('Clearing tmp...');
-del.sync(['./tmp/*'], { ignore: ['../tmp/README.md'] });
+del.sync(['./tmp/*'], { ignore: ['./tmp/README.md'] });
 
 console.log('All done!');
