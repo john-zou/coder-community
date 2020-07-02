@@ -8,9 +8,8 @@ import { GetAllPostsDto } from "./dto/posts.dto";
 export class PostsController {
   constructor(private readonly postsService: PostsService) { }
 
-  //get all posts from dev.to (to be replaced with actual posts in mongoDB later after create posts is implemented)
+  //to be replaced with actual posts in mongoDB later after create posts is implemented
   @Get()
-
   getPostsFromDevTo(): Promise<GetAllPostsDto[]> {
     return this.postsService.getDevToArticles();
   }

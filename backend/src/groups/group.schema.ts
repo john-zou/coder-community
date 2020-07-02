@@ -14,13 +14,13 @@ export class Group extends TimeStamps {
   @prop()
   backgroundImg?: string;
 
-  @prop({ ref: User })
+  @prop({ ref: 'User' })
   users: Ref<User>[];
 
-  @prop({ ref: Post })
+  @prop({ ref: 'Post' })
   posts: Ref<Post>[];
 
-  @prop({ ref: Video })
+  @prop({ ref: 'Video' })
   videos: Ref<Video>[];
 }
 

@@ -7,10 +7,10 @@ export class Conversation extends TimeStamps {
   @prop()
   name: string;
 
-  @prop({ ref: User })
+  @prop({ ref: 'User' })
   users: Ref<User>[];
 
-  @prop({ ref: Message })
+  @prop({ ref: 'Message' })
   messages: Ref<Message>[];
 }
 

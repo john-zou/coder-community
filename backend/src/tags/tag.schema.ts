@@ -6,7 +6,7 @@ export class Tag extends TimeStamps {
   @prop()
   name: string;
 
-  @prop({ ref: Post })
+  @prop({ ref: 'Post' })
   posts: Ref<Post>[];
 }
 

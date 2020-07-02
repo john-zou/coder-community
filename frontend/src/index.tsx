@@ -13,7 +13,7 @@ import { Loading } from "./pages/common/Loading";
 
 const Root = () => {
   const [initialState, setInitialState] = useState({});
-  //load maximum of 50 posts from db
+  //load maximum of 20 posts from db in initial load 
   useEffect(() => {
     fetch("http://localhost:3001/api/posts").then((res) => {
       res.json().then((dataFromBackend => {
@@ -23,8 +23,7 @@ const Root = () => {
       console.log(err);
     })
   }, []);
-  console.log(initialState);
-
+  // console.log(initialState);
   if (Object.keys(initialState).length === 0) {
     return <Loading />
   }

@@ -24,22 +24,22 @@ export class User extends TimeStamps {//mapped to MongoDb collection 'users"
   @prop()
   status?: string;
 
-  @prop({ ref: User })
+  @prop({ ref: 'User' })
   followers: Ref<User>[];
 
-  @prop({ ref: User })
-  followings: Ref<User>[];
+  @prop({ ref: 'User' })
+  following: Ref<User>[];
 
-  @prop({ ref: Group })
+  @prop({ ref: 'Group' })
   groups: Ref<Group>[];
 
-  @prop({ ref: Post })
+  @prop({ ref: 'Post' })
   savedPosts: Ref<Post>[];
 
-  @prop({ ref: Tag })
+  @prop({ ref: 'Tag' })
   tags: Ref<Tag>[];
 
-  @prop({ ref: Conversation })
+  @prop({ ref: 'Conversation' })
   conversations: Ref<Conversation>[];
 
   @prop()

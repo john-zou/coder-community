@@ -13,5 +13,5 @@ export class GetAllPostsDto { //for frontend to render
   featuredImg: string;
   likedByUsers: number;
   commentsCount: number;
-  // comments: string[];
+  comments: string[];
 }
