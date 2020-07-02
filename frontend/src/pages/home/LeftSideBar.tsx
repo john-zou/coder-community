@@ -59,10 +59,15 @@ const LeftSideBar = () => {
       </div>
       <div className={classes.groupLinks}>
         <h3>Daily Challenge</h3>
-        <h3>Messages</h3>
+        <Link to={`/messages`} className={classes.link}>
+          <h3>Messages</h3>
+        </Link>
+        <h3>Hacker News</h3>
+        <h3>Posts</h3>
+        <h3>Videos</h3>
         <h3>Groups</h3>
-        <GroupList />
-        <p className={classes.showPostsText}># DISPLAY POSTS</p>
+        {/* <GroupList /> */}
+        <p className={classes.showPostsText}># BROWSE BY TAGS</p>
         <FilterPost />
       </div>
     </div>

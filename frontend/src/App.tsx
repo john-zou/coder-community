@@ -9,6 +9,7 @@ import CreatePost from "./pages/create_post/CreatePost";
 import PostDetail from "./pages/post_detail";
 import Upload from "./pages/video_management/Upload";
 import SearchResult from "./pages/search_result/SearchResult";
+import { Messenger } from "./pages/messenger";
 
 export default function App() {
   return (
@@ -27,9 +28,12 @@ export default function App() {
         <Route path="/post/:postID">
           <PostDetail />
         </Route>
-	<Route path="/result">
-	  <SearchResult />
-	</Route>
+        <Route path="/messages">
+          <Messenger />
+        </Route>
+        <Route path="/result">
+          <SearchResult />
+        </Route>
         <Route path="/video_management">
           <Upload />
         </Route>

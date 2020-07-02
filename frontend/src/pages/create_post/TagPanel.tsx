@@ -1,8 +1,8 @@
 import React from "react";
 import { connect } from "react-redux";
 import Tag from "./Tag";
-import { fade, makeStyles } from "@material-ui/core/styles";
-import { setTag, delTag } from '../../actions';
+import { makeStyles } from "@material-ui/core/styles";
+// import { setTag, delTag } from '../../actions';
 
 const useStyles = makeStyles({
   cptag: {
