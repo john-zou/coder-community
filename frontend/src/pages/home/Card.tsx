@@ -7,7 +7,8 @@ import { Post, RootState, User } from "../../store";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { savePost, likePost, viewPost } from "../../actions/home";
-import DefaultPic from "../../assets/user.svg"
+import DefaultPic from "../../assets/user.svg";
+
 const useStyles = makeStyles({
   root: {
     minHeight: "fit-content",
@@ -186,7 +187,7 @@ const Card = ({ postID }: Props) => {
               dispatch(likePost(post, !post.likedByUser));
             }}
           />
-          <p>&nbsp;{post.likes}</p>
+          <p>&nbsp;{post.likesCount}</p>
           <Link to={`/post/${post.slug}`} className={classes.link}>
             <img className={classes.commentIcon} src={CommentIcon} alt="" />
           </Link>

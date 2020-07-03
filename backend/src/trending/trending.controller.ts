@@ -1,7 +1,7 @@
 import { Controller, Get } from '@nestjs/common';
 import { TrendingService } from './trending.service';
 import { ApiTags } from '@nestjs/swagger';
-import { GetInitialDataDto } from './initialData.dto';
+import { GetInitialDataDto, GetInitialDataLoggedInDto } from './initialData.dto';
 import { Personal } from '../auth/guards/personal.decorator';
 import { UserObjectID } from '../user/user-object-id.decorator';
 
@@ -10,14 +10,14 @@ import { UserObjectID } from '../user/user-object-id.decorator';
 export class TrendingController {
   constructor(private readonly trendingService: TrendingService) { }
 
-  @Personal()
   @Get()
-  getTrending(@UserObjectID() userObjectID: string): Promise<GetInitialDataDto> {
-    return this.trendingService.getInitialData(userObjectID);
+  getTrending(): Promise<GetInitialDataDto> {
+    return this.trendingService.getInitialData();
   }
 
-  // @Get('loggedIn')
-  // getTrendingLoggedIn(): Promise<GetInitialLoggedInData> {
-
-  // }
+  @Personal()
+  @Get('loggedIn')
+  getTrendingLoggedIn(@UserObjectID() userObjectID: string): Promise<GetInitialDataLoggedInDto> {
+    return this.trendingService.getInitialLoggedInData(userObjectID);
+  }
 }

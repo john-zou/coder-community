@@ -5,7 +5,7 @@ import { ThemeProvider } from "@material-ui/core/styles";
 import theme from "./theme";
 
 import "./index.css";
-import { Provider, useSelector } from "react-redux";
+import { Provider } from "react-redux";
 import { createStore } from "redux";
 import { rootReducer } from "./reducers";
 import { Loading } from "./pages/common/Loading";
@@ -18,15 +18,14 @@ const Root = () => {
 
   useEffect(() => {
     async function getInitialData() {
-      const api = new TrendingApi();
-      const trendingPosts = await api.trendingControllerGetTrending();
-      const initialData = { trendingPosts };
-      setInitialState(initialData);
+      const api = new TrendingApi({ basePath: "http://localhost:3001" });
+      const initialData = await api.trendingControllerGetTrending();
+      // console.log(initialState);
+      setInitialState(initialData); //contains posts and authors
     }
     getInitialData();
   }, []);
 
-  console.log(initialState);
   if (Object.keys(initialState).length === 0) {
     return <Loading />
   }
