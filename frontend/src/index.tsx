@@ -21,7 +21,7 @@ const Root = () => {
       const api = new TrendingApi({ basePath: "http://localhost:3001" });
       const initialData = await api.trendingControllerGetTrending();
       // console.log(initialState);
-      setInitialState(initialData); //contains posts and authors
+      setInitialState(initialData); //{posts: [], authors: []}
     }
     getInitialData();
   }, []);

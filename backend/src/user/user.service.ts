@@ -5,6 +5,7 @@ import { ReturnModelType } from '@typegoose/typegoose';
 import { PostDto } from '../posts/dto/posts.dto';
 import { UserDto } from './dto/user.dto';
 import { PostsService } from '../posts/posts.service';
+import { convertToStrArr } from '../util/helperFunctions';
 
 @Injectable()
 export class UserService {
@@ -20,7 +21,7 @@ export class UserService {
       _id: foundUser._id,
       userID: foundUser.userID,
       name: foundUser.name,
-      likedPosts: this.postsService.convertToStrArr(foundUser.likedPosts),
+      likedPosts: convertToStrArr(foundUser.likedPosts),
       profilePic: foundUser.profilePic,
     }
   }
@@ -51,7 +52,7 @@ export class UserService {
         userID: foundUser.userID,
         name: foundUser.name,
         profilePic: foundUser.profilePic,
-        likedPosts: this.postsService.convertToStrArr(foundUser.likedPosts),
+        likedPosts: convertToStrArr(foundUser.likedPosts),
       })
     }
     return result;

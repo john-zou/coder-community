@@ -6,6 +6,7 @@ import { PostDto, CreatePostSuccessDto, CreatePostBodyDto } from './dto/posts.dt
 import { User } from '../user/user.schema';
 import * as urlSlug from 'url-slug';
 import { ObjectID } from 'mongodb';
+import { convertToStrArr } from '../util/helperFunctions';
 
 // Unused -- can use later for different feature
 type DevToArticle = {
@@ -95,12 +96,6 @@ export class PostsService {
     return found !== null;
   }
 
-  convertToStrArr(list: Ref<any, ObjectID>): string[] {
-    return list.map((item) => {
-      return item.toString();
-    })
-  }
-
   /**
    * 
    * @param userObjectID? only needed if user logged in
@@ -115,13 +110,13 @@ export class PostsService {
         slug: post.slug,
         previewContent: post.previewContent,
         content: post.content,
-        tags: this.convertToStrArr(post.tags),
+        tags: convertToStrArr(post.tags),
         createdAt: post.createdAt.toString(),
         featuredImg: post.featuredImg,
         likedByUser: userObjectID && this.isLikedByUser(post.likes, userObjectID),
         likesCount: post.likes.length,
         views: post.views,
-        comments: this.convertToStrArr(post.comments),
+        comments: convertToStrArr(post.comments),
         commentsCount: post.comments.length,
       }
     ));
