@@ -3,7 +3,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import HeartIcon from "../../icons/heartIcon.svg";
 import HeartIconRed from "../../icons/heartIconRed.svg";
 import CommentIcon from "../../icons/commentIcon.svg";
-import { TrendingPost, RootState, CurrentViewedPost } from "../../initialData";
+import { TrendingPost, RootState, CurrentViewedPost } from "../../store/index-old";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { savePost, likePost, viewPost } from "../../actions/home";
@@ -165,7 +165,7 @@ const Card = ({ trendingPost }: Props) => {
             <h4
               style={{ color: "#5D67E9", cursor: "pointer" }}
               onClick={() => {
-                dispatch(savePost(trendingPost));
+                dispatch(savePost(null));
               }}
             >
               Save for later

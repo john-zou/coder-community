@@ -14,8 +14,8 @@ export class GetInitialPostDataDto {
   tags: string[];
   featuredImg: string;
   likes: number;
-
   comments: number;
   // comments: string[];
   createdAt: Date;
+  likedByUser: boolean;
 }

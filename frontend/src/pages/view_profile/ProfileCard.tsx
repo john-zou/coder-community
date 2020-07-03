@@ -2,7 +2,7 @@ import React from "react";
 import { makeStyles, createStyles } from "@material-ui/core/styles";
 import Avatar from "@material-ui/core/Avatar";
 import { Grid, Typography, Button } from "@material-ui/core";
-import { CurrentViewedProfile } from "../../initialData";
+import { CurrentViewedProfile } from "../../store/index-old";
 
 const useStyles = makeStyles((theme) =>
   createStyles({

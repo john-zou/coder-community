@@ -12,7 +12,7 @@ export class Group extends TimeStamps {
   profilePic?: string;
 
   @prop()
-  backgroundImg?: string;
+  profileBanner?: string;
 
   @prop({ ref: 'User' })
   users: Ref<User>[];

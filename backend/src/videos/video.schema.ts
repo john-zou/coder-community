@@ -17,7 +17,7 @@ export class Video extends TimeStamps {
   // content: 
 
   @prop({ ref: 'User' })
-  likedByUsers: Ref<User>[];
+  likes: Ref<User>[];
 
 
   @prop({ ref: 'Comment' })

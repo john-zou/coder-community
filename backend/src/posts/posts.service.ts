@@ -87,7 +87,7 @@ export class PostsService {
       likes: data.public_reactions_count,
       comments: data.comments_count,
       // comments,
-      // likedByUser: false;
+      likedByUser: false,
     }
   }
 }

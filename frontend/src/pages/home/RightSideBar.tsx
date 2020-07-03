@@ -1,7 +1,7 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState, SavedPost, CurrentViewedPost, IsLoggedIn } from "../../initialData";
+import { RootState, IsLoggedIn, Post } from "../../store";
 import Avatar from "../common/Avatar";
 import { Link } from "react-router-dom";
 import { handleViewPost } from "./Card";
@@ -41,15 +41,13 @@ const useStyles = makeStyles({
   },
 });
 
+//parent:
 export default function RightSideBar() {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const currViewedPost = useSelector<RootState, CurrentViewedPost>(
-    (state) => state.currentViewedPost
-  );
-  const savedPosts = useSelector<RootState, SavedPost[]>(
-    (state) => state.savedPosts
-  );
+  const currViewedPost = null;
+
+  const savedPosts = [];
   const isLoggedIn = useSelector<RootState, IsLoggedIn>((state) => state.isLoggedIn);
 
   return (
@@ -64,7 +62,7 @@ export default function RightSideBar() {
                 to={`/post/${sp.postID}`}
                 className={classes.link}
                 onClick={() => {
-                  handleViewPost(currViewedPost, sp, dispatch);
+                  handleViewPost(currViewedPost, sp);
                 }}
               >
                 <p style={{ marginTop: "-0.5em", fontWeight: "bold" }}>

@@ -10,7 +10,6 @@ import { createStore } from "redux";
 import { rootReducer } from "./reducers";
 import { Loading } from "./pages/common/Loading";
 import { TrendingApi } from "./api";
-import { RootState, IsLoggedIn } from "./initialData";
 // import initialData from "./initialData";
 
 const Root = () => {

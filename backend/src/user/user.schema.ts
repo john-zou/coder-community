@@ -19,7 +19,7 @@ export class User extends TimeStamps {//mapped to MongoDb collection 'users"
   profilePic?: string;
 
   @prop()
-  backgroundImg?: string;
+  profileBanner?: string;
 
   @prop()
   status?: string;
@@ -35,6 +35,9 @@ export class User extends TimeStamps {//mapped to MongoDb collection 'users"
 
   @prop({ ref: 'Post' })
   savedPosts: Ref<Post>[];
+
+  @prop({ ref: 'Post' })
+  likedPosts: Ref<Post>[];
 
   @prop({ ref: 'Tag' })
   tags: Ref<Tag>[];

@@ -10,6 +10,7 @@ import PostDetail from "./pages/post_detail";
 import Upload from "./pages/video_management/Upload";
 import SearchResult from "./pages/search_result/SearchResult";
 import { Messenger } from "./pages/messenger";
+import { DevLogin } from "./pages/login/DevLogin";
 
 export default function App() {
   return (
@@ -25,7 +26,7 @@ export default function App() {
         <Route path="/create-post">
           <CreatePost />
         </Route>
-        <Route path="/post/:postID">
+        <Route path="/post/:slug">
           <PostDetail />
         </Route>
         <Route path="/messages">
@@ -36,6 +37,9 @@ export default function App() {
         </Route>
         <Route path="/video_management">
           <Upload />
+        </Route>
+        <Route path="/dev-login">
+          <DevLogin />
         </Route>
       </Switch>
       <Footer></Footer>

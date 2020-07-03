@@ -10,7 +10,7 @@ export class PostsController {
 
   //to be replaced with actual posts in mongoDB later after create posts is implemented
   @Get()
-  getPostsFromDevTo(): Promise<GetInitialPostDataDto[]> {
+  getPosts(): Promise<GetInitialPostDataDto[]> {
     return this.postsService.getDevToArticles();
   }
 }

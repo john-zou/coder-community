@@ -16,6 +16,7 @@ const initialData = {
     followers: ["evan_you", "gaeron"],
   },
   trendingPosts: [
+
     //the 10 most trending posts shown on home page (trending = newest + most liked + most commented on)
     {
       authorID: "nick_lee",

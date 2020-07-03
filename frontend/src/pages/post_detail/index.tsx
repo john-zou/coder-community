@@ -1,6 +1,6 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { RootState, CurrentViewedPost } from "../../initialData";
+import { RootState, CurrentViewedPost } from "../../store/index-old";
 import { useSelector, useDispatch } from "react-redux";
 // import { useParams } from "react-router-dom";
 import HeartIcon from "../../icons/heartIcon.svg";

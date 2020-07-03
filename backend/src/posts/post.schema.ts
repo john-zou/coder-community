@@ -12,7 +12,7 @@ export class Post extends TimeStamps {//mapped to MongoDb collection 'posts"
   title: string;
 
   @prop()
-  description: string;
+  previewContent: string;
 
   @prop()
   content: string;
@@ -28,6 +28,9 @@ export class Post extends TimeStamps {//mapped to MongoDb collection 'posts"
 
   @prop({ ref: 'Comment' })
   comments: Ref<Comment>[];
+
+  @prop()
+  views: number;
 }
 
 export const PostModel = getModelForClass(Post);

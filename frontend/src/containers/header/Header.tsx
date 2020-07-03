@@ -19,7 +19,7 @@ import MessageIcon from "@material-ui/icons/Message";
 import { Link } from "react-router-dom";
 import PurpleButton from "../../pages/common/PurpleButton";
 import Logo from "../../assets/ccLogo.svg";
-import { RootState, IsLoggedIn } from "../../initialData";
+import { RootState, IsLoggedIn } from "../../store";
 import { useSelector } from "react-redux";
 import styled from '@emotion/styled';
 

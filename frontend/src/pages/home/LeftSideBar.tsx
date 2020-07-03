@@ -1,8 +1,7 @@
 import React from "react";
-import GroupList from "./GroupList";
 import { makeStyles } from "@material-ui/core/styles";
 import { useSelector } from "react-redux";
-import { RootState, User, IsLoggedIn } from "../../initialData";
+import { RootState, User, IsLoggedIn } from "../../store/index-old";
 import FilterPost from "./FilterPost";
 import { Link } from "react-router-dom";
 
