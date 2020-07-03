@@ -15,7 +15,7 @@ export function ProfileBanner({ imgSrc, isUser }) {
   const classes = useStyles();
   return (
     <div style={{ height: "300px" }}>
-      <img className={classes.bannerImg} src={imgSrc}></img>
+      <img className={classes.bannerImg} src={imgSrc} alt="banner"></img>
     </div>
   );
 }

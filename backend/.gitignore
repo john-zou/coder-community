@@ -35,3 +35,20 @@ lerna-debug.log*
 
 # Use Yarn
 package-lock.json
+
+#.env will be used for secrets
+.env
+
+# generated API client zip
+/scripts/generated-api-client.zip
+
+tmp/*
+!tmp/README.md
+public/*
+!public/README.md
+private/*
+!private/README.md
+
+docs
+docs-cn
+typedoc

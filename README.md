@@ -1,4 +1,76 @@
-#### Wiki (for team): https://github.com/john-zou/coder-community/wiki
+# Project Progress 3
+
+## Completed Tasks:
+
+## Put some default data for your “main” data in your reducer(s).
+
+![image](https://user-images.githubusercontent.com/61474884/85080419-f48b0000-b17d-11ea-9209-df1d850de80c.png)
+
+![image](https://user-images.githubusercontent.com/61474884/85080465-1c7a6380-b17e-11ea-8d2a-8a56f180b986.png)
+
+## Connect the default data to at least one component in order to display it.
+
+It has been connected to the component for the Home (`/`), Post (`/post/<post-id>`), and User (`u/<user-id>`) pages.
+
+### Home:
+
+![image](https://user-images.githubusercontent.com/61474884/85084780-ab8d7880-b18a-11ea-8f23-917764998751.png)
+
+### Post:
+
+![image](https://user-images.githubusercontent.com/61474884/85084804-b9db9480-b18a-11ea-86e9-b17d8013d996.png)
+
+### User:
+
+![image](https://user-images.githubusercontent.com/61474884/85084829-d081eb80-b18a-11ea-8074-ce022888b906.png)
+
+## Create a minimum of 3 actions that manipulate your store.
+
+![image](https://user-images.githubusercontent.com/61474884/85085023-6158c700-b18b-11ea-9b1a-313ba7da2981.png)
+
+These are working on the pages above.
+
+## Additionally, video upload page:
+
+![image](https://user-images.githubusercontent.com/61474884/85196204-64d47700-b28d-11ea-832f-11bf5ef1b90c.png)
+
+## Back end initial setup / repo structuring for full stack app:
+
+![image](https://user-images.githubusercontent.com/61474884/85196229-9baa8d00-b28d-11ea-8deb-c6946474acb9.png)
+
+---
+
+---
+
+# Project Progress 2
+
+## Completed Tasks:
+
+### A component structure of the app / at least 5 components:
+
+![Diagram](deliverables/component_structure.png)
+
+### A component for the main item (post) and styling / progress towards completing one of our minimal goals:
+
+![Diagram](deliverables/components.png)
+
+### Optional: Redux setup
+
+![Diagram](deliverables/redux_setup.png)
+
+### Additionally: React Router setup
+
+![Diagram](deliverables/router_setup.png)
+
+### Responsive Navbar
+
+![Diagram](deliverables/responsive_navbar.png)
+![Diagram](deliverables/responsive_navbar2.png)
+![Diagram](deliverables/responsive_navbar3.png)
+
+---
+
+---
 
 # Project: _Coder Community_ (tentative title)
 

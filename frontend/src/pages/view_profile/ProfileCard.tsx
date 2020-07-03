@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
+import React from "react";
+import { makeStyles, createStyles } from "@material-ui/core/styles";
 import Avatar from "@material-ui/core/Avatar";
 import { Grid, Typography, Button } from "@material-ui/core";
 import { CurrentViewedProfile } from "../../initialData";

@@ -3,6 +3,8 @@ import GroupList from "./GroupList";
 import { makeStyles } from "@material-ui/core/styles";
 import { useSelector } from "react-redux";
 import { RootState, User } from "../../initialData";
+import FilterPost from "./FilterPost";
+import { Link } from "react-router-dom";
 
 const useStyles = makeStyles({
   root: {
@@ -31,6 +33,16 @@ const useStyles = makeStyles({
   groupLinks: {
     marginTop: "2em",
   },
+  showPostsText: {
+    marginTop: "1em",
+    borderBottom: "solid 1px lightgray",
+    fontSize: "large",
+    fontFamily: "Passion One, cursive",
+    color: "#707070",
+  },
+  link: {
+    textDecoration: "none",
+  },
 });
 
 const LeftSideBar = () => {
@@ -41,12 +53,17 @@ const LeftSideBar = () => {
     <div className={classes.root}>
       <div className={classes.diplayAccount}>
         <img className={classes.displayImg} src={user.profilePic} alt="" />
-        <h3 className={classes.displayName}>{user.name}</h3>
+        <Link to={`/user/${user.userID}`} className={classes.link}>
+          <h3 className={classes.displayName}>{user.name}</h3>
+        </Link>
       </div>
       <div className={classes.groupLinks}>
         <h3>Daily Challenge</h3>
         <h3>Messages</h3>
+        <h3>Groups</h3>
         <GroupList />
+        <p className={classes.showPostsText}># DISPLAY POSTS</p>
+        <FilterPost />
       </div>
     </div>
   );

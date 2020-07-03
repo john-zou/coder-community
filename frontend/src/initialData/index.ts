@@ -28,6 +28,7 @@ const initialData = {
       createdAt: howLongAgo(Date.now() - 1000000),
       likes: 100,
       comments: 2,
+      likedByUser: false,
     },
     {
       authorID: "nick_lee",
@@ -42,6 +43,7 @@ const initialData = {
       createdAt: howLongAgo(Date.now() - 2000000),
       likes: 70,
       comments: 2,
+      likedByUser: false,
     },
     {
       authorID: "gaeron",
@@ -55,6 +57,7 @@ const initialData = {
       createdAt: howLongAgo(Date.now() - 1003000),
       likes: 40,
       comments: 2,
+      likedByUser: false,
     },
   ],
   posts: [
@@ -143,6 +146,7 @@ const initialData = {
     featuredImg: randomBackgroundImage(),
     createdAt: howLongAgo(Date.now() - 4000000),
     likes: 70,
+    likedByUser: false,
     comments: [
       {
         authorID: "evan_you",
@@ -184,6 +188,19 @@ const initialData = {
       comments: 30,
     },
   ],
+  tags: [
+    "c",
+    "c++",
+    "css",
+    "backend",
+    "frontend",
+    "java",
+    "javascript",
+    "mongodb",
+    "nodejs",
+    "react",
+    "redux",
+  ],
 };
 
 export type RootState = typeof initialData;
@@ -194,5 +211,6 @@ export type CurrentViewedPost = typeof initialData.currentViewedPost;
 export type CurrentViewedProfile = typeof initialData.currentViewedProfile;
 export type Post = typeof initialData.posts[0];
 export type SavedPost = typeof initialData.savedPosts[0];
+export type Tag = typeof initialData.tags[0];
 
 export default initialData;
