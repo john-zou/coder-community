@@ -22,9 +22,13 @@ export class TrendingService {
    * 
    * TODO: make this scalable (optimize)
    */
-  async getInitialData(): Promise<GetInitialDataDto> {
-    const posts = await this.postsService.getInitialPosts();
-    const authors = await this.userService.getAuthors(posts);
-    throw new Error("Method not implemented.");
+
+  async getInitialData(userObjectID: string): Promise<GetInitialDataDto> {
+    const posts = await this.postsService.getInitialPosts(userObjectID);
+    const users = await this.userService.getAuthors(posts);
+    return {
+      posts,
+      users,
+    }
   }
 }

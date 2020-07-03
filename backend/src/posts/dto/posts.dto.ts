@@ -1,5 +1,6 @@
 // import { ObjectID } from "mongodb";
 //GET POST DTO
+//response
 export class PostDto {
   _id: string;
   author: string;
@@ -12,7 +13,7 @@ export class PostDto {
   comments?: string[];
   commentsCount: number;
   views: number;
-  createdAt: Date;
+  createdAt: string;
   likedByUser: boolean;
   slug: string;
   group?: string;

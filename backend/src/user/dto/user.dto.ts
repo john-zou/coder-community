@@ -1,4 +1,5 @@
-
+//GET USER DTO
+//response
 export class UserDto {
   _id: string;
   userID: string;

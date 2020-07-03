@@ -2,26 +2,38 @@ import { Injectable } from '@nestjs/common';
 import { User } from './user.schema';
 import { InjectModel } from 'nestjs-typegoose';
 import { ReturnModelType } from '@typegoose/typegoose';
+import { PostDto } from '../posts/dto/posts.dto';
+import { UserDto } from './dto/user.dto';
+import { PostsService } from '../posts/posts.service';
 
 @Injectable()
 export class UserService {
-  create(createUserDto: any): Promise<User> {
-    throw new Error("Method not implemented.");
-  }
+  // create(createUserDto: any): Promise<User> {
+  //   throw new Error("Method not implemented.");
+  // }
 
   constructor(
     @InjectModel(User) private userModel: ReturnModelType<typeof User>,
+    private readonly postsService: PostsService,
   ) { }
 
   findAll(): Promise<User[]> {
     return this.userModel.find().exec();
   }
 
-  /**
-   * 
-   */
-  getAuthors(posts: any) {
-    throw new Error("Method not implemented.");
+  async getAuthors(posts: PostDto[]): Promise<UserDto[]> {
+    const result: UserDto[] = [];
+    for (const post of posts) {
+      const foundUser = await this.userModel.findById(post.author);
+      result.push({
+        _id: foundUser._id,
+        userID: foundUser.userID,
+        name: foundUser.name,
+        profilePic: foundUser.profilePic,
+        likedPosts: this.postsService.convertToStrArr(foundUser.likedPosts),
+      })
+    }
+    return result;
   }
 
   /**

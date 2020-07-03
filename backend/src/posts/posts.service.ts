@@ -1,11 +1,13 @@
 import { Injectable, HttpService, Logger } from '@nestjs/common';
 import { Post } from './post.schema';
 import { InjectModel } from 'nestjs-typegoose';
-import { ReturnModelType } from '@typegoose/typegoose';
+import { ReturnModelType, Ref } from '@typegoose/typegoose';
 import { PostDto, CreatePostSuccessDto, CreatePostBodyDto } from './dto/posts.dto';
 import { User } from '../user/user.schema';
 import * as urlSlug from 'url-slug';
+import { ObjectID } from 'mongodb';
 
+// Unused -- can use later for different feature
 type DevToArticle = {
   "type_of": "article",
   "id": 194541,
@@ -53,7 +55,7 @@ type DevToArticle = {
 }
 const DevToApiKey = "QG7J1McHHMV7UZ9jwDTeZFHf";
 const DevToApiUrlArticles = "https://dev.to/api/articles/"; //retrieve a list of articles (with no content)
-const DevToApiUrlComments = "https://dev.to/api/comments";
+
 const previewContentLength = 100;
 @Injectable()
 export class PostsService {
@@ -88,8 +90,37 @@ export class PostsService {
     };
   }
 
-  async getInitialPosts(): Promise<PostDto[]> {
-    throw new Error("todo");
+  isLikedByUser(likes: Ref<User, ObjectID>[], userObjectID: string): boolean {
+    const found = likes.find((uid) => uid.toString() === userObjectID);
+    return found !== null;
+  }
+
+  convertToStrArr(list: Ref<any, ObjectID>): string[] {
+    return list.map((item) => {
+      return item.toString();
+    })
+  }
+
+  async getInitialPosts(userObjectID: string): Promise<PostDto[]> {
+    const foundPosts = await this.postModel.find().limit(5);
+    return foundPosts.map((post) => (
+      {
+        _id: post._id.toString(),
+        author: post.author.toString(),
+        title: post.title,
+        slug: post.slug,
+        previewContent: post.previewContent,
+        content: post.content,
+        tags: this.convertToStrArr(post.tags),
+        createdAt: post.createdAt.toString(),
+        featuredImg: post.featuredImg,
+        likedByUser: this.isLikedByUser(post.likes, userObjectID),
+        likesCount: post.likes.length,
+        views: post.views,
+        comments: this.convertToStrArr(post.comments),
+        commentsCount: post.comments.length,
+      }
+    ));
   }
 
   // Unused -- can use later for different feature
