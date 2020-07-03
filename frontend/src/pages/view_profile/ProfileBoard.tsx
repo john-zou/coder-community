@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Tabs, Tab, makeStyles, Divider } from "@material-ui/core";
 import HeartIcon from "../../icons/heartIcon.svg";
 import CommentIcon from "../../icons/commentIcon.svg";
-import { Post, SavedPost } from "../../initialData";
+import { Post, SavedPost } from "../../store/index-old";
 import Avatar from "../common/Avatar";
 
 // For tabs
@@ -190,14 +190,14 @@ function postComponent(post: Post, classes, isOwnPost = false) {
 
 type Props =
   | {
-      isUser: true;
-      posts: Post[];
-      savedPosts: SavedPost[];
-    }
+    isUser: true;
+    posts: Post[];
+    savedPosts: SavedPost[];
+  }
   | {
-      isUser: false;
-      posts: Post[];
-    };
+    isUser: false;
+    posts: Post[];
+  };
 
 export function ProfileBoard(props: Props) {
   const [tabIdx, setTabIdx] = useState(0);
@@ -241,10 +241,10 @@ export function ProfileBoard(props: Props) {
             {posts.map((post) => postComponent(post, classes, true))}
           </div>
         ) : (
-          <div style={{ marginTop: "1rem" }}>
-            {savedPosts.map((post) => savedPostComponent(post, classes))}
-          </div>
-        )}
+            <div style={{ marginTop: "1rem" }}>
+              {savedPosts.map((post) => savedPostComponent(post, classes))}
+            </div>
+          )}
       </>
     );
   } else {

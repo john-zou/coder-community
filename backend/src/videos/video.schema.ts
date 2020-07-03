@@ -4,7 +4,7 @@ import { User } from "../user/user.schema";
 import { Comment } from "../comments/comment.schema";
 
 export class Video extends TimeStamps {
-  @prop({ ref: User })
+  @prop({ ref: 'User' })
   author: Ref<User>;
 
   @prop()
@@ -13,10 +13,14 @@ export class Video extends TimeStamps {
   @prop()
   description: string;
 
-  @prop({ ref: User })
-  likedByUsers: Ref<User>[];
+  // @prop()
+  // content: 
 
-  @prop({ ref: Comment })
+  @prop({ ref: 'User' })
+  likes: Ref<User>[];
+
+
+  @prop({ ref: 'Comment' })
   comments: Ref<Comment>[];
 }
 

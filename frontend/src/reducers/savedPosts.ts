@@ -1,4 +1,4 @@
-import { SavedPost } from "../initialData";
+import { SavedPost } from "../store/index-old";
 
 export function savedPosts(state = Array<SavedPost>(), action): SavedPost[] {
   switch (action.type) {

@@ -2,7 +2,7 @@ import { UseGuards } from '@nestjs/common';
 import { UserAuthGuard } from './user.guard';
 
 /**
- * Shorthand for UserGuards(UserAuthGuard), used to endpoints that require authentication,
+ * Shorthand for UseGuards(UserAuthGuard), used for endpoints that require authentication,
  * i.e. endpoints related to personal things
  * 
  * Place this decorator on top of a controller method, and it will act as authentication

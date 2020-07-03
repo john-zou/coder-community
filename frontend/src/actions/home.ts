@@ -1,6 +1,6 @@
-import { TrendingPost, CurrentViewedPost } from "../initialData";
+import { Post } from "../store";
 
-export const savePost = (post: TrendingPost) => ({
+export const savePost = (post: Post) => ({
   type: "SAVE_POST",
   post,
 });
@@ -12,7 +12,7 @@ export const likePost = (post, isLiked) => ({
 });
 
 //set the currenViewedPost given the trending post
-export const viewPost = (post: CurrentViewedPost) => ({
+export const viewPost = (post: Post) => ({
   type: "VIEW_POST",
   post,
 });

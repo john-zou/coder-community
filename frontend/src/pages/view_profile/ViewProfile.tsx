@@ -7,7 +7,7 @@ import {
   Post,
   RootState,
   SavedPost,
-} from "../../initialData";
+} from "../../store/index-old";
 import { ProfileBanner } from "./ProfileBanner";
 import { ProfileBoard } from "./ProfileBoard";
 import { ProfileCard } from "./ProfileCard";
@@ -71,8 +71,8 @@ export function ViewProfile() {
             savedPosts={savedPosts}
           ></ProfileBoard>
         ) : (
-          <ProfileBoard isUser={false} posts={posts}></ProfileBoard>
-        )}
+            <ProfileBoard isUser={false} posts={posts}></ProfileBoard>
+          )}
       </div>
     </div>
   );

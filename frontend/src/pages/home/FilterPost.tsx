@@ -1,7 +1,7 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { useSelector } from "react-redux";
-import { RootState, Tag } from "../../initialData";
+import { RootState, Tag } from "../../store/index-old";
 
 const useStyles = makeStyles({
   root: {
@@ -23,7 +23,9 @@ const useStyles = makeStyles({
 
 const FilterPost = () => {
   const classes = useStyles();
-  const tags = useSelector<RootState, Tag[]>((state) => state.tags);
+  // const tags = useSelector<RootState, Tag[]>((state) => state.tags);
+  const tags = ["c", "c++", "css", "backend", "frontend", "java", "javascript", "mongodb", "nodejs", "react", "redux"];
+
   return (
     <form className={classes.root}>
       {tags.map((tag) => (

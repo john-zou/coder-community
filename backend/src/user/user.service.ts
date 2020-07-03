@@ -2,12 +2,16 @@ import { Injectable } from '@nestjs/common';
 import { User } from './user.schema';
 import { InjectModel } from 'nestjs-typegoose';
 import { ReturnModelType } from '@typegoose/typegoose';
+import { PostDto } from '../posts/dto/posts.dto';
+import { UserDto } from './dto/user.dto';
+import { PostsService } from '../posts/posts.service';
 
 @Injectable()
 export class UserService {
 
   constructor(
     @InjectModel(User) private userModel: ReturnModelType<typeof User>,
+    private readonly postsService: PostsService,
   ) {}
 
   async saveProfileBannerPic(userObjectID: string, url: string): Promise<void> {
@@ -25,6 +29,21 @@ export class UserService {
 
   findAll(): Promise<User[]> {
     return this.userModel.find().exec();
+  }
+
+  async getAuthors(posts: PostDto[]): Promise<UserDto[]> {
+    const result: UserDto[] = [];
+    for (const post of posts) {
+      const foundUser = await this.userModel.findById(post.author);
+      result.push({
+        _id: foundUser._id,
+        userID: foundUser.userID,
+        name: foundUser.name,
+        profilePic: foundUser.profilePic,
+        likedPosts: this.postsService.convertToStrArr(foundUser.likedPosts),
+      })
+    }
+    return result;
   }
 
   /**

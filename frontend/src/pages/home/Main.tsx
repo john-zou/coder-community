@@ -2,7 +2,7 @@ import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "./Card";
 import { useSelector } from "react-redux";
-import { RootState, TrendingPost } from "../../initialData";
+import { RootState, Post } from "../../store";
 
 const useStyles = makeStyles({
   main: {
@@ -20,14 +20,14 @@ const useStyles = makeStyles({
 //parent: Home
 const Main = () => {
   const classes = useStyles();
-  const trendingPosts = useSelector<RootState, TrendingPost[]>(
+  const trendingPosts = useSelector<RootState, string[]>(
     (state) => state.trendingPosts
   );
 
   return (
     <div className={classes.main}>
-      {trendingPosts.map((post) => (
-        <Card trendingPost={post} key={post.postID} />
+      {trendingPosts.map((_id) => (
+        <Card postID={_id} key={_id} />
       ))}
     </div>
   );
