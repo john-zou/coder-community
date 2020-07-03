@@ -4,6 +4,7 @@ import { TypegooseModule } from 'nestjs-typegoose';
 import { User } from './user.schema';
 import { LOCAL_MONGODB } from '../auth/constants';
 import { MockMongo } from '../util/mock-mongo';
+import { PostsService } from '../posts/posts.service';
 
 describe('UserService', () => {
   let module: TestingModule;
@@ -21,6 +22,7 @@ describe('UserService', () => {
           useFindAndModify: false,
         }),
         TypegooseModule.forFeature([User]),
+        PostsService
       ],
       providers: [UserService],
     }).compile();
