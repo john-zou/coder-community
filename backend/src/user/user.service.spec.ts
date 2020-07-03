@@ -21,7 +21,7 @@ describe('UserService', () => {
           useUnifiedTopology: true,
           useFindAndModify: false,
         }),
-        TypegooseModule.forFeature([User]),
+        TypegooseModule.forFeature([User, Post]),
         PostsService
       ],
       providers: [UserService],
