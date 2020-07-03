@@ -5,13 +5,18 @@ import { ReturnModelType } from '@typegoose/typegoose';
 
 @Injectable()
 export class UserService {
-  /**
-   * @param userID GitHub login
-   * @returns whether the user had to be newly created
-   */
+
   constructor(
     @InjectModel(User) private userModel: ReturnModelType<typeof User>,
   ) {}
+
+  async saveProfileBannerPic(userObjectID: string, url: string): Promise<void> {
+    await this.userModel.updateOne({_id: userObjectID}, {backgroundImg: url});
+  }
+
+  async saveProfilePic(userObjectID: string, url: string): Promise<void> {
+    await this.userModel.updateOne({_id: userObjectID}, {profilePic: url});
+  }
 
   // create(createUserDto: CreateUserDto): Promise<User> {
   //   const createdUser = new this.userModel(createUserDto);
