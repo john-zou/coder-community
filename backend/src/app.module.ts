@@ -15,6 +15,7 @@ import { UploadModule } from './upload/upload.module';
 import { ServeStaticModule } from '@nestjs/serve-static/dist/serve-static.module';
 import { join } from 'path';
 import { PublicUserContentDir, PublicUserContentServeRoot } from './storage/storage.constants';
+import { DevModule } from './dev/dev.module';
 @Module({
   imports: [AuthModule,UserModule,
     TypegooseModule.forRoot(MONGODB_URI, {
@@ -26,7 +27,7 @@ import { PublicUserContentDir, PublicUserContentServeRoot } from './storage/stor
     rootPath: join(__dirname, "..", PublicUserContentDir),
     serveRoot: PublicUserContentServeRoot,
   }),
-  TagsModule, PostsModule, CommentsModule, VideosModule, GroupsModule, StorageModule, UploadModule],
+  TagsModule, PostsModule, CommentsModule, VideosModule, GroupsModule, StorageModule, UploadModule, DevModule],
   controllers: [AppController],
   providers: [AppService],
 })
