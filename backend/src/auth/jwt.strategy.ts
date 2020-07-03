@@ -3,6 +3,8 @@ import { PassportStrategy } from '@nestjs/passport';
 import { Injectable } from '@nestjs/common';
 import { Secrets } from '../secrets';
 
+export type CoderCommunityJwtPayload = { _id: string };
+
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor() {
@@ -14,7 +16,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 
   // Passport will attach `user` to the `Request`
   // I.e. `req.user.userID` will be the one from a valid token
-  async validate({ userID }) {
-    return { userID };
+  async validate({ _id }): Promise<CoderCommunityJwtPayload> {
+    return { _id };
   }
 }
