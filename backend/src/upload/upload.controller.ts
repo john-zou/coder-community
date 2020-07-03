@@ -2,56 +2,58 @@ import { Controller, Post, UploadedFile } from '@nestjs/common';
 import { Personal } from '../auth/guards/personal.decorator';
 import { FileUpload } from './upload.decorator';
 import { UploadService } from './upload.service';
-import { UserID } from '../user/userID.decorator';
+import { UserObjectID } from '../user/user-object-id.decorator';
+import { UploadSuccess, FileUploadDto } from './upload.dto';
+import { ApiTags, ApiConsumes, ApiBody } from '@nestjs/swagger';
 
+@ApiTags('Upload')
+@ApiConsumes('multipart/form-data')
 @FileUpload() // Enables UploadedFile usage
 @Personal() // Applies authentication to the entire controller
 @Controller('upload')
 export class UploadController {
   constructor(private readonly uploadService: UploadService) {}
-
+  
+  @ApiBody({
+    type: FileUploadDto
+  })
   @Post('profile-pic')
-  uploadProfilePic(
+  async uploadProfilePic(
     @UploadedFile() file: Express.Multer.File,
-    @UserID() userID: string,
-  ): Promise<void> {
-    // TODO: create upload response DTOs
-    return this.uploadService.uploadProfilePic(userID, file);
+    @UserObjectID() _id: string,
+  ): Promise<UploadSuccess> {
+    return {
+      url: await this.uploadService.uploadProfilePic(_id, file),
+    };
   }
 
+  @ApiBody({
+    type: FileUploadDto
+  })
   @Post('profile-banner-pic')
-  uploadProfileBannerPic(
+  async uploadProfileBannerPic(
     @UploadedFile() file: Express.Multer.File,
-    @UserID() userID: string,
-  ): Promise<void> {
-    // TODO: create upload response DTOs
-    return this.uploadService.uploadProfileBannerPic(userID, file);
+    @UserObjectID() _id: string,
+  ): Promise<UploadSuccess> {
+    return { url: await this.uploadService.uploadProfileBannerPic(_id, file) };
   }
 
-  @Post('public/image')
-  uploadPublicImage(
+  @ApiBody({
+    type: FileUploadDto
+  })
+  @Post('public/asset')
+  async uploadPublicAsset(
     @UploadedFile() file: Express.Multer.File,
-    @UserID() userID: string,
-  ): Promise<void> {
-    // TODO: create upload response DTOs
-    return this.uploadService.uploadPublicImage(userID, file);
-  }
-
-  @Post('public/video')
-  uploadPublicVideo(
-    @UploadedFile() file: Express.Multer.File,
-    @UserID() userID: string,
-  ): Promise<void> {
-    // TODO: create upload response DTOs
-    return this.uploadService.uploadPublicVideo(userID, file);
+    @UserObjectID() _id: string,
+  ): Promise<UploadSuccess> {
+    return { url: await this.uploadService.uploadPublicAsset(_id, file) };
   }
 
   @Post('private/file')
-  uploadPrivateFile(
+  async uploadPrivateFile(
     @UploadedFile() file: Express.Multer.File,
-    @UserID() userID: string,
-  ): Promise<void> {
-    // TODO: create upload response DTOs
-    return this.uploadService.uploadPrivateFile(userID, file);
+    @UserObjectID() _id: string,
+  ): Promise<UploadSuccess> {
+    return { url: await this.uploadService.uploadPrivateFile(_id, file) };
   }
 }

@@ -1,15 +1,20 @@
-import { Test, TestingModule } from '@nestjs/testing';
 import { UploadController } from './upload.controller';
+import { UploadService } from './upload.service';
 
 describe('Upload Controller', () => {
   let controller: UploadController;
+  let service: UploadService;
 
   beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      controllers: [UploadController],
-    }).compile();
+    service = {
+      uploadPrivateFile: jest.fn(),
+      uploadProfileBannerPic: jest.fn(),
+      uploadProfilePic: jest.fn(),
+      uploadPublicImage: jest.fn(),
+      uploadPublicVideo: jest.fn(),
+    } as unknown as UploadService;
 
-    controller = module.get<UploadController>(UploadController);
+    controller = new UploadController(service);
   });
 
   it('should be defined', () => {

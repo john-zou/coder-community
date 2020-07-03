@@ -18,6 +18,7 @@ describe('UserService', () => {
         TypegooseModule.forRoot(LOCAL_MONGODB, {
           useNewUrlParser: true,
           useUnifiedTopology: true,
+          useFindAndModify: false,
         }),
         TypegooseModule.forFeature([User]),
       ],
@@ -36,25 +37,11 @@ describe('UserService', () => {
   });
 
   it('createOrUpdateUser', async () => {
-    const isNew = await service.createOrUpdateUser('octocat', 1);
-    expect(isNew).toBe(true);
-    const isNewSecondTime = await service.createOrUpdateUser('octopus', 1);
-    expect(isNewSecondTime).toBe(false);
+    const { isNewUser, _id } = await service.createOrUpdateUser('octocat', 1);
+    expect(isNewUser).toBe(true);
+    const { isNewUser: secondTime, _id: id } = await service.createOrUpdateUser('octopus', 1);
+    expect(secondTime).toBe(false);
+    expect(id).toBe(_id);
   });
 
-  // it('create new user', async () => {
-  //   const newUser = {
-  //     userID: "john-zou",
-  //     name: "John Zou 2",
-  //     status: "student",
-  //     isLoggedIn: true,
-  //     profilePic: "profile-pic.jpg",
-  //     backgroundImg: "background-pic.jpg",
-  //     followers: ["5efa69f7a2e9b30e302616a0"]
-  //   };
-  //   const createdUser = await service.create(newUser);
-  //   Object.keys(newUser).forEach(key => {
-  //     expect(createdUser[key]).toBe(newUser[key]);
-  //   })
-  // })
 });

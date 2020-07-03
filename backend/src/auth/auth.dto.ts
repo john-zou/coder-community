@@ -24,7 +24,13 @@ export class LoginSuccess {
   jwt: string;
 
   @ApiProperty({
-    example: 'nick-lee',
+    description: 'The MongoDB user _id',
+  })
+  _id: string;
+
+  @ApiProperty({
+    description: 'The visible User ID',
+    example: 'nick_lee'
   })
   userID: string;
 

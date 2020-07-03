@@ -16,11 +16,21 @@ import { MessagesModule } from './messages/messages.module';
 import { ConversationsModule } from './conversations/conversations.module';
 import { AttachmentsModule } from './attachments/attachments.module';
 import { TrendingModule } from './trending/trending.module';
+import { ServeStaticModule } from '@nestjs/serve-static/dist/serve-static.module';
+import { join } from 'path';
+import { PublicUserContentDir, PublicUserContentServeRoot } from './storage/storage.constants';
 @Module({
-  imports: [AuthModule, UserModule, TypegooseModule.forRoot(MONGODB_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-  }), TagsModule, PostsModule, CommentsModule, VideosModule, GroupsModule, MessagesModule, ConversationsModule, AttachmentsModule, StorageModule, UploadModule, TrendingModule],
+  imports: [AuthModule, UserModule,
+    TypegooseModule.forRoot(MONGODB_URI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      useFindAndModify: false,
+    }),
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, "..", PublicUserContentDir),
+      serveRoot: PublicUserContentServeRoot,
+    }),
+    TagsModule, PostsModule, CommentsModule, VideosModule, GroupsModule, StorageModule, UploadModule, MessagesModule, ConversationsModule, AttachmentsModule, StorageModule, UploadModule, TrendingModule],
   controllers: [AppController],
   providers: [AppService],
 })

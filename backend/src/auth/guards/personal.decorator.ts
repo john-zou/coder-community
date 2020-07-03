@@ -8,7 +8,7 @@ import { UserAuthGuard } from './user.guard';
  * Place this decorator on top of a controller method, and it will act as authentication
  * middleware.
  * 
- * Also, the @UserID param decorator will be usable in the methods for easy
+ * Also, the @UserObjectID param decorator will be usable in the methods for easy
  * access to the user's identity.
  */
 export function Personal(): MethodDecorator & ClassDecorator {
