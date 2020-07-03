@@ -1,7 +1,8 @@
 
-export class GetInitialUserDataDto {
+export class UserDto {
+  _id: string;
   userID: string;
-  gitHubID: number;
   name: string;
-  profilePic: string;
+  profilePic?: string;
+  likedPosts?: string[];
 }

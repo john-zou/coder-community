@@ -60,15 +60,14 @@ export type Post = {
   content: string,
   tags: string[],
   featuredImg: string,
-  likes: string[],
   likesCount: number,
   comments: string[],
   commentsCount: number,
   views: number,
   createdAt: string,
-  updatedAt: string,
   likedByUser: boolean,
   slug: string,
+  group?: string,
 }
 
 export type Tag = {
@@ -88,7 +87,7 @@ export type User = {
   profileBanner?: string,
   status?: string,
   followers?: string[],//list of ids
-  followin?: string[],
+  following?: string[],
   groups?: string[],
   savedPosts: string[],
   likedPosts: string[],

@@ -1,8 +1,13 @@
-import { GetInitialUserDataDto } from "../user/dto/user.dto";
-import { GetInitialPostDataDto } from "../posts/dto/posts.dto";
+import { UserDto } from "../user/dto/user.dto";
+import { PostDto } from "../posts/dto/posts.dto";
 
 //for redux intial state
-export class InitialDataDto {
-  user: GetInitialUserDataDto;
-  posts: GetInitialPostDataDto[];
+export class GetInitialDataDto {
+  posts: PostDto[];
+  users: UserDto[];
+}
+export class GetInitialDataLoggedInDto {
+  posts: PostDto[];
+  users: UserDto[];
+  user: UserDto;
 }

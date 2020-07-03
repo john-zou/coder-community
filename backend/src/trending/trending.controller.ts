@@ -1,18 +1,20 @@
 import { Controller, Get } from '@nestjs/common';
-import { InitialDataDto } from './initialData.dto';
 import { TrendingService } from './trending.service';
 import { ApiTags } from '@nestjs/swagger';
-import { PostsService } from '../posts/posts.service';
-import { UserService } from '../user/user.service';
-import { GetInitialPostDataDto } from '../posts/dto/posts.dto';
+import { GetInitialDataDto } from './initialData.dto';
 
 @ApiTags('Trending')
 @Controller('trending')
 export class TrendingController {
-  constructor(private readonly postsService: PostsService) { }
+  constructor(private readonly trendingService: TrendingService) { }
 
   @Get()
-  getTrending(): Promise<GetInitialPostDataDto[]> {
-    return this.postsService.getDevToArticles();
+  getTrending(): Promise<GetInitialDataDto> {
+    return this.trendingService.getInitialData();
   }
+
+  // @Get('loggedIn')
+  // getTrendingLoggedIn(): Promise<GetInitialLoggedInData> {
+
+  // }
 }

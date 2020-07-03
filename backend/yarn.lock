@@ -8971,6 +8971,11 @@ unicode-trie@^2.0.0:
     pako "^0.2.5"
     tiny-inflate "^1.0.0"
 
+unidecode@^0.1.8:
+  version "0.1.8"
+  resolved "https://registry.yarnpkg.com/unidecode/-/unidecode-0.1.8.tgz#efbb301538bc45246a9ac8c559d72f015305053e"
+  integrity sha1-77swFTi8RSRqmsjFWdcvAVMFBT4=
+
 union-value@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/union-value/-/union-value-1.0.1.tgz#0b6fe7b835aecda61c6ea4d4f02c14221e109847"
@@ -9039,6 +9044,13 @@ urix@^0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/urix/-/urix-0.1.0.tgz#da937f7a62e21fec1fd18d49b35c2935067a6c72"
   integrity sha1-2pN/emLiH+wf0Y1Js1wpNQZ6bHI=
+
+url-slug@^2.3.1:
+  version "2.3.1"
+  resolved "https://registry.yarnpkg.com/url-slug/-/url-slug-2.3.1.tgz#89ea82aba623c2d3084b1f1f344508ee1d2bd489"
+  integrity sha512-5VDeQm05MkmDYMATArVCevXcPkAnZVfnTrpk8sgmqM/DBKVg4VDPEobmOkEVM9MgGdOi2UBRNuU2lqBSphWMJA==
+  dependencies:
+    unidecode "^0.1.8"
 
 url-template@^2.0.8:
   version "2.0.8"

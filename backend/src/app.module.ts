@@ -16,7 +16,7 @@ import { MessagesModule } from './messages/messages.module';
 import { ConversationsModule } from './conversations/conversations.module';
 import { AttachmentsModule } from './attachments/attachments.module';
 import { TrendingModule } from './trending/trending.module';
-import { ServeStaticModule } from '@nestjs/serve-static/dist/serve-static.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { PublicUserContentDir, PublicUserContentServeRoot } from './storage/storage.constants';
 @Module({

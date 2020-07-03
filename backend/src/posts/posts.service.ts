@@ -1,8 +1,10 @@
-import { Injectable, HttpService } from '@nestjs/common';
+import { Injectable, HttpService, Logger } from '@nestjs/common';
 import { Post } from './post.schema';
 import { InjectModel } from 'nestjs-typegoose';
 import { ReturnModelType } from '@typegoose/typegoose';
-import { GetInitialPostDataDto } from './dto/posts.dto';
+import { PostDto, CreatePostSuccessDto, CreatePostBodyDto } from './dto/posts.dto';
+import { User } from '../user/user.schema';
+import * as urlSlug from 'url-slug';
 
 type DevToArticle = {
   "type_of": "article",
@@ -52,13 +54,47 @@ type DevToArticle = {
 const DevToApiKey = "QG7J1McHHMV7UZ9jwDTeZFHf";
 const DevToApiUrlArticles = "https://dev.to/api/articles/"; //retrieve a list of articles (with no content)
 const DevToApiUrlComments = "https://dev.to/api/comments";
-
+const previewContentLength = 100;
 @Injectable()
 export class PostsService {
-  constructor(@InjectModel(Post) private postModel: ReturnModelType<typeof Post>, private readonly httpService: HttpService) { }
 
+  constructor(@InjectModel(Post) private postModel: ReturnModelType<typeof Post>,
+    @InjectModel(User) private userModel: ReturnModelType<typeof User>,
+    private readonly httpService: HttpService,) { }
+
+  async createPost(authorObjectID: string, body: CreatePostBodyDto): Promise<CreatePostSuccessDto> {
+    // Logger.log("PostsService::createPost")
+    const slug = urlSlug(body.title);
+    const doc = {
+      author: authorObjectID,
+      title: body.title,
+      slug,
+      previewContent: body.content.substring(0, previewContentLength),
+      content: body.content,
+      tags: body.tags,
+      featuredImg: body.featuredImg,
+      likes: [],
+      comments: [],
+      views: 0,
+      group: body.group,
+    }
+    // Logger.log(doc);
+    // Logger.log("Done create");
+    const newPost = new this.postModel(doc);
+    await newPost.save();
+    return {
+      _id: newPost._id,
+      slug,
+    };
+  }
+
+  async getInitialPosts(): Promise<PostDto[]> {
+    throw new Error("todo");
+  }
+
+  // Unused -- can use later for different feature
   // https://docs.dev.to/api/#tag/articles
-  async getDevToArticles(): Promise<GetInitialPostDataDto[]> {
+  async getDevToPosts(): Promise<any[]> {
     const res = await this.httpService.get(DevToApiUrlArticles, {
       headers: {
         'api_key': DevToApiKey
@@ -68,11 +104,12 @@ export class PostsService {
     const first50Articles = allArticles.slice(0, 20);
     // console.log(first50Articles);
     return await Promise.all(first50Articles.map((article) => {
-      return this.convertToPostsDto(article);
+      return this.convertDevToPosts(article);
     }));
   }
 
-  async convertToPostsDto(data: DevToArticle): Promise<GetInitialPostDataDto> {
+  // Unused -- can use later for different feature
+  private async convertDevToPosts(data: DevToArticle): Promise<any> {
     // const content = "Nullam quis feugiat est, vitae fermentum nunc. Ut ac nunc hendrerit, malesuada massa quis, pharetra ante. Praesent volutpat rhoncus risus a congue. Integer ultrices risus massa, a sodales sem mollis in. Fusce massa lectus, rhoncus at fermentum ac, eleifend ut diam. Donec a iaculis orci. Etiam cursus vel odio porta molestie. Maecenas elit ligula, ultricies vitae hendrerit nec, tincidunt nec urna. Sed tristique, nibh et lobortis mattis, sem magna dictum mauris, a viverra felis nunc quis lorem. Fusce elementum pellentesque diam, at eleifend nisi gravida nec. Aenean tempus lacus vel urna blandit ornare. Mauris id ante vitae tellus tempus vulputate quis quis diam. Nulla tellus ligula, scelerisque finibus elit quis, malesuada tempus nisi.";
     // const comments = ["Sed blandit sagittis sapien, id bibendum libero facilisis eget. Nullam eget nisi quam. Integer aliquet lectus mi, sit amet molestie est finibus vel.", "Maecenas commodo mauris quam, in laoreet nulla commodo vitae.", "Proin pulvinar scelerisque viverra."]
     return {

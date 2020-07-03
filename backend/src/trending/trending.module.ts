@@ -1,14 +1,12 @@
 import { Module, HttpModule } from '@nestjs/common';
 import { TrendingController } from './trending.controller';
 import { TrendingService } from './trending.service';
-import { User } from '../user/user.schema';
-import { Post } from '../posts/post.schema';
-import { TypegooseModule } from 'nestjs-typegoose';
-import { PostsService } from '../posts/posts.service';
+import { PostsModule } from 'src/posts/posts.module';
+import { UserModule } from 'src/user/user.module';
 
 @Module({
-  imports: [HttpModule, TypegooseModule.forFeature([User, Post])],
+  imports: [HttpModule, PostsModule, UserModule],
   controllers: [TrendingController],
-  providers: [TrendingService, PostsService]
+  providers: [TrendingService]
 })
 export class TrendingModule { }

@@ -1,4 +1,4 @@
-import { prop, Ref, getModelForClass } from '@typegoose/typegoose';
+import { prop, Ref } from '@typegoose/typegoose';
 import { TimeStamps } from '@typegoose/typegoose/lib/defaultClasses';
 import { Group } from '../groups/group.schema';
 import { Post } from '../posts/post.schema';
@@ -6,7 +6,7 @@ import { Tag } from '../tags/tag.schema';
 import { Conversation } from '../conversations/conversation.schema';
 
 export class User extends TimeStamps {//mapped to MongoDb collection 'users"
-  @prop({ required: true })
+  @prop({ required: true, unique: true })
   userID: string;
 
   @prop({ required: true })
@@ -48,5 +48,3 @@ export class User extends TimeStamps {//mapped to MongoDb collection 'users"
   @prop()
   lastLoggedIn: Date;
 }
-
-export const UserModel = getModelForClass(User);

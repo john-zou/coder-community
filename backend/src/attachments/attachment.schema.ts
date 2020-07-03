@@ -1,4 +1,4 @@
-import { prop, getModelForClass } from "@typegoose/typegoose";
+import { prop } from "@typegoose/typegoose";
 // import { User } from "../user/user.schema";
 import { TimeStamps } from "@typegoose/typegoose/lib/defaultClasses";
 
@@ -18,5 +18,3 @@ export class Attachment extends TimeStamps {
   // @prop()
   // content: 
 }
-
-export const AttachmentModel = getModelForClass(Attachment);

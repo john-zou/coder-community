@@ -5,16 +5,23 @@ import { ReturnModelType } from '@typegoose/typegoose';
 
 @Injectable()
 export class UserService {
-  /**
-   * @param userID GitHub login
-   * @returns whether the user had to be newly created
-   */
+  create(createUserDto: any): Promise<User> {
+    throw new Error("Method not implemented.");
+  }
+
   constructor(
     @InjectModel(User) private userModel: ReturnModelType<typeof User>,
-  ) {}
+  ) { }
 
   findAll(): Promise<User[]> {
     return this.userModel.find().exec();
+  }
+
+  /**
+   * 
+   */
+  getAuthors(posts: any) {
+    throw new Error("Method not implemented.");
   }
 
   /**

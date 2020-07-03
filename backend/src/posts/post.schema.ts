@@ -1,8 +1,9 @@
 import { TimeStamps } from "@typegoose/typegoose/lib/defaultClasses";
-import { prop, Ref, getModelForClass } from '@typegoose/typegoose';
+import { prop, Ref } from '@typegoose/typegoose';
 import { Tag } from "../tags/tag.schema";
 import { User } from "../user/user.schema";
 import { Comment } from "../comments/comment.schema";
+import { Group } from "../groups/group.schema";
 
 export class Post extends TimeStamps {//mapped to MongoDb collection 'posts"
   @prop({ ref: 'User' })
@@ -10,6 +11,9 @@ export class Post extends TimeStamps {//mapped to MongoDb collection 'posts"
 
   @prop()
   title: string;
+
+  @prop()
+  slug: string;
 
   @prop()
   previewContent: string;
@@ -31,6 +35,7 @@ export class Post extends TimeStamps {//mapped to MongoDb collection 'posts"
 
   @prop()
   views: number;
-}
 
-export const PostModel = getModelForClass(Post);
+  @prop({ ref: 'Group' })
+  group: Ref<Group>;
+}

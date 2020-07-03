@@ -9,13 +9,15 @@ import { Personal } from '../auth/guards/personal.decorator';
 export class UserController {
   constructor(private readonly userService: UserService) { }
 
-  // @Post()
-  // create(@Body() createUserDto: CreateUserDto): Promise<User> {
+  // @Post('dev-create')
+  // create(@Body() createUserDto: {
+
+  // }): Promise<User> {
   //   return this.userService.create(createUserDto);
   // }
 
-  @Personal()
-  test(): string {
-    return 'Hello!';
-  }
+  // @Personal()
+  // test(): string {
+  //   return 'Hello!';
+  // }
 }

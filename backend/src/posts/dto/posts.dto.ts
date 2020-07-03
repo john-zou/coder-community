@@ -1,21 +1,36 @@
 // import { ObjectID } from "mongodb";
-export class CreatePostDto {
+//GET POST DTO
+export class PostDto {
+  _id: string;
+  author: string;
   title: string;
-  content: string;
-}
-
-//for showing initial posts on the home page
-export class GetInitialPostDataDto {
-  authorName: string;
-  authorImg: string;
-  title: string;
-  previewContent: string;
-  // content: string;
+  previewContent?: string;
+  content?: string;
   tags: string[];
   featuredImg: string;
-  likes: number;
-  comments: number;
-  // comments: string[];
+  likesCount: number;
+  comments?: string[];
+  commentsCount: number;
+  views: number;
   createdAt: Date;
   likedByUser: boolean;
+  slug: string;
+  group?: string;
 }
+
+//CREATE POST DTO
+//request
+export class CreatePostBodyDto {
+  title: string;
+  content: string;
+  tags: string[];
+  featuredImg: string;
+  group?: string;
+}
+
+//response
+export class CreatePostSuccessDto {
+  _id: string;
+  slug: string;
+}
+
