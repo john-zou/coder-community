@@ -1,4 +1,4 @@
-import { prop, Ref } from '@typegoose/typegoose';
+import { prop, Ref, ReturnModelType } from '@typegoose/typegoose';
 import { TimeStamps } from '@typegoose/typegoose/lib/defaultClasses';
 import { Group } from '../groups/group.schema';
 import { Post } from '../posts/post.schema';
@@ -48,3 +48,5 @@ export class User extends TimeStamps {//mapped to MongoDb collection 'users"
   @prop()
   lastLoggedIn: Date;
 }
+
+export type UserModel = ReturnModelType<typeof User>;

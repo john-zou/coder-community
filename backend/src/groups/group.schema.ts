@@ -1,5 +1,5 @@
 import { TimeStamps } from "@typegoose/typegoose/lib/defaultClasses";
-import { prop, Ref } from "@typegoose/typegoose";
+import { prop, Ref, ReturnModelType } from "@typegoose/typegoose";
 import { User } from "../user/user.schema";
 import { Post } from "../posts/post.schema";
 import { Video } from "../videos/video.schema";
@@ -23,3 +23,5 @@ export class Group extends TimeStamps {
   @prop({ ref: 'Video' })
   videos: Ref<Video>[];
 }
+
+export type GroupModel = ReturnModelType<typeof Group>;

@@ -8,14 +8,24 @@ import { PostsService } from '../posts/posts.service';
 
 @Injectable()
 export class UserService {
-  // create(createUserDto: any): Promise<User> {
-  //   throw new Error("Method not implemented.");
-  // }
 
   constructor(
     @InjectModel(User) private userModel: ReturnModelType<typeof User>,
     private readonly postsService: PostsService,
-  ) { }
+  ) {}
+
+  async saveProfileBannerPic(userObjectID: string, url: string): Promise<void> {
+    await this.userModel.updateOne({_id: userObjectID}, {backgroundImg: url});
+  }
+
+  async saveProfilePic(userObjectID: string, url: string): Promise<void> {
+    await this.userModel.updateOne({_id: userObjectID}, {profilePic: url});
+  }
+
+  // create(createUserDto: CreateUserDto): Promise<User> {
+  //   const createdUser = new this.userModel(createUserDto);
+  //   return createdUser.save();
+  // }
 
   findAll(): Promise<User[]> {
     return this.userModel.find().exec();

@@ -1,5 +1,5 @@
 import { TimeStamps } from "@typegoose/typegoose/lib/defaultClasses";
-import { prop, Ref } from "@typegoose/typegoose";
+import { prop, Ref, ReturnModelType } from "@typegoose/typegoose";
 import { User } from "../user/user.schema";
 import { Post } from "../posts/post.schema";
 import { Video } from "../videos/video.schema";
@@ -35,3 +35,5 @@ export class Comment extends TimeStamps {
   @prop({ ref: Video })
   parentVideo?: Ref<Video>;
 }
+
+export type CommentModel = ReturnModelType<typeof Comment>;

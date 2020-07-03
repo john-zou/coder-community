@@ -1,45 +1,31 @@
-import {
-  PublicUserContentDir,
-  PublicUserContentServeRoot,
-  PublicAssetsDir,
-} from './../storage/storage.constants';
 import { Injectable } from '@nestjs/common';
-import { StorageService } from '../storage/storage.service';
 import path from 'path';
-import { ProfilePicsDir, ProfileBannerDir } from '../storage/storage.constants';
 import { v4 as uuid } from 'uuid';
+import { ProfileBannerDir, ProfilePicsDir } from '../storage/storage.constants';
+import { StorageService } from '../storage/storage.service';
+import { UserService } from '../user/user.service';
+import {
+  PublicAssetsDir, PublicUserContentDir,
+  PublicUserContentServeRoot
+} from './../storage/storage.constants';
 
 @Injectable()
 export class UploadService {
-  constructor(private readonly storageService: StorageService) {}
+  constructor(private readonly storageService: StorageService, private readonly userService: UserService) {}
 
-  private async uploadProfileItem(
-    fileName: string,
-    file: Express.Multer.File,
-    to: string,
-  ): Promise<string> {
-    const extension = path.extname(file.originalname);
-    const subPath = path.join(to, fileName + '.' + extension);
-    const serverPath = path.join(PublicUserContentDir, subPath);
-    await this.storageService.save(file, serverPath);
-    const servePath = path.join(PublicUserContentServeRoot, subPath);
-    return servePath;
+  async uploadProfilePic(_id: string, file: Express.Multer.File): Promise<string> {
+    const url = await this.uploadProfileItem(_id, file, ProfilePicsDir);
+    await this.userService.saveProfilePic(_id, url);
+    return url;
   }
 
-  uploadProfilePic(_id: string, file: Express.Multer.File): Promise<string> {
-    return this.uploadProfileItem(_id, file, ProfilePicsDir);
-  }
-
-  uploadProfileBannerPic(
+  async uploadProfileBannerPic(
     _id: string,
     file: Express.Multer.File,
   ): Promise<string> {
-    return this.uploadProfileItem(_id, file, ProfileBannerDir);
-  }
-
-  private generateAssetName(originalName: string) {
-    const extension = path.extname(originalName);
-    return uuid() + '.' + extension;
+    const url = await this.uploadProfileItem(_id, file, ProfileBannerDir);
+    await this.userService.saveProfileBannerPic(_id, url);
+    return url;
   }
 
   async uploadPublicAsset(
@@ -64,4 +50,24 @@ export class UploadService {
   uploadPrivateFile(_id: string, file: Express.Multer.File): Promise<string> {
     throw new Error('Method not implemented.');
   }
+
+  private async uploadProfileItem(
+    fileName: string,
+    file: Express.Multer.File,
+    to: string,
+  ): Promise<string> {
+    const extension = path.extname(file.originalname);
+    const subPath = path.join(to, fileName + '.' + extension);
+    const serverPath = path.join(PublicUserContentDir, subPath);
+    await this.storageService.save(file, serverPath);
+    const servePath = path.join(PublicUserContentServeRoot, subPath);
+    return servePath;
+  }
+
+  private generateAssetName(originalName: string) {
+    const extension = path.extname(originalName);
+    return uuid() + '.' + extension;
+  }
+
+
 }

@@ -72,21 +72,6 @@ export class AuthService {
     private readonly userService: UserService,
   ) { }
 
-  async loginDev(): Promise<LoginSuccess> {
-    const devUserID = "lion-king";
-    // create dev user
-    const { isNewUser, _id } = await this.userService.createOrUpdateUser(
-      devUserID, 12345678
-    );
-    const jwt = await this.signCoderCommunityJwt(_id);
-
-    return {
-      isNewUser,
-      jwt,
-      userID: devUserID,
-      _id,
-    };
-  }
 
   logOut(
     logOut: LogOut,
@@ -157,7 +142,7 @@ export class AuthService {
     };
   }
 
-  private signCoderCommunityJwt(_id: string) {
+  signCoderCommunityJwt(_id: string): Promise<string> {
     const payload = { _id };
     return this.jwtService.signAsync(payload);
   }

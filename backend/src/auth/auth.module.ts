@@ -18,5 +18,6 @@ import { Secrets } from '../secrets';
   ],
   controllers: [AuthController],
   providers: [AuthService, JwtStrategy],
+  exports: [AuthService]
 })
 export class AuthModule {}

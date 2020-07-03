@@ -19,6 +19,7 @@ import { TrendingModule } from './trending/trending.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { PublicUserContentDir, PublicUserContentServeRoot } from './storage/storage.constants';
+import { DevModule } from './dev/dev.module';
 @Module({
   imports: [AuthModule, UserModule,
     TypegooseModule.forRoot(MONGODB_URI, {
@@ -30,7 +31,7 @@ import { PublicUserContentDir, PublicUserContentServeRoot } from './storage/stor
       rootPath: join(__dirname, "..", PublicUserContentDir),
       serveRoot: PublicUserContentServeRoot,
     }),
-    TagsModule, PostsModule, CommentsModule, VideosModule, GroupsModule, StorageModule, UploadModule, MessagesModule, ConversationsModule, AttachmentsModule, StorageModule, UploadModule, TrendingModule],
+    TagsModule, PostsModule, CommentsModule, VideosModule, GroupsModule, StorageModule, UploadModule, MessagesModule, ConversationsModule, AttachmentsModule, StorageModule, UploadModule, TrendingModule, DevModule],
   controllers: [AppController],
   providers: [AppService],
 })

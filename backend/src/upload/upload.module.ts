@@ -6,6 +6,7 @@ import { StorageService } from '../storage/storage.service';
 import { MulterModule } from '@nestjs/platform-express';
 import { FileSizeLimitInBytes } from '../storage/storage.constants';
 import { multerFileFilter } from './multer-file-filter';
+import { UserModule } from '../user/user.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { multerFileFilter } from './multer-file-filter';
       fileFilter: multerFileFilter,
       limits: {fileSize: FileSizeLimitInBytes}
     }),
+    UserModule, // to update the user profile pic and banner URLs
     StorageModule,
   ],
   controllers: [UploadController],

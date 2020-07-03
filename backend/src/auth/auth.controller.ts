@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Req, Res, Get } from '@nestjs/common';
+import { Controller, Post, Body } from '@nestjs/common';
 import {
   GitHubLoginBody,
   GoogleLoginBody,
@@ -9,18 +9,10 @@ import {
 import { AuthService } from './auth.service';
 import { ApiTags } from '@nestjs/swagger';
 
-@ApiTags('Authentication')
+@ApiTags('Auth')
 @Controller()
 export class AuthController {
   constructor(private authService: AuthService) { }
-
-  /**
-   * Temporary endpoint for logging in to bypass OAuth
-   */
-  @Get('login/dev')
-  loginDev(): Promise<LoginSuccess> {
-    return this.authService.loginDev();
-  }
 
   @Post('login/github')
   loginGitHub(@Body() gitHubLogin: GitHubLoginBody): Promise<LoginSuccess> {
