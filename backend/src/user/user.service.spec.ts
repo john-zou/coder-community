@@ -5,6 +5,8 @@ import { User } from './user.schema';
 import { LOCAL_MONGODB } from '../auth/constants';
 import { MockMongo } from '../util/mock-mongo';
 import { PostsService } from '../posts/posts.service';
+import { Post } from '../posts/post.schema';
+import { PostsModule } from '../posts/posts.module';
 
 describe('UserService', () => {
   let module: TestingModule;
@@ -22,7 +24,7 @@ describe('UserService', () => {
           useFindAndModify: false,
         }),
         TypegooseModule.forFeature([User, Post]),
-        PostsService
+        PostsModule
       ],
       providers: [UserService],
     }).compile();
