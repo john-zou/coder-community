@@ -65,11 +65,28 @@ type GitHubUser = {
 
 @Injectable()
 export class AuthService {
+
   constructor(
     private readonly jwtService: JwtService,
     private readonly httpService: HttpService,
     private readonly userService: UserService,
   ) { }
+
+  async loginDev(): Promise<LoginSuccess> {
+    const devUserID = "lion-king";
+    // create dev user
+    const { isNewUser, _id } = await this.userService.createOrUpdateUser(
+      devUserID, 12345678
+    );
+    const jwt = await this.signCoderCommunityJwt(_id);
+
+    return {
+      isNewUser,
+      jwt,
+      userID: devUserID,
+      _id,
+    };
+  }
 
   logOut(
     logOut: LogOut,
