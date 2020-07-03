@@ -63,3 +63,4 @@ export const howLongAgo = (unixTime) => {
   }
   return `${years} years ago`;
 };
+

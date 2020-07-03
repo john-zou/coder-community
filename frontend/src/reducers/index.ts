@@ -9,10 +9,12 @@ import { trendingPosts } from "./trendingPosts";
 import { currentViewedPost } from "./currentViewedPost";
 import { savedPosts } from "./savedPosts";
 import { isLoggedIn } from "./isLoggedIn";
+import { users } from "./users";
 
 
 export const rootReducer = combineReducers({
   user,
+  users,
   currentViewedProfile,
   posts,
   groups,

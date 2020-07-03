@@ -1,5 +1,5 @@
 import { Injectable, HttpService } from '@nestjs/common';
-import { GetInitialDataDto } from './initialData.dto';
+import { GetInitialDataDto, GetInitialDataLoggedInDto } from './initialData.dto';
 import { Personal } from '../auth/guards/personal.decorator';
 import { PostsService } from '../posts/posts.service';
 import { UserService } from '../user/user.service';
@@ -23,12 +23,23 @@ export class TrendingService {
    * TODO: make this scalable (optimize)
    */
 
-  async getInitialData(userObjectID: string): Promise<GetInitialDataDto> {
-    const posts = await this.postsService.getInitialPosts(userObjectID);
+  async getInitialData(): Promise<GetInitialDataDto> {
+    const posts = await this.postsService.getInitialPosts();
     const users = await this.userService.getAuthors(posts);
     return {
       posts,
       users,
+    }
+  }
+
+  async getInitialLoggedInData(userObjectID: string): Promise<GetInitialDataLoggedInDto> {
+    const posts = await this.postsService.getInitialPosts(userObjectID);
+    const users = await this.userService.getAuthors(posts);
+    const user = await this.userService.findUserById(userObjectID);
+    return {
+      posts,
+      users,
+      user,
     }
   }
 }

@@ -3,7 +3,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
-import { MONGODB_URI } from './auth/constants';
+import { LOCAL_MONGODB, MONGODB_URI } from './auth/constants';
 import { TypegooseModule } from 'nestjs-typegoose';
 import { TagsModule } from './tags/tags.module';
 import { PostsModule } from './posts/posts.module';

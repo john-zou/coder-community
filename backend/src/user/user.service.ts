@@ -12,14 +12,25 @@ export class UserService {
   constructor(
     @InjectModel(User) private userModel: ReturnModelType<typeof User>,
     private readonly postsService: PostsService,
-  ) {}
+  ) { }
+
+  async findUserById(userObjectID: string): Promise<UserDto> {
+    const foundUser = await this.userModel.findById(userObjectID);
+    return {
+      _id: foundUser._id,
+      userID: foundUser.userID,
+      name: foundUser.name,
+      likedPosts: this.postsService.convertToStrArr(foundUser.likedPosts),
+      profilePic: foundUser.profilePic,
+    }
+  }
 
   async saveProfileBannerPic(userObjectID: string, url: string): Promise<void> {
-    await this.userModel.updateOne({_id: userObjectID}, {backgroundImg: url});
+    await this.userModel.updateOne({ _id: userObjectID }, { backgroundImg: url });
   }
 
   async saveProfilePic(userObjectID: string, url: string): Promise<void> {
-    await this.userModel.updateOne({_id: userObjectID}, {profilePic: url});
+    await this.userModel.updateOne({ _id: userObjectID }, { profilePic: url });
   }
 
   // create(createUserDto: CreateUserDto): Promise<User> {
