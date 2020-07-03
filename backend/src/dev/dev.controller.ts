@@ -1,17 +1,20 @@
-import { Controller, Get, Param, Post as PostEndpoint, Body, HttpException } from '@nestjs/common';
+import { Controller, Get, Param, Post, Body, HttpException } from '@nestjs/common';
 import { LoginSuccess } from '../auth/auth.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { UserService } from '../user/user.service';
 import { AuthService } from '../auth/auth.service';
 import { ObjectID } from 'mongodb';
 import { CreateCustomUser } from './dev.dto';
+import { PostsService } from '../posts/posts.service';
+import { CreatePostBodyDto, CreatePostSuccessDto } from '../posts/dto/posts.dto';
 
 @ApiTags('Dev')
 @Controller('dev')
 export class DevController {
   constructor(
     private readonly authService: AuthService,
-    private readonly userService: UserService
+    private readonly userService: UserService,
+    private readonly postsService: PostsService,
   ) {}
 
   /**
@@ -34,7 +37,7 @@ export class DevController {
     };
   }
 
-  @PostEndpoint('create-user')
+  @Post('create-user')
   async createCustomUser(@Body() customUser: CreateCustomUser): Promise<LoginSuccess> {
     const { _id, isNewUser } = await this.userService.createOrUpdateUser(
       customUser.userID,
@@ -47,6 +50,11 @@ export class DevController {
       userID: customUser.userID,
       _id,
     }
+  }
+
+  @Post('create-post')
+  createPostDev(@Body() createPostDto: CreatePostBodyDto & { author: string }): Promise<CreatePostSuccessDto> {
+    return this.postsService.createPost(createPostDto.author, createPostDto);
   }
 
   /**

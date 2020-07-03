@@ -15,9 +15,4 @@ export class PostsController {
   createPost(@Body() createPostDto: CreatePostBodyDto, @UserObjectID() author: string): Promise<CreatePostSuccessDto> {
     return this.postsService.createPost(author, createPostDto);
   }
-
-  @Post('dev-create')
-  createPostDev(@Body() createPostDto: CreatePostBodyDto & { author: string }): Promise<CreatePostSuccessDto> {
-    return this.postsService.createPost(createPostDto.author, createPostDto);
-  }
 }
