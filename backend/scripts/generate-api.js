@@ -2,7 +2,7 @@
 require('dotenv').config();
 const { NestFactory } = require('@nestjs/core');
 const { SwaggerModule, DocumentBuilder } = require('@nestjs/swagger');
-const { AppModule } = require('../dist/app.module');
+const { AppModule } = require('../dist/src/app.module');
 const axios = require("axios");
 const fs = require("fs");
 const extract = require("extract-zip");
@@ -15,15 +15,16 @@ console.log("Processing back end controllers, DTOs, models to generate API docum
 (async () => {
   // Create Swagger (OpenAPI) document
   const app = await NestFactory.create(AppModule);
+  app.setGlobalPrefix('api');
   const options = new DocumentBuilder()
-      .setTitle('Coder Community')
-      .setDescription('The Coder Community API description')
-      .setVersion('0.0.1')
-      .build();
+    .setTitle('Coder Community')
+    .setDescription('The Coder Community API description')
+    .setVersion('0.0.1')
+    .build();
   const document = SwaggerModule.createDocument(app, options);
 
   console.log("Done!");
-  
+
   // Send to swagger.io
   const data = {
     spec: document,
@@ -32,7 +33,7 @@ console.log("Processing back end controllers, DTOs, models to generate API docum
   };
 
   console.log("Requesting generated SDK from swagger.io...");
-  const response = await axios.post(endpoint, data, {responseType: 'arraybuffer'});
+  const response = await axios.post(endpoint, data, { responseType: 'arraybuffer' });
   console.log("Done!")
 
   // Save to file locally

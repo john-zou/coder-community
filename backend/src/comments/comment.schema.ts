@@ -23,6 +23,9 @@ export class Comment extends TimeStamps {
   @prop({ enum: CommentRoot })
   commentRoot: CommentRoot;
 
+  @prop({ ref: User })
+  likes: Ref<User>[];
+
   @prop({ ref: Post })
   parentPost?: Ref<Post>;
 

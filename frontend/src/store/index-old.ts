@@ -5,6 +5,7 @@ import {
 } from "../util/helpers";
 
 const initialData = {
+  isLoggedIn: false,
   user: {
     isLoggedIn: true,
     userID: "nick_lee", //should be unique for querying mongodb
@@ -15,9 +16,10 @@ const initialData = {
     followers: ["evan_you", "gaeron"],
   },
   trendingPosts: [
+
     //the 10 most trending posts shown on home page (trending = newest + most liked + most commented on)
     {
-      authorID: "nick_lee", //for viewing author's public profile
+      authorID: "nick_lee",
       authorName: "Nick Lee",
       authorImg: randomImage(),
       postID: "css-tricks", //when user interacts with the post (such as clicking, liking it)
@@ -212,5 +214,6 @@ export type CurrentViewedProfile = typeof initialData.currentViewedProfile;
 export type Post = typeof initialData.posts[0];
 export type SavedPost = typeof initialData.savedPosts[0];
 export type Tag = typeof initialData.tags[0];
+export type IsLoggedIn = typeof initialData.isLoggedIn;
 
 export default initialData;

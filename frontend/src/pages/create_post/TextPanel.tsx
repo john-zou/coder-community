@@ -23,7 +23,7 @@ const useStyles = makeStyles({
     border: "none",
     outline: "none",
     '&:hover': {
-       backgroundColor: "#F2F2F2",
+      backgroundColor: "#F2F2F2",
     },
     margin: "0.5em auto",
     width: "100%",
@@ -35,7 +35,7 @@ const useStyles = makeStyles({
     border: "none",
     outline: "none",
     '&:hover': {
-       backgroundColor: "#F2F2F2",
+      backgroundColor: "#F2F2F2",
     },
     margin: "0.5em auto",
     width: "100%",
@@ -49,11 +49,11 @@ const useStyles = makeStyles({
 });
 
 const _onTitle = (event) => {
-    this.props.setTitle(event.target.value);
+  this.props.setTitle(event.target.value);
 }
 
 const _onText = (event) => {
-    this.props.setText(event.target.value);
+  this.props.setText(event.target.value);
 }
 
 function TextPanel() {
@@ -62,17 +62,17 @@ function TextPanel() {
   //	(state) => state.posts);
   return (
     <div className={classes.cptext}>
-       <form>
-       	    <input className={classes.cptitle} type="text" placeholder="Title" onChange={_onTitle}></input>
-	    <br></br>
-       	    <textarea className={classes.cpcontent} id="text" onChange={_onText} placeholder="Type content"></textarea>
-       </form>
+      <form>
+        <input className={classes.cptitle} type="text" placeholder="Title" onChange={_onTitle}></input>
+        <br></br>
+        <textarea className={classes.cpcontent} id="text" onChange={_onText} placeholder="Type content"></textarea>
+      </form>
     </div>
   );
 }
 
 const mapStateToProps = (state) => {
-    return {};
+  return {};
 }
 
 export default connect(mapStateToProps, { setTitle, setText })(TextPanel);

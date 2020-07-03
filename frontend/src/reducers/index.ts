@@ -8,6 +8,8 @@ import { currentViewedProfile } from "./currentViewedProfile";
 import { trendingPosts } from "./trendingPosts";
 import { currentViewedPost } from "./currentViewedPost";
 import { savedPosts } from "./savedPosts";
+import { isLoggedIn } from "./isLoggedIn";
+
 
 export const rootReducer = combineReducers({
   user,
@@ -19,4 +21,5 @@ export const rootReducer = combineReducers({
   trendingPosts,
   currentViewedPost,
   savedPosts,
+  isLoggedIn
 });

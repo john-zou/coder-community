@@ -91,8 +91,7 @@ export class AuthService {
   logOut(
     logOut: LogOut,
   ):
-    | import('./auth.dto').LogOutSuccess
-    | PromiseLike<import('./auth.dto').LogOutSuccess> {
+    Promise<import('./auth.dto').LogOutSuccess> {
     throw new Error('Method not implemented.');
   }
 

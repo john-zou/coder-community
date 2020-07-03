@@ -1,8 +1,7 @@
 import React from "react";
-import GroupList from "./GroupList";
 import { makeStyles } from "@material-ui/core/styles";
 import { useSelector } from "react-redux";
-import { RootState, User } from "../../initialData";
+import { RootState, User, IsLoggedIn } from "../../store/index-old";
 import FilterPost from "./FilterPost";
 import { Link } from "react-router-dom";
 
@@ -48,21 +47,30 @@ const useStyles = makeStyles({
 const LeftSideBar = () => {
   const classes = useStyles();
   const user = useSelector<RootState, User>((state) => state.user);
-
+  const isLoggedIn = useSelector<RootState, IsLoggedIn>((state) => state.isLoggedIn);
   return (
     <div className={classes.root}>
-      <div className={classes.diplayAccount}>
-        <img className={classes.displayImg} src={user.profilePic} alt="" />
-        <Link to={`/user/${user.userID}`} className={classes.link}>
-          <h3 className={classes.displayName}>{user.name}</h3>
-        </Link>
-      </div>
+      {isLoggedIn &&
+        <div className={classes.diplayAccount}>
+          <img className={classes.displayImg} src={user.profilePic} alt="" />
+          <Link to={`/user/${user.userID}`} className={classes.link}>
+            <h3 className={classes.displayName}>{user.name}</h3>
+          </Link>
+        </div>
+      }
       <div className={classes.groupLinks}>
         <h3>Daily Challenge</h3>
-        <h3>Messages</h3>
+        {isLoggedIn &&
+          <Link to={`/messages`} className={classes.link}>
+            <h3>Messages</h3>
+          </Link>
+        }
+        <h3>Hacker News</h3>
+        <h3>Posts</h3>
+        <h3>Videos</h3>
         <h3>Groups</h3>
-        <GroupList />
-        <p className={classes.showPostsText}># DISPLAY POSTS</p>
+        {/* <GroupList /> */}
+        <p className={classes.showPostsText}># BROWSE BY TAGS</p>
         <FilterPost />
       </div>
     </div>

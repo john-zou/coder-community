@@ -3,9 +3,10 @@ import { TimeStamps } from '@typegoose/typegoose/lib/defaultClasses';
 import { Group } from '../groups/group.schema';
 import { Post } from '../posts/post.schema';
 import { Tag } from '../tags/tag.schema';
+import { Conversation } from '../conversations/conversation.schema';
 
 export class User extends TimeStamps {//mapped to MongoDb collection 'users"
-  @prop({ required: true })
+  @prop({ required: true, unique: true })
   userID: string;
 
   @prop({ required: true })
@@ -18,25 +19,31 @@ export class User extends TimeStamps {//mapped to MongoDb collection 'users"
   profilePic?: string;
 
   @prop()
-  backgroundImg?: string;
+  profileBanner?: string;
 
   @prop()
   status?: string;
 
-  @prop({ ref: User })
+  @prop({ ref: 'User' })
   followers: Ref<User>[];
 
-  @prop({ ref: User })
-  followings: Ref<User>[];
+  @prop({ ref: 'User' })
+  following: Ref<User>[];
 
-  @prop({ ref: Group })
+  @prop({ ref: 'Group' })
   groups: Ref<Group>[];
 
-  @prop({ ref: Post })
+  @prop({ ref: 'Post' })
   savedPosts: Ref<Post>[];
 
-  @prop({ ref: Tag })
+  @prop({ ref: 'Post' })
+  likedPosts: Ref<Post>[];
+
+  @prop({ ref: 'Tag' })
   tags: Ref<Tag>[];
+
+  @prop({ ref: 'Conversation' })
+  conversations: Ref<Conversation>[];
 
   @prop()
   lastLoggedIn: Date;
