@@ -1,7 +1,8 @@
-import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import RightSideBar from "./RightSideBar";
-import Main from "./Main";
+import { makeStyles } from '@material-ui/core/styles';
+import React from 'react';
+
+import Main from '../home/Main';
+import RightSideBar from './RightSideBar';
 
 const useStyles = makeStyles({
   home: {

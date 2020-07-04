@@ -1,3 +1,3 @@
-export function videos(state = [], action) {
+export function videos(state = {}, action) {
   return state;
 }

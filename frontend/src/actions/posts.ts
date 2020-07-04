@@ -1,7 +1,7 @@
-import { User, Post } from "../store";
+export function fetchPostBySlug(slug: string) {
+  return "TODO";
+}
 
-export const setInitialTrendingPosts = (posts: Record<string, Post>, users: Record<string, User>) => ({
-  type: "SET_INITIAL_TRENDING_POSTS",
-  posts,
-  users,
-});
+export function fetchPostContentByID(id: string) {
+  return "TODO";
+}

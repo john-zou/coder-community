@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 
 import { UserModel } from '../mongo';
 import { PostDto } from '../posts/dto/posts.dto';
-import { PostsService } from '../posts/posts.service';
+// import { PostsService } from '../posts/posts.service';
 import { convertToStrArr } from '../util/helperFunctions';
 import { UserDto } from './dto/user.dto';
 import { User } from './user.schema';
@@ -10,18 +10,21 @@ import { User } from './user.schema';
 @Injectable()
 export class UserService {
 
-  constructor(
-    private readonly postsService: PostsService,
-  ) { }
-
   async findUserById(userObjectID: string): Promise<UserDto> {
     const foundUser = await UserModel.findById(userObjectID);
     return {
       _id: foundUser._id,
       userID: foundUser.userID,
       name: foundUser.name,
-      likedPosts: convertToStrArr(foundUser.likedPosts),
       profilePic: foundUser.profilePic,
+      profileBanner: foundUser.profileBanner,
+      status: foundUser.status,
+      followers: convertToStrArr(foundUser.followers),
+      following: convertToStrArr(foundUser.following),
+      groups: convertToStrArr(foundUser.groups),
+      posts: convertToStrArr(foundUser.posts),
+      savedPosts: convertToStrArr(foundUser.savedPosts),
+      likedPosts: convertToStrArr(foundUser.likedPosts),
     }
   }
 

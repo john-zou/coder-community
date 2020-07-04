@@ -1,9 +1,10 @@
-import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import { useSelector } from "react-redux";
-import { RootState, User, IsLoggedIn } from "../../store";
-import FilterPost from "./FilterPost";
-import { Link } from "react-router-dom";
+import { makeStyles } from '@material-ui/core/styles';
+import React from 'react';
+import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
+
+import { Loadable, RootState, User } from '../../store';
+import FilterPost from './FilterPost';
 
 const useStyles = makeStyles({
   root: {
@@ -46,15 +47,16 @@ const useStyles = makeStyles({
 
 const LeftSideBar = () => {
   const classes = useStyles();
-  const user = useSelector<RootState, User>((state) => state.user);
-  const isLoggedIn = useSelector<RootState, IsLoggedIn>((state) => state.isLoggedIn);
+  const user = useSelector<RootState, Loadable<User>>((state) => state.user);
+  const isLoggedIn = useSelector<RootState, boolean>((state) => state.isLoggedIn);
+
   return (
     <div className={classes.root}>
       {isLoggedIn &&
         <div className={classes.diplayAccount}>
-          <img className={classes.displayImg} src={user.profilePic} alt="" />
-          <Link to={`/user/${user.userID}`} className={classes.link}>
-            <h3 className={classes.displayName}>{user.name}</h3>
+          <img className={classes.displayImg} src={user.item.profilePic} alt="" />
+          <Link to={`/user/${user.item.userID}`} className={classes.link}>
+            <h3 className={classes.displayName}>{user.item.name}</h3>
           </Link>
         </div>
       }

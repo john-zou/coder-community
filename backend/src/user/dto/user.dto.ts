@@ -5,5 +5,12 @@ export class UserDto {
   userID: string;
   name: string;
   profilePic?: string;
-  likedPosts?: string[];
+  profileBanner?: string;
+  status?: string;
+  followers?: string[];
+  following?: string[];
+  groups?: string[];
+  posts?: string[];
+  savedPosts?: string[];
+  likedPosts: string[];
 }

@@ -1,10 +1,11 @@
-import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState, IsLoggedIn, Post } from "../../store";
-import Avatar from "../common/Avatar";
-import { Link } from "react-router-dom";
-import { handleViewPost } from "./Card";
+import { makeStyles } from '@material-ui/core/styles';
+import React from 'react';
+import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
+
+import { RootState } from '../../store';
+import Avatar from '../common/Avatar';
+import { handleViewPost } from './Card';
 
 const useStyles = makeStyles({
   root: {
@@ -17,12 +18,6 @@ const useStyles = makeStyles({
     paddingTop: "5vh",
     marginRight: "5vw",
   },
-  // mostPopularSection: {
-  //   height: "56vh",
-  //   display: "flex",
-  //   flexDirection: "column",
-  //   overflowY: "scroll",
-  // },
   savePostSection: {
     display: "flex",
     flexDirection: "column",
@@ -44,11 +39,10 @@ const useStyles = makeStyles({
 //parent:
 export default function RightSideBar() {
   const classes = useStyles();
-  const dispatch = useDispatch();
   const currViewedPost = null;
 
   const savedPosts = [];
-  const isLoggedIn = useSelector<RootState, IsLoggedIn>((state) => state.isLoggedIn);
+  const isLoggedIn = useSelector<RootState, boolean>((state) => state.isLoggedIn);
 
   return (
     <div className={classes.root}>

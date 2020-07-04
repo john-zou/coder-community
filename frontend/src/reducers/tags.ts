@@ -1,3 +1,3 @@
-export function tags(state = [], action) {
+export function tags(state = {}, action) {
   return state;
 }

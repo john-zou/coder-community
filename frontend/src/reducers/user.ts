@@ -1,29 +1,30 @@
-/**
- * Handles login
- */
-type User = {
-  userID: string,
-  gitHubID: number,
-  name: string,
-  profilePic?: string,
-  backgroundImg?: string,
-  status?: string,
-  followers: string[],
-  following: string[],
-  groups: string[],
-  savedPosts: string[],
-  tags: string[],
-  conversations: string[],
-  lastLogginIn: Date;
-}
+import { ReduxAction } from '../actions/constants';
+import { Loadable, User } from '../store';
 
-const initialState = {
-  user: {},
-  loggedIn: false,
-  loading: false,
-  error: null,
-}
-
-export function user(state = initialState, action) {
-  return state;
+export function user(state: Loadable<User> = { loading: false }, action: ReduxAction) {
+  switch (action.type) {
+    case "USER_PENDING": {
+      return {
+        ...state,
+        loading: true,
+      }
+    }
+    case "USER_SUCCESS": {
+      return {
+        ...state,
+        loading: false,
+        error: null,
+        item: action.payload.user,
+      }
+    }
+    case "USER_FAILURE": {
+      return {
+        ...state,
+        loading: false,
+        error: action.payload.error
+      }
+    }
+    default:
+      return state;
+  }
 }

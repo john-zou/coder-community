@@ -1,13 +1,14 @@
-import React, { useEffect } from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import HeartIcon from "../../icons/heartIcon.svg";
-import HeartIconRed from "../../icons/heartIconRed.svg";
-import CommentIcon from "../../icons/commentIcon.svg";
-import { Post, RootState, User } from "../../store";
-import { Link } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { savePost, likePost, viewPost } from "../../actions/home";
-import DefaultPic from "../../assets/user.svg";
+import { makeStyles } from '@material-ui/core/styles';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
+
+import { likePost, savePost, viewPost } from '../../actions/home';
+import DefaultPic from '../../assets/user.svg';
+import CommentIcon from '../../icons/commentIcon.svg';
+import HeartIcon from '../../icons/heartIcon.svg';
+import HeartIconRed from '../../icons/heartIconRed.svg';
+import { Post, RootState, User } from '../../store';
 
 const useStyles = makeStyles({
   root: {
@@ -87,11 +88,11 @@ type Props = {
 const Card = ({ postID }: Props) => {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const post = useSelector<RootState, Post>(state => state.posts[postID]);
+
+  const post = useSelector<RootState, Post>(state => state.posts.items[postID]);
 
   const authorID = post.author;
-  //backend should have author information inside post, save author in users, post in posts
-  const author = useSelector<RootState, User>(state => state.users[authorID]);
+  const author = useSelector<RootState, User>(state => state.users.items[authorID]);
 
   return (
     <div className={classes.root}>
@@ -173,7 +174,7 @@ const Card = ({ postID }: Props) => {
       </div>
 
       <div className={classes.interactions}>
-        {post.tags.map((tag) => (
+        {post.tags.items.map((tag) => (
           <p key={post._id} className={classes.tagText}>
             #{tag}&nbsp;
           </p>
