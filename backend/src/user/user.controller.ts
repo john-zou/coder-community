@@ -11,13 +11,6 @@ import { UserDto } from './dto/user.dto';
 export class UserController {
   constructor(private readonly userService: UserService) { }
 
-  // @Post('dev-create')
-  // create(@Body() createUserDto: {
-
-  // }): Promise<User> {
-  //   return this.userService.create(createUserDto);
-  // }
-
   @Personal()
   @Get()
   getUser(@UserObjectID() userObjectID: string): Promise<UserDto> {

@@ -1,11 +1,3 @@
-import { Post } from "../store";
+import produce from "immer";
 
-export function savedPosts(state = Array<Post>(), action): Post[] {
-  switch (action.type) {
-    case "SAVE_POST": {
-      return [...state, action.post];
-    }
-    default:
-      return state;
-  }
-}
+export const savedPosts = produce((state, action) => { }, { loading: false });

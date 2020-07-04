@@ -7,7 +7,8 @@ import { UsersState } from '../store';
 export const users = produce((state: UsersState, action: ReduxAction) => {
   switch (action.type) {
     case "INITIAL_TRENDING_POSTS_SUCCESS": {
-      action.payload.users.forEach(user => state[user._id] = user);
+      const usersMap = action.payload.users;
+      Object.keys(usersMap).forEach(_id => state[_id] = { loading: false, item: usersMap[_id] });
     }
   }
 }, {});

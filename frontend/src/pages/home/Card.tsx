@@ -89,10 +89,10 @@ const Card = ({ postID }: Props) => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
-  const post = useSelector<RootState, Post>(state => state.posts.items[postID]);
+  const post = useSelector<RootState, Post>(state => state.posts[postID].item);
 
   const authorID = post.author;
-  const author = useSelector<RootState, User>(state => state.users.items[authorID]);
+  const author = useSelector<RootState, User>(state => state.users[authorID].item);
 
   return (
     <div className={classes.root}>

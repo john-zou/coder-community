@@ -8,13 +8,15 @@ export function trendingPosts(state: LoadableIDs = { loading: false }, action: R
       return {
         ...state,
         loading: true,
+        error: undefined,
       }
     }
     case "INITIAL_TRENDING_POSTS_SUCCESS": {
+      console.log(action);
       return {
         ...state,
         loading: false,
-        error: true,
+        error: undefined,
         items: action.payload.postIDs,
       }
     }

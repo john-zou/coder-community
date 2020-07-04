@@ -1,7 +1,18 @@
-export function posts(state = {}, action) {
-  return state;
-}
+import produce from 'immer';
 
+import { ReduxAction } from '../actions/constants';
+import { PostsState } from '../store';
+
+//https://immerjs.github.io/immer/docs/example-reducer
+export const posts = produce((state: PostsState, action: ReduxAction) => {
+  switch (action.type) {
+    case "INITIAL_TRENDING_POSTS_SUCCESS": {
+      const postsMap = action.payload.posts;
+      console.log(postsMap);
+      Object.keys(postsMap).forEach(_id => state[_id] = { loading: false, item: postsMap[_id] });
+    }
+  }
+}, {});
 // // ** New post page
 // const loadImgReducer = (imgurl = "", action) => {
 //   if (action.type === "IMG_LOAD") return action.url;

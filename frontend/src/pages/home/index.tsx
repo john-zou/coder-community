@@ -25,12 +25,13 @@ export default function Home() {
     dispatch(setInitialTrendingPosts());
   }, []);
 
-  if (trendingPosts.loading) {
+  if (!trendingPosts.items || trendingPosts.loading) {
     return <Loading />
   }
+
   return (
     <div className={classes.home}>
-      <LeftSideBar />
+      {/* <LeftSideBar /> */}
       <Main />
       <RightSideBar />
     </div>

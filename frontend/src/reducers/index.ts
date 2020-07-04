@@ -13,6 +13,10 @@ import { trendingPosts } from './trendingPosts';
 import { user } from './user';
 import { users } from './users';
 import { videos } from './videos';
+import { userIDs } from './userIDs';
+import { userOwnPosts } from "./userOwnPosts";
+import { trendingVideos } from "./trendingVideos";
+import { savedPosts } from "./savedPosts";
 
 
 export const rootReducer = combineReducers({
@@ -29,7 +33,11 @@ export const rootReducer = combineReducers({
   videos,
 
   slugs,
+  userIDs,
 
   user,
   trendingPosts,
+  userOwnPosts,
+  trendingVideos,
+  savedPosts,
 });
