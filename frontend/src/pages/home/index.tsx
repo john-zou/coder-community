@@ -8,7 +8,6 @@ import { Loading } from '../common/Loading';
 import LeftSideBar from './LeftSideBar';
 import Main from './Main';
 import RightSideBar from './RightSideBar';
-import { setTags } from '../../actions/tags';
 
 const useStyles = makeStyles({
   home: {
@@ -24,7 +23,6 @@ export default function Home() {
 
   useEffect(() => {
     dispatch(setInitialTrendingPosts());
-    dispatch(setTags());
   }, []);
 
   if (!trendingPosts.items || trendingPosts.loading) {

@@ -14,10 +14,6 @@ export const USER_PROFILE_PENDING = "USER_PROFILE_PENDING";
 export const USER_PROFILE_SUCCESS = "USER_PROFILE_SUCCESS";
 export const USER_PROFILE_FAILURE = "USER_PROFILE_FAILURE";
 
-export const TAGS_PENDING = "TAGS_PENDING";
-export const TAGS_SUCCESS = "TAGS_SUCCESS";
-export const TAGS_FAILURE = "TAGS_FAILURE"
-
 export type ReduxAction = {
   type: ActionType,
   payload?: any,
@@ -36,6 +32,3 @@ export type ActionType =
   | typeof USER_PROFILE_PENDING
   | typeof USER_PROFILE_SUCCESS
   | typeof USER_PROFILE_FAILURE
-  | typeof TAGS_PENDING
-  | typeof TAGS_SUCCESS
-  | typeof TAGS_FAILURE
