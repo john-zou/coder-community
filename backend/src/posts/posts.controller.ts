@@ -1,9 +1,10 @@
-import { ApiTags } from "@nestjs/swagger";
-import { Controller, Post, Body } from "@nestjs/common";
-import { PostsService } from "./posts.service";
-import { CreatePostBodyDto, CreatePostSuccessDto } from "./dto/posts.dto";
-import { Personal } from "../auth/guards/personal.decorator";
-import { UserObjectID } from "../user/user-object-id.decorator";
+import { Body, Controller, Post } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
+
+import { Personal } from '../auth/guards/personal.decorator';
+import { UserObjectID } from '../user/user-object-id.decorator';
+import { CreatePostBodyDto, CreatePostSuccessDto } from './dto/posts.dto';
+import { PostsService } from './posts.service';
 
 @ApiTags('Posts')
 @Controller('posts')

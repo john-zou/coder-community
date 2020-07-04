@@ -43,10 +43,13 @@ package-lock.json
 /scripts/generated-api-client.zip
 
 tmp/*
+tmp/**/*
 !tmp/README.md
 public/*
+public/**/*
 !public/README.md
 private/*
+private/**/*
 !private/README.md
 
 docs
