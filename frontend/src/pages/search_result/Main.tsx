@@ -2,7 +2,7 @@ import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "./Card";
 import { useSelector } from "react-redux";
-import { RootState, TrendingPost } from "../../store/index-old";
+import { RootState, TrendingPost } from "../../store";
 
 const useStyles = makeStyles({
   main: {

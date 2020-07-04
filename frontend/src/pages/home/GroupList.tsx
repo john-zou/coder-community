@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { RootState, Group } from "../../store/index-old";
+import { RootState, Group } from "../../store";
 import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles({

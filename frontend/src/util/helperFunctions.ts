@@ -64,3 +64,14 @@ export const howLongAgo = (unixTime) => {
   return `${years} years ago`;
 };
 
+/**
+ * 
+ * @param arr backend response eg: posts[], users[]
+ * convert to maps from _id to Post, User etc.
+ */
+export const convertArrToMap = (arr): Record<string, any> => {
+  return arr.reduce((map, obj) => {
+    map[obj._id] = obj;
+    return map;
+  }, {});
+}

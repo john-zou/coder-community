@@ -82,7 +82,8 @@ export const handleViewPost = (
 type Props = {
   postID: string;
 };
-//parent: 
+
+//parent: Main
 const Card = ({ postID }: Props) => {
   const classes = useStyles();
   const dispatch = useDispatch();

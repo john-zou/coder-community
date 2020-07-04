@@ -114,7 +114,7 @@ export type IsLoggedIn = boolean;
 
 export type RootState = {
   isLoggedIn: false,
-  //cache 
+  //cache -small version of mongodb in which each item is a map from ObjectID to appropriate data type
   attachments: Record<string, Attachment>,
   comments: Record<string, Comment>,
   conversations: Record<string, Conversation>,
@@ -134,7 +134,5 @@ export type RootState = {
   likedByUser: false,
   savedPosts: string[],
 };
-
-
 
 export default RootState;

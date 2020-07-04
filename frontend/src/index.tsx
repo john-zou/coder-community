@@ -3,25 +3,29 @@ import ReactDOM from "react-dom";
 import App from "./App";
 import { ThemeProvider } from "@material-ui/core/styles";
 import theme from "./theme";
-
 import "./index.css";
-import { Provider } from "react-redux";
+import { Provider, useDispatch } from "react-redux";
 import { createStore } from "redux";
 import { rootReducer } from "./reducers";
 import { Loading } from "./pages/common/Loading";
 import { TrendingApi } from "./api";
-// import initialData from "./initialData";
+import { convertArrToMap } from "./util/helperFunctions";
+import { setInitialTrendingPosts } from "./actions/posts";
+import { Post, User } from "./store";
 
 const Root = () => {
   const [initialState, setInitialState] = useState({});
   // const isLoggedIn = useSelector<RootState, IsLoggedIn>(state => state.isLoggedIn)
-
+  const dispatch = useDispatch();
   useEffect(() => {
     async function getInitialData() {
       const api = new TrendingApi({ basePath: "http://localhost:3001" });
-      const initialData = await api.trendingControllerGetTrending();
+      const initialData = await api.trendingControllerGetTrending();//{posts: [], users: []}
+      const posts: Record<string, Post> = convertArrToMap(initialData.posts);
+      const users: Record<string, User> = convertArrToMap(initialData.users);
+      setInitialState({ posts, users });
+      dispatch(setInitialTrendingPosts(posts, users));
       // console.log(initialState);
-      setInitialState(initialData); //{posts: [], authors: []}
     }
     getInitialData();
   }, []);

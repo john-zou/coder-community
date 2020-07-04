@@ -3,7 +3,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import HeartIcon from "../../icons/heartIcon.svg";
 import HeartIconRed from "../../icons/heartIconRed.svg";
 import CommentIcon from "../../icons/commentIcon.svg";
-import { TrendingPost, RootState, CurrentViewedPost } from "../../store/index-old";
+import { TrendingPost, RootState } from "../../store";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { savePost, likePost, viewPost } from "../../actions/home";

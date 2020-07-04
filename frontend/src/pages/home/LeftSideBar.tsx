@@ -1,7 +1,7 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { useSelector } from "react-redux";
-import { RootState, User, IsLoggedIn } from "../../store/index-old";
+import { RootState, User, IsLoggedIn } from "../../store";
 import FilterPost from "./FilterPost";
 import { Link } from "react-router-dom";
 

@@ -22,7 +22,7 @@ import { PublicUserContentDir, PublicUserContentServeRoot } from './storage/stor
 import { DevModule } from './dev/dev.module';
 @Module({
   imports: [AuthModule, UserModule,
-    TypegooseModule.forRoot(MONGODB_URI, {
+    TypegooseModule.forRoot(LOCAL_MONGODB, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
       useFindAndModify: false,
