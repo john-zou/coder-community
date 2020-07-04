@@ -1,7 +1,7 @@
 import { MockMongoose } from 'mock-mongoose';
 import * as mongoose from 'mongoose';
 
-import { disconnectMongo, initializeMongo } from '../mongo';
+import { disconnectMongo, initializeMongo } from '../mongoModels';
 import { Secrets } from '../secrets';
 
 

@@ -1,17 +1,14 @@
 import { Injectable } from '@nestjs/common';
 
-import { UserModel } from '../mongo';
+import { UserModel } from '../mongoModels';
 import { PostDto } from '../posts/dto/posts.dto';
-import { PostsService } from '../posts/posts.service';
+// import { PostsService } from '../posts/posts.service';
+import { convertToStrArr } from '../util/helperFunctions';
 import { UserDto } from './dto/user.dto';
 import { User } from './user.schema';
 
 @Injectable()
 export class UserService {
-
-  constructor(
-    private readonly postsService: PostsService,
-  ) { }
 
   async findUserById(userObjectID: string): Promise<UserDto> {
     const foundUser = await UserModel.findById(userObjectID);
@@ -19,17 +16,24 @@ export class UserService {
       _id: foundUser._id,
       userID: foundUser.userID,
       name: foundUser.name,
-      likedPosts: this.postsService.convertToStrArr(foundUser.likedPosts),
       profilePic: foundUser.profilePic,
+      profileBanner: foundUser.profileBanner,
+      status: foundUser.status,
+      followers: convertToStrArr(foundUser.followers),
+      following: convertToStrArr(foundUser.following),
+      groups: convertToStrArr(foundUser.groups),
+      posts: convertToStrArr(foundUser.posts),
+      savedPosts: convertToStrArr(foundUser.savedPosts),
+      likedPosts: convertToStrArr(foundUser.likedPosts),
     }
   }
 
   async saveProfileBannerPic(userObjectID: string, url: string): Promise<void> {
-    await UserModel.updateOne({_id: userObjectID}, {backgroundImg: url});
+    await UserModel.updateOne({ _id: userObjectID }, { backgroundImg: url });
   }
 
   async saveProfilePic(userObjectID: string, url: string): Promise<void> {
-    await UserModel.updateOne({_id: userObjectID}, {profilePic: url});
+    await UserModel.updateOne({ _id: userObjectID }, { profilePic: url });
   }
 
   // create(createUserDto: CreateUserDto): Promise<User> {
@@ -50,7 +54,7 @@ export class UserService {
         userID: foundUser.userID,
         name: foundUser.name,
         profilePic: foundUser.profilePic,
-        likedPosts: this.postsService.convertToStrArr(foundUser.likedPosts),
+        likedPosts: convertToStrArr(foundUser.likedPosts),
       })
     }
     return result;

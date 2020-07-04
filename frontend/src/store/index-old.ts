@@ -2,7 +2,7 @@ import {
   randomImage,
   randomBackgroundImage,
   howLongAgo,
-} from "../util/helpers";
+} from "../util/helperFunctions";
 
 const initialData = {
   isLoggedIn: false,

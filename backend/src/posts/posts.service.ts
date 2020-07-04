@@ -1,9 +1,10 @@
 import { HttpService, Injectable } from '@nestjs/common';
 import { Ref } from '@typegoose/typegoose';
 import { ObjectID } from 'mongodb';
+import { convertToStrArr } from '../util/helperFunctions';
 import * as urlSlug from 'url-slug';
 
-import { PostModel } from '../mongo';
+import { PostModel } from '../mongoModels';
 import { User } from '../user/user.schema';
 import { CreatePostBodyDto, CreatePostSuccessDto, PostDto } from './dto/posts.dto';
 
@@ -93,16 +94,10 @@ export class PostsService {
     return found !== null;
   }
 
-  convertToStrArr(list: Ref<any, ObjectID>): string[] {
-    return list.map((item) => {
-      return item.toString();
-    })
-  }
-
   /**
    * 
    * @param userObjectID? only needed if user logged in
-   */  
+   */
   async getInitialPosts(userObjectID?: string): Promise<PostDto[]> {
     const foundPosts = await PostModel.find().limit(5);
     return foundPosts.map((post) => (
@@ -113,13 +108,13 @@ export class PostsService {
         slug: post.slug,
         previewContent: post.previewContent,
         content: post.content,
-        tags: this.convertToStrArr(post.tags),
+        tags: convertToStrArr(post.tags),
         createdAt: post.createdAt.toString(),
         featuredImg: post.featuredImg,
         likedByUser: userObjectID && this.isLikedByUser(post.likes, userObjectID),
         likesCount: post.likes.length,
         views: post.views,
-        comments: this.convertToStrArr(post.comments),
+        comments: convertToStrArr(post.comments),
         commentsCount: post.comments.length,
       }
     ));

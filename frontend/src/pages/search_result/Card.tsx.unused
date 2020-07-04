@@ -1,12 +1,13 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import HeartIcon from "../../icons/heartIcon.svg";
 import HeartIconRed from "../../icons/heartIconRed.svg";
 import CommentIcon from "../../icons/commentIcon.svg";
-import { TrendingPost, RootState, CurrentViewedPost } from "../../store/index-old";
+import { Post, RootState, User } from "../../store";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { savePost, likePost, viewPost } from "../../actions/home";
+import DefaultPic from "../../assets/user.svg";
 
 const useStyles = makeStyles({
   root: {
@@ -72,41 +73,38 @@ const useStyles = makeStyles({
 });
 
 export const handleViewPost = (
-  currViewedPost: CurrentViewedPost,
-  trendingPost,
+  post,
   dispatch
 ) => {
-  const postToView = {
-    ...trendingPost,
-    content: currViewedPost.content,
-    comments: currViewedPost.comments,
-  };
-  dispatch(viewPost(postToView));
+  dispatch(viewPost(post));
 };
 
 type Props = {
-  trendingPost: TrendingPost;
+  postID: string;
 };
 
-const Card = ({ trendingPost }: Props) => {
-  const currViewedPost = useSelector<RootState, CurrentViewedPost>(
-    (state) => state.currentViewedPost
-  );
+//parent: Main
+const Card = ({ postID }: Props) => {
   const classes = useStyles();
   const dispatch = useDispatch();
+  const post = useSelector<RootState, Post>(state => state.posts[postID]);
+
+  const authorID = post.author;
+  //backend should have author information inside post, save author in users, post in posts
+  const author = useSelector<RootState, User>(state => state.users[authorID]);
 
   return (
     <div className={classes.root}>
       <div className={classes.account}>
         <img
           className={classes.accountImg}
-          src={trendingPost.authorImg}
+          src={author.profilePic && DefaultPic}
           alt=""
         />
         <div className={classes.nameTime}>
           <p>
             <Link
-              to={`/user/${trendingPost.authorID}`}
+              to={`/user/${author._id}`}
               className={classes.link}
             >
               <span
@@ -115,40 +113,40 @@ const Card = ({ trendingPost }: Props) => {
                   color: "#5DCBAF",
                 }}
               >
-                {trendingPost.authorName}&nbsp;
+                {author.name}&nbsp;
               </span>
             </Link>
             posted&nbsp;
             <span style={{ fontWeight: "bolder" }}>
               <Link
-                to={`/post/${trendingPost.postID}`}
+                to={`/post/${post._id}`}
                 className={classes.link}
                 onClick={() => {
-                  handleViewPost(currViewedPost, trendingPost, dispatch);
+                  handleViewPost(post, dispatch);
                 }}
               >
-                {trendingPost.title}
+                {post.title}
               </Link>
             </span>
           </p>
-          <p style={{ marginTop: "-0.8em" }}>{trendingPost.createdAt}</p>
+          <p style={{ marginTop: "-0.8em" }}>{post.createdAt}</p>
         </div>
       </div>
 
       <div className={classes.imgTitle}>
         <img
-          src={trendingPost.featuredImg}
+          src={post.featuredImg}
           style={{ marginTop: "10px", width: "200px", height: "200px" }}
           alt=""
         />
         <div>
-          <p style={{ marginLeft: "2em" }}>{trendingPost.previewContent}</p>
+          <p style={{ marginLeft: "2em" }}>{post.previewContent}</p>
           <div className={classes.readSave}>
             <Link
-              to={`/post/${trendingPost.postID}`}
+              to={`/post/${post._id}`}
               className={classes.link}
               onClick={() => {
-                handleViewPost(currViewedPost, trendingPost, dispatch);
+                handleViewPost(post, dispatch);
               }}
             >
               <h4
@@ -165,7 +163,7 @@ const Card = ({ trendingPost }: Props) => {
             <h4
               style={{ color: "#5D67E9", cursor: "pointer" }}
               onClick={() => {
-                dispatch(savePost(null));
+                dispatch(savePost(post));
               }}
             >
               Save for later
@@ -175,8 +173,8 @@ const Card = ({ trendingPost }: Props) => {
       </div>
 
       <div className={classes.interactions}>
-        {trendingPost.tags.map((tag) => (
-          <p key={trendingPost.postID} className={classes.tagText}>
+        {post.tags.map((tag) => (
+          <p key={post._id} className={classes.tagText}>
             #{tag}&nbsp;
           </p>
         ))}
@@ -184,17 +182,17 @@ const Card = ({ trendingPost }: Props) => {
         <div className={classes.interactionsIcons}>
           <img
             className={classes.heartIcon}
-            src={trendingPost.likedByUser ? HeartIconRed : HeartIcon}
+            src={post.likedByUser ? HeartIconRed : HeartIcon}
             alt=""
             onClick={() => {
-              dispatch(likePost(trendingPost, !trendingPost.likedByUser));
+              dispatch(likePost(post, !post.likedByUser));
             }}
           />
-          <p>&nbsp;{trendingPost.likes}</p>
-          <Link to={`/post/${trendingPost.postID}`} className={classes.link}>
+          <p>&nbsp;{post.likesCount}</p>
+          <Link to={`/post/${post.slug}`} className={classes.link}>
             <img className={classes.commentIcon} src={CommentIcon} alt="" />
           </Link>
-          <p>&nbsp;{trendingPost.comments}</p>
+          <p>&nbsp;{post.comments}</p>
         </div>
       </div>
     </div>

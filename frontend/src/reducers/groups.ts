@@ -1,3 +1,3 @@
-export function groups(state = [], action) {
+export function groups(state = {}, action) {
   return state;
 }

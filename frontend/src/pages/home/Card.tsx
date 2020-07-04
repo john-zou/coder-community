@@ -1,13 +1,14 @@
-import React, { useEffect } from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import HeartIcon from "../../icons/heartIcon.svg";
-import HeartIconRed from "../../icons/heartIconRed.svg";
-import CommentIcon from "../../icons/commentIcon.svg";
-import { Post, RootState, User } from "../../store";
-import { Link } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { savePost, likePost, viewPost } from "../../actions/home";
-import DefaultPic from "../../assets/user.svg";
+import { makeStyles } from '@material-ui/core/styles';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
+
+import { likePost, savePost, viewPost } from '../../actions/home';
+import DefaultPic from '../../assets/user.svg';
+import CommentIcon from '../../icons/commentIcon.svg';
+import HeartIcon from '../../icons/heartIcon.svg';
+import HeartIconRed from '../../icons/heartIconRed.svg';
+import { Post, RootState, User, TagsState } from '../../store';
 
 const useStyles = makeStyles({
   root: {
@@ -82,16 +83,17 @@ export const handleViewPost = (
 type Props = {
   postID: string;
 };
-//parent: 
+
+//parent: Main
 const Card = ({ postID }: Props) => {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const post = useSelector<RootState, Post>(state => state.posts[postID]);
+
+  const post = useSelector<RootState, Post>(state => state.posts[postID].item);
 
   const authorID = post.author;
-  //backend should have author information inside post, save author in users, post in posts
-  const author = useSelector<RootState, User>(state => state.users[authorID]);
-
+  const author = useSelector<RootState, User>(state => state.users[authorID].item);
+  const tags = useSelector<RootState, TagsState>(state => state.tags);
   return (
     <div className={classes.root}>
       <div className={classes.account}>
@@ -172,9 +174,9 @@ const Card = ({ postID }: Props) => {
       </div>
 
       <div className={classes.interactions}>
-        {post.tags.map((tag) => (
-          <p key={post._id} className={classes.tagText}>
-            #{tag}&nbsp;
+        {post.tags.items.map((_id) => (
+          <p key={_id} className={classes.tagText}>
+            #{tags[_id]}&nbsp;
           </p>
         ))}
         <div style={{ display: "flex", flex: 1 }}></div>
@@ -191,7 +193,7 @@ const Card = ({ postID }: Props) => {
           <Link to={`/post/${post.slug}`} className={classes.link}>
             <img className={classes.commentIcon} src={CommentIcon} alt="" />
           </Link>
-          <p>&nbsp;{post.comments}</p>
+          <p>&nbsp;{post.commentsCount}</p>
         </div>
       </div>
     </div>

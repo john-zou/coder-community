@@ -1,35 +1,44 @@
-import React, { useState, useEffect } from "react";
-import ReactDOM from "react-dom";
-import App from "./App";
-import { ThemeProvider } from "@material-ui/core/styles";
-import theme from "./theme";
+import './index.css';
 
-import "./index.css";
-import { Provider } from "react-redux";
-import { createStore } from "redux";
-import { rootReducer } from "./reducers";
-import { Loading } from "./pages/common/Loading";
-import { TrendingApi } from "./api";
-// import initialData from "./initialData";
+import { ThemeProvider } from '@material-ui/core/styles';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { Provider } from 'react-redux';
+import { applyMiddleware, createStore } from 'redux';
+import { composeWithDevTools } from 'redux-devtools-extension';
+import thunk from 'redux-thunk';
+
+import App from './App';
+import { JwtLocalStorageKey } from './constants';
+import { rootReducer } from './reducers';
+import RootState from './store';
+import theme from './theme';
+
+const initialState: RootState = {
+  isLoggedIn: !!localStorage.getItem(JwtLocalStorageKey),
+  attachments: {},
+  comments: {},
+  conversations: {},
+  groups: {},
+  messages: {},
+  posts: {},
+  tags: {},
+  users: {},
+  videos: {},
+
+  slugs: {},
+  userIDs: {},
+
+  user: { loading: false },
+  trendingPosts: { loading: false },
+  userOwnPosts: { loading: false },
+  trendingVideos: { loading: false },
+  savedPosts: { loading: false },
+}
+
+const store = createStore(rootReducer, initialState, composeWithDevTools(applyMiddleware(thunk)));
 
 const Root = () => {
-  const [initialState, setInitialState] = useState({});
-  // const isLoggedIn = useSelector<RootState, IsLoggedIn>(state => state.isLoggedIn)
-
-  useEffect(() => {
-    async function getInitialData() {
-      const api = new TrendingApi({ basePath: "http://localhost:3001" });
-      const initialData = await api.trendingControllerGetTrending();
-      // console.log(initialState);
-      setInitialState(initialData); //contains posts and authors
-    }
-    getInitialData();
-  }, []);
-
-  if (Object.keys(initialState).length === 0) {
-    return <Loading />
-  }
-  const store = createStore(rootReducer, initialState);
   return (
     <React.StrictMode>
       <ThemeProvider theme={theme}>

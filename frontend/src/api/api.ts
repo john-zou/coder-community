@@ -177,6 +177,12 @@ export interface GetInitialDataDto {
      * @memberof GetInitialDataDto
      */
     users: Array<UserDto>;
+    /**
+     * 
+     * @type {Array<TagsDto>}
+     * @memberof GetInitialDataDto
+     */
+    tags: Array<TagsDto>;
 }
 /**
  * 
@@ -202,6 +208,12 @@ export interface GetInitialDataLoggedInDto {
      * @memberof GetInitialDataLoggedInDto
      */
     user: UserDto;
+    /**
+     * 
+     * @type {Array<TagsDto>}
+     * @memberof GetInitialDataLoggedInDto
+     */
+    tags: Array<TagsDto>;
 }
 /**
  * 
@@ -374,6 +386,31 @@ export interface PostDto {
 /**
  * 
  * @export
+ * @interface TagsDto
+ */
+export interface TagsDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof TagsDto
+     */
+    id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof TagsDto
+     */
+    name: string;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof TagsDto
+     */
+    posts: Array<string>;
+}
+/**
+ * 
+ * @export
  * @interface UploadSuccess
  */
 export interface UploadSuccess {
@@ -416,10 +453,52 @@ export interface UserDto {
     profilePic?: string;
     /**
      * 
+     * @type {string}
+     * @memberof UserDto
+     */
+    profileBanner?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UserDto
+     */
+    status?: string;
+    /**
+     * 
      * @type {Array<string>}
      * @memberof UserDto
      */
-    likedPosts?: Array<string>;
+    followers?: Array<string>;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof UserDto
+     */
+    following?: Array<string>;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof UserDto
+     */
+    groups?: Array<string>;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof UserDto
+     */
+    posts?: Array<string>;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof UserDto
+     */
+    savedPosts?: Array<string>;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof UserDto
+     */
+    likedPosts: Array<string>;
 }
 /**
  * AuthApi - fetch parameter creator
@@ -1588,6 +1667,98 @@ export class UploadApi extends BaseAPI {
      */
     public uploadControllerUploadPublicAsset(body: FileUploadDto, options?: any) {
         return UploadApiFp(this.configuration).uploadControllerUploadPublicAsset(body, options)(this.fetch, this.basePath);
+    }
+
+}
+/**
+ * UserApi - fetch parameter creator
+ * @export
+ */
+export const UserApiFetchParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        userControllerGetUser(options: any = {}): FetchArgs {
+            const localVarPath = `/api/user`;
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * UserApi - functional programming interface
+ * @export
+ */
+export const UserApiFp = function(configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        userControllerGetUser(options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<UserDto> {
+            const localVarFetchArgs = UserApiFetchParamCreator(configuration).userControllerGetUser(options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+    }
+};
+
+/**
+ * UserApi - factory interface
+ * @export
+ */
+export const UserApiFactory = function (configuration?: Configuration, fetch?: FetchAPI, basePath?: string) {
+    return {
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        userControllerGetUser(options?: any) {
+            return UserApiFp(configuration).userControllerGetUser(options)(fetch, basePath);
+        },
+    };
+};
+
+/**
+ * UserApi - object-oriented interface
+ * @export
+ * @class UserApi
+ * @extends {BaseAPI}
+ */
+export class UserApi extends BaseAPI {
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UserApi
+     */
+    public userControllerGetUser(options?: any) {
+        return UserApiFp(this.configuration).userControllerGetUser(options)(this.fetch, this.basePath);
     }
 
 }

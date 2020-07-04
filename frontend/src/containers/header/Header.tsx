@@ -1,27 +1,28 @@
-import React from "react";
-import { fade, makeStyles } from "@material-ui/core/styles";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import IconButton from "@material-ui/core/IconButton";
-import Typography from "@material-ui/core/Typography";
-import InputBase from "@material-ui/core/InputBase";
-import Badge from "@material-ui/core/Badge";
-import MenuItem from "@material-ui/core/MenuItem";
-import Menu from "@material-ui/core/Menu";
-import MenuIcon from "@material-ui/icons/Menu";
-import SearchIcon from "@material-ui/icons/Search";
-import AccountCircle from "@material-ui/icons/AccountCircle";
-import NotificationsIcon from "@material-ui/icons/Notifications";
-import MoreIcon from "@material-ui/icons/MoreVert";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import MessageIcon from "@material-ui/icons/Message";
-import { Link } from "react-router-dom";
-import PurpleButton from "../../pages/common/PurpleButton";
-import Logo from "../../assets/ccLogo.svg";
-import { RootState, IsLoggedIn } from "../../store";
-import { useSelector } from "react-redux";
 import styled from '@emotion/styled';
+import AppBar from '@material-ui/core/AppBar';
+import Badge from '@material-ui/core/Badge';
+import IconButton from '@material-ui/core/IconButton';
+import InputBase from '@material-ui/core/InputBase';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
+import { makeStyles } from '@material-ui/core/styles';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import AccountCircle from '@material-ui/icons/AccountCircle';
+import MenuIcon from '@material-ui/icons/Menu';
+import MessageIcon from '@material-ui/icons/Message';
+import MoreIcon from '@material-ui/icons/MoreVert';
+import NotificationsIcon from '@material-ui/icons/Notifications';
+import SearchIcon from '@material-ui/icons/Search';
+import React from 'react';
+import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
+
+import Logo from '../../assets/ccLogo.svg';
+import PurpleButton from '../../pages/common/PurpleButton';
+import { RootState } from '../../store';
 
 const drawerWidth = 240;
 const useStyles = makeStyles((theme) => ({
@@ -106,7 +107,7 @@ export default function Header(props) {
   margin-right: 0.7em;
   cursor: pointer;
 `;
-  const isLoggedIn = useSelector<RootState, IsLoggedIn>((state) => state.isLoggedIn);
+  const isLoggedIn = useSelector<RootState, boolean>((state) => state.isLoggedIn);
 
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -239,13 +240,9 @@ export default function Header(props) {
                 </ListItemDiv>}
 
               {!isLoggedIn &&
-                <>
-                  <ListItemDiv>
-                    <PurpleButton content="Log In" />
-                  </ListItemDiv>
-                  <ListItemDiv>
-                    <PurpleButton content="Sign Up" />
-                  </ListItemDiv></>}
+                <ListItemDiv>
+                  <PurpleButton content="Log In with GitHub" />
+                </ListItemDiv>}
 
             </ListItemIcon>
           </ListItem>

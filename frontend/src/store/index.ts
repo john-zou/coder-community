@@ -1,3 +1,15 @@
+export type Loadable<T> = {
+  loading: boolean;
+  error?: Error;
+  item?: T;
+}
+
+export type LoadableIDs = {
+  loading: boolean;
+  error?: Error;
+  items?: string[];
+}
+
 export type Attachment = {
   _id: string,
   url: string,
@@ -11,10 +23,10 @@ export type Comment = {
   _id: string,
   author: string,
   content: string,
-  replies: string[], //list of comment ids
+  replies: LoadableIDs, //list of comment ids
   commentRoot: string,
-  likes: string[],
-  likesCount: string,
+  likes: LoadableIDs,
+  likesCount: number,
   parentPost: string,
   parentComment: string,
   parentVideo: string,
@@ -25,8 +37,8 @@ export type Comment = {
 export type Conversation = {
   _id: string,
   name: string,
-  users: string[],
-  messages: string[],
+  users: LoadableIDs,
+  messages: LoadableIDs,
   createdAt: string,
   updatedAt: string,
 }
@@ -36,9 +48,9 @@ export type Group = {
   name: string,
   profilePic: string,
   profileBanner: string,
-  users: string[],
-  posts: string[],
-  videos: string[],
+  users: LoadableIDs,
+  posts: LoadableIDs,
+  videos: LoadableIDs,
   createdAt: string,
   updatedAt: string,
 };
@@ -47,7 +59,7 @@ export type Message = {
   _id: string,
   author: string,
   text: string,
-  attachments: string[],
+  attachments: LoadableIDs,
   createdAt: string,
   updatedAt: string,
 };
@@ -58,10 +70,10 @@ export type Post = {
   title: string,
   previewContent: string,
   content: string,
-  tags: string[],
+  tags: LoadableIDs,
   featuredImg: string,
   likesCount: number,
-  comments: string[],
+  comments: LoadableIDs,
   commentsCount: number,
   views: number,
   createdAt: string,
@@ -73,29 +85,28 @@ export type Post = {
 export type Tag = {
   _id: string,
   name: string,
-  posts: string[],
-  createdAt: string,
-  updatedAt: string,
+  posts: LoadableIDs,
 };
 
 export type User = {
   _id: string,
-  userID?: string,
-  gitHubID: number,
+  userID: string,
+  gitHubID?: number,
   name: string,
   profilePic: string,
   profileBanner?: string,
   status?: string,
-  followers?: string[],//list of ids
-  following?: string[],
-  groups?: string[],
-  savedPosts: string[],
-  likedPosts: string[],
-  tags: string[],
-  conversations: string[],
-  lastLoggedIn: string,
-  createdAt: string,
-  updatedAt: string,
+  followers?: LoadableIDs,//list of ids
+  following?: LoadableIDs,
+  groups?: LoadableIDs,
+  posts?: LoadableIDs,
+  savedPosts?: LoadableIDs,
+  likedPosts?: LoadableIDs,
+  tags?: LoadableIDs,
+  conversations?: LoadableIDs,
+  lastLoggedIn?: string,
+  createdAt?: string,
+  updatedAt?: string,
 };
 
 export type Video = {
@@ -105,36 +116,47 @@ export type Video = {
   description: string,
   likesCount: number,
   commentsCount: number,
-  comments: string[],
+  comments: LoadableIDs,
   createdAt: string,
   updatedAt: string,
 };
 
-export type IsLoggedIn = boolean;
+export type AttachmentsState = Record<string, Loadable<Attachment>>;
+export type CommentsState = Record<string, Loadable<Comment>>;
+export type ConversationsState = Record<string, Loadable<Conversation>>;
+export type GroupsState = Record<string, Loadable<Group>>;
+export type MessagesState = Record<string, Loadable<Message>>;
+export type PostsState = Record<string, Loadable<Post>>;
+export type TagsState = Record<string, Loadable<Tag>>;
+export type UsersState = Record<string, Loadable<User>>;
+export type VideosState = Record<string, Loadable<Video>>;
 
 export type RootState = {
-  isLoggedIn: false,
-  //cache 
-  attachments: Record<string, Attachment>,
-  comments: Record<string, Comment>,
-  conversations: Record<string, Conversation>,
-  groups: Record<string, Group>,
-  messages: Record<string, Message>,
-  posts: Record<string, Post>,
-  tags: Record<string, Tag>,
-  users: Record<string, User>,
-  video: Record<string, Video>,
+  isLoggedIn: boolean,
+
+  //cache -small version of mongodb in which each item is a map from ObjectID to appropriate data type
+  attachments: Record<string, Loadable<Attachment>>,
+  comments: Record<string, Loadable<Comment>>,
+  conversations: Record<string, Loadable<Conversation>>,
+  groups: Record<string, Loadable<Group>>,
+  messages: Record<string, Loadable<Message>>,
+  posts: Record<string, Loadable<Post>>,
+  tags: Record<string, Loadable<Tag>>,
+  users: Record<string, Loadable<User>>,
+  videos: Record<string, Loadable<Video>>,
+
+  //mapping of post slug to post ObjectID
+  slugs: Record<string, string>,
+  //mapping of user ID to user ObjectID
+  userIDs: Record<string, string>,
 
   //redux store (contains references to the info stored in the cache above), 
   //the front end will first look up in the cache, if it doesn't find sth then ask the backend
-  user: User,
-  trendingPosts: string[],
-  userOwnPosts: string[],
-  trendingVideos: string[],
-  likedByUser: false,
-  savedPosts: string[],
+  user: Loadable<User>,
+  trendingPosts: LoadableIDs,
+  userOwnPosts: LoadableIDs,
+  trendingVideos: LoadableIDs,
+  savedPosts: LoadableIDs,
 };
-
-
 
 export default RootState;

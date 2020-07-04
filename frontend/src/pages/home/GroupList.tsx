@@ -1,6 +1,6 @@
 import React from "react";
-import { useSelector } from "react-redux";
-import { RootState, Group } from "../../store/index-old";
+// import { useSelector } from "react-redux";
+// import { RootState, Group } from "../../store";
 import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles({
@@ -11,13 +11,13 @@ const useStyles = makeStyles({
 });
 export default function GroupList() {
   const classes = useStyles();
-  const groups = useSelector<RootState, Group[]>((state) => state.groups);
+  // const groups = useSelector<RootState, Group[]>((state) => state.groups);
 
   return (
     <div className={classes.root}>
-      {groups.map((group, idx) => {
+      {/* {groups.map((group, idx) => {
         return <p key={idx}>&nbsp;&nbsp;&nbsp;&nbsp;{group.name}</p>;
-      })}
+      })} */}
     </div>
   );
 }

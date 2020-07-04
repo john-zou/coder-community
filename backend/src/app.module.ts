@@ -34,7 +34,7 @@ import { VideosModule } from './videos/videos.module';
     MessagesModule,
     ConversationsModule,
     AttachmentsModule,
-    
+
     // Special modules
     AuthModule,
     StorageModule,

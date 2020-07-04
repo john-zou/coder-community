@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { isDocument } from '@typegoose/typegoose';
 
-import { MessageModel, UserModel } from '../mongo';
+import { MessageModel, UserModel } from '../mongoModels';
 
 @Injectable()
 export class MessagesService {

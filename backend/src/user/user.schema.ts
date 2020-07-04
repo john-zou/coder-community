@@ -35,6 +35,9 @@ export class User extends TimeStamps {//mapped to MongoDb collection 'users"
   groups: Ref<Group>[];
 
   @prop({ ref: 'Post' })
+  posts: Ref<Post>[];
+
+  @prop({ ref: 'Post' })
   savedPosts: Ref<Post>[];
 
   @prop({ ref: 'Post' })

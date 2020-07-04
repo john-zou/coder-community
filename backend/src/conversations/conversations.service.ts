@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 
-import { ConversationModel } from '../mongo';
+import { ConversationModel } from '../mongoModels';
 import { Conversation } from './conversation.schema';
 
 @Injectable()

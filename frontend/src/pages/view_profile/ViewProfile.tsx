@@ -1,21 +1,18 @@
-import { createStyles, makeStyles } from "@material-ui/core/styles";
-import React from "react";
-import { useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
-import {
-  CurrentViewedProfile,
-  Post,
-  RootState,
-  SavedPost,
-} from "../../store/index-old";
-import { ProfileBanner } from "./ProfileBanner";
-import { ProfileBoard } from "./ProfileBoard";
-import { ProfileCard } from "./ProfileCard";
+import { createStyles, makeStyles } from '@material-ui/core/styles';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
+
+import { getLoggedInUser, getUserForViewProfile } from '../../actions/user';
+import { ViewProfileParams } from '../../App';
+import { Loadable, RootState, User } from '../../store';
+import { Loading } from '../common/Loading';
+import { NotFoundError } from '../common/NotFoundError';
 
 const useStyles = makeStyles(() =>
   createStyles({
     container: {
-      display: "grid",
+      display: "g rid",
       gridTemplateAreas: `
         "banner banner banner"
         "card board space"
@@ -39,41 +36,82 @@ const useStyles = makeStyles(() =>
 );
 
 export function ViewProfile() {
-  const { username } = useParams();
-  const currentUserID = useSelector<RootState, string>(
-    (state) => state.user.userID
-  );
-  const profile = useSelector<RootState, CurrentViewedProfile>(
-    (state) => state.currentViewedProfile
-  );
-  const posts = useSelector<RootState, Post[]>((state) => state.posts);
-  const savedPosts = useSelector<RootState, SavedPost[]>(
-    (state) => state.savedPosts
+  const classes = useStyles();
+
+  const { username } = useParams<ViewProfileParams>();
+  const isLoggedIn = useSelector<RootState, boolean>(state => state.isLoggedIn);
+  const dispatch = useDispatch();
+
+  // The one doing the viewing
+  const currentUser = useSelector<RootState, Loadable<User>>(
+    (state) => state.user
   );
 
-  const classes = useStyles();
-  const isUser = username === currentUserID;
-  const bannerImgSrc = profile.backgroundImg;
+  let viewedUser = useSelector<RootState, Loadable<User>>(
+    (state) => {
+      const userObjectID = state.userIDs[username];
+      return state.users[userObjectID];
+    }
+  )
+
+  // Get user if user hasn't loaded yet
+  useEffect(() => {
+    // check redux cache for user(s)
+    if (isLoggedIn) {
+      // check current user
+      if (!currentUser.item && !currentUser.loading && !currentUser.error) {
+        dispatch(getLoggedInUser());
+      }
+    }
+    if (currentUser.item && currentUser.item.userID === username) {
+      // Current user is looking at own profile, so there is no other user info to get
+      return;
+    }
+    if (!viewedUser) {
+      dispatch(getUserForViewProfile(username));
+      return;
+    }
+    if (viewedUser && !viewedUser.loading && !viewedUser.error && !viewedUser.item.posts) {
+      dispatch(getUserForViewProfile(username));
+    }
+  }, []);
+
+  if (!currentUser || currentUser.loading) {
+    return <Loading />
+  }
+
+  if (!viewedUser || viewedUser.loading) {
+    return <Loading />
+  }
+
+  if (currentUser.error || viewedUser.error) {
+    return <NotFoundError />
+  }
+
+  const userIsLookingAtOwnProfile = isLoggedIn && currentUser?.item?.userID === username;
+  if (userIsLookingAtOwnProfile) {
+    viewedUser = currentUser;
+  }
 
   return (
     <div className={classes.container}>
-      <div className={classes.banner}>
-        <ProfileBanner imgSrc={bannerImgSrc} isUser={isUser}></ProfileBanner>
+      {/* <div className={classes.banner}>
+        <ProfileBanner imgSrc={viewedUser.item.profileBanner} isUser={userIsLookingAtOwnProfile}></ProfileBanner>
       </div>
       <div className={classes.card}>
-        <ProfileCard profile={profile} isUser={isUser}></ProfileCard>
+        <ProfileCard profile={profile} isUser={userIsLookingAtOwnProfile}></ProfileCard>
       </div>
       <div className={classes.board}>
-        {isUser ? (
+        {userIsLookingAtOwnProfile ? (
           <ProfileBoard
-            isUser={isUser}
-            posts={posts}
+            isUser={userIsLookingAtOwnProfile}
+            user={viewedUser}
             savedPosts={savedPosts}
           ></ProfileBoard>
         ) : (
             <ProfileBoard isUser={false} posts={posts}></ProfileBoard>
           )}
-      </div>
+      </div> */}
     </div>
   );
 }
