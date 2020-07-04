@@ -23,18 +23,17 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-        env:
-          CI: true
-          CC_SECRET: ${{ secrets.CC_SECRET }}
-          GG_SECRET: ${{ secrets.GG_SECRET }}
-          GH_SECRET: ${{ secrets.GH_SECRET }}
-          LOCAL_MONGODB: ${{ secrets.LOCAL_MONGODB }}
-          REMOTE_MONGODB: ${{ secrets.REMOTE_MONGODB }}
       - name: Start MongoDB
         uses: supercharge/mongodb-github-action@1.3.0
       - run: cd backend && yarn install
       - run: cd backend && yarn build
       - run: cd backend && yarn test:cov
+        env:
+          CC_SECRET: ${{ secrets.CC_SECRET }}
+          GG_SECRET: ${{ secrets.GG_SECRET }}
+          GH_SECRET: ${{ secrets.GH_SECRET }}
+          LOCAL_MONGODB: ${{ secrets.LOCAL_MONGODB }}
+          REMOTE_MONGODB: ${{ secrets.REMOTE_MONGODB }}
 
   frontend:
     name: front end
