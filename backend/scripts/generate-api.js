@@ -2,7 +2,7 @@
 require('dotenv').config();
 const { NestFactory } = require('@nestjs/core');
 const { SwaggerModule, DocumentBuilder } = require('@nestjs/swagger');
-const { AppModule } = require('../dist/src/app.module');
+const { AppModule } = require('../dist/app.module');
 const axios = require("axios");
 const fs = require("fs");
 const extract = require("extract-zip");
