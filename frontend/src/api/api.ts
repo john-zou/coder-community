@@ -80,6 +80,19 @@ export class RequiredError extends Error {
 /**
  * 
  * @export
+ * @interface CreateCustomUser
+ */
+export interface CreateCustomUser {
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateCustomUser
+     */
+    userID: string;
+}
+/**
+ * 
+ * @export
  * @interface CreatePostBodyDto
  */
 export interface CreatePostBodyDto {
@@ -164,6 +177,31 @@ export interface GetInitialDataDto {
      * @memberof GetInitialDataDto
      */
     users: Array<UserDto>;
+}
+/**
+ * 
+ * @export
+ * @interface GetInitialDataLoggedInDto
+ */
+export interface GetInitialDataLoggedInDto {
+    /**
+     * 
+     * @type {Array<PostDto>}
+     * @memberof GetInitialDataLoggedInDto
+     */
+    posts: Array<PostDto>;
+    /**
+     * 
+     * @type {Array<UserDto>}
+     * @memberof GetInitialDataLoggedInDto
+     */
+    users: Array<UserDto>;
+    /**
+     * 
+     * @type {UserDto}
+     * @memberof GetInitialDataLoggedInDto
+     */
+    user: UserDto;
 }
 /**
  * 
@@ -319,7 +357,7 @@ export interface PostDto {
      * @type {boolean}
      * @memberof PostDto
      */
-    likedByUser: boolean;
+    likedByUser?: boolean;
     /**
      * 
      * @type {string}
@@ -384,10 +422,10 @@ export interface UserDto {
     likedPosts?: Array<string>;
 }
 /**
- * AuthenticationApi - fetch parameter creator
+ * AuthApi - fetch parameter creator
  * @export
  */
-export const AuthenticationApiFetchParamCreator = function (configuration?: Configuration) {
+export const AuthApiFetchParamCreator = function (configuration?: Configuration) {
     return {
         /**
          * 
@@ -414,28 +452,6 @@ export const AuthenticationApiFetchParamCreator = function (configuration?: Conf
             localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
             const needsSerialization = (<any>"LogOut" !== "string") || localVarRequestOptions.headers['Content-Type'] === 'application/json';
             localVarRequestOptions.body =  needsSerialization ? JSON.stringify(body || {}) : (body || "");
-
-            return {
-                url: url.format(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        authControllerLoginDev(options: any = {}): FetchArgs {
-            const localVarPath = `/api/login/dev`;
-            const localVarUrlObj = url.parse(localVarPath, true);
-            const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
-            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
-            delete localVarUrlObj.search;
-            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
 
             return {
                 url: url.format(localVarUrlObj),
@@ -508,10 +524,10 @@ export const AuthenticationApiFetchParamCreator = function (configuration?: Conf
 };
 
 /**
- * AuthenticationApi - functional programming interface
+ * AuthApi - functional programming interface
  * @export
  */
-export const AuthenticationApiFp = function(configuration?: Configuration) {
+export const AuthApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
@@ -520,24 +536,7 @@ export const AuthenticationApiFp = function(configuration?: Configuration) {
          * @throws {RequiredError}
          */
         authControllerLogOut(body: LogOut, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<LogOutSuccess> {
-            const localVarFetchArgs = AuthenticationApiFetchParamCreator(configuration).authControllerLogOut(body, options);
-            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
-                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
-                    if (response.status >= 200 && response.status < 300) {
-                        return response.json();
-                    } else {
-                        throw response;
-                    }
-                });
-            };
-        },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        authControllerLoginDev(options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<LoginSuccess> {
-            const localVarFetchArgs = AuthenticationApiFetchParamCreator(configuration).authControllerLoginDev(options);
+            const localVarFetchArgs = AuthApiFetchParamCreator(configuration).authControllerLogOut(body, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -555,7 +554,7 @@ export const AuthenticationApiFp = function(configuration?: Configuration) {
          * @throws {RequiredError}
          */
         authControllerLoginGitHub(body: GitHubLoginBody, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<LoginSuccess> {
-            const localVarFetchArgs = AuthenticationApiFetchParamCreator(configuration).authControllerLoginGitHub(body, options);
+            const localVarFetchArgs = AuthApiFetchParamCreator(configuration).authControllerLoginGitHub(body, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -573,7 +572,7 @@ export const AuthenticationApiFp = function(configuration?: Configuration) {
          * @throws {RequiredError}
          */
         authControllerLoginGoogle(body: GoogleLoginBody, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<LoginSuccess> {
-            const localVarFetchArgs = AuthenticationApiFetchParamCreator(configuration).authControllerLoginGoogle(body, options);
+            const localVarFetchArgs = AuthApiFetchParamCreator(configuration).authControllerLoginGoogle(body, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -588,10 +587,10 @@ export const AuthenticationApiFp = function(configuration?: Configuration) {
 };
 
 /**
- * AuthenticationApi - factory interface
+ * AuthApi - factory interface
  * @export
  */
-export const AuthenticationApiFactory = function (configuration?: Configuration, fetch?: FetchAPI, basePath?: string) {
+export const AuthApiFactory = function (configuration?: Configuration, fetch?: FetchAPI, basePath?: string) {
     return {
         /**
          * 
@@ -600,15 +599,7 @@ export const AuthenticationApiFactory = function (configuration?: Configuration,
          * @throws {RequiredError}
          */
         authControllerLogOut(body: LogOut, options?: any) {
-            return AuthenticationApiFp(configuration).authControllerLogOut(body, options)(fetch, basePath);
-        },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        authControllerLoginDev(options?: any) {
-            return AuthenticationApiFp(configuration).authControllerLoginDev(options)(fetch, basePath);
+            return AuthApiFp(configuration).authControllerLogOut(body, options)(fetch, basePath);
         },
         /**
          * 
@@ -617,7 +608,7 @@ export const AuthenticationApiFactory = function (configuration?: Configuration,
          * @throws {RequiredError}
          */
         authControllerLoginGitHub(body: GitHubLoginBody, options?: any) {
-            return AuthenticationApiFp(configuration).authControllerLoginGitHub(body, options)(fetch, basePath);
+            return AuthApiFp(configuration).authControllerLoginGitHub(body, options)(fetch, basePath);
         },
         /**
          * 
@@ -626,37 +617,27 @@ export const AuthenticationApiFactory = function (configuration?: Configuration,
          * @throws {RequiredError}
          */
         authControllerLoginGoogle(body: GoogleLoginBody, options?: any) {
-            return AuthenticationApiFp(configuration).authControllerLoginGoogle(body, options)(fetch, basePath);
+            return AuthApiFp(configuration).authControllerLoginGoogle(body, options)(fetch, basePath);
         },
     };
 };
 
 /**
- * AuthenticationApi - object-oriented interface
+ * AuthApi - object-oriented interface
  * @export
- * @class AuthenticationApi
+ * @class AuthApi
  * @extends {BaseAPI}
  */
-export class AuthenticationApi extends BaseAPI {
+export class AuthApi extends BaseAPI {
     /**
      * 
      * @param {LogOut} body 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof AuthenticationApi
+     * @memberof AuthApi
      */
     public authControllerLogOut(body: LogOut, options?: any) {
-        return AuthenticationApiFp(this.configuration).authControllerLogOut(body, options)(this.fetch, this.basePath);
-    }
-
-    /**
-     * 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof AuthenticationApi
-     */
-    public authControllerLoginDev(options?: any) {
-        return AuthenticationApiFp(this.configuration).authControllerLoginDev(options)(this.fetch, this.basePath);
+        return AuthApiFp(this.configuration).authControllerLogOut(body, options)(this.fetch, this.basePath);
     }
 
     /**
@@ -664,10 +645,10 @@ export class AuthenticationApi extends BaseAPI {
      * @param {GitHubLoginBody} body 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof AuthenticationApi
+     * @memberof AuthApi
      */
     public authControllerLoginGitHub(body: GitHubLoginBody, options?: any) {
-        return AuthenticationApiFp(this.configuration).authControllerLoginGitHub(body, options)(this.fetch, this.basePath);
+        return AuthApiFp(this.configuration).authControllerLoginGitHub(body, options)(this.fetch, this.basePath);
     }
 
     /**
@@ -675,10 +656,10 @@ export class AuthenticationApi extends BaseAPI {
      * @param {GoogleLoginBody} body 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof AuthenticationApi
+     * @memberof AuthApi
      */
     public authControllerLoginGoogle(body: GoogleLoginBody, options?: any) {
-        return AuthenticationApiFp(this.configuration).authControllerLoginGoogle(body, options)(this.fetch, this.basePath);
+        return AuthApiFp(this.configuration).authControllerLoginGoogle(body, options)(this.fetch, this.basePath);
     }
 
 }
@@ -775,6 +756,290 @@ export class DefaultApi extends BaseAPI {
 
 }
 /**
+ * DevApi - fetch parameter creator
+ * @export
+ */
+export const DevApiFetchParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {CreateCustomUser} body 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        devControllerCreateCustomUser(body: CreateCustomUser, options: any = {}): FetchArgs {
+            // verify required parameter 'body' is not null or undefined
+            if (body === null || body === undefined) {
+                throw new RequiredError('body','Required parameter body was null or undefined when calling devControllerCreateCustomUser.');
+            }
+            const localVarPath = `/api/dev/create-user`;
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'POST' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+            const needsSerialization = (<any>"CreateCustomUser" !== "string") || localVarRequestOptions.headers['Content-Type'] === 'application/json';
+            localVarRequestOptions.body =  needsSerialization ? JSON.stringify(body || {}) : (body || "");
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        devControllerCreatePostDev(options: any = {}): FetchArgs {
+            const localVarPath = `/api/dev/create-post`;
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'POST' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        devControllerGetJwt(id: string, options: any = {}): FetchArgs {
+            // verify required parameter 'id' is not null or undefined
+            if (id === null || id === undefined) {
+                throw new RequiredError('id','Required parameter id was null or undefined when calling devControllerGetJwt.');
+            }
+            const localVarPath = `/api/dev/jwt`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        devControllerLoginDev(options: any = {}): FetchArgs {
+            const localVarPath = `/api/dev/login`;
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * DevApi - functional programming interface
+ * @export
+ */
+export const DevApiFp = function(configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {CreateCustomUser} body 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        devControllerCreateCustomUser(body: CreateCustomUser, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<LoginSuccess> {
+            const localVarFetchArgs = DevApiFetchParamCreator(configuration).devControllerCreateCustomUser(body, options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        devControllerCreatePostDev(options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<CreatePostSuccessDto> {
+            const localVarFetchArgs = DevApiFetchParamCreator(configuration).devControllerCreatePostDev(options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * 
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        devControllerGetJwt(id: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<string> {
+            const localVarFetchArgs = DevApiFetchParamCreator(configuration).devControllerGetJwt(id, options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        devControllerLoginDev(options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<LoginSuccess> {
+            const localVarFetchArgs = DevApiFetchParamCreator(configuration).devControllerLoginDev(options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+    }
+};
+
+/**
+ * DevApi - factory interface
+ * @export
+ */
+export const DevApiFactory = function (configuration?: Configuration, fetch?: FetchAPI, basePath?: string) {
+    return {
+        /**
+         * 
+         * @param {CreateCustomUser} body 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        devControllerCreateCustomUser(body: CreateCustomUser, options?: any) {
+            return DevApiFp(configuration).devControllerCreateCustomUser(body, options)(fetch, basePath);
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        devControllerCreatePostDev(options?: any) {
+            return DevApiFp(configuration).devControllerCreatePostDev(options)(fetch, basePath);
+        },
+        /**
+         * 
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        devControllerGetJwt(id: string, options?: any) {
+            return DevApiFp(configuration).devControllerGetJwt(id, options)(fetch, basePath);
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        devControllerLoginDev(options?: any) {
+            return DevApiFp(configuration).devControllerLoginDev(options)(fetch, basePath);
+        },
+    };
+};
+
+/**
+ * DevApi - object-oriented interface
+ * @export
+ * @class DevApi
+ * @extends {BaseAPI}
+ */
+export class DevApi extends BaseAPI {
+    /**
+     * 
+     * @param {CreateCustomUser} body 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DevApi
+     */
+    public devControllerCreateCustomUser(body: CreateCustomUser, options?: any) {
+        return DevApiFp(this.configuration).devControllerCreateCustomUser(body, options)(this.fetch, this.basePath);
+    }
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DevApi
+     */
+    public devControllerCreatePostDev(options?: any) {
+        return DevApiFp(this.configuration).devControllerCreatePostDev(options)(this.fetch, this.basePath);
+    }
+
+    /**
+     * 
+     * @param {string} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DevApi
+     */
+    public devControllerGetJwt(id: string, options?: any) {
+        return DevApiFp(this.configuration).devControllerGetJwt(id, options)(this.fetch, this.basePath);
+    }
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DevApi
+     */
+    public devControllerLoginDev(options?: any) {
+        return DevApiFp(this.configuration).devControllerLoginDev(options)(this.fetch, this.basePath);
+    }
+
+}
+/**
  * PostsApi - fetch parameter creator
  * @export
  */
@@ -811,28 +1076,6 @@ export const PostsApiFetchParamCreator = function (configuration?: Configuration
                 options: localVarRequestOptions,
             };
         },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        postsControllerCreatePostDev(options: any = {}): FetchArgs {
-            const localVarPath = `/api/posts/dev-create`;
-            const localVarUrlObj = url.parse(localVarPath, true);
-            const localVarRequestOptions = Object.assign({ method: 'POST' }, options);
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
-            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
-            delete localVarUrlObj.search;
-            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
-
-            return {
-                url: url.format(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
     }
 };
 
@@ -850,23 +1093,6 @@ export const PostsApiFp = function(configuration?: Configuration) {
          */
         postsControllerCreatePost(body: CreatePostBodyDto, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<CreatePostSuccessDto> {
             const localVarFetchArgs = PostsApiFetchParamCreator(configuration).postsControllerCreatePost(body, options);
-            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
-                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
-                    if (response.status >= 200 && response.status < 300) {
-                        return response.json();
-                    } else {
-                        throw response;
-                    }
-                });
-            };
-        },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        postsControllerCreatePostDev(options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<CreatePostSuccessDto> {
-            const localVarFetchArgs = PostsApiFetchParamCreator(configuration).postsControllerCreatePostDev(options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -895,14 +1121,6 @@ export const PostsApiFactory = function (configuration?: Configuration, fetch?: 
         postsControllerCreatePost(body: CreatePostBodyDto, options?: any) {
             return PostsApiFp(configuration).postsControllerCreatePost(body, options)(fetch, basePath);
         },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        postsControllerCreatePostDev(options?: any) {
-            return PostsApiFp(configuration).postsControllerCreatePostDev(options)(fetch, basePath);
-        },
     };
 };
 
@@ -924,16 +1142,6 @@ export class PostsApi extends BaseAPI {
         return PostsApiFp(this.configuration).postsControllerCreatePost(body, options)(this.fetch, this.basePath);
     }
 
-    /**
-     * 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof PostsApi
-     */
-    public postsControllerCreatePostDev(options?: any) {
-        return PostsApiFp(this.configuration).postsControllerCreatePostDev(options)(this.fetch, this.basePath);
-    }
-
 }
 /**
  * TrendingApi - fetch parameter creator
@@ -948,6 +1156,28 @@ export const TrendingApiFetchParamCreator = function (configuration?: Configurat
          */
         trendingControllerGetTrending(options: any = {}): FetchArgs {
             const localVarPath = `/api/trending`;
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        trendingControllerGetTrendingLoggedIn(options: any = {}): FetchArgs {
+            const localVarPath = `/api/trending/loggedIn`;
             const localVarUrlObj = url.parse(localVarPath, true);
             const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
             const localVarHeaderParameter = {} as any;
@@ -989,6 +1219,23 @@ export const TrendingApiFp = function(configuration?: Configuration) {
                 });
             };
         },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        trendingControllerGetTrendingLoggedIn(options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<GetInitialDataLoggedInDto> {
+            const localVarFetchArgs = TrendingApiFetchParamCreator(configuration).trendingControllerGetTrendingLoggedIn(options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
     }
 };
 
@@ -1005,6 +1252,14 @@ export const TrendingApiFactory = function (configuration?: Configuration, fetch
          */
         trendingControllerGetTrending(options?: any) {
             return TrendingApiFp(configuration).trendingControllerGetTrending(options)(fetch, basePath);
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        trendingControllerGetTrendingLoggedIn(options?: any) {
+            return TrendingApiFp(configuration).trendingControllerGetTrendingLoggedIn(options)(fetch, basePath);
         },
     };
 };
@@ -1024,6 +1279,16 @@ export class TrendingApi extends BaseAPI {
      */
     public trendingControllerGetTrending(options?: any) {
         return TrendingApiFp(this.configuration).trendingControllerGetTrending(options)(this.fetch, this.basePath);
+    }
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TrendingApi
+     */
+    public trendingControllerGetTrendingLoggedIn(options?: any) {
+        return TrendingApiFp(this.configuration).trendingControllerGetTrendingLoggedIn(options)(this.fetch, this.basePath);
     }
 
 }

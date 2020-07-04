@@ -14,7 +14,7 @@ export class PostDto {
   commentsCount: number;
   views: number;
   createdAt: string;
-  likedByUser: boolean;
+  likedByUser?: boolean;
   slug: string;
   group?: string;
 }

@@ -99,7 +99,11 @@ export class PostsService {
     })
   }
 
-  async getInitialPosts(userObjectID: string): Promise<PostDto[]> {
+  /**
+   * 
+   * @param userObjectID? only needed if user logged in
+   */  
+  async getInitialPosts(userObjectID?: string): Promise<PostDto[]> {
     const foundPosts = await PostModel.find().limit(5);
     return foundPosts.map((post) => (
       {
@@ -112,7 +116,7 @@ export class PostsService {
         tags: this.convertToStrArr(post.tags),
         createdAt: post.createdAt.toString(),
         featuredImg: post.featuredImg,
-        likedByUser: this.isLikedByUser(post.likes, userObjectID),
+        likedByUser: userObjectID && this.isLikedByUser(post.likes, userObjectID),
         likesCount: post.likes.length,
         views: post.views,
         comments: this.convertToStrArr(post.comments),

@@ -11,7 +11,18 @@ export class UserService {
 
   constructor(
     private readonly postsService: PostsService,
-  ) {}
+  ) { }
+
+  async findUserById(userObjectID: string): Promise<UserDto> {
+    const foundUser = await UserModel.findById(userObjectID);
+    return {
+      _id: foundUser._id,
+      userID: foundUser.userID,
+      name: foundUser.name,
+      likedPosts: this.postsService.convertToStrArr(foundUser.likedPosts),
+      profilePic: foundUser.profilePic,
+    }
+  }
 
   async saveProfileBannerPic(userObjectID: string, url: string): Promise<void> {
     await UserModel.updateOne({_id: userObjectID}, {backgroundImg: url});
