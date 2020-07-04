@@ -55,23 +55,23 @@ export default function RightSideBar() {
     <div className={classes.rightbar}>
       <div className={classes.search}>
         <p className={classes.title}># Search</p>
-	<hr className={classes.display}></hr>
+        <hr className={classes.display}></hr>
         <div className={classes.searchoption}>
-          <input type="checkbox" checked/>
-	  <label>posts</label>
+          <input type="checkbox" checked />
+          <label>posts</label>
           <br></br>
-	  <input type="checkbox"/>
-	  <label>users</label>
-	  <br></br>
-	  <input type="checkbox"/>
-	  <label>videos</label>
-	</div>
+          <input type="checkbox" />
+          <label>users</label>
+          <br></br>
+          <input type="checkbox" />
+          <label>videos</label>
+        </div>
       </div>
       <div className={classes.filter}>
         <p className={classes.title}># Filter by</p>
-	<hr className={classes.display}></hr>
+        <hr className={classes.display}></hr>
         <div className={classes.filtertags}>
-	   <TagCard />
+          <TagCard />
         </div>
       </div>
     </div>

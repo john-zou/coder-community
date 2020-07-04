@@ -4,13 +4,16 @@ import { ThemeProvider } from '@material-ui/core/styles';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { createStore } from 'redux';
+import { applyMiddleware, createStore } from 'redux';
+import { composeWithDevTools } from 'redux-devtools-extension';
+import thunk from 'redux-thunk';
 
 import App from './App';
 import { JwtLocalStorageKey } from './constants';
 import { rootReducer } from './reducers';
 import RootState from './store';
 import theme from './theme';
+
 
 const initialState: RootState = {
   isLoggedIn: !!localStorage.getItem(JwtLocalStorageKey),
@@ -34,7 +37,7 @@ const initialState: RootState = {
   savedPosts: { loading: false },
 }
 
-const store = createStore(rootReducer, initialState);
+const store = createStore(rootReducer, initialState, composeWithDevTools(applyMiddleware(thunk)));
 
 const Root = () => {
   return (
