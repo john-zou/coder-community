@@ -1,6 +1,6 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { RootState, CurrentViewedPost } from "../../store";
+import { RootState } from "../../store";
 import { useSelector, useDispatch } from "react-redux";
 // import { useParams } from "react-router-dom";
 import HeartIcon from "../../icons/heartIcon.svg";
@@ -45,7 +45,7 @@ const PostDetail = () => {
   // const { postID } = useParams(); //get the url param to render the appropriate post
   const classes = useStyles();
   const dispatch = useDispatch();
-  const post = useSelector<RootState, CurrentViewedPost>(
+  const post = useSelector<RootState, string[]>(
     (state) => state.currentViewedPost
   );
   return (

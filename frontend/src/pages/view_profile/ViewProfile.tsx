@@ -3,11 +3,9 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import {
-  CurrentViewedProfile,
   Post,
   RootState,
-  SavedPost,
-} from "../../store/index-old";
+} from "../../store";
 import { ProfileBanner } from "./ProfileBanner";
 import { ProfileBoard } from "./ProfileBoard";
 import { ProfileCard } from "./ProfileCard";

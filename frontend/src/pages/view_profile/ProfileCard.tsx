@@ -2,7 +2,7 @@ import React from "react";
 import { makeStyles, createStyles } from "@material-ui/core/styles";
 import Avatar from "@material-ui/core/Avatar";
 import { Grid, Typography, Button } from "@material-ui/core";
-import { CurrentViewedProfile } from "../../store/index-old";
+import { User } from "../../store";
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -44,11 +44,12 @@ const useStyles = makeStyles((theme) =>
 );
 
 type Props = {
-  profile: CurrentViewedProfile;
+  profile: User;
   isUser: boolean;
 };
 export function ProfileCard({ profile, isUser }: Props) {
   const classes = useStyles();
+
   const { name, followers, posts, status, profilePic } = profile;
 
   return (

@@ -23,10 +23,10 @@ const useStyles = makeStyles({
 
 const FilterPost = () => {
   const classes = useStyles();
-  const tags = useSelector<RootState, Tag[]>((state) => state.tags);
+  const tags = useSelector<RootState, Record<string, Tag>>((state) => state.tags);
   return (
     <form className={classes.root}>
-      {tags.map((tag) => (
+      {Object.values(tags).map((tag) => (
         <div className={classes.row}>
           <label className={classes.label}>#{tag}</label>
           <input

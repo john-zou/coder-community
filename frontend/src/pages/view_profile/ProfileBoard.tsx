@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Tabs, Tab, makeStyles, Divider } from "@material-ui/core";
 import HeartIcon from "../../icons/heartIcon.svg";
 import CommentIcon from "../../icons/commentIcon.svg";
-import { Post, SavedPost } from "../../store/index-old";
+import { Post } from "../../store";
 import Avatar from "../common/Avatar";
 
 // For tabs
