@@ -1,9 +1,10 @@
-import { TimeStamps } from "@typegoose/typegoose/lib/defaultClasses";
-import { prop, Ref, ReturnModelType } from '@typegoose/typegoose';
-import { Tag } from "../tags/tag.schema";
-import { User } from "../user/user.schema";
-import { Comment } from "../comments/comment.schema";
-import { Group } from "../groups/group.schema";
+import { prop, Ref } from '@typegoose/typegoose';
+import { TimeStamps } from '@typegoose/typegoose/lib/defaultClasses';
+
+import { Comment } from '../comments/comment.schema';
+import { Group } from '../groups/group.schema';
+import { Tag } from '../tags/tag.schema';
+import { User } from '../user/user.schema';
 
 export class Post extends TimeStamps {//mapped to MongoDb collection 'posts"
   @prop({ ref: 'User' })
@@ -39,5 +40,3 @@ export class Post extends TimeStamps {//mapped to MongoDb collection 'posts"
   @prop({ ref: 'Group' })
   group: Ref<Group>;
 }
-
-export type PostModel = ReturnModelType<typeof Post>;

@@ -1,15 +1,12 @@
-require('dotenv').config();
-import { Test, TestingModule } from '@nestjs/testing';
 import { MessagesService } from './messages.service';
-import { TypegooseModule } from 'nestjs-typegoose';
-import { Message } from './message.schema';
-import { MONGODB_URI } from '../auth/constants';
-import { User } from '../user/user.schema';
 
+require('dotenv').config();
 describe('MessagesService', () => {
   let service: MessagesService;
 
-
+  it('TODO: write tests', () => {
+    expect(true);
+  })
   // beforeEach(async () => {
   //   const module: TestingModule = await Test.createTestingModule({
   //     imports: [TypegooseModule.forRoot(MONGODB_URI), TypegooseModule.forFeature([User, Message])],

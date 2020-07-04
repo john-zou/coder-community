@@ -1,11 +1,11 @@
-import { Injectable, HttpService, Logger } from '@nestjs/common';
-import { Post } from './post.schema';
-import { InjectModel } from 'nestjs-typegoose';
-import { ReturnModelType, Ref } from '@typegoose/typegoose';
-import { PostDto, CreatePostSuccessDto, CreatePostBodyDto } from './dto/posts.dto';
-import { User } from '../user/user.schema';
-import * as urlSlug from 'url-slug';
+import { HttpService, Injectable } from '@nestjs/common';
+import { Ref } from '@typegoose/typegoose';
 import { ObjectID } from 'mongodb';
+import * as urlSlug from 'url-slug';
+
+import { PostModel } from '../mongo';
+import { User } from '../user/user.schema';
+import { CreatePostBodyDto, CreatePostSuccessDto, PostDto } from './dto/posts.dto';
 
 // Unused -- can use later for different feature
 type DevToArticle = {
@@ -60,9 +60,7 @@ const previewContentLength = 100;
 @Injectable()
 export class PostsService {
 
-  constructor(@InjectModel(Post) private postModel: ReturnModelType<typeof Post>,
-    @InjectModel(User) private userModel: ReturnModelType<typeof User>,
-    private readonly httpService: HttpService,) { }
+  constructor(private readonly httpService: HttpService) { }
 
   async createPost(authorObjectID: string, body: CreatePostBodyDto): Promise<CreatePostSuccessDto> {
     // Logger.log("PostsService::createPost")
@@ -82,7 +80,7 @@ export class PostsService {
     }
     // Logger.log(doc);
     // Logger.log("Done create");
-    const newPost = new this.postModel(doc);
+    const newPost = new PostModel(doc);
     await newPost.save();
     return {
       _id: newPost._id,
@@ -104,9 +102,9 @@ export class PostsService {
   /**
    * 
    * @param userObjectID? only needed if user logged in
-   */
+   */  
   async getInitialPosts(userObjectID?: string): Promise<PostDto[]> {
-    const foundPosts = await this.postModel.find().limit(5);
+    const foundPosts = await PostModel.find().limit(5);
     return foundPosts.map((post) => (
       {
         _id: post._id.toString(),

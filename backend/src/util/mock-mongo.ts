@@ -1,5 +1,9 @@
-import * as mongoose from 'mongoose';
 import { MockMongoose } from 'mock-mongoose';
+import * as mongoose from 'mongoose';
+
+import { disconnectMongo, initializeMongo } from '../mongo';
+import { Secrets } from '../secrets';
+
 
 let started = false;
 let mockMongoose: MockMongoose;
@@ -26,17 +30,18 @@ export async function MockMongo(): Promise<void> {
   if (process.env.CI) {
     // GitHub action, true local MongoDB
     if (!started) {
+      await initializeMongo(Secrets.MongoConnectionString)
       started = true;
     } else {
-      // tear down
-      await mongoose.disconnect();
+      await disconnectMongo();
       started = false;
     }
   } else {
-    // In-memory database
+    // Use in-memory DB (MockMongoose)
     if (!started) {
       mockMongoose = new MockMongoose(mongoose);
       await mockMongoose.prepareStorage();
+      await initializeMongo(Secrets.MongoConnectionString);
       started = true;
     } else {
       await mockMongoose.killMongo();
