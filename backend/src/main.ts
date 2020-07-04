@@ -3,9 +3,16 @@ require('dotenv').config();
 import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
+import { initializeMongo } from './mongo';
+import { Secrets } from './secrets';
 
 async function bootstrap() {
+  // Connect to MongoDB and set up Models.
+  await initializeMongo(Secrets.MongoConnectionString);
+
   const app = await NestFactory.create(AppModule);
+
+  // CORS -- change origin to 
   app.enableCors(
     { origin: 'http://localhost:3000' }
   )
@@ -21,4 +28,5 @@ async function bootstrap() {
 
   await app.listen(3001);
 }
+
 bootstrap();

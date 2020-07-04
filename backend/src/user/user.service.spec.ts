@@ -1,11 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UserService } from './user.service';
-import { TypegooseModule } from 'nestjs-typegoose';
-import { User } from './user.schema';
-import { LOCAL_MONGODB } from '../auth/constants';
 import { MockMongo } from '../util/mock-mongo';
-import { PostsService } from '../posts/posts.service';
-import { Post } from '../posts/post.schema';
 import { PostsModule } from '../posts/posts.module';
 
 describe('UserService', () => {
@@ -17,15 +12,7 @@ describe('UserService', () => {
 
   beforeEach(async () => {
     module = await Test.createTestingModule({
-      imports: [
-        TypegooseModule.forRoot(LOCAL_MONGODB, {
-          useNewUrlParser: true,
-          useUnifiedTopology: true,
-          useFindAndModify: false,
-        }),
-        TypegooseModule.forFeature([User, Post]),
-        PostsModule
-      ],
+      imports: [PostsModule],
       providers: [UserService],
     }).compile();
 
@@ -43,9 +30,11 @@ describe('UserService', () => {
   it('createOrUpdateUser', async () => {
     const { isNewUser, _id } = await service.createOrUpdateUser('octocat', 1);
     expect(isNewUser).toBe(true);
-    const { isNewUser: secondTime, _id: id } = await service.createOrUpdateUser('octopus', 1);
+    const { isNewUser: secondTime, _id: id } = await service.createOrUpdateUser(
+      'octopus',
+      1,
+    );
     expect(secondTime).toBe(false);
     expect(id).toBe(_id);
   });
-
 });

@@ -3,8 +3,6 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
-import { MONGODB_URI } from './auth/constants';
-import { TypegooseModule } from 'nestjs-typegoose';
 import { TagsModule } from './tags/tags.module';
 import { PostsModule } from './posts/posts.module';
 import { CommentsModule } from './comments/comments.module';
@@ -21,17 +19,35 @@ import { join } from 'path';
 import { PublicUserContentDir, PublicUserContentServeRoot } from './storage/storage.constants';
 import { DevModule } from './dev/dev.module';
 @Module({
-  imports: [AuthModule, UserModule,
-    TypegooseModule.forRoot(MONGODB_URI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-      useFindAndModify: false,
-    }),
+  imports: [
+    // Modules corresponding directly to Mongoose Models / MongoDB collections
+    UserModule,
+    TagsModule,
+    PostsModule,
+    CommentsModule,
+    VideosModule,
+    GroupsModule,
+    StorageModule,
+    UploadModule,
+    MessagesModule,
+    ConversationsModule,
+    AttachmentsModule,
+    
+    // Special modules
+    AuthModule,
+    StorageModule,
+    UploadModule,
+    TrendingModule,
+
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, "..", PublicUserContentDir),
       serveRoot: PublicUserContentServeRoot,
     }),
-    TagsModule, PostsModule, CommentsModule, VideosModule, GroupsModule, StorageModule, UploadModule, MessagesModule, ConversationsModule, AttachmentsModule, StorageModule, UploadModule, TrendingModule, DevModule],
+
+    // Module for dev convenience -- remove when deploying
+    DevModule
+  ],
+
   controllers: [AppController],
   providers: [AppService],
 })

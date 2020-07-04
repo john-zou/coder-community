@@ -1,8 +1,9 @@
-import { TimeStamps } from "@typegoose/typegoose/lib/defaultClasses";
-import { prop, Ref, ReturnModelType } from "@typegoose/typegoose";
-import { User } from "../user/user.schema";
-import { Post } from "../posts/post.schema";
-import { Video } from "../videos/video.schema";
+import { prop, Ref } from '@typegoose/typegoose';
+import { TimeStamps } from '@typegoose/typegoose/lib/defaultClasses';
+
+import { Post } from '../posts/post.schema';
+import { User } from '../user/user.schema';
+import { Video } from '../videos/video.schema';
 
 export enum CommentRoot {
   POST = 'post',
@@ -35,5 +36,3 @@ export class Comment extends TimeStamps {
   @prop({ ref: Video })
   parentVideo?: Ref<Video>;
 }
-
-export type CommentModel = ReturnModelType<typeof Comment>;

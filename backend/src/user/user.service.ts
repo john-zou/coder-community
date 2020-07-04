@@ -1,25 +1,24 @@
 import { Injectable } from '@nestjs/common';
-import { User } from './user.schema';
-import { InjectModel } from 'nestjs-typegoose';
-import { ReturnModelType } from '@typegoose/typegoose';
+
+import { UserModel } from '../mongo';
 import { PostDto } from '../posts/dto/posts.dto';
-import { UserDto } from './dto/user.dto';
 import { PostsService } from '../posts/posts.service';
+import { UserDto } from './dto/user.dto';
+import { User } from './user.schema';
 
 @Injectable()
 export class UserService {
 
   constructor(
-    @InjectModel(User) private userModel: ReturnModelType<typeof User>,
     private readonly postsService: PostsService,
   ) {}
 
   async saveProfileBannerPic(userObjectID: string, url: string): Promise<void> {
-    await this.userModel.updateOne({_id: userObjectID}, {backgroundImg: url});
+    await UserModel.updateOne({_id: userObjectID}, {backgroundImg: url});
   }
 
   async saveProfilePic(userObjectID: string, url: string): Promise<void> {
-    await this.userModel.updateOne({_id: userObjectID}, {profilePic: url});
+    await UserModel.updateOne({_id: userObjectID}, {profilePic: url});
   }
 
   // create(createUserDto: CreateUserDto): Promise<User> {
@@ -28,13 +27,13 @@ export class UserService {
   // }
 
   findAll(): Promise<User[]> {
-    return this.userModel.find().exec();
+    return UserModel.find().exec();
   }
 
   async getAuthors(posts: PostDto[]): Promise<UserDto[]> {
     const result: UserDto[] = [];
     for (const post of posts) {
-      const foundUser = await this.userModel.findById(post.author);
+      const foundUser = await UserModel.findById(post.author);
       result.push({
         _id: foundUser._id,
         userID: foundUser.userID,
@@ -57,7 +56,7 @@ export class UserService {
     gitHubID: number,
   ): Promise<{ isNewUser: boolean; _id: string }> {
     // Check if it's a new user
-    const found = await this.userModel.findOneAndUpdate(
+    const found = await UserModel.findOneAndUpdate(
       {
         gitHubID,
       },
@@ -70,7 +69,7 @@ export class UserService {
       return { _id: found._id.toString(), isNewUser: false };
     } else {
       // Create a new user
-      const newUser = await new this.userModel({
+      const newUser = await new UserModel({
         userID,
         gitHubID,
         followers: [],

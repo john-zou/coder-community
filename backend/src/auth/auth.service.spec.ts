@@ -3,13 +3,12 @@ import { JwtModule, JwtService } from '@nestjs/jwt';
 import { Test, TestingModule } from '@nestjs/testing';
 import { AxiosResponse } from 'axios';
 import { Observable } from 'rxjs';
+
 import { UserModule } from '../user/user.module';
 import { UserService } from '../user/user.service';
-import { AuthService } from './auth.service';
-import { GitHubOAuthClientID, LOCAL_MONGODB } from './constants';
 import { MockMongo } from '../util/mock-mongo';
-import { User } from '../user/user.schema';
-import { TypegooseModule } from 'nestjs-typegoose';
+import { AuthService } from './auth.service';
+import { GitHubOAuthClientID } from './constants';
 import { CoderCommunityJwtPayload } from './jwt.strategy';
 
 const GitHubAccessTokenUrl = 'https://github.com/login/oauth/access_token';
@@ -32,12 +31,6 @@ describe('AuthService', () => {
       imports: [
         HttpModule, // For social OAuth
         JwtModule.register({ secret: FakeCoderCommunityJwtSecret }), // For signing CoderCommunity jwt
-        TypegooseModule.forRoot(LOCAL_MONGODB, {
-          useNewUrlParser: true,
-          useUnifiedTopology: true,
-          useFindAndModify: false,
-        }),
-        TypegooseModule.forFeature([User]),
         UserModule,
         // For creation of new user
       ],

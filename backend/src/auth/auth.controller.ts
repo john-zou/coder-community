@@ -1,13 +1,8 @@
-import { Controller, Post, Body } from '@nestjs/common';
-import {
-  GitHubLoginBody,
-  GoogleLoginBody,
-  LoginSuccess,
-  LogOut,
-  LogOutSuccess,
-} from './auth.dto';
-import { AuthService } from './auth.service';
+import { Body, Controller, Post } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
+
+import { GitHubLoginBody, GoogleLoginBody, LoginSuccess, LogOut, LogOutSuccess } from './auth.dto';
+import { AuthService } from './auth.service';
 
 @ApiTags('Auth')
 @Controller()

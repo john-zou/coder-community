@@ -1,16 +1,10 @@
-import { Injectable, HttpService, HttpException } from '@nestjs/common';
+import { HttpException, HttpService, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import {
-  GitHubLoginBody,
-  GoogleLoginBody,
-  LoginSuccess,
-  LogOut,
-} from './auth.dto';
 
-import { GitHubOAuthClientID } from './constants';
-
-import { UserService } from '../user/user.service';
 import { Secrets } from '../secrets';
+import { UserService } from '../user/user.service';
+import { GitHubLoginBody, GoogleLoginBody, LoginSuccess, LogOut } from './auth.dto';
+import { GitHubOAuthClientID } from './constants';
 
 const GitHubAccessTokenUrl = 'https://github.com/login/oauth/access_token';
 const GitHubApi = 'https://api.github.com/user';
