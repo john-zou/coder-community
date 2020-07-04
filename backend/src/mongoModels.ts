@@ -23,10 +23,10 @@ export const TagModel = getModelForClass(Tag);
 export const UserModel = getModelForClass(User);
 
 export const DefaultMongoOptions = {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useFindAndModify: false,
-  };
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  useFindAndModify: false,
+};
 
 export async function initializeMongo(connectionString: string): Promise<void> {
   mongooseInstance = await mongoose.connect(connectionString, DefaultMongoOptions);

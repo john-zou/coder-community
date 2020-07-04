@@ -14,7 +14,6 @@ import { rootReducer } from './reducers';
 import RootState from './store';
 import theme from './theme';
 
-
 const initialState: RootState = {
   isLoggedIn: !!localStorage.getItem(JwtLocalStorageKey),
   attachments: {},

@@ -3,7 +3,7 @@ require('dotenv').config();
 import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
-import { initializeMongo } from './mongo';
+import { initializeMongo } from './mongoModels';
 import { Secrets } from './secrets';
 
 async function bootstrap() {

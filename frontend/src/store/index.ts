@@ -86,8 +86,6 @@ export type Tag = {
   _id: string,
   name: string,
   posts: LoadableIDs,
-  createdAt: string,
-  updatedAt: string,
 };
 
 export type User = {

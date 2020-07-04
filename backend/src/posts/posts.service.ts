@@ -4,7 +4,7 @@ import { ObjectID } from 'mongodb';
 import { convertToStrArr } from '../util/helperFunctions';
 import * as urlSlug from 'url-slug';
 
-import { PostModel } from '../mongo';
+import { PostModel } from '../mongoModels';
 import { User } from '../user/user.schema';
 import { CreatePostBodyDto, CreatePostSuccessDto, PostDto } from './dto/posts.dto';
 

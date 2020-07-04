@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 
-import { UserModel } from '../mongo';
+import { UserModel } from '../mongoModels';
 import { PostDto } from '../posts/dto/posts.dto';
 // import { PostsService } from '../posts/posts.service';
 import { convertToStrArr } from '../util/helperFunctions';
