@@ -2,6 +2,7 @@ import produce from 'immer';
 
 import { ReduxAction } from '../actions/constants';
 import { PostsState } from '../store';
+import { convertIDArrToLoadableIDs } from '../util/helperFunctions';
 
 //https://immerjs.github.io/immer/docs/example-reducer
 export const posts = produce((state: PostsState, action: ReduxAction) => {
@@ -9,7 +10,12 @@ export const posts = produce((state: PostsState, action: ReduxAction) => {
     case "INITIAL_TRENDING_POSTS_SUCCESS": {
       const postsMap = action.payload.posts;
       console.log(postsMap);
-      Object.keys(postsMap).forEach(_id => state[_id] = { loading: false, item: postsMap[_id] });
+      Object.keys(postsMap).forEach(_id => {
+        const post = postsMap[_id];
+        post.comments = convertIDArrToLoadableIDs(post.comments);
+        post.tags = convertIDArrToLoadableIDs(post.tags);
+        state[_id] = { loading: false, item: postsMap[_id] }
+      });
     }
   }
 }, {});

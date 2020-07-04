@@ -8,7 +8,7 @@ import DefaultPic from '../../assets/user.svg';
 import CommentIcon from '../../icons/commentIcon.svg';
 import HeartIcon from '../../icons/heartIcon.svg';
 import HeartIconRed from '../../icons/heartIconRed.svg';
-import { Post, RootState, User } from '../../store';
+import { Post, RootState, User, TagsState } from '../../store';
 
 const useStyles = makeStyles({
   root: {
@@ -93,7 +93,7 @@ const Card = ({ postID }: Props) => {
 
   const authorID = post.author;
   const author = useSelector<RootState, User>(state => state.users[authorID].item);
-
+  const tags = useSelector<RootState, TagsState>(state => state.tags);
   return (
     <div className={classes.root}>
       <div className={classes.account}>
@@ -174,9 +174,9 @@ const Card = ({ postID }: Props) => {
       </div>
 
       <div className={classes.interactions}>
-        {post.tags.items.map((tag) => (
-          <p key={post._id} className={classes.tagText}>
-            #{tag}&nbsp;
+        {post.tags.items.map((_id) => (
+          <p key={_id} className={classes.tagText}>
+            #{tags[_id]}&nbsp;
           </p>
         ))}
         <div style={{ display: "flex", flex: 1 }}></div>
@@ -193,7 +193,7 @@ const Card = ({ postID }: Props) => {
           <Link to={`/post/${post.slug}`} className={classes.link}>
             <img className={classes.commentIcon} src={CommentIcon} alt="" />
           </Link>
-          <p>&nbsp;{post.comments}</p>
+          <p>&nbsp;{post.commentsCount}</p>
         </div>
       </div>
     </div>
