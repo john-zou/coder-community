@@ -15,6 +15,7 @@ export class PostsController {
   @Personal() //provides @UserObjectID to get userid
   @Post()
   createPost(@Body() createPostDto: CreatePostBodyDto, @UserObjectID() author: string): Promise<CreatePostSuccessDto> {
+    console.log("*** " + createPostDto + " ***");
     return this.postsService.createPost(author, createPostDto);
   }
 }

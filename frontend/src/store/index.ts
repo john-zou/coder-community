@@ -82,6 +82,12 @@ export type Post = {
   group?: string,
 }
 
+export type PostsCreation = {
+  title: String,
+  content: String,
+  tags: [] // [Record<string, Loadable<Tag>>]
+}
+
 export type Tag = {
   _id: string,
   name: string,
@@ -127,12 +133,14 @@ export type ConversationsState = Record<string, Loadable<Conversation>>;
 export type GroupsState = Record<string, Loadable<Group>>;
 export type MessagesState = Record<string, Loadable<Message>>;
 export type PostsState = Record<string, Loadable<Post>>;
+export type PostsCreationState = { title: '', content: '', tags: [] };
 export type TagsState = Record<string, Loadable<Tag>>;
 export type UsersState = Record<string, Loadable<User>>;
 export type VideosState = Record<string, Loadable<Video>>;
 
 export type RootState = {
   isLoggedIn: boolean,
+  postsCreation: PostsCreation,
 
   //cache -small version of mongodb in which each item is a map from ObjectID to appropriate data type
   attachments: Record<string, Loadable<Attachment>>,

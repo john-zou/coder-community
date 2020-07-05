@@ -1,9 +1,9 @@
 import React from "react";
-import { connect } from "react-redux";
-import { fade, makeStyles } from "@material-ui/core/styles";
-import { setTitle, setText } from '../../actions';
-// import { useSelector } from 'react-redux';
+import { makeStyles } from "@material-ui/core/styles";
+import { createTitle, createContent } from '../../actions/postsCreation';
+import { useSelector, useDispatch } from 'react-redux';
 // import { RootState, Post } from '../../initialData';
+import { RootState, TagsState } from '../../store';
 
 const useStyles = makeStyles({
   cptext: {
@@ -48,31 +48,30 @@ const useStyles = makeStyles({
   },
 });
 
-const _onTitle = (event) => {
-  this.props.setTitle(event.target.value);
+const updateContent = (event, dispatch) => {
+  dispatch(createContent(event.target.value));
 }
 
-const _onText = (event) => {
-  this.props.setText(event.target.value);
+const updateTitle = (event, dispatch) => {
+  dispatch(createTitle(event.target.value));
 }
 
-function TextPanel() {
+export default function TextPanel() {
   const classes = useStyles();
-  // const posts = useSelector<RootState, Post[]>(
-  //	(state) => state.posts);
+  // const postsCreation = useSelector<RootState> ((state) => state.postsCreation);
+  const dispatch = useDispatch();
   return (
     <div className={classes.cptext}>
       <form>
-        <input className={classes.cptitle} type="text" placeholder="Title" onChange={_onTitle}></input>
+        <input className={classes.cptitle} type="text" placeholder="Title" onChange={(event) => {
+          updateTitle(event, dispatch);
+        }}>
+        </input>
         <br></br>
-        <textarea className={classes.cpcontent} id="text" onChange={_onText} placeholder="Type content"></textarea>
+        <textarea className={classes.cpcontent} id="text" onChange={(event) => {
+          updateContent(event, dispatch);
+        }} placeholder="Type content"></textarea>
       </form>
     </div>
   );
 }
-
-const mapStateToProps = (state) => {
-  return {};
-}
-
-export default connect(mapStateToProps, { setTitle, setText })(TextPanel);

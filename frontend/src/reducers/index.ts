@@ -5,6 +5,7 @@ import { comments } from './comments';
 import { conversations } from './conversations';
 import { groups } from './groups';
 import { isLoggedIn } from './isLoggedIn';
+import { postsCreation } from "./postsCreation";
 import { messages } from './messages';
 import { posts } from './posts';
 import { slugs } from './slugs';
@@ -21,6 +22,7 @@ import { savedPosts } from "./savedPosts";
 
 export const rootReducer = combineReducers({
   isLoggedIn,
+  postsCreation,
 
   attachments,
   comments,

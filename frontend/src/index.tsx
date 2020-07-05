@@ -11,11 +11,18 @@ import thunk from 'redux-thunk';
 import App from './App';
 import { JwtLocalStorageKey } from './constants';
 import { rootReducer } from './reducers';
-import RootState from './store';
+import RootState, {Loadable, Tag} from './store';
 import theme from './theme';
+import {postsCreation} from "./reducers/postsCreation";
 
 const initialState: RootState = {
   isLoggedIn: !!localStorage.getItem(JwtLocalStorageKey),
+  postsCreation: {
+    title: '',
+    content: '',
+    tags: []
+  },
+
   attachments: {},
   comments: {},
   conversations: {},
