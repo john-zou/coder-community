@@ -50,7 +50,6 @@ const LeftSideBar = () => {
   const user = useSelector<RootState, Loadable<User>>((state) => state.user);
   const isLoggedIn = useSelector<RootState, boolean>((state) => state.isLoggedIn);
 
-  console.log(isLoggedIn);
   return (
     <div className={classes.root}>
       {isLoggedIn &&

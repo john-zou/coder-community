@@ -25,7 +25,9 @@ const Main = () => {
     (state) => state.trendingPosts
   );
 
-  console.log(trendingPosts);
+  trendingPosts.items.forEach((item) => {
+    console.log(item);
+  })
   return (
     <div className={classes.main}>
       {trendingPosts.items.map((_id) => (

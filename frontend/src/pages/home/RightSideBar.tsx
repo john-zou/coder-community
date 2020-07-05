@@ -41,8 +41,14 @@ export default function RightSideBar() {
   const classes = useStyles();
   const currViewedPost = null;
 
-  const savedPosts = [];
-  const isLoggedIn = useSelector<RootState, boolean>((state) => state.isLoggedIn);
+  const savedPosts = [
+    {
+      postID: "5f00faca1a9b9b1781929025", author: "fred", title: "sad", previewContent: "It is sad", content: "It is so sad", tags: [ "cpp", "html" ], featuredImg: "", likesCount: 100, comments: "this is a comment", commentsCount: 100, views: 10, createdAt: "created here", likedByUser: true, slug: "slug", group: "group"
+    }
+  ];
+  let isLoggedIn = useSelector<RootState, boolean>((state) => state.isLoggedIn);
+  console.log(isLoggedIn);
+  isLoggedIn = true;
 
   return (
     <div className={classes.root}>
