@@ -10,7 +10,9 @@ export type LoadableIDs = {
   items?: string[];
 }
 
-export type Attachment = {
+export interface Entity { }
+
+export interface Attachment extends Entity {
   _id: string,
   url: string,
   fileType: string,
@@ -19,7 +21,7 @@ export type Attachment = {
   updatedAt: string,
 }
 
-export type Comment = {
+export interface Comment extends Entity {
   _id: string,
   author: string,
   content: string,
@@ -34,7 +36,7 @@ export type Comment = {
   updatedAt: string,
 }
 
-export type Conversation = {
+export interface Conversation extends Entity {
   _id: string,
   name: string,
   users: LoadableIDs,
@@ -43,7 +45,7 @@ export type Conversation = {
   updatedAt: string,
 }
 
-export type Group = {
+export interface Group extends Entity {
   _id: string,
   name: string,
   description: string,
@@ -56,7 +58,7 @@ export type Group = {
   updatedAt: string,
 };
 
-export type Message = {
+export interface Message extends Entity {
   _id: string,
   author: string,
   text: string,
@@ -65,7 +67,7 @@ export type Message = {
   updatedAt: string,
 };
 
-export type Post = {
+export interface Post extends Entity {
   _id: string,
   author: string,
   title: string,
@@ -83,13 +85,13 @@ export type Post = {
   group?: string,
 }
 
-export type Tag = {
+export interface Tag extends Entity {
   _id: string,
   name: string,
   posts: LoadableIDs,
 };
 
-export type User = {
+export interface User extends Entity {
   _id: string,
   userID: string,
   gitHubID?: number,
@@ -110,7 +112,7 @@ export type User = {
   updatedAt?: string,
 };
 
-export type Video = {
+export interface Video extends Entity {
   _id: string,
   author: string,
   name: string,
@@ -122,15 +124,16 @@ export type Video = {
   updatedAt: string,
 };
 
-export type AttachmentsState = Record<string, Attachment>;
-export type CommentsState = Record<string, Comment>;
-export type ConversationsState = Record<string, Conversation>;
-export type GroupsState = Record<string, Group>;
-export type MessagesState = Record<string, Message>;
-export type PostsState = Record<string, Post>;
-export type TagsState = Record<string, Tag>;
-export type UsersState = Record<string, User>;
-export type VideosState = Record<string, Video>;
+// Removed for simplification:
+// export type AttachmentsState = Record<string, Attachment>;
+// export type CommentsState = Record<string, Comment>;
+// export type ConversationsState = Record<string, Conversation>;
+// export type GroupsState = Record<string, Group>;
+// export type MessagesState = Record<string, Message>;
+// export type PostsState = Record<string, Post>;
+// export type TagsState = Record<string, Tag>;
+// export type UsersState = Record<string, User>;
+// export type VideosState = Record<string, Video>;
 
 export enum SelectedTab {
   GROUPS = "groups",
@@ -144,16 +147,8 @@ export type RootState = {
   isLoggedIn: boolean,
   selectedTab: SelectedTab,
 
-  //cache -small version of mongodb in which each item is a map from ObjectID to appropriate data type
-  attachments: Record<string, Attachment>,
-  comments: Record<string, Comment>,
-  conversations: Record<string, Conversation>,
-  groups: Record<string, Group>,
-  messages: Record<string, Message>,
-  posts: Record<string, Post>,
-  tags: Record<string, Tag>,
-  users: Record<string, User>,
-  videos: Record<string, Video>,
+  //cache -small version of mongodb in which each item is a map from ObjectID to a MongoDB Document
+  cache: Record<string, Entity>,
 
   //mapping of post slug to post ObjectID
   slugs: Record<string, string>,
