@@ -10,7 +10,6 @@ import MenuItem from '@material-ui/core/MenuItem';
 import { makeStyles } from '@material-ui/core/styles';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import AccountCircle from '@material-ui/icons/AccountCircle';
 import MenuIcon from '@material-ui/icons/Menu';
 import MessageIcon from '@material-ui/icons/Message';
 import MoreIcon from '@material-ui/icons/MoreVert';
@@ -22,7 +21,9 @@ import { Link } from 'react-router-dom';
 
 import Logo from '../../assets/ccLogo.svg';
 import PurpleButton from '../../pages/common/PurpleButton';
-import { RootState } from '../../store';
+import { RootState, Loadable, User } from '../../store';
+import { initializeGitHubOAuth } from '../../pages/login/login';
+import { Avatar } from '@material-ui/core';
 
 const drawerWidth = 240;
 const useStyles = makeStyles((theme) => ({
@@ -108,6 +109,7 @@ export default function Header(props) {
   cursor: pointer;
 `;
   const isLoggedIn = useSelector<RootState, boolean>((state) => state.isLoggedIn);
+  const user = useSelector<RootState, Loadable<User>>((state) => state.user);
 
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -183,7 +185,7 @@ export default function Header(props) {
           aria-haspopup="true"
           color="inherit"
         >
-          <AccountCircle />
+          <Avatar alt="avatar" src={user?.item?.profilePic} />
         </IconButton>
         <p>Profile</p>
       </MenuItem>
@@ -241,9 +243,9 @@ export default function Header(props) {
 
               {!isLoggedIn &&
                 <ListItemDiv>
-                  <Link to="/login" className={classes.link}>
+                  <div onClick={initializeGitHubOAuth}>
                     <PurpleButton content="Log In with GitHub" />
-                  </Link>
+                  </div>
                 </ListItemDiv>}
 
             </ListItemIcon>
@@ -269,7 +271,7 @@ export default function Header(props) {
                 onClick={handleProfileMenuOpen}
                 color="inherit"
               >
-                <AccountCircle />
+                <Avatar alt="avatar" src={user?.item?.profilePic} />
               </IconButton>
             </div>}
 
