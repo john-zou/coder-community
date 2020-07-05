@@ -10,12 +10,15 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
+    "@types/qs": "^6.9.3",
     "@types/react-redux": "^7.1.9",
     "@types/react-router-dom": "^5.1.5",
+    "@types/uuid": "^8.0.0",
     "antd": "^4.3.1",
     "immer": "^6.0.9",
     "material-ui-dropzone": "^3.2.1",
     "portable-fetch": "^3.0.0",
+    "qs": "^6.9.4",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-dropzone": "^11.0.1",
@@ -27,7 +30,8 @@
     "redux-observable": "^1.2.0",
     "redux-thunk": "^2.3.0",
     "rxjs": "^6.5.5",
-    "typescript": "^3.9.5"
+    "typescript": "^3.9.5",
+    "uuid": "^8.2.0"
   },
   "scripts": {
     "gen": "cd ../backend && yarn gen",
