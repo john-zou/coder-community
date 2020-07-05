@@ -109,7 +109,7 @@ export interface CreatePostBodyDto {
      */
     content: string;
     /**
-     * 
+     * the object IDs of the tags
      * @type {Array<string>}
      * @memberof CreatePostBodyDto
      */
