@@ -5,13 +5,11 @@ const { SwaggerModule, DocumentBuilder } = require('@nestjs/swagger');
 const { AppModule } = require('../dist/app.module');
 const axios = require('axios');
 const fs = require('fs');
-const { promises: fsProm } = require('fs');
 const extract = require('extract-zip');
+const lineReplace = require('line-replace');
 
 const endpoint = 'https://generator3.swagger.io/api/generate';
 const dest = __dirname + '/generated-api-client.zip';
-const CustomFilePath =
-  __dirname + '../../../frontend/src/api/coder-community-api.ts';
 
 console.log(
   'Processing back end controllers, DTOs, models to generate API document...',
@@ -58,11 +56,21 @@ console.log(
   });
   console.log('Done!');
 
-  // // Add custom facade with auth token embedded:
-  // const code = generateFacadeFromTags(document.tags);
-  // await fsProm.writeFile(CustomFilePath);
+  console.log(
+    'Modifying line 16 of api.ts so that the helper functions automatically include user token',
+  );
+  // Change line 16 in the generated api.ts
+  lineReplace({
+    file: __dirname + '../../../frontend/src/api/api.ts',
+    line: 16,
+    text: `import portableFetch from "../api-auth/fetch-container";`,
+    addNewLine: true,
+    callback: () => {
+      console.log('Done!');
+    },
+  });
 
   console.log(
-    'frontend/src/api now contains up-to-date Typescript fetch helpers for the back end endpoints.',
+    'frontend/src/api now contains up-to-date Typescript fetch helpers for the back end endpoints. Can safely exit if it hasnt exited',
   );
 })();
