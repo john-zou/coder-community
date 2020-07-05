@@ -88,3 +88,7 @@ export const convertIDArrToLoadableIDs = (IDarr: string[]): LoadableIDs => {
     items: IDarr,
   }
 }
+
+export const convertArrToLoadableIDs = (entity: any, ...keys: string[]): any => {
+  keys.forEach(key => entity[key] = { loading: false, items: entity[key] });
+}

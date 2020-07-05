@@ -45,7 +45,7 @@ export const getLoggedInUser = () => {
   return async function (dispatch) {
     dispatch(getLoggedInUserBegin());
     try {
-      const api = new UserApi({ basePath: "http://localhost:3001" });
+      const api = new UserApi();
       const user = await api.userControllerGetUser();
       dispatch(getLoggedInUserSuccess(user))
     }

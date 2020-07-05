@@ -17,10 +17,13 @@ import { userIDs } from './userIDs';
 import { userOwnPosts } from "./userOwnPosts";
 import { trendingVideos } from "./trendingVideos";
 import { savedPosts } from "./savedPosts";
+import { selectedTab } from "./selectedTab";
+import { browsingGroups } from "./browsingGroups";
 
 
 export const rootReducer = combineReducers({
   isLoggedIn,
+  selectedTab,
 
   attachments,
   comments,
@@ -37,6 +40,7 @@ export const rootReducer = combineReducers({
 
   user,
   trendingPosts,
+  browsingGroups,
   userOwnPosts,
   trendingVideos,
   savedPosts,

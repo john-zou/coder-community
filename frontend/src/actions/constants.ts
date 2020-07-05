@@ -17,6 +17,10 @@ export const USER_PROFILE_FAILURE = "USER_PROFILE_FAILURE";
 export const LOGIN_SUCCESS = "LOGIN_SUCCESS";
 export const LOGOUT = "LOGOUT";
 
+export const GROUPS_PENDING = "GROUPS_PENDING";
+export const GROUPS_SUCCESS = "GROUPS_SUCCESS";
+export const GROUPS_FAILURE = "GROUPS_FAILURE";
+
 export type ReduxAction = {
   type: ActionType,
   payload?: any,
@@ -37,3 +41,6 @@ export type ActionType =
   | typeof USER_PROFILE_FAILURE
   | typeof LOGIN_SUCCESS
   | typeof LOGOUT
+  | typeof GROUPS_PENDING
+  | typeof GROUPS_SUCCESS
+  | typeof GROUPS_FAILURE

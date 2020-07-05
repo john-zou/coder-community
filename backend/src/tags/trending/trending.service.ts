@@ -1,9 +1,9 @@
 import { Injectable, HttpService } from '@nestjs/common';
 import { GetInitialDataDto, GetInitialDataLoggedInDto } from './initialData.dto';
-import { Personal } from '../auth/guards/personal.decorator';
-import { PostsService } from '../posts/posts.service';
-import { UserService } from '../user/user.service';
-import { TagsService } from '../tags/tags.service';
+import { Personal } from '../../auth/guards/personal.decorator';
+import { PostsService } from '../../posts/posts.service';
+import { UserService } from '../../user/user.service';
+import { TagsService } from '../tags.service';
 
 @Personal()
 @Injectable()

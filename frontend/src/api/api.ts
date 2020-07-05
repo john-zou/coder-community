@@ -93,6 +93,56 @@ export interface CreateCustomUser {
 /**
  * 
  * @export
+ * @interface CreateGroupDto
+ */
+export interface CreateGroupDto {
+    /**
+     * The name of the group
+     * @type {string}
+     * @memberof CreateGroupDto
+     */
+    name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateGroupDto
+     */
+    description?: string;
+    /**
+     * The URL for the group's circular profile avatar image
+     * @type {string}
+     * @memberof CreateGroupDto
+     */
+    profilePic?: string;
+    /**
+     * The URL for the group's background image
+     * @type {string}
+     * @memberof CreateGroupDto
+     */
+    profileBanner?: string;
+    /**
+     * Whether the group is viewable by non-members
+     * @type {boolean}
+     * @memberof CreateGroupDto
+     */
+    _private: boolean;
+}
+/**
+ * 
+ * @export
+ * @interface CreateGroupSuccessDto
+ */
+export interface CreateGroupSuccessDto {
+    /**
+     * The newly created group's object ID
+     * @type {string}
+     * @memberof CreateGroupSuccessDto
+     */
+    id: string;
+}
+/**
+ * 
+ * @export
  * @interface CreatePostBodyDto
  */
 export interface CreatePostBodyDto {
@@ -158,6 +208,61 @@ export interface FileUploadDto {
      * @memberof FileUploadDto
      */
     file: any;
+}
+/**
+ * 
+ * @export
+ * @interface GetGroupSuccessDto
+ */
+export interface GetGroupSuccessDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof GetGroupSuccessDto
+     */
+    id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetGroupSuccessDto
+     */
+    name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetGroupSuccessDto
+     */
+    description: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetGroupSuccessDto
+     */
+    profilePic: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetGroupSuccessDto
+     */
+    profileBanner: string;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof GetGroupSuccessDto
+     */
+    users: Array<string>;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof GetGroupSuccessDto
+     */
+    posts: Array<string>;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof GetGroupSuccessDto
+     */
+    videos: Array<string>;
 }
 /**
  * 
@@ -1229,6 +1334,365 @@ export class DevApi extends BaseAPI {
      */
     public devControllerMarcoPersonal(options?: any) {
         return DevApiFp(this.configuration).devControllerMarcoPersonal(options)(this.fetch, this.basePath);
+    }
+
+}
+/**
+ * GroupsApi - fetch parameter creator
+ * @export
+ */
+export const GroupsApiFetchParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {CreateGroupDto} body 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        groupsControllerCreateGroup(body: CreateGroupDto, options: any = {}): FetchArgs {
+            // verify required parameter 'body' is not null or undefined
+            if (body === null || body === undefined) {
+                throw new RequiredError('body','Required parameter body was null or undefined when calling groupsControllerCreateGroup.');
+            }
+            const localVarPath = `/api/groups`;
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'POST' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+            const needsSerialization = (<any>"CreateGroupDto" !== "string") || localVarRequestOptions.headers['Content-Type'] === 'application/json';
+            localVarRequestOptions.body =  needsSerialization ? JSON.stringify(body || {}) : (body || "");
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        groupsControllerGetGroups(options: any = {}): FetchArgs {
+            const localVarPath = `/api/groups`;
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        groupsControllerGetPrivateGroup(id: string, options: any = {}): FetchArgs {
+            // verify required parameter 'id' is not null or undefined
+            if (id === null || id === undefined) {
+                throw new RequiredError('id','Required parameter id was null or undefined when calling groupsControllerGetPrivateGroup.');
+            }
+            const localVarPath = `/api/groups/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        groupsControllerJoinGroup(id: string, options: any = {}): FetchArgs {
+            // verify required parameter 'id' is not null or undefined
+            if (id === null || id === undefined) {
+                throw new RequiredError('id','Required parameter id was null or undefined when calling groupsControllerJoinGroup.');
+            }
+            const localVarPath = `/api/groups/join/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'POST' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        groupsControllerLeaveGroup(id: string, options: any = {}): FetchArgs {
+            // verify required parameter 'id' is not null or undefined
+            if (id === null || id === undefined) {
+                throw new RequiredError('id','Required parameter id was null or undefined when calling groupsControllerLeaveGroup.');
+            }
+            const localVarPath = `/api/groups/leave/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'DELETE' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * GroupsApi - functional programming interface
+ * @export
+ */
+export const GroupsApiFp = function(configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {CreateGroupDto} body 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        groupsControllerCreateGroup(body: CreateGroupDto, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<CreateGroupSuccessDto> {
+            const localVarFetchArgs = GroupsApiFetchParamCreator(configuration).groupsControllerCreateGroup(body, options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        groupsControllerGetGroups(options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Array<GetGroupSuccessDto>> {
+            const localVarFetchArgs = GroupsApiFetchParamCreator(configuration).groupsControllerGetGroups(options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * 
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        groupsControllerGetPrivateGroup(id: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<GetGroupSuccessDto> {
+            const localVarFetchArgs = GroupsApiFetchParamCreator(configuration).groupsControllerGetPrivateGroup(id, options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * 
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        groupsControllerJoinGroup(id: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Response> {
+            const localVarFetchArgs = GroupsApiFetchParamCreator(configuration).groupsControllerJoinGroup(id, options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response;
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * 
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        groupsControllerLeaveGroup(id: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Response> {
+            const localVarFetchArgs = GroupsApiFetchParamCreator(configuration).groupsControllerLeaveGroup(id, options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response;
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+    }
+};
+
+/**
+ * GroupsApi - factory interface
+ * @export
+ */
+export const GroupsApiFactory = function (configuration?: Configuration, fetch?: FetchAPI, basePath?: string) {
+    return {
+        /**
+         * 
+         * @param {CreateGroupDto} body 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        groupsControllerCreateGroup(body: CreateGroupDto, options?: any) {
+            return GroupsApiFp(configuration).groupsControllerCreateGroup(body, options)(fetch, basePath);
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        groupsControllerGetGroups(options?: any) {
+            return GroupsApiFp(configuration).groupsControllerGetGroups(options)(fetch, basePath);
+        },
+        /**
+         * 
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        groupsControllerGetPrivateGroup(id: string, options?: any) {
+            return GroupsApiFp(configuration).groupsControllerGetPrivateGroup(id, options)(fetch, basePath);
+        },
+        /**
+         * 
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        groupsControllerJoinGroup(id: string, options?: any) {
+            return GroupsApiFp(configuration).groupsControllerJoinGroup(id, options)(fetch, basePath);
+        },
+        /**
+         * 
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        groupsControllerLeaveGroup(id: string, options?: any) {
+            return GroupsApiFp(configuration).groupsControllerLeaveGroup(id, options)(fetch, basePath);
+        },
+    };
+};
+
+/**
+ * GroupsApi - object-oriented interface
+ * @export
+ * @class GroupsApi
+ * @extends {BaseAPI}
+ */
+export class GroupsApi extends BaseAPI {
+    /**
+     * 
+     * @param {CreateGroupDto} body 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof GroupsApi
+     */
+    public groupsControllerCreateGroup(body: CreateGroupDto, options?: any) {
+        return GroupsApiFp(this.configuration).groupsControllerCreateGroup(body, options)(this.fetch, this.basePath);
+    }
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof GroupsApi
+     */
+    public groupsControllerGetGroups(options?: any) {
+        return GroupsApiFp(this.configuration).groupsControllerGetGroups(options)(this.fetch, this.basePath);
+    }
+
+    /**
+     * 
+     * @param {string} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof GroupsApi
+     */
+    public groupsControllerGetPrivateGroup(id: string, options?: any) {
+        return GroupsApiFp(this.configuration).groupsControllerGetPrivateGroup(id, options)(this.fetch, this.basePath);
+    }
+
+    /**
+     * 
+     * @param {string} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof GroupsApi
+     */
+    public groupsControllerJoinGroup(id: string, options?: any) {
+        return GroupsApiFp(this.configuration).groupsControllerJoinGroup(id, options)(this.fetch, this.basePath);
+    }
+
+    /**
+     * 
+     * @param {string} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof GroupsApi
+     */
+    public groupsControllerLeaveGroup(id: string, options?: any) {
+        return GroupsApiFp(this.configuration).groupsControllerLeaveGroup(id, options)(this.fetch, this.basePath);
     }
 
 }

@@ -1,5 +1,5 @@
 import React from "react";
-import GroupList from "./GroupList";
+// import GroupList from "./GroupList";
 import { fade, makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles({
@@ -53,14 +53,14 @@ const _omImgRm = (event) => {
 	this.props.setImg('');
 	*/
 }
-    
+
 export default function ImgPanel() {
   const classes = useStyles();
 
   return (
     <div className={classes.root}>
       <form onSubmit={_onImgUpload}>
-      	<button className={classes.button} onClick={_onImgUpload}>Upload Photos</button>
+        <button className={classes.button} onClick={_onImgUpload}>Upload Photos</button>
       </form>
     </div>
   );

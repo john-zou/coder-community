@@ -46,6 +46,7 @@ export type Conversation = {
 export type Group = {
   _id: string,
   name: string,
+  description: string,
   profilePic: string,
   profileBanner: string,
   users: LoadableIDs,
@@ -121,29 +122,38 @@ export type Video = {
   updatedAt: string,
 };
 
-export type AttachmentsState = Record<string, Loadable<Attachment>>;
-export type CommentsState = Record<string, Loadable<Comment>>;
-export type ConversationsState = Record<string, Loadable<Conversation>>;
-export type GroupsState = Record<string, Loadable<Group>>;
-export type MessagesState = Record<string, Loadable<Message>>;
-export type PostsState = Record<string, Loadable<Post>>;
-export type TagsState = Record<string, Loadable<Tag>>;
-export type UsersState = Record<string, Loadable<User>>;
-export type VideosState = Record<string, Loadable<Video>>;
+export type AttachmentsState = Record<string, Attachment>;
+export type CommentsState = Record<string, Comment>;
+export type ConversationsState = Record<string, Conversation>;
+export type GroupsState = Record<string, Group>;
+export type MessagesState = Record<string, Message>;
+export type PostsState = Record<string, Post>;
+export type TagsState = Record<string, Tag>;
+export type UsersState = Record<string, User>;
+export type VideosState = Record<string, Video>;
+
+export enum SelectedTab {
+  GROUPS = "groups",
+  MESSAGES = "messages",
+  POSTS = "posts",
+  VIDEOS = "videos",
+  DEFAULT = "default"
+}
 
 export type RootState = {
   isLoggedIn: boolean,
+  selectedTab: SelectedTab,
 
   //cache -small version of mongodb in which each item is a map from ObjectID to appropriate data type
-  attachments: Record<string, Loadable<Attachment>>,
-  comments: Record<string, Loadable<Comment>>,
-  conversations: Record<string, Loadable<Conversation>>,
-  groups: Record<string, Loadable<Group>>,
-  messages: Record<string, Loadable<Message>>,
-  posts: Record<string, Loadable<Post>>,
-  tags: Record<string, Loadable<Tag>>,
-  users: Record<string, Loadable<User>>,
-  videos: Record<string, Loadable<Video>>,
+  attachments: Record<string, Attachment>,
+  comments: Record<string, Comment>,
+  conversations: Record<string, Conversation>,
+  groups: Record<string, Group>,
+  messages: Record<string, Message>,
+  posts: Record<string, Post>,
+  tags: Record<string, Tag>,
+  users: Record<string, User>,
+  videos: Record<string, Video>,
 
   //mapping of post slug to post ObjectID
   slugs: Record<string, string>,
@@ -154,6 +164,7 @@ export type RootState = {
   //the front end will first look up in the cache, if it doesn't find sth then ask the backend
   user: Loadable<User>,
   trendingPosts: LoadableIDs,
+  browsingGroups: LoadableIDs,
   userOwnPosts: LoadableIDs,
   trendingVideos: LoadableIDs,
   savedPosts: LoadableIDs,

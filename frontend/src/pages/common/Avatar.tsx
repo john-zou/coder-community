@@ -23,11 +23,11 @@ const useStyles = makeStyles({
   },
 });
 
-const Avatar = ({ post, extraText }) => {
+const Avatar = ({ pic, title, subtitle, extraText }) => {
   const classes = useStyles();
   return (
     <div className={classes.account}>
-      <img className={classes.accountImg} src={post.authorImg} alt="" />
+      <img className={classes.accountImg} src={pic} alt="" />
       <div className={classes.nameTime}>
         <p>
           <span
@@ -36,11 +36,11 @@ const Avatar = ({ post, extraText }) => {
               color: "#5DCBAF",
             }}
           >
-            {post.authorName}&nbsp;&nbsp;&nbsp;
+            {title}&nbsp;&nbsp;&nbsp;
           </span>
           <span style={{ color: "#5D67E9" }}>{extraText}</span>
         </p>
-        <p style={{ marginTop: "-0.8em" }}>{post.createdAt}</p>
+        <p style={{ marginTop: "-0.8em" }}>{subtitle}</p>
       </div>
     </div>
   );

@@ -51,7 +51,7 @@ export default function RightSideBar() {
         <div className={classes.savePostSection}>
           {savedPosts.map((sp) => (
             <div key={sp.postID}>
-              <Avatar post={sp} extraText=""></Avatar>
+              {/* <Avatar post={sp} extraText=""></Avatar> */}
               <Link
                 to={`/post/${sp.postID}`}
                 className={classes.link}

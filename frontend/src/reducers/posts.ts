@@ -9,7 +9,7 @@ export const posts = produce((state: PostsState, action: ReduxAction) => {
   switch (action.type) {
     case "INITIAL_TRENDING_POSTS_SUCCESS": {
       const postsMap = action.payload.posts;
-      console.log(postsMap);
+      // console.log(postsMap);
       Object.keys(postsMap).forEach(_id => {
         const post = postsMap[_id];
         post.comments = convertIDArrToLoadableIDs(post.comments);

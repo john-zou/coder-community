@@ -12,7 +12,6 @@ export function trendingPosts(state: LoadableIDs = { loading: false }, action: R
       }
     }
     case "INITIAL_TRENDING_POSTS_SUCCESS": {
-      console.log(action);
       return {
         ...state,
         loading: false,

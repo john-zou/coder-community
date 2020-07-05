@@ -5,15 +5,29 @@ import { Post } from '../posts/post.schema';
 import { User } from '../user/user.schema';
 import { Video } from '../videos/video.schema';
 
+/**
+ * The Group Schema
+ * 
+ * If making any changes, make sure to double check group.service.ts!
+ */
 export class Group extends TimeStamps {
   @prop()
   name: string;
+
+  @prop()
+  description?: string;
 
   @prop()
   profilePic?: string;
 
   @prop()
   profileBanner?: string;
+
+  @prop({ ref: 'User' })
+  admins: Ref<User>[]
+
+  @prop()
+  private: boolean;
 
   @prop({ ref: 'User' })
   users: Ref<User>[];

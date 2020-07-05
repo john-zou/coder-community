@@ -1,6 +1,6 @@
 import { TrendingApi, GetInitialDataLoggedInDto, GetInitialDataDto, UserDto } from '../api';
 import RootState, { Post, User, Tag } from '../store';
-import { convertArrToMap } from '../util/helperFunctions';
+import { convertArrToMap, convertArrToLoadableIDs } from '../util/helperFunctions';
 import { ReduxAction } from './constants';
 
 const fetchingInitialTrendingPostsBegin = (): ReduxAction => ({
@@ -44,6 +44,8 @@ export const setInitialTrendingPosts = () => {
 
       if (isLoggedIn) {
         const user: UserDto = (initialData as GetInitialDataLoggedInDto).user;
+        // Convert user's array of references into LoadableIDs
+        convertArrToLoadableIDs(user, "followers", "following", "groups", "posts", "savedPosts", "likedPosts", "tags", "conversations");
         dispatch(fetchInitialTrendingPostsSuccess(posts, users, tags, postIDs, user));
       } else {
         dispatch(fetchInitialTrendingPostsSuccess(posts, users, tags, postIDs));

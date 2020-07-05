@@ -11,11 +11,12 @@ import thunk from 'redux-thunk';
 import App from './App';
 import { JwtLocalStorageKey } from './constants';
 import { rootReducer } from './reducers';
-import RootState from './store';
+import RootState, { SelectedTab } from './store';
 import theme from './theme';
 
 const initialState: RootState = {
   isLoggedIn: !!localStorage.getItem(JwtLocalStorageKey),
+  selectedTab: SelectedTab.DEFAULT,
   attachments: {},
   comments: {},
   conversations: {},
@@ -31,6 +32,7 @@ const initialState: RootState = {
 
   user: { loading: false },
   trendingPosts: { loading: false },
+  browsingGroups: { loading: false },
   userOwnPosts: { loading: false },
   trendingVideos: { loading: false },
   savedPosts: { loading: false },

@@ -96,7 +96,7 @@ const PostDetail = () => {
         />
         <h1>{post.item.title}</h1>
 
-        <Avatar post={post} extraText="follow"></Avatar>
+        {/* <Avatar post={post} extraText="follow"></Avatar> */}
 
         <p>{post.item.content}</p>
 

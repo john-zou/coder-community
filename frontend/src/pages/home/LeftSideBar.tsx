@@ -1,11 +1,12 @@
 import { makeStyles } from '@material-ui/core/styles';
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 import { Loadable, RootState, User } from '../../store';
 import FilterPost from './FilterPost';
 import { Loading } from '../common/Loading';
+import { fetchGroups } from '../../actions/groups';
 
 const useStyles = makeStyles({
   root: {
@@ -48,11 +49,9 @@ const useStyles = makeStyles({
 
 const LeftSideBar = () => {
   const classes = useStyles();
+  const dispatch = useDispatch();
   const user = useSelector<RootState, Loadable<User>>((state) => state.user);
   const isLoggedIn = useSelector<RootState, boolean>((state) => state.isLoggedIn);
-
-  console.log(isLoggedIn);
-  console.log(user);
 
   if (!user.item || user.loading) {
     return <Loading />
@@ -77,8 +76,8 @@ const LeftSideBar = () => {
         <h3>Hacker News</h3>
         <h3>Posts</h3>
         <h3>Videos</h3>
-        <h3>Groups</h3>
-        {/* <GroupList /> */}
+        <h3 onClick={() => dispatch(fetchGroups())}>Groups</h3>
+
         <p className={classes.showPostsText}># BROWSE BY TAGS</p>
         <FilterPost />
       </div>

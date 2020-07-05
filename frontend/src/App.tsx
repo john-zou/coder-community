@@ -15,6 +15,7 @@ import Upload from './pages/video_management/Upload';
 import { ViewProfile } from './pages/view_profile/ViewProfile';
 import { LogOut } from './pages/login/Logout';
 import { Experimental } from './pages/experimental/Experimental';
+import Group from './pages/group';
 
 export type ViewProfileParams = {
   username: string;
