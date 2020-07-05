@@ -8,15 +8,6 @@
 [![Generic badge](https://img.shields.io/badge/Architecture-Nest%20JS-red.svg)](https://nestjs.com/)
 [![Generic badge](https://img.shields.io/badge/OpenAPI-%203-green.svg)](https://swagger.io/specification/)
 
-## MongoDB; Environment Variables
-
-- This project is configured to use `.env`, please see Slack for the file. It needs to end up at `backend/.env`
-- Usage of Local MongoDB is the default setting. To change to remote, change `USE_LOCAL_MONGODB=true` to `USE_LOCAL_MONGODB=false` in `.env`
-- We use a library for Mongoose called [Typegoose](https://github.com/typegoose/typegoose).
-  - To create a model, see any of the `.schema.ts` files, such as [user.schema.ts](https://github.com/john-zou/coder-community/blob/master/backend/src/user/user.schema.ts)
-  - Then, add it to `backend/mongo.ts` like the other models have been
-  - To use the model, treat it as a global variable, like `UserModel.find({_id: "12345678"})` or `new UserModel({userID: "example"})`
-
 ## Installation
 
 ```bash
@@ -55,6 +46,19 @@ yarn doc:cn
 ```
 
 See backend/docs-cn/index.html
+
+## MongoDB; Environment Variables
+
+- This project is configured to use `.env`. Copy paste it to your repo locally (get it from our Slack/Whatsapp). It needs to end up at `backend/.env`
+- Usage of Local MongoDB is the default setting. To change to remote, change `USE_LOCAL_MONGODB=true` to `USE_LOCAL_MONGODB=false` in `.env`
+- We use a library for Mongoose called [Typegoose](https://github.com/typegoose/typegoose).
+  - To create a model, see any of the `.schema.ts` files, such as [user.schema.ts](https://github.com/john-zou/coder-community/blob/master/backend/src/user/user.schema.ts)
+  - Then, add it to `backend/mongoModels.ts` like the other models have been
+  - To use the model, treat it as a global variable, like `UserModel.find({_id: "12345678"})` or `new UserModel({userID: "example"})`
+
+## Authentication
+
+- See `backend/src/auth/README.md`
 
 ## Test
 

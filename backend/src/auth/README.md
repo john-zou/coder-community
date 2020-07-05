@@ -1,8 +1,26 @@
 # CoderCommunity Auth
 
-CoderCommunity uses a custom social login, for GitHub and Google, with the possibility of easily extending it to others
+CoderCommunity uses a custom social login, for GitHub (implemented) and Google (todo), and is extensible to other providers (such as Facebook)
 
-API documentation for this, and ever back end controller, can be seen by starting the back end and visiting localhost:3001/api
+The implementation is a custom JWT strategy (with no expiry); the main benefit of this is that session management is not needed.
+
+- The JWT contains the MongoDB `ObjectID` of the user, so it is unaffected by things such as GitHub username changes. It is permanently linked to their CoderCommunity data.
+
+# `yarn gen`
+
+- The API helpers created by `yarn gen` will automatically include the JWT in the request header (`"Authorization": "Bearer <token>"`). This is what the back end looks for. If it's missing or invalid, a 401 results, if the `UserAuthGuard` (`@Personal()`) is applied to the endpoint.
+  - `frontend/src/auth/fetch-container.ts` exports two methods for controlling this behavior, and they should be used only when logging in or logging out
+
+# Convenience REST endpoints for logging in as anyone
+
+- `DevModule` contains convenience endpoints for obtaining tokens easily. See `backend/src/dev/README.md`.
+- To attach the token to the front end account, set the jwt in `localhost:3000`'s localStorage in your browser:
+
+```javascript
+localStorage.set("jwt", <the jwt token, looks something like nefklan32nfknfklnaln.adna23nfafa.23fkn1kf13f>);
+```
+
+(Both of the above will be removed prior to actual deployment -- if we ever deploy it as a real app)
 
 # Flow
 

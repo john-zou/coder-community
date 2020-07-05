@@ -28,6 +28,12 @@ jobs:
       - run: cd backend && yarn install
       - run: cd backend && yarn build
       - run: cd backend && yarn test:cov
+        env:
+          CC_SECRET: ${{ secrets.CC_SECRET }}
+          GG_SECRET: ${{ secrets.GG_SECRET }}
+          GH_SECRET: ${{ secrets.GH_SECRET }}
+          LOCAL_MONGODB: ${{ secrets.LOCAL_MONGODB }}
+          REMOTE_MONGODB: ${{ secrets.REMOTE_MONGODB }}
 
   frontend:
     name: front end
