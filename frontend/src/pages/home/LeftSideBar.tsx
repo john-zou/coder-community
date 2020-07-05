@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 
 import { Loadable, RootState, User } from '../../store';
 import FilterPost from './FilterPost';
+import { Loading } from '../common/Loading';
 
 const useStyles = makeStyles({
   root: {
@@ -51,6 +52,11 @@ const LeftSideBar = () => {
   const isLoggedIn = useSelector<RootState, boolean>((state) => state.isLoggedIn);
 
   console.log(isLoggedIn);
+  console.log(user);
+
+  if (!user.item || user.loading) {
+    return <Loading />
+  }
   return (
     <div className={classes.root}>
       {isLoggedIn &&
