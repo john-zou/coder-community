@@ -5889,6 +5889,11 @@ levn@~0.3.0:
     prelude-ls "~1.1.2"
     type-check "~0.3.2"
 
+line-replace@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/line-replace/-/line-replace-2.0.1.tgz#227c8839003b178dd080ca67fd280eb537f8c168"
+  integrity sha512-CSr3f6gynLCA9R+RBS0IDIfv7a8OAXcuyq+CHgq0WzbQ7KSJQfF5DgtpRVxpSp1KBNXogtzbNqAeUjrmHYTPYA==
+
 linebreak@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/linebreak/-/linebreak-1.0.2.tgz#4b5781733e9a9eb2849dba2f963e47c887f8aa06"
