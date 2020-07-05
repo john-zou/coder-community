@@ -1,6 +1,5 @@
 import { JwtLocalStorageKey } from "../constants";
 
-// By default, uses the normal fetch
 export default function portableFetchReplacement(path, options: any = {}) {
     if (!options.headers) {
       options.headers = new Headers();
