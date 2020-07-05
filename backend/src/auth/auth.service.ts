@@ -1,4 +1,4 @@
-import { HttpException, HttpService, Injectable } from '@nestjs/common';
+import { HttpException, HttpService, Injectable, Logger } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 
 import { Secrets } from '../secrets';
@@ -87,7 +87,8 @@ export class AuthService {
     code,
     state,
   }: GitHubLoginBody): Promise<LoginSuccess> {
-    const res = await this.httpService
+    try {
+      const res = await this.httpService
       .post(
         GitHubAccessTokenUrl,
         {
@@ -104,36 +105,45 @@ export class AuthService {
       )
       .toPromise();
 
-    if (!res.data) {
-      throw new HttpException('There was an issue with the GitHub OAuth', 401);
+      if (!res.data) {
+        throw new HttpException('There was an issue with the GitHub OAuth', 401);
+      }
+
+      const gitHubToken: string = res.data.access_token;
+
+      const userInfo: Partial<GitHubUser> = await this.httpService
+        .get(GitHubApi, {
+          headers: {
+            Authorization: 'token ' + gitHubToken,
+            Accept: 'application/json',
+          },
+        })
+        .toPromise()
+        .then(res => res.data);
+
+      const userID = userInfo.login;
+      const gitHubID = userInfo.id;
+
+      const { isNewUser, _id } = await this.userService.createOrUpdateUser(
+        userID, gitHubID, {
+          name: userInfo.name,
+          profilePic: userInfo.avatar_url,
+          status: userInfo.bio,
+        }
+      );
+
+      const jwt = await this.signCoderCommunityJwt(_id);
+
+      return {
+        isNewUser,
+        jwt,
+        userID,
+        _id,
+      };
+    } catch (err) {
+      Logger.log(err);
+      throw err;
     }
-
-    const gitHubToken: string = res.data.access_token;
-    const userInfo: Partial<GitHubUser> = await this.httpService
-      .get(GitHubApi, {
-        headers: {
-          Authorization: 'token ' + gitHubToken,
-          Accept: 'application/json',
-        },
-      })
-      .toPromise()
-      .then(res => res.data);
-
-    const userID = userInfo.login;
-    const gitHubID = userInfo.id;
-
-    const { isNewUser, _id } = await this.userService.createOrUpdateUser(
-      userID, gitHubID
-    );
-
-    const jwt = await this.signCoderCommunityJwt(_id);
-
-    return {
-      isNewUser,
-      jwt,
-      userID,
-      _id,
-    };
   }
 
   signCoderCommunityJwt(_id: string): Promise<string> {
