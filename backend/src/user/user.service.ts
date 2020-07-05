@@ -7,9 +7,17 @@ import { convertToStrArr } from '../util/helperFunctions';
 import { UserDto } from './dto/user.dto';
 import { User } from './user.schema';
 
+/**
+ * typed like in UserSchema
+ */
+type ExtraGitHubUserInfo = {
+  name?: string;
+  profilePic?: string;
+  status?: string;
+};
+
 @Injectable()
 export class UserService {
-
   async findUserById(userObjectID: string): Promise<UserDto> {
     const foundUser = await UserModel.findById(userObjectID);
     return {
@@ -25,7 +33,7 @@ export class UserService {
       posts: convertToStrArr(foundUser.posts),
       savedPosts: convertToStrArr(foundUser.savedPosts),
       likedPosts: convertToStrArr(foundUser.likedPosts),
-    }
+    };
   }
 
   async saveProfileBannerPic(userObjectID: string, url: string): Promise<void> {
@@ -35,11 +43,6 @@ export class UserService {
   async saveProfilePic(userObjectID: string, url: string): Promise<void> {
     await UserModel.updateOne({ _id: userObjectID }, { profilePic: url });
   }
-
-  // create(createUserDto: CreateUserDto): Promise<User> {
-  //   const createdUser = new this.userModel(createUserDto);
-  //   return createdUser.save();
-  // }
 
   findAll(): Promise<User[]> {
     return UserModel.find().exec();
@@ -55,7 +58,7 @@ export class UserService {
         name: foundUser.name,
         profilePic: foundUser.profilePic,
         likedPosts: convertToStrArr(foundUser.likedPosts),
-      })
+      });
     }
     return result;
   }
@@ -69,6 +72,7 @@ export class UserService {
   async createOrUpdateUser(
     userID: string,
     gitHubID: number,
+    extraInfo?: ExtraGitHubUserInfo,
   ): Promise<{ isNewUser: boolean; _id: string }> {
     // Check if it's a new user
     const found = await UserModel.findOneAndUpdate(
@@ -90,7 +94,9 @@ export class UserService {
         followers: [],
         followings: [],
         lastLoggedIn: new Date(),
-        name: 'Coder Community Member',
+        name: extraInfo?.name || 'Coder Community Member',
+        profilePic: extraInfo?.profilePic,
+        status: extraInfo?.status,
       }).save();
 
       return { _id: newUser._id.toString(), isNewUser: true };
