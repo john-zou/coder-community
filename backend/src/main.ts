@@ -1,7 +1,8 @@
 require('dotenv').config();
 
 import { NestFactory } from '@nestjs/core';
-import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+
 import { AppModule } from './app.module';
 import { initializeMongo } from './mongoModels';
 import { Secrets } from './secrets';
@@ -21,7 +22,9 @@ async function bootstrap() {
   const options = new DocumentBuilder()
     .setTitle('Coder Community')
     .setDescription('The Coder Community API description')
-    .setVersion('0.0.1')
+    .setVersion('0.0.2')
+    .addServer('http://localhost:3001')
+    .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup('api', app, document);

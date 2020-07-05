@@ -14,6 +14,9 @@ export const USER_PROFILE_PENDING = "USER_PROFILE_PENDING";
 export const USER_PROFILE_SUCCESS = "USER_PROFILE_SUCCESS";
 export const USER_PROFILE_FAILURE = "USER_PROFILE_FAILURE";
 
+export const LOGIN_SUCCESS = "LOGIN_SUCCESS";
+export const LOGOUT = "LOGOUT";
+
 export type ReduxAction = {
   type: ActionType,
   payload?: any,
@@ -32,3 +35,5 @@ export type ActionType =
   | typeof USER_PROFILE_PENDING
   | typeof USER_PROFILE_SUCCESS
   | typeof USER_PROFILE_FAILURE
+  | typeof LOGIN_SUCCESS
+  | typeof LOGOUT

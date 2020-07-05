@@ -13,6 +13,8 @@ import PostDetail from './pages/post_detail';
 import SearchResult from './pages/search_result/SearchResult';
 import Upload from './pages/video_management/Upload';
 import { ViewProfile } from './pages/view_profile/ViewProfile';
+import { LogOut } from './pages/login/Logout';
+import { Experimental } from './pages/experimental/Experimental';
 
 export type ViewProfileParams = {
   username: string;
@@ -51,8 +53,14 @@ export default function App() {
         <Route path="/video_management">
           <Upload />
         </Route>
-        <Route path="/dev-login">
+        <Route path="/login">
           <DevLogin />
+        </Route>
+        <Route path="/logout">
+          <LogOut></LogOut>
+        </Route>
+        <Route path="/test">
+          <Experimental />
         </Route>
       </Switch>
       <Footer></Footer>

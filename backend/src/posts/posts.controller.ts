@@ -1,5 +1,5 @@
 import { Body, Controller, Post } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 import { Personal } from '../auth/guards/personal.decorator';
 import { UserObjectID } from '../user/user-object-id.decorator';
@@ -11,6 +11,7 @@ import { PostsService } from './posts.service';
 export class PostsController {
   constructor(private readonly postsService: PostsService) { }
 
+  @ApiBearerAuth()
   @Personal() //provides @UserObjectID to get userid
   @Post()
   createPost(@Body() createPostDto: CreatePostBodyDto, @UserObjectID() author: string): Promise<CreatePostSuccessDto> {

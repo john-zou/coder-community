@@ -241,7 +241,9 @@ export default function Header(props) {
 
               {!isLoggedIn &&
                 <ListItemDiv>
+                  <Link to="/login" className={classes.link}>
                   <PurpleButton content="Log In with GitHub" />
+                  </Link>
                 </ListItemDiv>}
 
             </ListItemIcon>

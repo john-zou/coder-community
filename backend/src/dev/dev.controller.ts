@@ -8,6 +8,8 @@ import { CreatePostBodyDto, CreatePostSuccessDto } from '../posts/dto/posts.dto'
 import { PostsService } from '../posts/posts.service';
 import { UserService } from '../user/user.service';
 import { CreateCustomUser } from './dev.dto';
+import { Personal } from '../auth/guards/personal.decorator';
+import { UserObjectID } from '../user/user-object-id.decorator';
 
 @ApiTags('Dev')
 @Controller('dev')
@@ -17,6 +19,17 @@ export class DevController {
     private readonly userService: UserService,
     private readonly postsService: PostsService,
   ) {}
+
+  @Get('marco')
+  marco(): { polo: boolean} {
+    return { polo: true };
+  }
+
+  @Personal()
+  @Get('marco/personal')
+  marcoPersonal(@UserObjectID() id: string): { polo: boolean, id: string } {
+    return { polo: true, id }
+  }
 
   /**
    * A simple way to log in to test the front end without OAuth: gets the login token for userID lion-king
