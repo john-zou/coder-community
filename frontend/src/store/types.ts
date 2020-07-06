@@ -34,6 +34,7 @@ export type Conversation = {
 export type Group = {
   _id: string,
   name: string,
+  description: string,
   profilePic: string,
   profileBanner: string,
   users: string[],

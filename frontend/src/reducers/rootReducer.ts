@@ -4,6 +4,7 @@ import usersReducer from './usersSlice';
 import tagsReducer from './tagsSlice';
 import userReducer from "./userSlice";
 import isLoggedInReducer from "./isLoggedInSlice";
+import groupsReducer from "./groupsSlice";
 
 const rootReducer = combineReducers({
   isLoggedIn: isLoggedInReducer,
@@ -11,11 +12,11 @@ const rootReducer = combineReducers({
   users: usersReducer,
   posts: postsReducer,
   tags: tagsReducer,
+  groups: groupsReducer,
   //TODO
   // attachments: attachmentsReducer,
   // comments: commentsReducer,
   // conversations: conversationsReducer,
-  // groups: groupsReducer,
   // videos: videosReducer,
 })
 

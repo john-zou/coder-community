@@ -26,12 +26,12 @@ const Main = () => {
     (state) => state.posts.trendingPosts
   );
 
-  // console.log(trendingPosts);
   return (
     <div className={classes.main}>
       {trendingPosts.map((_id) => (
         <Card postID={_id} key={_id} />
       ))}
+
     </div>
   );
 };
