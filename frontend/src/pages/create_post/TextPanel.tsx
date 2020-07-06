@@ -1,6 +1,7 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { createTitle, createContent } from '../../actions/postsCreation';
+// import { createTitle, createContent } from '../../actions/postsCreation';
+import { createTitle, createContent } from '../../reducers/postsCreationSlice';
 import { useDispatch } from 'react-redux';
 // import { RootState, Post } from '../../initialData';
 

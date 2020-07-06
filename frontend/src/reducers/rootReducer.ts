@@ -1,6 +1,6 @@
 import { combineReducers } from "redux";
 import postsReducer from './postsSlice';
-import postsCreationReducer from '';
+import postsCreationReducer from './postsCreationSlice';
 import usersReducer from './usersSlice';
 import tagsReducer from './tagsSlice';
 import userReducer from "./userSlice";
