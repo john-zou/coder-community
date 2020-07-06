@@ -1,9 +1,8 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { createTitle, createContent } from '../../actions/postsCreation';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 // import { RootState, Post } from '../../initialData';
-import { RootState, TagsState } from '../../store';
 
 const useStyles = makeStyles({
   cptext: {
@@ -58,7 +57,6 @@ const updateTitle = (event, dispatch) => {
 
 export default function TextPanel() {
   const classes = useStyles();
-  // const postsCreation = useSelector<RootState> ((state) => state.postsCreation);
   const dispatch = useDispatch();
   return (
     <div className={classes.cptext}>

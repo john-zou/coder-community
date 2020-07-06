@@ -83,8 +83,8 @@ export type Post = {
 }
 
 export type PostsCreation = {
-  title: String,
-  content: String,
+  title: string,
+  content: string,
   tags: [] // [Record<string, Loadable<Tag>>]
 }
 
