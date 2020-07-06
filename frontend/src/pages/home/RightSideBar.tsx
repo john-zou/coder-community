@@ -2,9 +2,10 @@ import { makeStyles } from '@material-ui/core/styles';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+
+import { RootState } from '../../store';
 import Avatar from '../common/Avatar';
 import { handleViewPost } from './Card';
-import { RootState } from '../../reducers/rootReducer';
 
 const useStyles = makeStyles({
   root: {
@@ -50,7 +51,7 @@ export default function RightSideBar() {
         <div className={classes.savePostSection}>
           {savedPosts.map((sp) => (
             <div key={sp.postID}>
-              <Avatar post={sp} extraText=""></Avatar>
+              {/* <Avatar post={sp} extraText=""></Avatar> */}
               <Link
                 to={`/post/${sp.postID}`}
                 className={classes.link}

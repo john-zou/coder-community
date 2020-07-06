@@ -1,6 +1,6 @@
-import { UserDto } from "../user/dto/user.dto";
-import { PostDto } from "../posts/dto/posts.dto";
-import { TagsDto } from "../tags/tags.dto";
+import { UserDto } from "../../user/dto/user.dto";
+import { PostDto } from "../../posts/dto/posts.dto";
+import { TagsDto } from "../tags.dto";
 
 
 //for redux intial state

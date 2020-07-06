@@ -15,7 +15,7 @@ import { PostsModule } from './posts/posts.module';
 import { PublicUserContentDir, PublicUserContentServeRoot } from './storage/storage.constants';
 import { StorageModule } from './storage/storage.module';
 import { TagsModule } from './tags/tags.module';
-import { TrendingModule } from './trending/trending.module';
+import { TrendingModule } from './tags/trending/trending.module';
 import { UploadModule } from './upload/upload.module';
 import { UserModule } from './user/user.module';
 import { VideosModule } from './videos/videos.module';

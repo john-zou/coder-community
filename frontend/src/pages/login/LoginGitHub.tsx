@@ -5,7 +5,7 @@ import { stateContainer } from "./login";
 import { AuthApi } from "../../api";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { loginSuccess } from "../../reducers/isLoggedInSlice";
+import { login } from "../../actions/isLoggedIn";
 
 export function LoginGitHub() {
   const location = useLocation();
@@ -28,8 +28,8 @@ export function LoginGitHub() {
         code: code as string,
         state: state as string,
       })
-      .then((loginSuccessDto) => {
-        dispatch(loginSuccess(loginSuccessDto));
+      .then((loginSuccess) => {
+        dispatch(login(loginSuccess.jwt));
         history.push("/");
       })
       .catch((err) => {

@@ -1,16 +1,15 @@
 import { makeStyles } from '@material-ui/core/styles';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
 
+import { fetchPostBySlug, fetchPostContentByID } from '../../actions/posts';
 import { PostDetailParams } from '../../App';
+import { Loadable, Post, RootState } from '../../store';
 import Avatar from '../common/Avatar';
 import { Loading } from '../common/Loading';
 import { NotFoundError } from '../common/NotFoundError';
 import NewComment from './NewComment';
-import { RootState } from '../../reducers/rootReducer';
-import { fetchPostBySlug, fetchPostContentByID } from '../../reducers/postsSlice';
-import { Post } from '../../store/types';
 
 // import { useParams } from "react-router-dom";
 const useStyles = makeStyles({
@@ -55,52 +54,51 @@ const PostDetail = () => {
   const { slug } = useParams<PostDetailParams>(); //get the url param to render the appropriate post
 
   const classes = useStyles();
-  const dispatch: any = useDispatch();
-  // const history = useHistory();
-  // const isLoggedIn = useSelector<RootState, boolean>(state => state.isLoggedIn);
-  const post = useSelector<RootState, Post>(state => {
-    const postID = state.posts.slugToID[slug];
+  const dispatch = useDispatch();
+  const history = useHistory();
+  const isLoggedIn = useSelector<RootState, boolean>(state => state.isLoggedIn);
+  const post = useSelector<RootState, Loadable<Post>>(state => {
+    const postID = state.slugs[slug];
     return state.posts[postID];
   });
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-
 
   useEffect(() => {
-    setLoading(true);
     if (!post) {
       dispatch(fetchPostBySlug(slug));
       return;
     }
+    if (post.loading || post.error) {
+      return;
+    }
 
-    if (!post.content) {
-      dispatch(fetchPostContentByID(post._id));
+    if (!post.item.content) {
+      dispatch(fetchPostContentByID(post.item._id));
     }
   }, [post, slug, dispatch]);
 
-  if (loading || !post || !post.content) {
+  if (!post || !post.item || post.loading || !post.item.content) {
     return <Loading />
   }
 
-  if (error) {
+  if (post.error) {
     return <NotFoundError /> // TODO: add something for server error
   }
 
   // post has item with content
-  // const likedByUser = isLoggedIn && post.likedByUser;
+  const likedByUser = isLoggedIn && post.item.likedByUser;
 
   return (
     <div className={classes.root}>
       <div className={classes.postDetail}>
         <img
-          src={post.featuredImg}
+          src={post.item.featuredImg}
           style={{ height: "20em", objectFit: "cover", width: "100%" }} alt="featured"
         />
-        <h1>{post.title}</h1>
+        <h1>{post.item.title}</h1>
 
-        <Avatar post={post} extraText="follow"></Avatar>
+        {/* <Avatar post={post} extraText="follow"></Avatar> */}
 
-        <p>{post.content}</p>
+        <p>{post.item.content}</p>
 
         <Interactions />
         {/* <div className={classes.interactionsIcons}>
