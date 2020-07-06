@@ -34,7 +34,9 @@ export const userSlice = createSlice({
   },
   extraReducers: {
     [fetchTrendingPosts.fulfilled.type]: (state, action) => {
-      userAdapter.addMany(state, action.payload.user)
+      if (action.payload.user) {
+        userAdapter.addOne(state, action.payload.user)
+      }
     }
   }
 })

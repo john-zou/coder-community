@@ -10,27 +10,29 @@ const postsAdapter = createEntityAdapter<Post>({
 
 //https://redux-toolkit.js.org/api/createAsyncThunk
 export const fetchTrendingPosts = createAsyncThunk(
-  'posts/fetchTrendingPostsStatus',
+  'fetchTrendingPosts',
   async (_, { getState }) => {
     const api = new TrendingApi();
     let initialData: GetInitialDataLoggedInDto | GetInitialDataDto;
     const isLoggedIn = (getState() as RootState).isLoggedIn;
+    console.log(isLoggedIn);
     if (isLoggedIn) {
       initialData = await api.trendingControllerGetTrendingLoggedIn();
     } else {
       initialData = await api.trendingControllerGetTrending();
     }
+    console.log(initialData);
     return initialData; //{users[], posts[], tags[]}
   }
 )
 
 export const fetchPostBySlug = (slug: string) => createAsyncThunk(
-  'posts/fetchPostBySlugStatus',
+  'fetchPostBySlug',
   async () => { }
 )
 
 export const fetchPostContentByID = (ID: string) => createAsyncThunk(
-  'posts/fetchPostContentByIDStatus',
+  'fetchPostContentByID',
   async () => { }
 )
 

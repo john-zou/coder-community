@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import FilterPost from './FilterPost';
 import { RootState } from '../../reducers/rootReducer';
 import { User } from '../../store/types';
+import { Loading } from '../common/Loading';
 
 const useStyles = makeStyles({
   root: {
@@ -50,6 +51,10 @@ const LeftSideBar = () => {
   const classes = useStyles();
   const user = useSelector<RootState, User>(state => Object.values(state.user.entities)[0]);
   const isLoggedIn = useSelector<RootState, boolean>(state => state.isLoggedIn);
+
+  if (!user) {
+    return <Loading />
+  }
 
   // console.log(isLoggedIn);
   return (

@@ -97,7 +97,7 @@ const Card = ({ postID }: Props) => {
   const post = useSelector<RootState, Post>(state => state.posts.entities[postID]);
 
   const authorID = post.author;
-  const author = useSelector<RootState, User>(state => state.users[authorID]);
+  const author = useSelector<RootState, User>(state => state.users.entities[authorID]);
   const tags = useSelector<RootState, Dictionary<Tag>>(state => state.tags.entities);
 
   return (
