@@ -1,5 +1,6 @@
 import { createEntityAdapter, createSlice } from "@reduxjs/toolkit";
 import { fetchTrendingPosts } from "./postsSlice";
+import { User } from "../store/types";
 
 const usersAdapter = createEntityAdapter<User>({
   selectId: item => item._id
@@ -8,8 +9,7 @@ const usersAdapter = createEntityAdapter<User>({
 //https://redux-toolkit.js.org/api/createSlice
 export const usersSlice = createSlice({
   name: "users",
-  initialState: usersAdapter.getInitialState({ //extends EntityState
-  }),//also has ids[] and entities{}
+  initialState: usersAdapter.getInitialState(),
   reducers: {
 
   },

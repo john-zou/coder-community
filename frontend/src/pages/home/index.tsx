@@ -1,14 +1,15 @@
 import { makeStyles } from '@material-ui/core/styles';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-// import { setInitialTrendingPosts } from '../../actions/trendingPosts';
-import RootState, { LoadableIDs } from '../../store';
 import { Loading } from '../common/Loading';
 import LeftSideBar from './LeftSideBar';
 import Main from './Main';
 import RightSideBar from './RightSideBar';
 import { fetchTrendingPosts } from '../../reducers/postsSlice';
+import { unwrapResult } from '@reduxjs/toolkit';
+import ErrorPage from '../common/ErrorPage';
+
 
 const useStyles = makeStyles({
   home: {
@@ -19,15 +20,30 @@ const useStyles = makeStyles({
 
 export default function Home() {
   const classes = useStyles();
-  const dispatch = useDispatch();
-  const trendingPosts = useSelector<RootState, LoadableIDs>(state => state.trendingPosts);
+  const dispatch: any = useDispatch();
+
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    dispatch(fetchTrendingPosts());
+    setLoading(true);
+    dispatch(fetchTrendingPosts())
+      .then(unwrapResult).then( //must set dispatch to any to use .then
+        () => {
+          setLoading(false)
+        }
+      ).catch(error => {
+        setLoading(false);
+        setError(error)
+      });
   }, []);
 
-  if (!trendingPosts.items || trendingPosts.loading) {
+  if (loading) {
     return <Loading />
+  }
+
+  if (error) {
+    return <ErrorPage error={error} />
   }
 
   return (

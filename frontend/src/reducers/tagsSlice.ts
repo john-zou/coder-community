@@ -1,6 +1,6 @@
 import { createEntityAdapter, createSlice } from "@reduxjs/toolkit";
 import { fetchTrendingPosts } from "./postsSlice";
-import { Tag } from "../store";
+import { Tag } from "../store/types";
 
 const tagsAdapter = createEntityAdapter<Tag>({
   selectId: item => item._id
@@ -9,8 +9,7 @@ const tagsAdapter = createEntityAdapter<Tag>({
 //https://redux-toolkit.js.org/api/createSlice
 export const tagsSlice = createSlice({
   name: "users",
-  initialState: tagsAdapter.getInitialState({ //extends EntityState
-  }),//has ids[] and entities{} by default
+  initialState: tagsAdapter.getInitialState(),
   reducers: {
 
   },

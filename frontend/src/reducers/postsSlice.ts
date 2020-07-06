@@ -1,6 +1,7 @@
 import { createEntityAdapter, createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import RootState, { Post } from "../store";
-import { GetInitialDataLoggedInDto, GetInitialDataDto } from "../api";
+import { GetInitialDataLoggedInDto, GetInitialDataDto, TrendingApi } from "../api";
+import { RootState } from "./rootReducer";
+import { Post } from "../store/types";
 
 
 const postsAdapter = createEntityAdapter<Post>({
@@ -23,12 +24,12 @@ export const fetchTrendingPosts = createAsyncThunk(
   }
 )
 
-export const fetchPostBySlug = createAsyncThunk(
+export const fetchPostBySlug = (slug: string) => createAsyncThunk(
   'posts/fetchPostBySlugStatus',
   async () => { }
 )
 
-export const fetchPostContentByID = createAsyncThunk(
+export const fetchPostContentByID = (ID: string) => createAsyncThunk(
   'posts/fetchPostContentByIDStatus',
   async () => { }
 )
@@ -36,8 +37,9 @@ export const fetchPostContentByID = createAsyncThunk(
 //https://redux-toolkit.js.org/api/createSlice
 export const postsSlice = createSlice({
   name: "posts",
-  initialState: postsAdapter.getInitialState<{ trendingPosts: string[] }>({ //extends EntityState
+  initialState: postsAdapter.getInitialState<{ trendingPosts: string[], slugToID: Record<string, string> }>({ //extends EntityState
     trendingPosts: [],
+    slugToID: {},
   }),//also has ids[] and entities{}
   reducers: {
 

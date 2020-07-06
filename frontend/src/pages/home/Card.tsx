@@ -1,14 +1,19 @@
 import { makeStyles } from '@material-ui/core/styles';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
-import { likePost, savePost, viewPost } from '../../actions/home.ts';
+// import { likePost, savePost, viewPost } from '../../actions/home.ts';
 import DefaultPic from '../../assets/user.svg';
 import CommentIcon from '../../icons/commentIcon.svg';
 import HeartIcon from '../../icons/heartIcon.svg';
 import HeartIconRed from '../../icons/heartIconRed.svg';
-// import { Post, RootState, User, TagsState } from '../../store';
+import { RootState } from '../../reducers/rootReducer';
+import { Post } from '../../store/types';
+import { User } from '../../store/types';
+import { Tag } from '../../store/types';
+import { Dictionary } from '@reduxjs/toolkit';
+import { viewPost, savePost, likePost } from '../../actions/home';
 
 const useStyles = makeStyles({
   root: {
@@ -89,11 +94,12 @@ const Card = ({ postID }: Props) => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
-  const post = useSelector<RootState, Post>(state => state.posts[postID].item);
+  const post = useSelector<RootState, Post>(state => state.posts.entities[postID]);
 
   const authorID = post.author;
-  const author = useSelector<RootState, User>(state => state.users[authorID].item);
-  const tags = useSelector<RootState, TagsState>(state => state.tags);
+  const author = useSelector<RootState, User>(state => state.users[authorID]);
+  const tags = useSelector<RootState, Dictionary<Tag>>(state => state.tags.entities);
+
   return (
     <div className={classes.root}>
       <div className={classes.account}>
@@ -174,7 +180,7 @@ const Card = ({ postID }: Props) => {
       </div>
 
       <div className={classes.interactions}>
-        {post.tags.items.map((_id) => (
+        {post.tags.map((_id) => (
           <p key={_id} className={classes.tagText}>
             #{tags[_id]}&nbsp;
           </p>

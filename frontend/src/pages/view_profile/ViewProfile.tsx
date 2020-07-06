@@ -1,13 +1,14 @@
 import { createStyles, makeStyles } from '@material-ui/core/styles';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
-import { getLoggedInUser, getUserForViewProfile } from '../../actions/user';
 import { ViewProfileParams } from '../../App';
-import { Loadable, RootState, User } from '../../store';
 import { Loading } from '../common/Loading';
 import { NotFoundError } from '../common/NotFoundError';
+import { getLoggedInUser, getUserForViewProfile } from '../../reducers/userSlice';
+import { RootState } from '../../reducers/rootReducer';
+import { User } from '../../store/types';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -42,14 +43,17 @@ export function ViewProfile() {
   const isLoggedIn = useSelector<RootState, boolean>(state => state.isLoggedIn);
   const dispatch = useDispatch();
 
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
   // The one doing the viewing
-  const currentUser = useSelector<RootState, Loadable<User>>(
-    (state) => state.user
+  const currentUser = useSelector<RootState, User>(
+    (state) => Object.values(state.user.entities)[0]
   );
 
-  let viewedUser = useSelector<RootState, Loadable<User>>(
+  let viewedUser = useSelector<RootState, User>(
     (state) => {
-      const userObjectID = state.userIDs[username];
+      const userObjectID = state.user.ids[0];
       return state.users[userObjectID];
     }
   )
@@ -59,11 +63,11 @@ export function ViewProfile() {
     // check redux cache for user(s)
     if (isLoggedIn) {
       // check current user
-      if (!currentUser.item && !currentUser.loading && !currentUser.error) {
+      if (!currentUser && !loading && !error) {
         dispatch(getLoggedInUser());
       }
     }
-    if (currentUser.item && currentUser.item.userID === username) {
+    if (currentUser && currentUser.userID === username) {
       // Current user is looking at own profile, so there is no other user info to get
       return;
     }
@@ -71,24 +75,20 @@ export function ViewProfile() {
       dispatch(getUserForViewProfile(username));
       return;
     }
-    if (viewedUser && !viewedUser.loading && !viewedUser.error && !viewedUser.item.posts) {
+    if (viewedUser && !loading && !error && !viewedUser.posts) {
       dispatch(getUserForViewProfile(username));
     }
   }, []);
 
-  if (!currentUser || currentUser.loading) {
+  if (!currentUser || loading || !viewedUser) {
     return <Loading />
   }
 
-  if (!viewedUser || viewedUser.loading) {
-    return <Loading />
-  }
-
-  if (currentUser.error || viewedUser.error) {
+  if (error) {
     return <NotFoundError />
   }
 
-  const userIsLookingAtOwnProfile = isLoggedIn && currentUser?.item?.userID === username;
+  const userIsLookingAtOwnProfile = isLoggedIn && currentUser?.userID === username;
   if (userIsLookingAtOwnProfile) {
     viewedUser = currentUser;
   }

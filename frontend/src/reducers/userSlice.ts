@@ -1,5 +1,7 @@
 import { createEntityAdapter, createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { UserApi } from "../api";
+import { fetchTrendingPosts } from "./postsSlice";
+import { User } from "../store/types";
 
 const userAdapter = createEntityAdapter<User>({
   selectId: item => item._id
@@ -13,7 +15,7 @@ export const getLoggedInUser = createAsyncThunk(
   }
 )
 
-export const getUserForViewProfile = createAsyncThunk(
+export const getUserForViewProfile = (userName) => createAsyncThunk(
   '/user/getUserForViewProfileStatus',
   async () => {
     //TODO
