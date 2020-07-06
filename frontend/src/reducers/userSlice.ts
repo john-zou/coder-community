@@ -1,8 +1,9 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import { UserApi } from "../api";
+import { UserApi, GetInitialDataDto, GetInitialDataLoggedInDto } from "../api";
 import { fetchTrendingPosts } from "./postsSlice";
-import { User } from "../store/types";
+import { CurrentLoggedInUser } from "../store/types";
 import _ from "lodash";
+import { isGetInitialDataLoggedInDto } from "../util/helperFunctions";
 
 
 export const getLoggedInUser = createAsyncThunk(
@@ -25,7 +26,7 @@ type PostIDPayload = { postID: string };
 
 //https://redux-toolkit.js.org/api/createSlice
 // The state is just User, and initialized to null
-const initialState: User = null;
+const initialState: CurrentLoggedInUser = null;
 
 export const userSlice = createSlice({
   name: "user",
@@ -51,19 +52,17 @@ export const userSlice = createSlice({
     toggleLikePost: {
       reducer: (user, action: PayloadAction<PostIDPayload>) => {
         // optimistic update
-        if (!user.likedPosts) {
-          // Something might have gone wrong and likedPosts doesn't exist
-          console.log("user.likedPosts array didn't exist. This is unexpected. Creating new array.");
-          user.likedPosts = [action.payload.postID];
+        const { postID } = action.payload;
+        // User didn't previously like the post
+        if (!user.likedPostsSet[postID]) {
+          user.likedPostsSet[postID] = true;
+          user.likedPosts.push(action.payload.postID);
         } else {
-          if (user.likedPosts.includes(action.payload.postID)) {
-            _.pull(user.likedPosts, action.payload.postID);
-          } else {
-            user.likedPosts.push(action.payload.postID);
-          }
-        }
+          // User previously liked the post, now un-likes it
+          user.likedPostsSet[postID] = false;
+          _.pull(user.likedPosts, action.payload.postID);
+        }     
       },
-      // to perform side effect. Does not affect payload
       prepare: (payload: PostIDPayload) => {
         // TODO: make endpoint
         // new UserApi().userControllerToggleLike(payload.postID);
@@ -73,16 +72,24 @@ export const userSlice = createSlice({
   },
   extraReducers: {
     // fetchTrendingPosts may return a User
-    [fetchTrendingPosts.fulfilled.type]: (state, action) => {
-      if (action.payload.user) {
-        const user = action.payload.user;
+    [fetchTrendingPosts.fulfilled.type]: (state, action: PayloadAction<GetInitialDataDto | GetInitialDataLoggedInDto>) => {
+      if (isGetInitialDataLoggedInDto(action.payload)) {
+        const userDto = action.payload.user;
+
+        // If the user already exists, merge the dto with the state (currentUser)
         if (state) {
-          // update the user
-          return {...state, ...user};
-        } else {
-          // use payload as next state
-          return user;
+          // Update likedPostsSet
+          userDto.likedPosts?.forEach(post => state.likedPostsSet[post] = true);
+
+          return {...state, ...userDto};
         }
+
+        // Create LoggedInUser
+        const freshlyLoggedInUser = {...userDto, likedPostsSet: {}} as CurrentLoggedInUser;
+        // Add the liked posts to the likedPostsSet
+        userDto.likedPosts?.forEach(postID => freshlyLoggedInUser.likedPostsSet[postID] = true);
+        
+        return freshlyLoggedInUser;
       }
     }
   }
