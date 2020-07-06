@@ -35,12 +35,8 @@ export const userSlice = createSlice({
     savePost: {
       reducer: (user, action: PayloadAction<PostIDPayload>) => {
         // optimistic update
-        if (!user.savedPosts) {
-          console.log("user.savedPosts array didn't exist. This is unexpected. Creating new array.");
-          user.savedPosts = [action.payload.postID];
-        } else {
-          user.savedPosts.push(action.payload.postID);
-        }
+        user.savedPosts.push(action.payload.postID);
+        user.savedPostsSet[action.payload.postID] = true;
       },
       // to perform side effect. Does not affect payload
       prepare: (payload: PostIDPayload) => {
@@ -78,17 +74,16 @@ export const userSlice = createSlice({
 
         // If the user already exists, merge the dto with the state (currentUser)
         if (state) {
-          // Update likedPostsSet
-          userDto.likedPosts?.forEach(post => state.likedPostsSet[post] = true);
-
+          // Update likedPostsSet and savedPostsSet
+          userDto.likedPosts?.forEach(postID => state.likedPostsSet[postID] = true);
+          userDto.savedPosts?.forEach(postID => state.savedPostsSet[postID] = true);
           return {...state, ...userDto};
         }
 
-        // Create LoggedInUser
-        const freshlyLoggedInUser = {...userDto, likedPostsSet: {}} as CurrentLoggedInUser;
-        // Add the liked posts to the likedPostsSet
+        // Create LoggedInUser and initialize liked and saved posts sets
+        const freshlyLoggedInUser = {...userDto, likedPostsSet: {}, savedPostsSet: {}} as CurrentLoggedInUser;
         userDto.likedPosts?.forEach(postID => freshlyLoggedInUser.likedPostsSet[postID] = true);
-        
+        userDto.savedPosts?.forEach(postID => freshlyLoggedInUser.savedPostsSet[postID] = true);
         return freshlyLoggedInUser;
       }
     }

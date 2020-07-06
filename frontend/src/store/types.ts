@@ -99,6 +99,7 @@ export type User = {
 
 export interface CurrentLoggedInUser extends User {
   likedPostsSet: Record<string, boolean>;
+  savedPostsSet: Record<string, boolean>;
 }
 
 export type Video = {
