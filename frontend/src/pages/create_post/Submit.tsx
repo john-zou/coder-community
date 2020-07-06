@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
-import { setImg, setTitle, setText, setTag, delTag, setPeople } from '../../actions';
+// import { setImg, setTitle, setText, setTag, delTag, setPeople } from '../../actions';
 
 
 const useStyles = makeStyles({
@@ -30,4 +30,6 @@ const mapStateToProps = (state) => {
     return { img: state.imgurl, tit: state.title, txt: state.text, tags: state.tags, people: state.people };
 }
 
-export default connect(mapStateToProps, { setImg, setTitle, setText, setTag, delTag, setPeople })(Submit);
+export default connect(mapStateToProps, 
+  // { setImg, setTitle, setText, setTag, delTag, setPeople }
+  )(Submit);

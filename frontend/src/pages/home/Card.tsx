@@ -1,14 +1,19 @@
-import { makeStyles } from '@material-ui/core/styles';
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { makeStyles } from "@material-ui/core/styles";
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 
-import { likePost, savePost, viewPost } from '../../actions/home';
-import DefaultPic from '../../assets/user.svg';
-import CommentIcon from '../../icons/commentIcon.svg';
-import HeartIcon from '../../icons/heartIcon.svg';
-import HeartIconRed from '../../icons/heartIconRed.svg';
-import { Post, RootState, User, TagsState } from '../../store';
+// import { likePost, savePost, viewPost } from '../../actions/home.ts';
+import DefaultPic from "../../assets/user.svg";
+import CommentIcon from "../../icons/commentIcon.svg";
+import HeartIcon from "../../icons/heartIcon.svg";
+import HeartIconRed from "../../icons/heartIconRed.svg";
+import { RootState } from "../../reducers/rootReducer";
+import { Post } from "../../store/types";
+import { User } from "../../store/types";
+import { Tag } from "../../store/types";
+import { Dictionary } from "@reduxjs/toolkit";
+import { savePost, toggleLikePost } from "../../reducers/userSlice";
 
 const useStyles = makeStyles({
   root: {
@@ -73,11 +78,9 @@ const useStyles = makeStyles({
   },
 });
 
-export const handleViewPost = (
-  post,
-  dispatch
-) => {
-  dispatch(viewPost(post));
+export const handleViewPost = (post, dispatch) => {
+  // use history.push instead -John
+  // dispatch(viewPost(post));
 };
 
 type Props = {
@@ -89,11 +92,18 @@ const Card = ({ postID }: Props) => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
-  const post = useSelector<RootState, Post>(state => state.posts[postID].item);
+  const post = useSelector<RootState, Post>(
+    (state) => state.posts.entities[postID]
+  );
 
   const authorID = post.author;
-  const author = useSelector<RootState, User>(state => state.users[authorID].item);
-  const tags = useSelector<RootState, TagsState>(state => state.tags);
+  const author = useSelector<RootState, User>(
+    (state) => state.users.entities[authorID]
+  );
+  const tags = useSelector<RootState, Dictionary<Tag>>(
+    (state) => state.tags.entities
+  );
+
   return (
     <div className={classes.root}>
       <div className={classes.account}>
@@ -104,10 +114,7 @@ const Card = ({ postID }: Props) => {
         />
         <div className={classes.nameTime}>
           <p>
-            <Link
-              to={`/user/${author._id}`}
-              className={classes.link}
-            >
+            <Link to={`/user/${author._id}`} className={classes.link}>
               <span
                 style={{
                   fontWeight: "bold",
@@ -164,7 +171,7 @@ const Card = ({ postID }: Props) => {
             <h4
               style={{ color: "#5D67E9", cursor: "pointer" }}
               onClick={() => {
-                dispatch(savePost(post));
+                dispatch(savePost({ postID: post._id }));
               }}
             >
               Save for later
@@ -174,7 +181,7 @@ const Card = ({ postID }: Props) => {
       </div>
 
       <div className={classes.interactions}>
-        {post.tags.items.map((_id) => (
+        {post.tags.map((_id) => (
           <p key={_id} className={classes.tagText}>
             #{tags[_id]}&nbsp;
           </p>
@@ -186,7 +193,7 @@ const Card = ({ postID }: Props) => {
             src={post.likedByUser ? HeartIconRed : HeartIcon}
             alt=""
             onClick={() => {
-              dispatch(likePost(post, !post.likedByUser));
+              dispatch(toggleLikePost({ postID: post._id }));
             }}
           />
           <p>&nbsp;{post.likesCount}</p>
