@@ -49,7 +49,7 @@ export default function Home() {
 
   return (
     <div className={classes.home}>
-      <LeftSideBar />
+      { /* <LeftSideBar /> */ }
       <Main />
       <RightSideBar />
     </div>

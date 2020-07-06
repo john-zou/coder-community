@@ -49,8 +49,16 @@ const useStyles = makeStyles({
 
 const LeftSideBar = () => {
   const classes = useStyles();
+
   const user = useSelector<RootState, User>(state => Object.values(state.user.entities)[0]);
   const isLoggedIn = useSelector<RootState, boolean>(state => state.isLoggedIn);
+  /*
+  const user = useSelector<RootState, Loadable<User>>((state) => state.user);
+  let isLoggedIn = useSelector<RootState, boolean>((state) => state.isLoggedIn);
+
+  isLoggedIn = false;
+   */
+
 
   /*
   if (!user) {
@@ -60,13 +68,13 @@ const LeftSideBar = () => {
   console.log(isLoggedIn);
   return (
     <div className={classes.root}>
-      {isLoggedIn &&
+      { /*isLoggedIn &&
         <div className={classes.diplayAccount}>
           <img className={classes.displayImg} src={user.profilePic} alt="" />
           <Link to={`/user/${user.userID}`} className={classes.link}>
             <h3 className={classes.displayName}>{user.name}</h3>
           </Link>
-        </div>
+        </div> */
       }
       <div className={classes.groupLinks}>
         <h3>Daily Challenge</h3>

@@ -68,7 +68,13 @@ export type Post = {
   likedByUser: boolean,
   slug: string,
   group?: string,
-}
+};
+
+export type PostsCreation = {
+  title: string,
+  content: string,
+  tags: [] // [Record<string, Loadable<Tag>>]
+};
 
 export type Tag = {
   _id: string,

@@ -27,7 +27,7 @@ export default function CreatePost() {
       <ImgP />
       <TextP />
       <TagP />
-      <PeopleP />
+      { /* <PeopleP /> */ }
       <Submit />
     </div>
   );
