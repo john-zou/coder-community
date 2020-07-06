@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { fade, makeStyles } from "@material-ui/core/styles";
-import { setTitle, setText } from '../../actions';
+// import { setTitle, setText } from '../../actions';
 // import { useSelector } from 'react-redux';
 // import { RootState, Post } from '../../initialData';
 
@@ -75,4 +75,6 @@ const mapStateToProps = (state) => {
   return {};
 }
 
-export default connect(mapStateToProps, { setTitle, setText })(TextPanel);
+export default connect(mapStateToProps, 
+  // { setTitle, setText }
+  )(TextPanel);

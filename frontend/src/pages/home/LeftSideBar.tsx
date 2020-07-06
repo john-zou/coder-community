@@ -49,7 +49,7 @@ const useStyles = makeStyles({
 
 const LeftSideBar = () => {
   const classes = useStyles();
-  const user = useSelector<RootState, User>(state => Object.values(state.user.entities)[0]);
+  const user = useSelector<RootState, User>(state => state.user);
   const isLoggedIn = useSelector<RootState, boolean>(state => state.isLoggedIn);
 
   if (!user) {
