@@ -1,4 +1,4 @@
-import { Post } from "../store";
+import { Post } from "../store/types";
 
 export const savePost = (post: Post) => ({
   type: "SAVE_POST",

@@ -1,5 +1,3 @@
-import { LoadableIDs } from "../store";
-
 export const randomImage = () => {
   // get a random number from 200-350
   const randomNumber = Math.floor(Math.random() * 150 + 200);
@@ -76,15 +74,4 @@ export const convertArrToMap = (arr): Record<string, any> => {
     map[obj._id] = obj;
     return map;
   }, {});
-}
-
-/**
- * 
- * @param IDarr array of IDs such as tags, comments
- */
-export const convertIDArrToLoadableIDs = (IDarr: string[]): LoadableIDs => {
-  return {
-    loading: false,
-    items: IDarr,
-  }
 }
