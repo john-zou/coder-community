@@ -135,15 +135,15 @@ export type RootState = {
   isLoggedIn: boolean,
 
   //cache -small version of mongodb in which each item is a map from ObjectID to appropriate data type
-  attachments: Record<string, Loadable<Attachment>>,
-  comments: Record<string, Loadable<Comment>>,
-  conversations: Record<string, Loadable<Conversation>>,
-  groups: Record<string, Loadable<Group>>,
-  messages: Record<string, Loadable<Message>>,
-  posts: Record<string, Loadable<Post>>,
-  tags: Record<string, Loadable<Tag>>,
-  users: Record<string, Loadable<User>>,
-  videos: Record<string, Loadable<Video>>,
+  // attachments: Record<string, Loadable<Attachment>>,
+  // comments: Record<string, Loadable<Comment>>,
+  // conversations: Record<string, Loadable<Conversation>>,
+  // groups: Record<string, Loadable<Group>>,
+  // messages: Record<string, Loadable<Message>>,
+  // posts: Record<string, Loadable<Post>>,
+  // tags: Record<string, Loadable<Tag>>,
+  // users: Record<string, Loadable<User>>,
+  // videos: Record<string, Loadable<Video>>,
 
   //mapping of post slug to post ObjectID
   slugs: Record<string, string>,
@@ -152,11 +152,11 @@ export type RootState = {
 
   //redux store (contains references to the info stored in the cache above), 
   //the front end will first look up in the cache, if it doesn't find sth then ask the backend
-  user: Loadable<User>,
-  trendingPosts: LoadableIDs,
-  userOwnPosts: LoadableIDs,
-  trendingVideos: LoadableIDs,
-  savedPosts: LoadableIDs,
+  // user: Loadable<User>,
+  // trendingPosts: LoadableIDs,
+  // userOwnPosts: LoadableIDs,
+  // trendingVideos: LoadableIDs,
+  // savedPosts: LoadableIDs,
 };
 
 export default RootState;

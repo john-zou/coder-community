@@ -2,12 +2,13 @@ import { makeStyles } from '@material-ui/core/styles';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { setInitialTrendingPosts } from '../../actions/trendingPosts';
+// import { setInitialTrendingPosts } from '../../actions/trendingPosts';
 import RootState, { LoadableIDs } from '../../store';
 import { Loading } from '../common/Loading';
 import LeftSideBar from './LeftSideBar';
 import Main from './Main';
 import RightSideBar from './RightSideBar';
+import { fetchTrendingPosts } from '../../reducers/postsSlice';
 
 const useStyles = makeStyles({
   home: {
@@ -22,7 +23,7 @@ export default function Home() {
   const trendingPosts = useSelector<RootState, LoadableIDs>(state => state.trendingPosts);
 
   useEffect(() => {
-    dispatch(setInitialTrendingPosts());
+    dispatch(fetchTrendingPosts());
   }, []);
 
   if (!trendingPosts.items || trendingPosts.loading) {
@@ -31,7 +32,7 @@ export default function Home() {
 
   return (
     <div className={classes.home}>
-      {/* <LeftSideBar /> */}
+      <LeftSideBar />
       <Main />
       <RightSideBar />
     </div>

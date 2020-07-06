@@ -3,12 +3,12 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
-import { likePost, savePost, viewPost } from '../../actions/home';
+import { likePost, savePost, viewPost } from '../../actions/home.ts';
 import DefaultPic from '../../assets/user.svg';
 import CommentIcon from '../../icons/commentIcon.svg';
 import HeartIcon from '../../icons/heartIcon.svg';
 import HeartIconRed from '../../icons/heartIconRed.svg';
-import { Post, RootState, User, TagsState } from '../../store';
+// import { Post, RootState, User, TagsState } from '../../store';
 
 const useStyles = makeStyles({
   root: {

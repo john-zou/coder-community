@@ -2,7 +2,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import React from 'react';
 import { useSelector } from 'react-redux';
 
-import { LoadableIDs, RootState } from '../../store';
+// import { LoadableIDs, RootState } from '../../store';
 import Card from './Card';
 
 const useStyles = makeStyles({
@@ -25,7 +25,7 @@ const Main = () => {
     (state) => state.trendingPosts
   );
 
-  console.log(trendingPosts);
+  // console.log(trendingPosts);
   return (
     <div className={classes.main}>
       {trendingPosts.items.map((_id) => (
