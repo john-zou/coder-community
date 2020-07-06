@@ -1,8 +1,10 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { submitPost } from '../../actions/postsCreation';
 import { useSelector, useDispatch } from 'react-redux';
-import {PostsCreation, PostsCreationState, RootState, TagsState, User} from "../../store";
+import { PostsCreation } from "../../store/types";
+import { RootState } from "../../reducers/rootReducer";
+import {CreatePostBodyDto} from "../../../../backend/src/posts/dto/posts.dto";
+// import { submitPost } from '../../actions/postsCreation';
 
 const useStyles = makeStyles({
   operation: {
@@ -10,6 +12,31 @@ const useStyles = makeStyles({
     flex: 0
   }
 });
+
+const submitPost = createdPost => {
+    let newPost: CreatePostBodyDto = {
+        title: createdPost.title,
+        content: createdPost.content,
+        tags: createdPost.tags,
+        featuredImg: ''
+    }
+    return dispatch => {
+        return fetch(`http://localhost:3001/api/posts`, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                newPost
+            })
+        }).then((response) => {
+            //return response.json();
+            // }).then((res) => {
+            //console.log(res);
+        }).catch(e => console.log(e))
+    }
+}
 
 const onSubmit = (createdPost, dispatch) => {
     // console.log("*** " + createdPost.title + " " + createdPost.content + " ***");
