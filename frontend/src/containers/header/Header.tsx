@@ -21,9 +21,10 @@ import { Link } from 'react-router-dom';
 
 import Logo from '../../assets/ccLogo.svg';
 import PurpleButton from '../../pages/common/PurpleButton';
-import { RootState, Loadable, User } from '../../store';
 import { initializeGitHubOAuth } from '../../pages/login/login';
 import { Avatar } from '@material-ui/core';
+import { RootState } from '../../reducers/rootReducer';
+import { User } from '../../store/types';
 
 const drawerWidth = 240;
 const useStyles = makeStyles((theme) => ({
@@ -109,7 +110,7 @@ export default function Header(props) {
   cursor: pointer;
 `;
   const isLoggedIn = useSelector<RootState, boolean>((state) => state.isLoggedIn);
-  const user = useSelector<RootState,Loadable<User>>((state) => state.user);
+  const user = useSelector<RootState, User>(state => Object.values(state.user.entities)[0]);
 
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -185,7 +186,7 @@ export default function Header(props) {
           aria-haspopup="true"
           color="inherit"
         >
-          <Avatar alt="avatar" src={user?.item?.profilePic} />
+          <Avatar alt="avatar" src={user?.profilePic} />
         </IconButton>
         <p>Profile</p>
       </MenuItem>
@@ -271,7 +272,7 @@ export default function Header(props) {
                 onClick={handleProfileMenuOpen}
                 color="inherit"
               >
-                <Avatar alt="avatar" src={user?.item?.profilePic} />
+                <Avatar alt="avatar" src={user?.profilePic} />
               </IconButton>
             </div>}
 

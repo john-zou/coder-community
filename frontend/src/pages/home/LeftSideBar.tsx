@@ -3,8 +3,10 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
-import { Loadable, RootState, User } from '../../store';
 import FilterPost from './FilterPost';
+import { RootState } from '../../reducers/rootReducer';
+import { User } from '../../store/types';
+import { Loading } from '../common/Loading';
 
 const useStyles = makeStyles({
   root: {
@@ -47,17 +49,21 @@ const useStyles = makeStyles({
 
 const LeftSideBar = () => {
   const classes = useStyles();
-  const user = useSelector<RootState, Loadable<User>>((state) => state.user);
-  const isLoggedIn = useSelector<RootState, boolean>((state) => state.isLoggedIn);
+  const user = useSelector<RootState, User>(state => Object.values(state.user.entities)[0]);
+  const isLoggedIn = useSelector<RootState, boolean>(state => state.isLoggedIn);
 
-  console.log(isLoggedIn);
+  if (!user) {
+    return <Loading />
+  }
+
+  // console.log(isLoggedIn);
   return (
     <div className={classes.root}>
       {isLoggedIn &&
         <div className={classes.diplayAccount}>
-          <img className={classes.displayImg} src={user.item.profilePic} alt="" />
-          <Link to={`/user/${user.item.userID}`} className={classes.link}>
-            <h3 className={classes.displayName}>{user.item.name}</h3>
+          <img className={classes.displayImg} src={user.profilePic} alt="" />
+          <Link to={`/user/${user.userID}`} className={classes.link}>
+            <h3 className={classes.displayName}>{user.name}</h3>
           </Link>
         </div>
       }

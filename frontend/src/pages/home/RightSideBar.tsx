@@ -2,10 +2,9 @@ import { makeStyles } from '@material-ui/core/styles';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-
-import { RootState } from '../../store';
 import Avatar from '../common/Avatar';
 import { handleViewPost } from './Card';
+import { RootState } from '../../reducers/rootReducer';
 
 const useStyles = makeStyles({
   root: {
