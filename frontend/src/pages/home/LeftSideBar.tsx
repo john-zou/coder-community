@@ -49,8 +49,12 @@ const useStyles = makeStyles({
 
 const LeftSideBar = () => {
   const classes = useStyles();
+<<<<<<< HEAD
 
   const user = useSelector<RootState, User>(state => Object.values(state.user.entities)[0]);
+=======
+  const user = useSelector<RootState, User>(state => state.user);
+>>>>>>> refs/remotes/origin/master
   const isLoggedIn = useSelector<RootState, boolean>(state => state.isLoggedIn);
   /*
   const user = useSelector<RootState, Loadable<User>>((state) => state.user);

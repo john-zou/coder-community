@@ -2,7 +2,7 @@ import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { submitPost } from '../../actions/postsCreation';
 import { useSelector, useDispatch } from 'react-redux';
-import {PostsCreation, PostsCreationState, RootState, TagsState, User} from "../../store";
+// import {PostsCreation, PostsCreationState, RootState, TagsState, User} from "../../store";
 
 const useStyles = makeStyles({
   operation: {

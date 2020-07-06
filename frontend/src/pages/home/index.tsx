@@ -9,6 +9,7 @@ import RightSideBar from './RightSideBar';
 import { fetchTrendingPosts } from '../../reducers/postsSlice';
 import { unwrapResult } from '@reduxjs/toolkit';
 import ErrorPage from '../common/ErrorPage';
+import { AppDispatch } from '../../store';
 
 
 const useStyles = makeStyles({
@@ -20,7 +21,7 @@ const useStyles = makeStyles({
 
 export default function Home() {
   const classes = useStyles();
-  const dispatch: any = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);

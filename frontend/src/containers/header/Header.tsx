@@ -110,7 +110,7 @@ export default function Header(props) {
   cursor: pointer;
 `;
   const isLoggedIn = useSelector<RootState, boolean>((state) => state.isLoggedIn);
-  const user = useSelector<RootState, User>(state => Object.values(state.user.entities)[0]);
+  const user = useSelector<RootState, User>(state => state.user);
 
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
