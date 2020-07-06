@@ -13,7 +13,7 @@
  */
 
 import * as url from "url";
-import portableFetch from "../api-auth/fetch-container";
+import portableFetch from "../api-auth/fetch-container"; // modified by backend/scripts/generate-api.js
 import { Configuration } from "./configuration";
 
 const BASE_PATH = "http://localhost:3001".replace(/\/+$/, "");
@@ -138,7 +138,7 @@ export interface CreatePostSuccessDto {
      * @type {string}
      * @memberof CreatePostSuccessDto
      */
-    id: string;
+    _id: string; // modified by backend/scripts/generate-api.js
     /**
      * 
      * @type {string}
@@ -272,7 +272,7 @@ export interface LoginSuccess {
      * @type {string}
      * @memberof LoginSuccess
      */
-    id: string;
+    _id: string; // modified by backend/scripts/generate-api.js
     /**
      * The visible User ID
      * @type {string}
@@ -297,7 +297,7 @@ export interface PostDto {
      * @type {string}
      * @memberof PostDto
      */
-    id: string;
+    _id: string; // modified by backend/scripts/generate-api.js
     /**
      * 
      * @type {string}
@@ -366,12 +366,6 @@ export interface PostDto {
     createdAt: string;
     /**
      * 
-     * @type {boolean}
-     * @memberof PostDto
-     */
-    likedByUser?: boolean;
-    /**
-     * 
      * @type {string}
      * @memberof PostDto
      */
@@ -394,7 +388,7 @@ export interface TagsDto {
      * @type {string}
      * @memberof TagsDto
      */
-    id: string;
+    _id: string; // modified by backend/scripts/generate-api.js
     /**
      * 
      * @type {string}
@@ -432,7 +426,7 @@ export interface UserDto {
      * @type {string}
      * @memberof UserDto
      */
-    id: string;
+    _id: string; // modified by backend/scripts/generate-api.js
     /**
      * 
      * @type {string}

@@ -7,6 +7,7 @@ const axios = require('axios');
 const fs = require('fs');
 const extract = require('extract-zip');
 const lineReplace = require('line-replace');
+const replaceInFile = require('replace-in-file');
 
 const endpoint = 'https://generator3.swagger.io/api/generate';
 const dest = __dirname + '/generated-api-client.zip';
@@ -56,19 +57,31 @@ console.log(
   });
   console.log('Done!');
 
+  console.log('Manually replacing " id: string; " to " _id: string; " in api.ts');
+  const replaceOptions = {
+    files: __dirname + '../../../frontend/src/api/api.ts',
+    from: / id: string;/g,
+    to: ' _id: string; // modified by backend/scripts/generate-api.js'
+  }
+  const replaceResults = await replaceInFile(replaceOptions);
+  console.log('Replacement results:', replaceResults);
+
+  console.log('Done!');
+
   console.log(
     'Modifying line 16 of api.ts so that the helper functions automatically include user token',
   );
-  // Change line 16 in the generated api.ts
   lineReplace({
     file: __dirname + '../../../frontend/src/api/api.ts',
     line: 16,
-    text: `import portableFetch from "../api-auth/fetch-container";`,
+    text: `import portableFetch from "../api-auth/fetch-container"; // modified by backend/scripts/generate-api.js`,
     addNewLine: true,
     callback: () => {
       console.log('Done!');
     },
   });
+
+  console.log('Done!');
 
   console.log(
     'frontend/src/api now contains up-to-date Typescript fetch helpers for the back end endpoints. Can safely exit if it hasnt exited',
