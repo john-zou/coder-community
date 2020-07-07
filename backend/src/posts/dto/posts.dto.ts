@@ -9,7 +9,7 @@ export class PostDto {
   content?: string;
   tags: string[];
   featuredImg: string;
-  likesCount: number;
+  likes: number;
   comments: string[];
   commentsCount: number;
   views: number;

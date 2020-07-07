@@ -35,8 +35,12 @@ export const userSlice = createSlice({
     savePost: {
       reducer: (user, action: PayloadAction<PostIDPayload>) => {
         // optimistic update
-        user.savedPosts.push(action.payload.postID);
-        user.savedPostsSet[action.payload.postID] = true;
+        if (user) {
+          user.savedPosts.push(action.payload.postID);
+          user.savedPostsSet[action.payload.postID] = true;
+        }
+
+        return user;
       },
       // to perform side effect. Does not affect payload
       prepare: (payload: PostIDPayload) => {
@@ -57,7 +61,7 @@ export const userSlice = createSlice({
           // User previously liked the post, now un-likes it
           user.likedPostsSet[postID] = false;
           _.pull(user.likedPosts, action.payload.postID);
-        }     
+        }
       },
       prepare: (payload: PostIDPayload) => {
         // TODO: make endpoint
@@ -77,11 +81,11 @@ export const userSlice = createSlice({
           // Update likedPostsSet and savedPostsSet
           userDto.likedPosts?.forEach(postID => state.likedPostsSet[postID] = true);
           userDto.savedPosts?.forEach(postID => state.savedPostsSet[postID] = true);
-          return {...state, ...userDto};
+          return { ...state, ...userDto };
         }
 
         // Create LoggedInUser and initialize liked and saved posts sets
-        const freshlyLoggedInUser = {...userDto, likedPostsSet: {}, savedPostsSet: {}} as CurrentLoggedInUser;
+        const freshlyLoggedInUser = { ...userDto, likedPostsSet: {}, savedPostsSet: {} } as CurrentLoggedInUser;
         userDto.likedPosts?.forEach(postID => freshlyLoggedInUser.likedPostsSet[postID] = true);
         userDto.savedPosts?.forEach(postID => freshlyLoggedInUser.savedPostsSet[postID] = true);
         return freshlyLoggedInUser;
