@@ -1,5 +1,5 @@
 import { createEntityAdapter, createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import { GetInitialDataLoggedInDto, GetInitialDataDto, TrendingApi } from "../api";
+import { TrendingApi, GetInitialDataLoggedInDto, GetInitialDataDto } from "../api";
 import { RootState } from "./rootReducer";
 import { Post } from "../store/types";
 
@@ -47,7 +47,7 @@ export const postsSlice = createSlice({
 
   },
   extraReducers: {
-    [fetchTrendingPosts.fulfilled.type]: (state, action: PayloadAction<GetInitialDataLoggedInDto | GetInitialDataDto>) => {
+    [fetchTrendingPosts.fulfilled.type]: (state, action: PayloadAction<GetInitialDataDto | GetInitialDataLoggedInDto>) => {
       state.trendingPosts.push(...action.payload.posts.map(post => post._id));
       postsAdapter.addMany(state, action.payload.posts) //add posts to ids and entities
     }

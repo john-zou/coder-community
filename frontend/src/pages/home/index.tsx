@@ -10,12 +10,23 @@ import { fetchTrendingPosts } from '../../reducers/postsSlice';
 import { unwrapResult } from '@reduxjs/toolkit';
 import ErrorPage from '../common/ErrorPage';
 import { AppDispatch } from '../../store';
+import GroupTab from '../group';
 
 
 const useStyles = makeStyles({
   home: {
     paddingTop: "7vh",
     display: "flex",
+  },
+  main: {
+    marginTop: "3vh",
+    display: "flex",
+    flex: 1,
+    marginBottom: "0",
+    height: "120vh",
+    flexDirection: "column",
+    alignItems: "center",
+    overflowY: "scroll",
   },
 });
 
@@ -25,6 +36,10 @@ export default function Home() {
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  const [groupsVisible, setGroupsVisible] = useState(false);
+  const [mainVisible, setMainVisible] = useState(true);
+  // const [newsVisible, setNewsVisible] = useState(false);//TODO: show hackernews
 
   useEffect(() => {
     setLoading(true);
@@ -50,8 +65,11 @@ export default function Home() {
 
   return (
     <div className={classes.home}>
-      <LeftSideBar />
-      <Main />
+      <LeftSideBar setGroupsVisible={setGroupsVisible} setMainVisible={setMainVisible} />
+      <div className={classes.main}>
+        {groupsVisible && <GroupTab />}
+        {mainVisible && <Main />}
+      </div>
       <RightSideBar />
     </div>
   );
