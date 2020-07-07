@@ -14,7 +14,6 @@ let initialState = {
 
 export function postsCreation(state = initialState, action: ReduxAction): any {
     let updated = Object.assign({}, state);
-    console.log("*** POST CREATION REDUCER ***");
     switch (action.type) {
         case CREATE_POSTS_TITLE:
             updated.title = action.payload.title;

@@ -54,21 +54,17 @@ const onSubmit = (createdPost, dispatch) => {
 const _onCancel = (event) => {}
 
 export default function Submit() {
-
   const classes = useStyles();
   const dispatch = useDispatch();
-  /*
   const createdPost = useSelector<RootState, PostsCreation>(state => state.postsCreation);
   curUser = useSelector<RootState, User>(state => state.user);
   console.log(curUser);
 
-
-   */
   return (
      <div className={classes.operation}>
         <button color="primary" onClick={_onCancel}>Cancel</button>
         <button color="primary" onClick={(event) =>{
-            // onSubmit(createdPost, dispatch);
+            onSubmit(createdPost, dispatch);
         }}>Submit</button>
      </div>
   );

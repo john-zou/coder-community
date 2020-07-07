@@ -74,9 +74,10 @@ export type Post = {
 };
 
 export type PostsCreation = {
+  _id: string,
   title: string,
   content: string,
-  tags: [] // [Record<string, Loadable<Tag>>]
+  tags: any[] // [Record<string, Loadable<Tag>>]
 };
 
 export type Tag = {
