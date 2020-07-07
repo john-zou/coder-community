@@ -34,8 +34,11 @@ export type Conversation = {
 export type Group = {
   _id: string,
   name: string,
+  description: string,
+  private: boolean,
   profilePic: string,
   profileBanner: string,
+  admins: string[],
   users: string[],
   posts: string[],
   videos: string[],
@@ -56,8 +59,8 @@ export type Post = {
   _id: string,
   author: string,
   title: string,
-  previewContent: string,
-  content: string,
+  previewContent?: string,
+  content?: string,
   tags: string[],
   featuredImg: string,
   likes: number, // Renamed from likesCount to match updated MongoDB schema
@@ -92,7 +95,6 @@ export type User = {
   likedPosts?: string[],
   tags?: string[],
   conversations?: string[],
-  lastLoggedIn?: string,
   createdAt?: string,
   updatedAt?: string,
 };

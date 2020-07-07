@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 
 import { UserModel } from '../mongoModels';
 import { PostDto } from '../posts/dto/posts.dto';
-// import { PostsService } from '../posts/posts.service';
 import { convertToStrArr } from '../util/helperFunctions';
 import { UserDto } from './dto/user.dto';
 import { User } from './user.schema';
@@ -42,10 +41,6 @@ export class UserService {
 
   async saveProfilePic(userObjectID: string, url: string): Promise<void> {
     await UserModel.updateOne({ _id: userObjectID }, { profilePic: url });
-  }
-
-  findAll(): Promise<User[]> {
-    return UserModel.find().exec();
   }
 
   async getAuthors(posts: PostDto[]): Promise<UserDto[]> {

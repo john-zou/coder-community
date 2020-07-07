@@ -111,7 +111,7 @@ export class PostsService {
         tags: convertToStrArr(post.tags),
         createdAt: post.createdAt.toString(),
         featuredImg: post.featuredImg,
-        likesCount: post.likes,
+        likes: post.likes,
         views: post.views,
         comments: convertToStrArr(post.comments),
         commentsCount: post.comments.length,

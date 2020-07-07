@@ -58,13 +58,21 @@ console.log(
   console.log('Done!');
 
   console.log('Manually replacing " id: string; " to " _id: string; " in api.ts');
-  const replaceOptions = {
+  const replaceOptionsForId = {
     files: __dirname + '../../../frontend/src/api/api.ts',
     from: / id: string;/g,
     to: ' _id: string; // modified by backend/scripts/generate-api.js'
   }
-  const replaceResults = await replaceInFile(replaceOptions);
-  console.log('Replacement results:', replaceResults);
+  console.log('Replacement results:', await replaceInFile(replaceOptionsForId));
+  console.log('Done!');
+
+  console.log('Manually replacing " _private: boolean; " to " private: boolean; " in api.ts')
+  const replaceOptionsForPrivate = {
+    files: __dirname + '../../../frontend/src/api/api.ts',
+    from: / _private: boolean;/g,
+    to: ' private: boolean; // modified by backend/scripts/generate-api.js'
+  }
+  console.log('Replacement results:', await replaceInFile(replaceOptionsForPrivate));
 
   console.log('Done!');
 
