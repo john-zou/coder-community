@@ -1,4 +1,4 @@
-import { HttpService, Injectable } from '@nestjs/common';
+import { HttpService, Injectable, NotFoundException } from '@nestjs/common';
 import { Ref } from '@typegoose/typegoose';
 import { ObjectID } from 'mongodb';
 import { convertToStrArr } from '../util/helperFunctions';
@@ -10,7 +10,7 @@ import {
   CreatePostBodyDto,
   CreatePostSuccessDto,
   PostDto,
-  PostDetailsDto,
+  PostWithDetails,
 } from './dto/posts.dto';
 
 // Unused -- can use later for different feature
@@ -62,7 +62,7 @@ const previewContentLength = 100;
 export class PostsService {
   constructor(private readonly httpService: HttpService) {}
 
-  async getPostBySlug(slug: string): Promise<PostDetailsDto> {
+  async getPostBySlug(slug: string): Promise<PostWithDetails> {
     const post = await PostModel.findOne({ slug });
     if (post) {
       return {
@@ -82,6 +82,8 @@ export class PostsService {
         views: post.views,
         group: post.group?.toString(),
       };
+    } else {
+      throw new NotFoundException();
     }
   }
 
