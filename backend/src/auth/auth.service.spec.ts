@@ -67,9 +67,8 @@ describe('AuthService', () => {
         .spyOn(httpService, 'post')
         .mockImplementation((url, data, config) => {
           expect(url).toEqual(GitHubAccessTokenUrl);
-          expect(data).toEqual({
+          expect(data).toMatchObject({
             client_id: GitHubOAuthClientID,
-            client_secret: undefined, // because no access to client secret
             code,
             state,
           });
@@ -114,9 +113,8 @@ describe('AuthService', () => {
         .spyOn(httpService, 'post')
         .mockImplementation((url, data, config) => {
           expect(url).toEqual(GitHubAccessTokenUrl);
-          expect(data).toEqual({
+          expect(data).toMatchObject({
             client_id: GitHubOAuthClientID,
-            client_secret: undefined,
             code,
             state,
           });
