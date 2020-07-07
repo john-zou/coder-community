@@ -1,5 +1,6 @@
+import { PostDetailsDto } from './../api/api';
 import { createEntityAdapter, createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import { GetInitialDataLoggedInDto, GetInitialDataDto, TrendingApi } from "../api";
+import { TrendingApi, GetInitialDataLoggedInDto, GetInitialDataDto, PostsApi } from "../api";
 import { RootState } from "./rootReducer";
 import { Post } from "../store/types";
 
@@ -26,14 +27,14 @@ export const fetchTrendingPosts = createAsyncThunk(
   }
 )
 
-export const fetchPostBySlug = (slug: string) => createAsyncThunk(
+export const fetchPostBySlug = createAsyncThunk(
   'fetchPostBySlug',
-  async () => { }
+  (slug: string) => new PostsApi().postsControllerGetPostBySlug(slug)
 )
 
 export const fetchPostContentByID = (ID: string) => createAsyncThunk(
   'fetchPostContentByID',
-  async () => { }
+  async () => { } // TODO
 )
 
 //https://redux-toolkit.js.org/api/createSlice
@@ -47,9 +48,14 @@ export const postsSlice = createSlice({
 
   },
   extraReducers: {
-    [fetchTrendingPosts.fulfilled.type]: (state, action: PayloadAction<GetInitialDataLoggedInDto | GetInitialDataDto>) => {
+    [fetchTrendingPosts.fulfilled.type]: (state, action: PayloadAction<GetInitialDataDto | GetInitialDataLoggedInDto>) => {
       state.trendingPosts.push(...action.payload.posts.map(post => post._id));
       postsAdapter.addMany(state, action.payload.posts) //add posts to ids and entities
+    },
+    [fetchPostBySlug.fulfilled.type]: (state, action: PayloadAction<PostDetailsDto>) => {
+      const _id = action.payload._id;
+      state.slugToID[action.payload.slug] = _id;
+      postsAdapter.upsertOne(state, action.payload);
     }
   }
 })

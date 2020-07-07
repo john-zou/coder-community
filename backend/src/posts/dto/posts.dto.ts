@@ -18,6 +18,24 @@ export class PostDto {
   group?: string;
 }
 
+export class PostDetailsDto {
+  _id: string;
+  author: string;
+  title: string;
+  previewContent: string;
+  content: string;
+  tags: string[];
+  featuredImg: string;
+  likes: number;
+  comments: string[];
+  commentsCount: number;
+  views: number;
+  createdAt: string;
+  updatedAt: string;
+  slug: string;
+  group?: string;
+}
+
 //CREATE POST DTO
 //request
 export class CreatePostBodyDto {
