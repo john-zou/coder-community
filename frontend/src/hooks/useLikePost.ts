@@ -20,9 +20,10 @@ export function useLikePost(postID: string): { postIsLikedByUser: boolean, handl
       handleToggleLike: initializeGitHubOAuth,
     }
   } else {
+    const postIsLikedByUser = !!user.likedPostsSet[postID];
     return {
-      postIsLikedByUser: !!user.likedPostsSet[postID],
-      handleToggleLike: () => dispatch(toggleLikePost({postID})),
+      postIsLikedByUser,
+      handleToggleLike: () => dispatch(toggleLikePost({postID, increment: !postIsLikedByUser})),
     }
   }
 }
