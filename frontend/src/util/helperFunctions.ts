@@ -1,3 +1,5 @@
+import { GetInitialDataDto, GetInitialDataLoggedInDto } from "../api";
+
 export const randomImage = () => {
   // get a random number from 200-350
   const randomNumber = Math.floor(Math.random() * 150 + 200);
@@ -75,3 +77,7 @@ export const convertArrToMap = (arr): Record<string, any> => {
     return map;
   }, {});
 }
+
+// Type check
+export const isGetInitialDataLoggedInDto
+  = (dto: GetInitialDataDto | GetInitialDataLoggedInDto): dto is GetInitialDataLoggedInDto => !!(dto as any).user
