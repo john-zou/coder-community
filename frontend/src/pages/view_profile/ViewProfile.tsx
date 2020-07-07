@@ -48,12 +48,12 @@ export function ViewProfile() {
 
   // The one doing the viewing
   const currentUser = useSelector<RootState, User>(
-    (state) => Object.values(state.user.entities)[0]
+    (state) => state.user
   );
 
   let viewedUser = useSelector<RootState, User>(
     (state) => {
-      const userObjectID = state.user.ids[0];
+      const userObjectID = state.user._id;
       return state.users[userObjectID];
     }
   )

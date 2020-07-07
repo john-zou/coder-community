@@ -10,7 +10,8 @@ import { NotFoundError } from '../common/NotFoundError';
 import NewComment from './NewComment';
 import { RootState } from '../../reducers/rootReducer';
 import { fetchPostBySlug, fetchPostContentByID } from '../../reducers/postsSlice';
-import { Post } from '../../store/types';
+import { Post, User } from '../../store/types';
+import { Dictionary } from '@reduxjs/toolkit';
 
 // import { useParams } from "react-router-dom";
 const useStyles = makeStyles({
@@ -62,6 +63,8 @@ const PostDetail = () => {
     const postID = state.posts.slugToID[slug];
     return state.posts[postID];
   });
+  const users = useSelector<RootState, Dictionary<User>>(state => state.users.entities);
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -98,7 +101,7 @@ const PostDetail = () => {
         />
         <h1>{post.title}</h1>
 
-        <Avatar post={post} extraText="follow"></Avatar>
+        <Avatar pic={users[post.author]} title={post.title} subtitle={post.createdAt} extraText="follow"></Avatar>
 
         <p>{post.content}</p>
 

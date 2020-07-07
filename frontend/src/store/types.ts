@@ -34,8 +34,11 @@ export type Conversation = {
 export type Group = {
   _id: string,
   name: string,
+  description: string,
+  private: boolean,
   profilePic: string,
   profileBanner: string,
+  admins: string[],
   users: string[],
   posts: string[],
   videos: string[],
@@ -56,16 +59,16 @@ export type Post = {
   _id: string,
   author: string,
   title: string,
-  previewContent: string,
-  content: string,
+  previewContent?: string,
+  content?: string,
   tags: string[],
   featuredImg: string,
-  likesCount: number,
+  likes: number, // Renamed from likesCount to match updated MongoDB schema
   comments: string[],
   commentsCount: number,
   views: number,
   createdAt: string,
-  likedByUser: boolean,
+  // likedByUser: boolean, // Removed for simplicity. use state.user.likedPosts instead.
   slug: string,
   group?: string,
 };
@@ -99,10 +102,14 @@ export type User = {
   likedPosts?: string[],
   tags?: string[],
   conversations?: string[],
-  lastLoggedIn?: string,
   createdAt?: string,
   updatedAt?: string,
 };
+
+export interface CurrentLoggedInUser extends User {
+  likedPostsSet: Record<string, boolean>;
+  savedPostsSet: Record<string, boolean>;
+}
 
 export type Video = {
   _id: string,

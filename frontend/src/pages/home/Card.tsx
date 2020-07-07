@@ -1,19 +1,20 @@
-import { makeStyles } from '@material-ui/core/styles';
-import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { makeStyles } from "@material-ui/core/styles";
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 
 // import { likePost, savePost, viewPost } from '../../actions/home.ts';
-import DefaultPic from '../../assets/user.svg';
-import CommentIcon from '../../icons/commentIcon.svg';
-import HeartIcon from '../../icons/heartIcon.svg';
-import HeartIconRed from '../../icons/heartIconRed.svg';
-import { RootState } from '../../reducers/rootReducer';
-import { Post } from '../../store/types';
-import { User } from '../../store/types';
-import { Tag } from '../../store/types';
-import { Dictionary } from '@reduxjs/toolkit';
-import { viewPost, savePost, likePost } from '../../actions/home';
+import DefaultPic from "../../assets/user.svg";
+import CommentIcon from "../../icons/commentIcon.svg";
+import HeartIcon from "../../icons/heartIcon.svg";
+import HeartIconRed from "../../icons/heartIconRed.svg";
+import { RootState } from "../../reducers/rootReducer";
+import { Post } from "../../store/types";
+import { User } from "../../store/types";
+import { Tag } from "../../store/types";
+import { Dictionary } from "@reduxjs/toolkit";
+import { savePost } from "../../reducers/userSlice";
+import { useLikePost } from "../../hooks/useLikePost";
 
 const useStyles = makeStyles({
   root: {
@@ -78,11 +79,9 @@ const useStyles = makeStyles({
   },
 });
 
-export const handleViewPost = (
-  post,
-  dispatch
-) => {
-  dispatch(viewPost(post));
+export const handleViewPost = (post, dispatch) => {
+  // use history.push instead -John
+  // dispatch(viewPost(post));
 };
 
 type Props = {
@@ -94,11 +93,19 @@ const Card = ({ postID }: Props) => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
-  const post = useSelector<RootState, Post>(state => state.posts.entities[postID]);
+  const post = useSelector<RootState, Post>(
+    (state) => state.posts.entities[postID]
+  );
+
+  const { postIsLikedByUser, handleToggleLike } = useLikePost(post._id);
 
   const authorID = post.author;
-  const author = useSelector<RootState, User>(state => state.users.entities[authorID]);
-  const tags = useSelector<RootState, Dictionary<Tag>>(state => state.tags.entities);
+  const author = useSelector<RootState, User>(
+    (state) => state.users.entities[authorID]
+  );
+  const tags = useSelector<RootState, Dictionary<Tag>>(
+    (state) => state.tags.entities
+  );
 
   return (
     <div className={classes.root}>
@@ -110,10 +117,7 @@ const Card = ({ postID }: Props) => {
         />
         <div className={classes.nameTime}>
           <p>
-            <Link
-              to={`/user/${author._id}`}
-              className={classes.link}
-            >
+            <Link to={`/user/${author._id}`} className={classes.link}>
               <span
                 style={{
                   fontWeight: "bold",
@@ -170,7 +174,7 @@ const Card = ({ postID }: Props) => {
             <h4
               style={{ color: "#5D67E9", cursor: "pointer" }}
               onClick={() => {
-                dispatch(savePost(post));
+                dispatch(savePost({ postID: post._id }));
               }}
             >
               Save for later
@@ -189,13 +193,11 @@ const Card = ({ postID }: Props) => {
         <div className={classes.interactionsIcons}>
           <img
             className={classes.heartIcon}
-            src={post.likedByUser ? HeartIconRed : HeartIcon}
+            src={postIsLikedByUser ? HeartIconRed : HeartIcon}
             alt=""
-            onClick={() => {
-              dispatch(likePost(post, !post.likedByUser));
-            }}
+            onClick={handleToggleLike}
           />
-          <p>&nbsp;{post.likesCount}</p>
+          <p>&nbsp;{post.likes}</p>
           <Link to={`/post/${post.slug}`} className={classes.link}>
             <img className={classes.commentIcon} src={CommentIcon} alt="" />
           </Link>

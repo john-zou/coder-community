@@ -2,7 +2,7 @@ import React from 'react'
 import { useEffect } from "react"
 import { useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { login } from '../../actions/isLoggedIn';
+import { loginSuccess } from '../../reducers/isLoggedInSlice';
 
 export function DevLogin() {
   const history = useHistory();
@@ -10,7 +10,8 @@ export function DevLogin() {
   useEffect(() => {
     fetch("http://localhost:3001/api/dev/login").then(res => res.json()).then(
       (res) => {
-        dispatch(login(res.jwt));
+        const jwt: string = res.jwt;
+        dispatch(loginSuccess({jwt}));
         history.push("/");
       }
     )

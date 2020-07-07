@@ -1,12 +1,16 @@
 import { makeStyles } from '@material-ui/core/styles';
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React, { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 import FilterPost from './FilterPost';
 import { RootState } from '../../reducers/rootReducer';
 import { User } from '../../store/types';
 import { Loading } from '../common/Loading';
+import { AppDispatch } from '../../store';
+import { fetchGroups } from '../../reducers/groupsSlice';
+import { unwrapResult } from '@reduxjs/toolkit';
+import ErrorPage from '../common/ErrorPage';
 
 const useStyles = makeStyles({
   root: {
@@ -47,10 +51,11 @@ const useStyles = makeStyles({
   },
 });
 
-const LeftSideBar = () => {
+const LeftSideBar = ({ setGroupsVisible, setMainVisible }) => {
   const classes = useStyles();
 
-  const user = useSelector<RootState, User>(state => Object.values(state.user.entities)[0]);
+  // const user = useSelector<RootState, User>(state => Object.values(state.user.entities)[0]);
+  const user = useSelector<RootState, User>(state => state.user);
   const isLoggedIn = useSelector<RootState, boolean>(state => state.isLoggedIn);
   /*
   const user = useSelector<RootState, Loadable<User>>((state) => state.user);
@@ -59,13 +64,26 @@ const LeftSideBar = () => {
   isLoggedIn = false;
    */
 
-
   /*
   if (!user) {
     return <Loading />
   }
-  */
   console.log(isLoggedIn);
+   */
+  const dispatch: AppDispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  if (!user) {
+    return <Loading />
+  }
+
+  if (loading) {
+    return <Loading />
+  }
+  if (error) {
+    return <ErrorPage error={error} />
+  }
   return (
     <div className={classes.root}>
       { /*isLoggedIn &&
@@ -86,8 +104,19 @@ const LeftSideBar = () => {
         <h3>Hacker News</h3>
         <h3>Posts</h3>
         <h3>Videos</h3>
-        <h3>Groups</h3>
-        {/* <GroupList /> */}
+
+        <h3 onClick={() => {
+          setGroupsVisible(true);
+          setMainVisible(false);
+          setLoading(true);
+          dispatch(fetchGroups()).then(unwrapResult).then(() => {
+            setLoading(false);
+          }).catch(err => {
+            setLoading(false);
+            setError(error);
+          })
+        }}>Groups</h3>
+
         <p className={classes.showPostsText}># BROWSE BY TAGS</p>
         <FilterPost />
       </div>
