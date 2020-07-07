@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 
 import { UserModel } from '../mongoModels';
 import { PostDto } from '../posts/dto/posts.dto';
@@ -19,6 +19,9 @@ type ExtraGitHubUserInfo = {
 export class UserService {
   async findUserById(userObjectID: string): Promise<UserDto> {
     const foundUser = await UserModel.findById(userObjectID);
+    if (!foundUser) {
+      throw new NotFoundException();
+    }
     return {
       _id: foundUser._id,
       userID: foundUser.userID,

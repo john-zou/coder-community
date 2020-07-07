@@ -93,11 +93,11 @@ const LeftSideBar = ({ setGroupsVisible, setMainVisible }) => {
         <h3>Videos</h3>
 
         <h3 onClick={() => {
-          setGroupsVisible(true);
-          setMainVisible(false);
           setLoading(true);
           dispatch(fetchGroups()).then(unwrapResult).then(() => {
             setLoading(false);
+            setGroupsVisible(true);
+            setMainVisible(false);
           }).catch(err => {
             setLoading(false);
             setError(error);
