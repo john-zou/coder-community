@@ -14,7 +14,6 @@ export class PostDto {
   commentsCount: number;
   views: number;
   createdAt: string;
-  likedByUser?: boolean;
   slug: string;
   group?: string;
 }
@@ -34,4 +33,3 @@ export class CreatePostSuccessDto {
   _id: string;
   slug: string;
 }
-
