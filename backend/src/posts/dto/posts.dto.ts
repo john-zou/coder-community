@@ -9,12 +9,29 @@ export class PostDto {
   content?: string;
   tags: string[];
   featuredImg: string;
-  likesCount: number;
-  comments?: string[];
+  likes: number;
+  comments: string[];
   commentsCount: number;
   views: number;
   createdAt: string;
-  likedByUser?: boolean;
+  slug: string;
+  group?: string;
+}
+
+export class PostDetailsDto {
+  _id: string;
+  author: string;
+  title: string;
+  previewContent: string;
+  content: string;
+  tags: string[];
+  featuredImg: string;
+  likes: number;
+  comments: string[];
+  commentsCount: number;
+  views: number;
+  createdAt: string;
+  updatedAt: string;
   slug: string;
   group?: string;
 }
@@ -34,4 +51,3 @@ export class CreatePostSuccessDto {
   _id: string;
   slug: string;
 }
-
