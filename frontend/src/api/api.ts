@@ -431,6 +431,103 @@ export interface LoginSuccess {
 /**
  * 
  * @export
+ * @interface PostDetailsDto
+ */
+export interface PostDetailsDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof PostDetailsDto
+     */
+    _id: string; // modified by backend/scripts/generate-api.js
+    /**
+     * 
+     * @type {string}
+     * @memberof PostDetailsDto
+     */
+    author: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PostDetailsDto
+     */
+    title: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PostDetailsDto
+     */
+    previewContent: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PostDetailsDto
+     */
+    content: string;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof PostDetailsDto
+     */
+    tags: Array<string>;
+    /**
+     * 
+     * @type {string}
+     * @memberof PostDetailsDto
+     */
+    featuredImg: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof PostDetailsDto
+     */
+    likes: number;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof PostDetailsDto
+     */
+    comments: Array<string>;
+    /**
+     * 
+     * @type {number}
+     * @memberof PostDetailsDto
+     */
+    commentsCount: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof PostDetailsDto
+     */
+    views: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof PostDetailsDto
+     */
+    createdAt: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PostDetailsDto
+     */
+    updatedAt: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PostDetailsDto
+     */
+    slug: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PostDetailsDto
+     */
+    group?: string;
+}
+/**
+ * 
+ * @export
  * @interface PostDto
  */
 export interface PostDto {
@@ -506,12 +603,6 @@ export interface PostDto {
      * @memberof PostDto
      */
     createdAt: string;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof PostDto
-     */
-    likedByUser: boolean;
     /**
      * 
      * @type {string}
@@ -1756,8 +1847,6 @@ export const PostsApiFetchParamCreator = function (configuration?: Configuration
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
-            // authentication bearer required
-
             localVarHeaderParameter['Content-Type'] = 'application/json';
 
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
@@ -1766,6 +1855,34 @@ export const PostsApiFetchParamCreator = function (configuration?: Configuration
             localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
             const needsSerialization = (<any>"CreatePostBodyDto" !== "string") || localVarRequestOptions.headers['Content-Type'] === 'application/json';
             localVarRequestOptions.body =  needsSerialization ? JSON.stringify(body || {}) : (body || "");
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} slug 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        postsControllerGetPostBySlug(slug: string, options: any = {}): FetchArgs {
+            // verify required parameter 'slug' is not null or undefined
+            if (slug === null || slug === undefined) {
+                throw new RequiredError('slug','Required parameter slug was null or undefined when calling postsControllerGetPostBySlug.');
+            }
+            const localVarPath = `/api/posts/{slug}`
+                .replace(`{${"slug"}}`, encodeURIComponent(String(slug)));
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
 
             return {
                 url: url.format(localVarUrlObj),
@@ -1799,6 +1916,24 @@ export const PostsApiFp = function(configuration?: Configuration) {
                 });
             };
         },
+        /**
+         * 
+         * @param {string} slug 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        postsControllerGetPostBySlug(slug: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<PostDetailsDto> {
+            const localVarFetchArgs = PostsApiFetchParamCreator(configuration).postsControllerGetPostBySlug(slug, options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
     }
 };
 
@@ -1816,6 +1951,15 @@ export const PostsApiFactory = function (configuration?: Configuration, fetch?: 
          */
         postsControllerCreatePost(body: CreatePostBodyDto, options?: any) {
             return PostsApiFp(configuration).postsControllerCreatePost(body, options)(fetch, basePath);
+        },
+        /**
+         * 
+         * @param {string} slug 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        postsControllerGetPostBySlug(slug: string, options?: any) {
+            return PostsApiFp(configuration).postsControllerGetPostBySlug(slug, options)(fetch, basePath);
         },
     };
 };
@@ -1836,6 +1980,17 @@ export class PostsApi extends BaseAPI {
      */
     public postsControllerCreatePost(body: CreatePostBodyDto, options?: any) {
         return PostsApiFp(this.configuration).postsControllerCreatePost(body, options)(this.fetch, this.basePath);
+    }
+
+    /**
+     * 
+     * @param {string} slug 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof PostsApi
+     */
+    public postsControllerGetPostBySlug(slug: string, options?: any) {
+        return PostsApiFp(this.configuration).postsControllerGetPostBySlug(slug, options)(this.fetch, this.basePath);
     }
 
 }

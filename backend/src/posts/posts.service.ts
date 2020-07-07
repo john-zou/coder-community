@@ -10,6 +10,7 @@ import {
   CreatePostBodyDto,
   CreatePostSuccessDto,
   PostDto,
+  PostDetailsDto,
 } from './dto/posts.dto';
 
 // Unused -- can use later for different feature
@@ -61,6 +62,29 @@ const previewContentLength = 100;
 export class PostsService {
   constructor(private readonly httpService: HttpService) {}
 
+  async getPostBySlug(slug: string): Promise<PostDetailsDto> {
+    const post = await PostModel.findOne({ slug });
+    if (post) {
+      return {
+        _id: post._id,
+        author: post.author.toString(),
+        comments: convertToStrArr(post.comments),
+        commentsCount: post.comments.length,
+        content: post.content,
+        createdAt: post.createdAt.toString(),
+        updatedAt: post.updatedAt.toString(),
+        featuredImg: post.featuredImg,
+        likes: post.likes,
+        previewContent: post.previewContent,
+        slug: post.slug,
+        tags: convertToStrArr(post.tags),
+        title: post.title,
+        views: post.views,
+        group: post.group?.toString(),
+      };
+    }
+  }
+
   async createPost(
     authorObjectID: string,
     body: CreatePostBodyDto,
@@ -75,7 +99,7 @@ export class PostsService {
       content: body.content,
       tags: body.tags,
       featuredImg: body.featuredImg,
-      likes: [],
+      likes: 0,
       comments: [],
       views: 0,
       group: body.group,
@@ -101,23 +125,21 @@ export class PostsService {
    */
   async getInitialPosts(userObjectID?: string): Promise<PostDto[]> {
     const foundPosts = await PostModel.find().limit(5);
-    return foundPosts.map((post) => (
-      {
-        _id: post._id.toString(),
-        author: post.author.toString(),
-        title: post.title,
-        slug: post.slug,
-        previewContent: post.previewContent,
-        content: post.content,
-        tags: convertToStrArr(post.tags),
-        createdAt: post.createdAt.toString(),
-        featuredImg: post.featuredImg,
-        likes: post.likes,
-        views: post.views,
-        comments: convertToStrArr(post.comments),
-        commentsCount: post.comments.length,
-      }
-    ));
+    return foundPosts.map(post => ({
+      _id: post._id.toString(),
+      author: post.author.toString(),
+      title: post.title,
+      slug: post.slug,
+      previewContent: post.previewContent,
+      content: post.content,
+      tags: convertToStrArr(post.tags),
+      createdAt: post.createdAt.toString(),
+      featuredImg: post.featuredImg,
+      likes: post.likes,
+      views: post.views,
+      comments: convertToStrArr(post.comments),
+      commentsCount: post.comments.length,
+    }));
   }
 
   // Unused -- can use later for different feature
