@@ -481,7 +481,7 @@ export interface PostDto {
      * @type {number}
      * @memberof PostDto
      */
-    likesCount: number;
+    likes: number;
     /**
      * 
      * @type {Array<string>}
@@ -506,12 +506,6 @@ export interface PostDto {
      * @memberof PostDto
      */
     createdAt: string;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof PostDto
-     */
-    likedByUser: boolean;
     /**
      * 
      * @type {string}
