@@ -1,3 +1,4 @@
+import { UserModel, TagModel } from './../mongoModels';
 import { HttpService, Injectable, NotFoundException } from '@nestjs/common';
 import { Ref } from '@typegoose/typegoose';
 import { ObjectID } from 'mongodb';
@@ -122,6 +123,17 @@ export class PostsService {
       newPost.slug = newPost._id;
       await newPost.save();
     }
+
+    // Add post to author
+    const author = await UserModel.findById(authorObjectID);
+    author.posts.push(newPost._id);
+    await author.save();
+
+    // Add post to tags
+    const tags = newPost.tags;
+    const expressions = tags.map(tagID => ({ _id: tagID }));
+    await TagModel.updateMany({ $or: expressions }, { $push: {posts: newPost._id }});
+
     return {
       _id: newPost._id,
       slug,
