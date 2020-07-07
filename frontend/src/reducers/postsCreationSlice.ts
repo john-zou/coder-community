@@ -1,13 +1,12 @@
 import {createEntityAdapter, createSlice, createAsyncThunk, PayloadAction} from "@reduxjs/toolkit";
-import { GetInitialDataLoggedInDto, GetInitialDataDto, TrendingApi } from "../api";
 import {PostsCreation, Tag} from "../store/types";
-
 
 const postsCreationAdapter = createEntityAdapter<PostsCreation>({
     selectId: item => item._id
 })
 
 export const initialState = {
+    _id: '',
     title: '',
     content: '',
     tags: []
@@ -16,21 +15,21 @@ export const initialState = {
 //https://redux-toolkit.js.org/api/createSlice
 export const postsCreationSlice = createSlice({
     name: "postsCreation",
-    initialState: postsCreationAdapter.getInitialState(),
+    initialState, //: postsCreationAdapter.getInitialState(),
     reducers: {
         createTitle: (state, action) => {
             let updated = Object.assign({}, state);
-            updated.entities.title = action.payload.title;
+            updated.title = action.payload;
             return updated;
         },
         createContent: (state, action) => {
             let updated = Object.assign({}, state);
-            updated.entities.content = action.payload.content;
+            updated.content = action.payload;
             return updated;
         },
         createTags: (state, action) => {
             let updated = Object.assign({}, state);
-            updated.entities.tags = action.payload.tags;
+            updated.tags = action.payload;
             return updated;
         }
     }

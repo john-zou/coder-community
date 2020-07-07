@@ -53,6 +53,7 @@ const updateContent = (event, dispatch) => {
 }
 
 const updateTitle = (event, dispatch) => {
+  // alert(event.target.value);
   dispatch(createTitle(event.target.value));
 }
 

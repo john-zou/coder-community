@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { PostsCreation } from "../../store/types";
 import { RootState } from "../../reducers/rootReducer";
 import {CreatePostBodyDto} from "../../../../backend/src/posts/dto/posts.dto";
-// import { submitPost } from '../../actions/postsCreation';
+import { UserObjectID } from '../../../../backend/src/user/user-object-id.decorator';
 
 const useStyles = makeStyles({
   operation: {
@@ -20,6 +20,7 @@ const submitPost = createdPost => {
         tags: createdPost.tags,
         featuredImg: ''
     }
+    // console.log(newPost);
     return dispatch => {
         return fetch(`http://localhost:3001/api/posts`, {
             method: 'POST',
@@ -28,18 +29,23 @@ const submitPost = createdPost => {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                newPost
-            })
+                newPost,
+                user: { _id: '^&^&' }
+            }),
+            /*
+            user: JSON.stringify( {
+                _id: '',
+            }),
+             */
         }).then((response) => {
-            //return response.json();
-            // }).then((res) => {
-            //console.log(res);
+            return response.json();
+        }).then((res) => {
+            console.log(res);
         }).catch(e => console.log(e))
     }
 }
 
 const onSubmit = (createdPost, dispatch) => {
-    // console.log("*** " + createdPost.title + " " + createdPost.content + " ***");
     dispatch(submitPost(createdPost));
 }
 
