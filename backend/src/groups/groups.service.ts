@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { CreateGroupDto, CreateGroupSuccessDto, GetGroupSuccessDto } from './group.dto';
+import { CreateGroupDto, GroupDto, CreateGroupSuccessDto, GetGroupsSuccessDto } from './group.dto';
 import { UserModel, GroupModel } from '../mongoModels';
 import { Group } from './group.schema';
 import { convertToStrArr } from '../util/helperFunctions';
@@ -35,23 +35,29 @@ export class GroupsService {
     throw new Error("Method not implemented.");
   }
 
-  async getGroups(): Promise<GetGroupSuccessDto[]> {
+  async getGroups(): Promise<GetGroupsSuccessDto> {
     const allGroups = await GroupModel.find();
-    return allGroups.map((group) => {
-      return {
-        _id: group._id.toString(),
-        name: group.name,
-        description: group.description,
-        profilePic: group.profilePic,
-        profileBanner: group.profileBanner,
-        users: convertToStrArr(group.users),
-        posts: convertToStrArr(group.posts),
-        videos: convertToStrArr(group.videos),
-      }
-    })
+    return {
+      groups: allGroups.map((group) => {
+        return {
+          _id: group._id.toString(),
+          name: group.name,
+          description: group.description,
+          admins: convertToStrArr(group.admins),
+          profilePic: group.profilePic,
+          profileBanner: group.profileBanner,
+          users: convertToStrArr(group.users),
+          posts: convertToStrArr(group.posts),
+          videos: convertToStrArr(group.videos),
+          private: group.private,
+          createdAt: group.createdAt.toString(),
+          updatedAt: group.updatedAt.toString(),
+        }
+      })
+    }
   }
 
-  async getGroupById(groupID: string, memberID?: string): Promise<GetGroupSuccessDto> {
+  async getGroupById(groupID: string, memberID?: string): Promise<GroupDto> {
     throw new Error("Method not implemented.");
   }
 

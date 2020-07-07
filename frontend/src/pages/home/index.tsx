@@ -18,6 +18,16 @@ const useStyles = makeStyles({
     paddingTop: "7vh",
     display: "flex",
   },
+  main: {
+    marginTop: "3vh",
+    display: "flex",
+    flex: 1,
+    marginBottom: "0",
+    height: "120vh",
+    flexDirection: "column",
+    alignItems: "center",
+    overflowY: "scroll",
+  },
 });
 
 export default function Home() {
@@ -56,8 +66,10 @@ export default function Home() {
   return (
     <div className={classes.home}>
       <LeftSideBar setGroupsVisible={setGroupsVisible} setMainVisible={setMainVisible} />
-      {groupsVisible && <GroupTab />}
-      {mainVisible && <Main />}
+      <div className={classes.main}>
+        {groupsVisible && <GroupTab />}
+        {mainVisible && <Main />}
+      </div>
       <RightSideBar />
     </div>
   );

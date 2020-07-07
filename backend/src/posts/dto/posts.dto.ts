@@ -10,11 +10,11 @@ export class PostDto {
   tags: string[];
   featuredImg: string;
   likesCount: number;
-  comments?: string[];
+  comments: string[];
   commentsCount: number;
   views: number;
   createdAt: string;
-  likedByUser?: boolean;
+  likedByUser: boolean;
   slug: string;
   group?: string;
 }

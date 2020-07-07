@@ -1,6 +1,6 @@
-import { createEntityAdapter, createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { RootState } from "./rootReducer";
+import { createEntityAdapter, createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { Group } from "../store/types";
+import { GroupsApi, GetGroupsSuccessDto } from "../api";
 
 const groupsAdapter = createEntityAdapter<Group>({
   selectId: item => item._id
@@ -10,19 +10,10 @@ const groupsAdapter = createEntityAdapter<Group>({
 export const fetchGroups = createAsyncThunk(
   'fetchGroups',
   async (_, { getState }) => {
-    const groups = null;
-    const api = new
-    // const api = new TrendingApi();
-    // let initialData: GetInitialDataLoggedInDto | GetInitialDataDto;
-    // const isLoggedIn = (getState() as RootState).isLoggedIn;
-    // console.log(isLoggedIn);
-    // if (isLoggedIn) {
-    //   initialData = await api.trendingControllerGetTrendingLoggedIn();
-    // } else {
-    //   initialData = await api.trendingControllerGetTrending();
-    // }
-    // console.log(initialData);
-    return groups; //{users[], posts[], tags[]}
+    const api = new GroupsApi();
+    const groups: GetGroupsSuccessDto = await api.groupsControllerGetGroups();
+    // console.log(groups);
+    return groups;
   }
 )
 
@@ -34,8 +25,7 @@ export const groupsSlice = createSlice({
 
   },
   extraReducers: {
-    [fetchGroups.fulfilled.type]: (state, action) => {
-      // state.trendingPosts.push(...action.payload.posts.map(post => post._id));
+    [fetchGroups.fulfilled.type]: (state, action: PayloadAction<GetGroupsSuccessDto>) => {
       groupsAdapter.addMany(state, action.payload.groups) //add posts to ids and entities
     }
   }

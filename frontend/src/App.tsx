@@ -67,7 +67,7 @@ export default function App() {
           <Experimental />
         </Route>
       </Switch>
-      <Footer></Footer>
+      {/* <Footer></Footer> */}
     </Router>
   );
 }

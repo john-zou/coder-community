@@ -41,13 +41,21 @@ export class CreateGroupSuccessDto {
 }
 
 //GET GROUP
-export class GetGroupSuccessDto {
+export class GroupDto {
   _id: string;
   name: string;
   description: string;
+  private: boolean;
   profilePic: string;
   profileBanner: string;
+  admins: string[];
   users: string[];
   posts: string[];
   videos: string[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+export class GetGroupsSuccessDto {
+  groups: GroupDto[]
 }

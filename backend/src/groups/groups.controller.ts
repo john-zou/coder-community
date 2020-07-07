@@ -1,7 +1,7 @@
 import { Controller, Post, Body, Delete, Param, Get } from '@nestjs/common';
 import { Personal } from '../auth/guards/personal.decorator';
 import { UserObjectID } from '../user/user-object-id.decorator';
-import { CreateGroupSuccessDto, CreateGroupDto, GetGroupSuccessDto } from './group.dto';
+import { CreateGroupSuccessDto, CreateGroupDto, GetGroupsSuccessDto, GroupDto } from './group.dto';
 import { GroupsService } from './groups.service';
 import { ApiTags } from '@nestjs/swagger';
 
@@ -11,18 +11,18 @@ export class GroupsController {
   constructor(private readonly groupsService: GroupsService) { };
 
   @Get()
-  getGroups(): Promise<GetGroupSuccessDto[]> {
+  getGroups(): Promise<GetGroupsSuccessDto> {
     return this.groupsService.getGroups();
   }
 
   @Get(':id')
-  getPublicGroup(@Param('id') groupID: string): Promise<GetGroupSuccessDto> {
+  getPublicGroup(@Param('id') groupID: string): Promise<GroupDto> {
     return this.groupsService.getGroupById(groupID);
   }
 
   @Personal()
   @Get(':id')
-  getPrivateGroup(@UserObjectID() memberID: string, @Param('id') groupID: string): Promise<GetGroupSuccessDto> {
+  getPrivateGroup(@UserObjectID() memberID: string, @Param('id') groupID: string): Promise<GroupDto> {
     return this.groupsService.getGroupById(groupID, memberID);
   }
 
