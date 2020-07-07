@@ -339,7 +339,7 @@ export interface PostDto {
      * @type {number}
      * @memberof PostDto
      */
-    likesCount: number;
+    likes: number;
     /**
      * 
      * @type {Array<string>}
