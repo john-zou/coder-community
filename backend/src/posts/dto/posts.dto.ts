@@ -10,7 +10,7 @@ export class PostDto {
   tags: string[];
   featuredImg: string;
   likes: number;
-  comments?: string[];
+  comments: string[];
   commentsCount: number;
   views: number;
   createdAt: string;

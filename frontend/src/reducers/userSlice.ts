@@ -35,8 +35,12 @@ export const userSlice = createSlice({
     savePost: {
       reducer: (user, action: PayloadAction<PostIDPayload>) => {
         // optimistic update
-        user.savedPosts.push(action.payload.postID);
-        user.savedPostsSet[action.payload.postID] = true;
+        if (user) {
+          user.savedPosts.push(action.payload.postID);
+          user.savedPostsSet[action.payload.postID] = true;
+        }
+
+        return user;
       },
       // to perform side effect. Does not affect payload
       prepare: (payload: PostIDPayload) => {
@@ -47,17 +51,20 @@ export const userSlice = createSlice({
     },
     toggleLikePost: {
       reducer: (user, action: PayloadAction<PostIDPayload>) => {
-        // optimistic update
-        const { postID } = action.payload;
-        // User didn't previously like the post
-        if (!user.likedPostsSet[postID]) {
-          user.likedPostsSet[postID] = true;
-          user.likedPosts.push(action.payload.postID);
-        } else {
-          // User previously liked the post, now un-likes it
-          user.likedPostsSet[postID] = false;
-          _.pull(user.likedPosts, action.payload.postID);
-        }     
+        if (user) {
+          // optimistic update
+          const { postID } = action.payload;
+          // User didn't previously like the post
+          if (!user.likedPostsSet[postID]) {
+            user.likedPostsSet[postID] = true;
+            user.likedPosts.push(action.payload.postID);
+          } else {
+            // User previously liked the post, now un-likes it
+            user.likedPostsSet[postID] = false;
+            _.pull(user.likedPosts, action.payload.postID);
+          }
+        }
+        return user;
       },
       prepare: (payload: PostIDPayload) => {
         // TODO: make endpoint
@@ -77,15 +84,21 @@ export const userSlice = createSlice({
           // Update likedPostsSet and savedPostsSet
           userDto.likedPosts?.forEach(postID => state.likedPostsSet[postID] = true);
           userDto.savedPosts?.forEach(postID => state.savedPostsSet[postID] = true);
-          return {...state, ...userDto};
+          return { ...state, ...userDto };
         }
 
-        // Create LoggedInUser and initialize liked and saved posts sets
-        const freshlyLoggedInUser = {...userDto, likedPostsSet: {}, savedPostsSet: {}} as CurrentLoggedInUser;
-        userDto.likedPosts?.forEach(postID => freshlyLoggedInUser.likedPostsSet[postID] = true);
-        userDto.savedPosts?.forEach(postID => freshlyLoggedInUser.savedPostsSet[postID] = true);
-        return freshlyLoggedInUser;
+        if (userDto) {
+          const freshlyLoggedInUser = { ...userDto, likedPostsSet: {}, savedPostsSet: {} } as CurrentLoggedInUser;
+          userDto.likedPosts?.forEach(postID => freshlyLoggedInUser.likedPostsSet[postID] = true);
+          userDto.savedPosts?.forEach(postID => freshlyLoggedInUser.savedPostsSet[postID] = true);
+          return freshlyLoggedInUser;
+        }
+
+
       }
+
+      // state may be null, so must explicitly return it
+      return state;
     }
   }
 })

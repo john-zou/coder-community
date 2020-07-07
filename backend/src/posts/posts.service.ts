@@ -101,21 +101,23 @@ export class PostsService {
    */
   async getInitialPosts(userObjectID?: string): Promise<PostDto[]> {
     const foundPosts = await PostModel.find().limit(5);
-    return foundPosts.map(post => ({
-      _id: post._id.toString(),
-      author: post.author.toString(),
-      title: post.title,
-      slug: post.slug,
-      previewContent: post.previewContent,
-      content: post.content,
-      tags: convertToStrArr(post.tags),
-      createdAt: post.createdAt.toString(),
-      featuredImg: post.featuredImg,
-      likes: post.likes,
-      views: post.views,
-      comments: convertToStrArr(post.comments),
-      commentsCount: post.comments.length,
-    }));
+    return foundPosts.map((post) => (
+      {
+        _id: post._id.toString(),
+        author: post.author.toString(),
+        title: post.title,
+        slug: post.slug,
+        previewContent: post.previewContent,
+        content: post.content,
+        tags: convertToStrArr(post.tags),
+        createdAt: post.createdAt.toString(),
+        featuredImg: post.featuredImg,
+        likes: post.likes,
+        views: post.views,
+        comments: convertToStrArr(post.comments),
+        commentsCount: post.comments.length,
+      }
+    ));
   }
 
   // Unused -- can use later for different feature
