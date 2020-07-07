@@ -6,6 +6,7 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Footer from "./containers/footer/Footer";
 import Header from "./containers/header/Header";
 import CreatePost from "./pages/create_post/CreatePost";
+import UpdatePost from "./pages/update_post";
 import Home from "./pages/home";
 import { DevLogin } from "./pages/login/DevLogin";
 import { Messenger } from "./pages/messenger";
@@ -38,6 +39,9 @@ export default function App() {
         </Route>
         <Route path="/create-post">
           <CreatePost />
+        </Route>
+        <Route path="/update-post/:slug">
+          <UpdatePost />
         </Route>
         <Route exact path="/post">
           <Home />
