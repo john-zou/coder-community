@@ -92,7 +92,13 @@ export class PostsService {
     body: CreatePostBodyDto,
   ): Promise<CreatePostSuccessDto> {
     // Logger.log("PostsService::createPost")
-    const slug = urlSlug(body.title);
+    let slug = urlSlug(body.title);
+
+    // TODO: optimize with model.collection.find() / limit() / size()
+    if (await PostModel.findOne({slug})) { 
+      slug = undefined;
+    }
+    
     const doc = {
       author: authorObjectID,
       title: body.title,
@@ -110,6 +116,12 @@ export class PostsService {
     // Logger.log("Done create");
     const newPost = new PostModel(doc);
     await newPost.save();
+    if (!slug) {
+      // set _id as slug (if slug is already taken)
+      // TODO: create a better slug than just the id if taken
+      newPost.slug = newPost._id;
+      await newPost.save();
+    }
     return {
       _id: newPost._id,
       slug,
