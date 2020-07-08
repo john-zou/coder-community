@@ -2,7 +2,6 @@ import {HttpService, Injectable, NotFoundException} from '@nestjs/common';
 import {Ref} from '@typegoose/typegoose';
 import {ObjectID} from 'mongodb';
 import {convertToStrArr} from '../util/helperFunctions';
-
 import * as urlSlug from 'url-slug';
 import {PostModel} from '../mongoModels';
 import {User} from '../user/user.schema';
