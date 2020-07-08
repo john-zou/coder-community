@@ -12,12 +12,12 @@ export class PostsController {
   constructor(private readonly postsService: PostsService) { }
 
   @ApiBearerAuth()
-  // @Personal() //provides @UserObjectID to get userid
+  @Personal() //provides @UserObjectID to get userid
   @Post()
   createPost(@Body('newPost') createPostDto: CreatePostBodyDto, @UserObjectID() author: string): Promise<CreatePostSuccessDto> {
   // createPost(@Body('newPost') createPostDto: CreatePostBodyDto) {
-    // console.log("*** " + createPostDto.content + "  " + createPostDto.title + " ***");
-    // console.log(author);
+    console.log("*** " + createPostDto.content + "  " + createPostDto.title + " ***");
+    console.log(author);
     return this.postsService.createPost(author, createPostDto);
   }
 

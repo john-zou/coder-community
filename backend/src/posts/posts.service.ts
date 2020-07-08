@@ -125,6 +125,7 @@ export class PostsService {
    */
   async getInitialPosts(userObjectID?: string): Promise<PostDto[]> {
     const foundPosts = await PostModel.find().limit(5);
+    console.log("&&&" + foundPosts);
     return foundPosts.map(post => ({
       _id: post._id.toString(),
       author: post.author.toString(),

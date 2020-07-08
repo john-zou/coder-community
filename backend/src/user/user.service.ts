@@ -44,9 +44,12 @@ export class UserService {
   }
 
   async getAuthors(posts: PostDto[]): Promise<UserDto[]> {
+    console.log("**** get authors")
     const result: UserDto[] = [];
     for (const post of posts) {
+      console.log(post);
       const foundUser = await UserModel.findById(post.author);
+      console.log(foundUser);
       result.push({
         _id: foundUser._id,
         userID: foundUser.userID,
