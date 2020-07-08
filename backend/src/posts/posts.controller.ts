@@ -1,14 +1,16 @@
-import {Body, Controller, Post, Get, Param, Put} from '@nestjs/common';
-import {ApiBearerAuth, ApiTags, ApiProperty} from '@nestjs/swagger';
+import {Body, Controller, Post, Get, Param, Query, UsePipes, ValidationPipe} from '@nestjs/common';
+import {ApiBearerAuth, ApiTags} from '@nestjs/swagger';
 import {Personal} from '../auth/guards/personal.decorator';
+import {UserService} from './../user/user.service';
 import {UserObjectID} from '../user/user-object-id.decorator';
-import {CreatePostBodyDto, CreatePostSuccessDto, PostDetailsDto} from './dto/posts.dto';
+import {CreatePostBodyDto, CreatePostSuccessDto, GetPostDetailsSuccessDto} from './dto/posts.dto';
 import {PostsService} from './posts.service';
+
 
 @ApiTags('Posts')
 @Controller('posts')
 export class PostsController {
-    constructor(private readonly postsService: PostsService) {
+    constructor(private readonly postsService: PostsService, private readonly userService: UserService) {
     }
 
     @ApiBearerAuth()
@@ -21,15 +23,22 @@ export class PostsController {
         return this.postsService.createPost(author, createPostDto);
     }
 
-    @Get(':slug')
-    getPostBySlug(@Param('slug') slug: string): Promise<PostDetailsDto> {
-        return this.postsService.getPostBySlug(slug);
-    }
-
-
     @Put()
     updatePostBySlug(@Body('newPost') newPost: CreatePostBodyDto, @Param('slug') slug: string) {
         console.log("CONTORLLER::NEWPOST");
         this.postsService.updatePostBySlug(newPost, slug);
+    }
+
+    @Get(':slug')
+    @UsePipes(new ValidationPipe({transform: true}))
+    async getPostBySlug(@Param('slug') slug: string, @Query('get-author') getAuthor?: boolean): Promise<GetPostDetailsSuccessDto> {
+        const post = await this.postsService.getPostBySlug(slug);
+        if (getAuthor) {
+
+            const author = await this.userService.findUserById(post.author);
+            return {post, author};
+        } else {
+            return {post}
+        }
     }
 }

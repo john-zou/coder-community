@@ -199,6 +199,25 @@ export interface CreatePostSuccessDto {
 /**
  * 
  * @export
+ * @interface CreateShopDto
+ */
+export interface CreateShopDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateShopDto
+     */
+    name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateShopDto
+     */
+    description: string;
+}
+/**
+ * 
+ * @export
  * @interface FileUploadDto
  */
 export interface FileUploadDto {
@@ -208,6 +227,19 @@ export interface FileUploadDto {
      * @memberof FileUploadDto
      */
     file: any;
+}
+/**
+ * 
+ * @export
+ * @interface GetAllShopsDto
+ */
+export interface GetAllShopsDto {
+    /**
+     * 
+     * @type {Array<ShopDto>}
+     * @memberof GetAllShopsDto
+     */
+    shops: Array<ShopDto>;
 }
 /**
  * 
@@ -277,6 +309,25 @@ export interface GetInitialDataLoggedInDto {
      * @memberof GetInitialDataLoggedInDto
      */
     tags: Array<TagsDto>;
+}
+/**
+ * 
+ * @export
+ * @interface GetPostDetailsSuccessDto
+ */
+export interface GetPostDetailsSuccessDto {
+    /**
+     * 
+     * @type {PostWithDetails}
+     * @memberof GetPostDetailsSuccessDto
+     */
+    post: PostWithDetails;
+    /**
+     * 
+     * @type {UserDto}
+     * @memberof GetPostDetailsSuccessDto
+     */
+    author?: UserDto;
 }
 /**
  * 
@@ -431,103 +482,6 @@ export interface LoginSuccess {
 /**
  * 
  * @export
- * @interface PostDetailsDto
- */
-export interface PostDetailsDto {
-    /**
-     * 
-     * @type {string}
-     * @memberof PostDetailsDto
-     */
-    _id: string; // modified by backend/scripts/generate-api.js
-    /**
-     * 
-     * @type {string}
-     * @memberof PostDetailsDto
-     */
-    author: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof PostDetailsDto
-     */
-    title: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof PostDetailsDto
-     */
-    previewContent: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof PostDetailsDto
-     */
-    content: string;
-    /**
-     * 
-     * @type {Array<string>}
-     * @memberof PostDetailsDto
-     */
-    tags: Array<string>;
-    /**
-     * 
-     * @type {string}
-     * @memberof PostDetailsDto
-     */
-    featuredImg: string;
-    /**
-     * 
-     * @type {number}
-     * @memberof PostDetailsDto
-     */
-    likes: number;
-    /**
-     * 
-     * @type {Array<string>}
-     * @memberof PostDetailsDto
-     */
-    comments: Array<string>;
-    /**
-     * 
-     * @type {number}
-     * @memberof PostDetailsDto
-     */
-    commentsCount: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof PostDetailsDto
-     */
-    views: number;
-    /**
-     * 
-     * @type {string}
-     * @memberof PostDetailsDto
-     */
-    createdAt: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof PostDetailsDto
-     */
-    updatedAt: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof PostDetailsDto
-     */
-    slug: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof PostDetailsDto
-     */
-    group?: string;
-}
-/**
- * 
- * @export
  * @interface PostDto
  */
 export interface PostDto {
@@ -615,6 +569,134 @@ export interface PostDto {
      * @memberof PostDto
      */
     group?: string;
+}
+/**
+ * 
+ * @export
+ * @interface PostWithDetails
+ */
+export interface PostWithDetails {
+    /**
+     * 
+     * @type {string}
+     * @memberof PostWithDetails
+     */
+    _id: string; // modified by backend/scripts/generate-api.js
+    /**
+     * 
+     * @type {string}
+     * @memberof PostWithDetails
+     */
+    author: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PostWithDetails
+     */
+    title: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PostWithDetails
+     */
+    previewContent: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PostWithDetails
+     */
+    content: string;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof PostWithDetails
+     */
+    tags: Array<string>;
+    /**
+     * 
+     * @type {string}
+     * @memberof PostWithDetails
+     */
+    featuredImg: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof PostWithDetails
+     */
+    likes: number;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof PostWithDetails
+     */
+    comments: Array<string>;
+    /**
+     * 
+     * @type {number}
+     * @memberof PostWithDetails
+     */
+    commentsCount: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof PostWithDetails
+     */
+    views: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof PostWithDetails
+     */
+    createdAt: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PostWithDetails
+     */
+    updatedAt: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PostWithDetails
+     */
+    slug: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PostWithDetails
+     */
+    group?: string;
+}
+/**
+ * 
+ * @export
+ * @interface ShopDto
+ */
+export interface ShopDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof ShopDto
+     */
+    name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ShopDto
+     */
+    description: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ShopDto
+     */
+    _id: string; // modified by backend/scripts/generate-api.js
+    /**
+     * 
+     * @type {string}
+     * @memberof ShopDto
+     */
+    createdAt: string;
 }
 /**
  * 
@@ -1847,6 +1929,8 @@ export const PostsApiFetchParamCreator = function (configuration?: Configuration
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication bearer required
+
             localVarHeaderParameter['Content-Type'] = 'application/json';
 
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
@@ -1864,13 +1948,18 @@ export const PostsApiFetchParamCreator = function (configuration?: Configuration
         /**
          * 
          * @param {string} slug 
+         * @param {boolean} getAuthor 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        postsControllerGetPostBySlug(slug: string, options: any = {}): FetchArgs {
+        postsControllerGetPostBySlug(slug: string, getAuthor: boolean, options: any = {}): FetchArgs {
             // verify required parameter 'slug' is not null or undefined
             if (slug === null || slug === undefined) {
                 throw new RequiredError('slug','Required parameter slug was null or undefined when calling postsControllerGetPostBySlug.');
+            }
+            // verify required parameter 'getAuthor' is not null or undefined
+            if (getAuthor === null || getAuthor === undefined) {
+                throw new RequiredError('getAuthor','Required parameter getAuthor was null or undefined when calling postsControllerGetPostBySlug.');
             }
             const localVarPath = `/api/posts/{slug}`
                 .replace(`{${"slug"}}`, encodeURIComponent(String(slug)));
@@ -1878,6 +1967,10 @@ export const PostsApiFetchParamCreator = function (configuration?: Configuration
             const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            if (getAuthor !== undefined) {
+                localVarQueryParameter['get-author'] = getAuthor;
+            }
 
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
             // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
@@ -1919,11 +2012,12 @@ export const PostsApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @param {string} slug 
+         * @param {boolean} getAuthor 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        postsControllerGetPostBySlug(slug: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<PostDetailsDto> {
-            const localVarFetchArgs = PostsApiFetchParamCreator(configuration).postsControllerGetPostBySlug(slug, options);
+        postsControllerGetPostBySlug(slug: string, getAuthor: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<GetPostDetailsSuccessDto> {
+            const localVarFetchArgs = PostsApiFetchParamCreator(configuration).postsControllerGetPostBySlug(slug, getAuthor, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -1955,11 +2049,12 @@ export const PostsApiFactory = function (configuration?: Configuration, fetch?: 
         /**
          * 
          * @param {string} slug 
+         * @param {boolean} getAuthor 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        postsControllerGetPostBySlug(slug: string, options?: any) {
-            return PostsApiFp(configuration).postsControllerGetPostBySlug(slug, options)(fetch, basePath);
+        postsControllerGetPostBySlug(slug: string, getAuthor: boolean, options?: any) {
+            return PostsApiFp(configuration).postsControllerGetPostBySlug(slug, getAuthor, options)(fetch, basePath);
         },
     };
 };
@@ -1985,12 +2080,178 @@ export class PostsApi extends BaseAPI {
     /**
      * 
      * @param {string} slug 
+     * @param {boolean} getAuthor 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof PostsApi
      */
-    public postsControllerGetPostBySlug(slug: string, options?: any) {
-        return PostsApiFp(this.configuration).postsControllerGetPostBySlug(slug, options)(this.fetch, this.basePath);
+    public postsControllerGetPostBySlug(slug: string, getAuthor: boolean, options?: any) {
+        return PostsApiFp(this.configuration).postsControllerGetPostBySlug(slug, getAuthor, options)(this.fetch, this.basePath);
+    }
+
+}
+/**
+ * ShopApi - fetch parameter creator
+ * @export
+ */
+export const ShopApiFetchParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {CreateShopDto} body 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        shopControllerCreateShop(body: CreateShopDto, options: any = {}): FetchArgs {
+            // verify required parameter 'body' is not null or undefined
+            if (body === null || body === undefined) {
+                throw new RequiredError('body','Required parameter body was null or undefined when calling shopControllerCreateShop.');
+            }
+            const localVarPath = `/api/shop`;
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'POST' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+            const needsSerialization = (<any>"CreateShopDto" !== "string") || localVarRequestOptions.headers['Content-Type'] === 'application/json';
+            localVarRequestOptions.body =  needsSerialization ? JSON.stringify(body || {}) : (body || "");
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        shopControllerGetAllShops(options: any = {}): FetchArgs {
+            const localVarPath = `/api/shop`;
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * ShopApi - functional programming interface
+ * @export
+ */
+export const ShopApiFp = function(configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {CreateShopDto} body 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        shopControllerCreateShop(body: CreateShopDto, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<ShopDto> {
+            const localVarFetchArgs = ShopApiFetchParamCreator(configuration).shopControllerCreateShop(body, options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        shopControllerGetAllShops(options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<GetAllShopsDto> {
+            const localVarFetchArgs = ShopApiFetchParamCreator(configuration).shopControllerGetAllShops(options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+    }
+};
+
+/**
+ * ShopApi - factory interface
+ * @export
+ */
+export const ShopApiFactory = function (configuration?: Configuration, fetch?: FetchAPI, basePath?: string) {
+    return {
+        /**
+         * 
+         * @param {CreateShopDto} body 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        shopControllerCreateShop(body: CreateShopDto, options?: any) {
+            return ShopApiFp(configuration).shopControllerCreateShop(body, options)(fetch, basePath);
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        shopControllerGetAllShops(options?: any) {
+            return ShopApiFp(configuration).shopControllerGetAllShops(options)(fetch, basePath);
+        },
+    };
+};
+
+/**
+ * ShopApi - object-oriented interface
+ * @export
+ * @class ShopApi
+ * @extends {BaseAPI}
+ */
+export class ShopApi extends BaseAPI {
+    /**
+     * 
+     * @param {CreateShopDto} body 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ShopApi
+     */
+    public shopControllerCreateShop(body: CreateShopDto, options?: any) {
+        return ShopApiFp(this.configuration).shopControllerCreateShop(body, options)(this.fetch, this.basePath);
+    }
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ShopApi
+     */
+    public shopControllerGetAllShops(options?: any) {
+        return ShopApiFp(this.configuration).shopControllerGetAllShops(options)(this.fetch, this.basePath);
     }
 
 }

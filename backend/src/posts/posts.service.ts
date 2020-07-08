@@ -1,7 +1,8 @@
-import {HttpService, Injectable} from '@nestjs/common';
+import {HttpService, Injectable, NotFoundException} from '@nestjs/common';
 import {Ref} from '@typegoose/typegoose';
 import {ObjectID} from 'mongodb';
 import {convertToStrArr} from '../util/helperFunctions';
+
 import * as urlSlug from 'url-slug';
 import {PostModel} from '../mongoModels';
 import {User} from '../user/user.schema';
@@ -9,7 +10,7 @@ import {
     CreatePostBodyDto,
     CreatePostSuccessDto,
     PostDto,
-    PostDetailsDto,
+    PostWithDetails,
 } from './dto/posts.dto';
 
 // Unused -- can use later for different feature
@@ -53,18 +54,18 @@ type DevToArticle = {
         profile_image_90: 'https://res.cloudinary.com/practicaldev/image/fetch/s--8tTU-XkZ--/c_fill,f_auto,fl_progressive,h_90,q_auto,w_90/https://thepracticaldev.s3.amazonaws.com/uploads/organization/profile_image/1/0213bbaa-d5a1-4d25-9e7a-10c30b455af0.png';
     };
 };
+
 const DevToApiKey = 'QG7J1McHHMV7UZ9jwDTeZFHf';
 const DevToApiUrlArticles = 'https://dev.to/api/articles/'; //retrieve a list of articles (with no content)
-
 const previewContentLength = 100;
 
 @Injectable()
 export class PostsService {
-    constructor(private readonly httpService: HttpService) {}
+    constructor(private readonly httpService: HttpService) {
+    }
 
-    async getPostBySlug(slug: string): Promise<PostDetailsDto> {
+    async getPostBySlug(slug: string): Promise<PostWithDetails> {
         const post = await PostModel.findOne({slug});
-        // console.log(slug);
         if (post) {
             return {
                 _id: post._id,
@@ -83,6 +84,9 @@ export class PostsService {
                 views: post.views,
                 group: post.group?.toString(),
             };
+        } else {
+            throw new NotFoundException();
+
         }
     }
 
@@ -91,8 +95,12 @@ export class PostsService {
         body: CreatePostBodyDto,
     ): Promise<CreatePostSuccessDto> {
         // Logger.log("PostsService::createPost")
-        const slug = urlSlug(body.title);
-        const findPost = await PostModel.findOne({slug});
+        let slug = urlSlug(body.title);
+
+        // TODO: optimize with model.collection.find() / limit() / size()
+        if (await PostModel.findOne({slug})) {
+            slug = undefined;
+        }
 
         const doc = {
             author: authorObjectID,
@@ -107,15 +115,21 @@ export class PostsService {
             views: 0,
             group: body.group,
         };
+        // Logger.log(doc);
+        // Logger.log("Done create");
         const newPost = new PostModel(doc);
         await newPost.save();
-
+        if (!slug) {
+            // set _id as slug (if slug is already taken)
+            // TODO: create a better slug than just the id if taken
+            newPost.slug = newPost._id;
+            await newPost.save();
+        }
         return {
             _id: newPost._id,
             slug,
         };
     }
-
 
     async updatePostBySlug(newPost: CreatePostBodyDto, slug: string) {
         console.log("SERVICE::" + slug);
@@ -131,7 +145,6 @@ export class PostsService {
         const found = likes.find(uid => uid.toString() === userObjectID);
         return found !== null;
     }
-
 
     /**
      *

@@ -21,9 +21,7 @@ const useStyles = makeStyles({
     }
 });
 
-/*
-function getOld() {
-    const {slug} = useParams<PostDetailParams>(); //get the url param to render the appropriate post
+const getOld = (slug) => {
     return dispatch => {
         return fetch(`http://localhost:3001/api/posts/${slug}`)
             .then((response) => {
@@ -35,15 +33,14 @@ function getOld() {
     }
 }
 
- */
-
 export default function UpdatePost() {
     const classes = useStyles();
-    // const oldPost = getOld();
+    const {slug} = useParams<PostDetailParams>(); //get the url param to render the appropriate post
+    const oldPost = getOld(slug);
     return (
         <div className={classes.updatePost}>
-            <ImgP />
-            <TextP />
+            <ImgP img={oldPost.img} />
+            <TextP title={oldPost.payload} />
             <TagP/>
             <Submit/>
         </div>

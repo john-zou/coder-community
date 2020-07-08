@@ -112,12 +112,12 @@ const Card = ({ postID }: Props) => {
       <div className={classes.account}>
         <img
           className={classes.accountImg}
-          src={author.profilePic && DefaultPic}
+          src={author.profilePic || DefaultPic}
           alt=""
         />
         <div className={classes.nameTime}>
           <p>
-            <Link to={`/user/${author._id}`} className={classes.link}>
+            <Link to={`/user/${author.userID}`} className={classes.link}>
               <span
                 style={{
                   fontWeight: "bold",
@@ -130,7 +130,7 @@ const Card = ({ postID }: Props) => {
             posted&nbsp;
             <span style={{ fontWeight: "bolder" }}>
               <Link
-                to={`/post/${post._id}`}
+                to={`/post/${post.slug}`}
                 className={classes.link}
                 onClick={() => {
                   handleViewPost(post, dispatch);

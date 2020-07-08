@@ -19,6 +19,7 @@ import { TrendingModule } from './trending/trending.module';
 import { UploadModule } from './upload/upload.module';
 import { UserModule } from './user/user.module';
 import { VideosModule } from './videos/videos.module';
+import { ShopModule } from './shop/shop.module';
 
 @Module({
   imports: [
@@ -47,7 +48,9 @@ import { VideosModule } from './videos/videos.module';
     }),
 
     // Module for dev convenience -- remove when deploying
-    DevModule
+    DevModule,
+
+    ShopModule // Automatically added by "yarn nestgen module shop"
   ],
 
   controllers: [AppController],
