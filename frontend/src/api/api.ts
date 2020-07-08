@@ -143,43 +143,6 @@ export interface CreateGroupSuccessDto {
 /**
  * 
  * @export
- * @interface CreatePostBodyDto
- */
-export interface CreatePostBodyDto {
-    /**
-     * 
-     * @type {string}
-     * @memberof CreatePostBodyDto
-     */
-    title: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof CreatePostBodyDto
-     */
-    content: string;
-    /**
-     * 
-     * @type {Array<string>}
-     * @memberof CreatePostBodyDto
-     */
-    tags: Array<string>;
-    /**
-     * 
-     * @type {string}
-     * @memberof CreatePostBodyDto
-     */
-    featuredImg: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof CreatePostBodyDto
-     */
-    group?: string;
-}
-/**
- * 
- * @export
  * @interface CreatePostSuccessDto
  */
 export interface CreatePostSuccessDto {
@@ -1914,15 +1877,10 @@ export const PostsApiFetchParamCreator = function (configuration?: Configuration
     return {
         /**
          * 
-         * @param {CreatePostBodyDto} body 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        postsControllerCreatePost(body: CreatePostBodyDto, options: any = {}): FetchArgs {
-            // verify required parameter 'body' is not null or undefined
-            if (body === null || body === undefined) {
-                throw new RequiredError('body','Required parameter body was null or undefined when calling postsControllerCreatePost.');
-            }
+        postsControllerCreatePost(options: any = {}): FetchArgs {
             const localVarPath = `/api/posts`;
             const localVarUrlObj = url.parse(localVarPath, true);
             const localVarRequestOptions = Object.assign({ method: 'POST' }, options);
@@ -1931,14 +1889,10 @@ export const PostsApiFetchParamCreator = function (configuration?: Configuration
 
             // authentication bearer required
 
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
             // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
             delete localVarUrlObj.search;
             localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
-            const needsSerialization = (<any>"CreatePostBodyDto" !== "string") || localVarRequestOptions.headers['Content-Type'] === 'application/json';
-            localVarRequestOptions.body =  needsSerialization ? JSON.stringify(body || {}) : (body || "");
 
             return {
                 url: url.format(localVarUrlObj),
@@ -1982,6 +1936,34 @@ export const PostsApiFetchParamCreator = function (configuration?: Configuration
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @param {string} slug 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        postsControllerUpdatePostBySlug(slug: string, options: any = {}): FetchArgs {
+            // verify required parameter 'slug' is not null or undefined
+            if (slug === null || slug === undefined) {
+                throw new RequiredError('slug','Required parameter slug was null or undefined when calling postsControllerUpdatePostBySlug.');
+            }
+            const localVarPath = `/api/posts`
+                .replace(`{${"slug"}}`, encodeURIComponent(String(slug)));
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'PUT' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -1993,12 +1975,11 @@ export const PostsApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
-         * @param {CreatePostBodyDto} body 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        postsControllerCreatePost(body: CreatePostBodyDto, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<CreatePostSuccessDto> {
-            const localVarFetchArgs = PostsApiFetchParamCreator(configuration).postsControllerCreatePost(body, options);
+        postsControllerCreatePost(options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<CreatePostSuccessDto> {
+            const localVarFetchArgs = PostsApiFetchParamCreator(configuration).postsControllerCreatePost(options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -2028,6 +2009,24 @@ export const PostsApiFp = function(configuration?: Configuration) {
                 });
             };
         },
+        /**
+         * 
+         * @param {string} slug 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        postsControllerUpdatePostBySlug(slug: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Response> {
+            const localVarFetchArgs = PostsApiFetchParamCreator(configuration).postsControllerUpdatePostBySlug(slug, options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response;
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
     }
 };
 
@@ -2039,12 +2038,11 @@ export const PostsApiFactory = function (configuration?: Configuration, fetch?: 
     return {
         /**
          * 
-         * @param {CreatePostBodyDto} body 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        postsControllerCreatePost(body: CreatePostBodyDto, options?: any) {
-            return PostsApiFp(configuration).postsControllerCreatePost(body, options)(fetch, basePath);
+        postsControllerCreatePost(options?: any) {
+            return PostsApiFp(configuration).postsControllerCreatePost(options)(fetch, basePath);
         },
         /**
          * 
@@ -2055,6 +2053,15 @@ export const PostsApiFactory = function (configuration?: Configuration, fetch?: 
          */
         postsControllerGetPostBySlug(slug: string, getAuthor: boolean, options?: any) {
             return PostsApiFp(configuration).postsControllerGetPostBySlug(slug, getAuthor, options)(fetch, basePath);
+        },
+        /**
+         * 
+         * @param {string} slug 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        postsControllerUpdatePostBySlug(slug: string, options?: any) {
+            return PostsApiFp(configuration).postsControllerUpdatePostBySlug(slug, options)(fetch, basePath);
         },
     };
 };
@@ -2068,13 +2075,12 @@ export const PostsApiFactory = function (configuration?: Configuration, fetch?: 
 export class PostsApi extends BaseAPI {
     /**
      * 
-     * @param {CreatePostBodyDto} body 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof PostsApi
      */
-    public postsControllerCreatePost(body: CreatePostBodyDto, options?: any) {
-        return PostsApiFp(this.configuration).postsControllerCreatePost(body, options)(this.fetch, this.basePath);
+    public postsControllerCreatePost(options?: any) {
+        return PostsApiFp(this.configuration).postsControllerCreatePost(options)(this.fetch, this.basePath);
     }
 
     /**
@@ -2087,6 +2093,17 @@ export class PostsApi extends BaseAPI {
      */
     public postsControllerGetPostBySlug(slug: string, getAuthor: boolean, options?: any) {
         return PostsApiFp(this.configuration).postsControllerGetPostBySlug(slug, getAuthor, options)(this.fetch, this.basePath);
+    }
+
+    /**
+     * 
+     * @param {string} slug 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof PostsApi
+     */
+    public postsControllerUpdatePostBySlug(slug: string, options?: any) {
+        return PostsApiFp(this.configuration).postsControllerUpdatePostBySlug(slug, options)(this.fetch, this.basePath);
     }
 
 }
