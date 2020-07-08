@@ -99,6 +99,13 @@ export type User = {
   updatedAt?: string,
 };
 
+export type Shop = {
+  _id: string,
+  name: string,
+  description: string,
+  createdAt: string,
+}
+
 export interface CurrentLoggedInUser extends User {
   likedPostsSet: Record<string, boolean>;
   savedPostsSet: Record<string, boolean>;
