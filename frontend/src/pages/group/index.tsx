@@ -1,10 +1,14 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from '@emotion/styled';
 import Avatar from "../common/Avatar";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../reducers/rootReducer";
 import { User, Group } from "../../store/types";
-import { Dictionary } from "@reduxjs/toolkit";
+import { Dictionary, unwrapResult } from "@reduxjs/toolkit";
+import { AppDispatch } from "../../store";
+import { Loading } from "../common/Loading";
+import ErrorPage from "../common/ErrorPage";
+import { fetchGroups } from "../../reducers/groupsSlice";
 import PurpleButton from "../common/PurpleButton";
 
 const GroupContainer = styled.div`
@@ -43,11 +47,34 @@ const GroupCard = ({ currentGroup, isUserAMember }) => {
     </div>
   </div>
 }
+
 export default function GroupTab() {
   const user = useSelector<RootState, User>(state => state.user);
   const groups = useSelector<RootState, Dictionary<Group>>(state => state.groups.entities);
+  const dispatch: AppDispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-  console.log("Groups array: ", groups);
+  useEffect(() => {
+    console.log("hellooooo");
+    setLoading(true);
+    dispatch(fetchGroups()).then(unwrapResult).then(() => {
+      setLoading(false);
+
+    }).catch(err => {
+      setLoading(false);
+      setError(err);
+    })
+  }, []);
+
+  if (loading || !groups) {
+    return <Loading />
+  }
+  if (error) {
+    return <ErrorPage error={error} />
+  }
+
+  // console.log("User's groups array: ", groups);
   // console.log("User's groups array: ", user.groups);
 
   const joinedGroupIDs = user.groups;

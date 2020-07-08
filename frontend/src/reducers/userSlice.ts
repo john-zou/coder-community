@@ -4,6 +4,7 @@ import { fetchTrendingPosts } from "./postsSlice";
 import { CurrentLoggedInUser } from "../store/types";
 import _ from "lodash";
 import { isGetInitialDataLoggedInDto } from "../util/helperFunctions";
+import { postsSlice } from "./postsSlice";
 
 
 export const getLoggedInUser = createAsyncThunk(
@@ -22,7 +23,8 @@ export const getUserForViewProfile = (userName) => createAsyncThunk(
 )
 
 
-type PostIDPayload = { postID: string };
+export type PostIDPayload = { postID: string };
+export type LikePostPayload = { postID: string, increment: boolean };
 
 //https://redux-toolkit.js.org/api/createSlice
 // The state is just User, and initialized to null
@@ -66,10 +68,17 @@ export const userSlice = createSlice({
         }
         return user;
       },
-      prepare: (payload: PostIDPayload) => {
+      prepare: ({postID, increment}: LikePostPayload) => {
+        // update postsSlice
+        if (increment) {
+          postsSlice.actions.incrementPostLikes({postID});
+        } else {
+          postsSlice.actions.decrementPostLikes({postID});
+        }
+
         // TODO: make endpoint
         // new UserApi().userControllerToggleLike(payload.postID);
-        return { payload };
+        return { payload: {postID} };
       }
     }
   },

@@ -1,16 +1,12 @@
 import { makeStyles } from '@material-ui/core/styles';
-import React, { useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
+import React from 'react';
+import { useSelector } from 'react-redux';
+import { Link, useHistory } from 'react-router-dom';
 
 import FilterPost from './FilterPost';
 import { RootState } from '../../reducers/rootReducer';
 import { User } from '../../store/types';
 import { Loading } from '../common/Loading';
-import { AppDispatch } from '../../store';
-import { fetchGroups } from '../../reducers/groupsSlice';
-import { unwrapResult } from '@reduxjs/toolkit';
-import ErrorPage from '../common/ErrorPage';
 
 const useStyles = makeStyles({
   root: {
@@ -51,24 +47,16 @@ const useStyles = makeStyles({
   },
 });
 
-const LeftSideBar = ({ setGroupsVisible, setMainVisible }) => {
+const LeftSideBar = () => {
   const classes = useStyles();
   const user = useSelector<RootState, User>(state => state.user);
   const isLoggedIn = useSelector<RootState, boolean>(state => state.isLoggedIn);
 
-  const dispatch: AppDispatch = useDispatch();
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+
+  const history = useHistory(); //to redirect to different route (from current route)
 
   if (!user) {
     return <Loading />
-  }
-
-  if (loading) {
-    return <Loading />
-  }
-  if (error) {
-    return <ErrorPage error={error} />
   }
 
   return (
@@ -93,15 +81,8 @@ const LeftSideBar = ({ setGroupsVisible, setMainVisible }) => {
         <h3>Videos</h3>
 
         <h3 onClick={() => {
-          setLoading(true);
-          dispatch(fetchGroups()).then(unwrapResult).then(() => {
-            setLoading(false);
-            setGroupsVisible(true);
-            setMainVisible(false);
-          }).catch(err => {
-            setLoading(false);
-            setError(error);
-          })
+          console.log("line 85...")
+          history.push("/home/groups");
         }}>Groups</h3>
 
         <p className={classes.showPostsText}># BROWSE BY TAGS</p>

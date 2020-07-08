@@ -33,12 +33,12 @@ export class CreateGroupDto {
 }
 
 //response
-// export class CreateGroupSuccessDto {
-//   @ApiProperty({
-//     description: "The newly created group's object ID"
-//   })
-//   _id: string;
-// }
+export class CreateGroupSuccessDto {
+  @ApiProperty({
+    description: "The newly created group's object ID"
+  })
+  _id: string;
+}
 
 //GET GROUP
 export class GroupDto {
