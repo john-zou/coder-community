@@ -6,13 +6,6 @@ import TagP from "./TagPanel";
 import Submit from "./Submit";
 import {useParams} from "react-router-dom";
 import {PostDetailParams} from "../../App";
-import {useDispatch, useSelector} from "react-redux";
-import {RootState} from "../../reducers/rootReducer";
-import {Post, User} from "../../store/types";
-import {Dictionary} from "@reduxjs/toolkit";
-import {fetchPostBySlug, fetchPostContentByID} from "../../reducers/postsSlice";
-import {Loading} from "../common/Loading";
-import {NotFoundError} from "../common/NotFoundError";
 
 const useStyles = makeStyles({
     updatePost: {
@@ -28,45 +21,29 @@ const useStyles = makeStyles({
     }
 });
 
+/*
+function getOld() {
+    const {slug} = useParams<PostDetailParams>(); //get the url param to render the appropriate post
+    return dispatch => {
+        return fetch(`http://localhost:3001/api/posts/${slug}`)
+            .then((response) => {
+                return response.json();
+            }).then((res) => {
+                // console.log(res);
+                return res;
+            }).catch(e => console.log(e));
+    }
+}
+
+ */
+
 export default function UpdatePost() {
     const classes = useStyles();
-    const {slug} = useParams<PostDetailParams>(); //get the url param to render the appropriate post
-
-    const dispatch: any = useDispatch();
-    const post = useSelector<RootState, Post>(state => {
-        const postID = state.posts.slugToID[slug];
-        console.log(postID);
-        return state.posts[postID];
-    });
-    const users = useSelector<RootState, Dictionary<User>>(state => state.users.entities);
-
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(null);
-
-
-    useEffect(() => {
-        setLoading(true);
-        if (!post) {
-            dispatch(fetchPostBySlug(slug));
-            return;
-        }
-
-        if (!post.content) {
-            dispatch(fetchPostContentByID(post._id));
-        }
-    }, [post, slug, dispatch]);
-
-    if (loading || !post || !post.content) {
-        return <Loading/>
-    }
-
-    if (error) {
-        return <NotFoundError/> // TODO: add something for server error
-    }
+    // const oldPost = getOld();
     return (
         <div className={classes.updatePost}>
-            <ImgP/>
-            <TextP/>
+            <ImgP />
+            <TextP />
             <TagP/>
             <Submit/>
         </div>

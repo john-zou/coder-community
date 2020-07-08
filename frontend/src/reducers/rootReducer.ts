@@ -1,6 +1,5 @@
 import { combineReducers } from "redux";
 import postsReducer from './postsSlice';
-import postsCreationReducer from './postsCreationSlice';
 import usersReducer from './usersSlice';
 import tagsReducer from './tagsSlice';
 import userReducer from "./userSlice";
@@ -12,7 +11,6 @@ const rootReducer = combineReducers({
   user: userReducer,
   users: usersReducer,
   posts: postsReducer,
-  postsCreation: postsCreationReducer,
   tags: tagsReducer,
   groups: groupsReducer,
   //TODO
