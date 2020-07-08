@@ -1,4 +1,4 @@
-import { HttpService, Injectable } from '@nestjs/common';
+import { HttpService, Injectable, NotFoundException } from '@nestjs/common';
 import { Ref } from '@typegoose/typegoose';
 import { ObjectID } from 'mongodb';
 import { convertToStrArr } from '../util/helperFunctions';
@@ -10,7 +10,7 @@ import {
   CreatePostBodyDto,
   CreatePostSuccessDto,
   PostDto,
-  PostDetailsDto,
+  PostWithDetails,
 } from './dto/posts.dto';
 
 // Unused -- can use later for different feature
@@ -62,7 +62,7 @@ const previewContentLength = 100;
 export class PostsService {
   constructor(private readonly httpService: HttpService) {}
 
-  async getPostBySlug(slug: string): Promise<PostDetailsDto> {
+  async getPostBySlug(slug: string): Promise<PostWithDetails> {
     const post = await PostModel.findOne({ slug });
     if (post) {
       return {
@@ -82,6 +82,8 @@ export class PostsService {
         views: post.views,
         group: post.group?.toString(),
       };
+    } else {
+      throw new NotFoundException();
     }
   }
 
@@ -90,7 +92,13 @@ export class PostsService {
     body: CreatePostBodyDto,
   ): Promise<CreatePostSuccessDto> {
     // Logger.log("PostsService::createPost")
-    const slug = urlSlug(body.title);
+    let slug = urlSlug(body.title);
+
+    // TODO: optimize with model.collection.find() / limit() / size()
+    if (await PostModel.findOne({slug})) { 
+      slug = undefined;
+    }
+    
     const doc = {
       author: authorObjectID,
       title: body.title,
@@ -108,6 +116,12 @@ export class PostsService {
     // Logger.log("Done create");
     const newPost = new PostModel(doc);
     await newPost.save();
+    if (!slug) {
+      // set _id as slug (if slug is already taken)
+      // TODO: create a better slug than just the id if taken
+      newPost.slug = newPost._id;
+      await newPost.save();
+    }
     return {
       _id: newPost._id,
       slug,
