@@ -1,17 +1,12 @@
 import { makeStyles } from '@material-ui/core/styles';
 import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-
-import { Loading } from '../common/Loading';
 import LeftSideBar from './LeftSideBar';
 import Main from './Main';
 import RightSideBar from './RightSideBar';
-import { fetchTrendingPosts } from '../../reducers/postsSlice';
-import { unwrapResult } from '@reduxjs/toolkit';
-import ErrorPage from '../common/ErrorPage';
-import { AppDispatch } from '../../store';
 import GroupTab from '../group';
-
+import { Route, Switch } from 'react-router-dom';
+import { BrowserRouter as Router } from 'react-router-dom';
+import { createBrowserHistory } from 'history';
 
 const useStyles = makeStyles({
   home: {
@@ -32,45 +27,24 @@ const useStyles = makeStyles({
 
 export default function Home() {
   const classes = useStyles();
-  const dispatch = useDispatch<AppDispatch>();
-
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-
-  const [groupsVisible, setGroupsVisible] = useState(false);
-  const [mainVisible, setMainVisible] = useState(true);
-  // const [newsVisible, setNewsVisible] = useState(false);//TODO: show hackernews
-
-  useEffect(() => {
-    setLoading(true);
-    dispatch(fetchTrendingPosts())
-      .then(unwrapResult).then( //must set dispatch to any to use .then
-        () => {
-          setLoading(false)
-        }
-      ).catch(error => {
-        console.log(error);
-        setError(error);
-        setLoading(false);
-      });
-  }, []);
-
-  if (loading) {
-    return <Loading />
-  }
-
-  if (error) {
-    return <ErrorPage error={error} />
-  }
+  const history = createBrowserHistory();
 
   return (
     <div className={classes.home}>
-      <LeftSideBar setGroupsVisible={setGroupsVisible} setMainVisible={setMainVisible} />
-      <div className={classes.main}>
-        {groupsVisible && <GroupTab />}
-        {mainVisible && <Main />}
-      </div>
-      <RightSideBar />
+      <Router>
+        <LeftSideBar />
+        <div className={classes.main}>
+          <Switch>
+            <Route path="/home/groups" component={GroupTab}>
+            </Route>
+            <Route exact path="/home" component={Main}>
+              <Main />
+            </Route>
+          </Switch>
+        </div>
+        <RightSideBar />
+
+      </Router>
     </div>
   );
 }
