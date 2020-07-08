@@ -21,14 +21,18 @@ const useStyles = makeStyles({
 });
 
 export default function CreatePost() {
-  const classes = useStyles();
-  return (
-    <div className={classes.createPost}>
-      <ImgP />
-      <TextP />
-      <TagP />
-      <PeopleP />
-      <Submit />
-    </div>
-  );
+    const classes = useStyles();
+    const [title, setTitle] = useState('');
+    const [content, setContent] = useState('');
+    const [tags, setTags] = useState([]);
+    const [featuredImg, setImg] = useState('');
+
+    return (
+        <div className={classes.createPost}>
+            <ImgP setImg={setImg}  />
+            <TextP setTitle={setTitle} setContent={setContent} />
+            <TagP setTags={setTags} />
+            <Submit title={title} content={content} tags={tags} img={featuredImg}/>
+        </div>
+    );
 }

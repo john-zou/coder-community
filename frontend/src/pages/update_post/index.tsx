@@ -61,5 +61,5 @@ export default function UpdatePost() {
             <TagP setTags={setTags} tags={oldPost.tags} />
             <Submit title={title} content={content} tags={tags} img={featuredImg} slug={slug} />
         </div>
-    )
+    );
 }

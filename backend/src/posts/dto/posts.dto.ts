@@ -1,3 +1,5 @@
+import { Tag } from '../../tags/tag.schema';
+import {Ref} from "@typegoose/typegoose";
 // import { ObjectID } from "mongodb";
 //GET POST DTO
 
@@ -49,7 +51,8 @@ export class GetPostDetailsSuccessDto {
 export class CreatePostBodyDto {
   title: string;
   content: string;
-  tags: string[];
+  // tags: string[];
+  tags: Ref<Tag>[];
   featuredImg: string;
   group?: string;
 }

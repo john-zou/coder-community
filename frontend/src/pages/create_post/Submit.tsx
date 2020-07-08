@@ -1,11 +1,10 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { useSelector, useDispatch } from 'react-redux';
-import {CurrentLoggedInUser, PostsCreation, User} from "../../store/types";
+import {PostsCreation, User} from "../../store/types";
 import { RootState } from "../../reducers/rootReducer";
-import { CreatePostBodyDto } from "../../../../backend/src/posts/dto/posts.dto";
+import {CreatePostBodyDto} from "../../../../backend/src/posts/dto/posts.dto";
 import { UserObjectID } from '../../../../backend/src/user/user-object-id.decorator';
-import { submitPost, updatePost } from "../../reducers/postsCreationSlice";
 
 const useStyles = makeStyles({
   operation: {
@@ -36,6 +35,8 @@ const onCancel = (params, dispatch) => {
     console.log("SUBMIT" + newPost);
     dispatch(updatePost(newPost));
 }
+
+const _onCancel = (event) => {}
 
 export default function Submit(params) {
   const classes = useStyles();
