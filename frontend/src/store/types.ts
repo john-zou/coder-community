@@ -84,7 +84,7 @@ export type User = {
   userID: string,
   gitHubID?: number,
   name: string,
-  profilePic: string,
+  profilePic?: string,
   profileBanner?: string,
   status?: string,
   followers?: string[],//list of ids

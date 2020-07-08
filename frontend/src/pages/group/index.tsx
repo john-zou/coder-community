@@ -10,6 +10,7 @@ import { Loading } from "../common/Loading";
 import ErrorPage from "../common/ErrorPage";
 import { fetchGroups } from "../../reducers/groupsSlice";
 import PurpleButton from "../common/PurpleButton";
+import { CreateGroupModal } from "./CreateGroupModal";
 
 const GroupContainer = styled.div`
   width: 90%;
@@ -87,7 +88,9 @@ export default function GroupTab() {
       <Header>
         <span><h2>Groups</h2></span>
         <div style={{ flex: 1 }}></div>
-        <span style={{ marginTop: "10px", color: "#5D67E9", fontWeight: "bold" }}><p>Create Group</p></span>
+        <span>
+          <CreateGroupModal />
+        </span>
       </Header>
 
       <hr style={{ color: "black" }}></hr>

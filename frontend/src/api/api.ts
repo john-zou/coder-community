@@ -300,6 +300,19 @@ export interface GetPostDetailsSuccessDto {
 /**
  * 
  * @export
+ * @interface GetUsersSuccessDto
+ */
+export interface GetUsersSuccessDto {
+    /**
+     * 
+     * @type {Array<UserDto>}
+     * @memberof GetUsersSuccessDto
+     */
+    users: Array<UserDto>;
+}
+/**
+ * 
+ * @export
  * @interface GitHubLoginBody
  */
 export interface GitHubLoginBody {
@@ -1156,7 +1169,7 @@ export const DevApiFetchParamCreator = function (configuration?: Configuration) 
             if (id === null || id === undefined) {
                 throw new RequiredError('id','Required parameter id was null or undefined when calling devControllerGetJwt.');
             }
-            const localVarPath = `/api/dev/jwt`
+            const localVarPath = `/api/dev/jwt/{id}`
                 .replace(`{${"id"}}`, encodeURIComponent(String(id)));
             const localVarUrlObj = url.parse(localVarPath, true);
             const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
@@ -2503,6 +2516,37 @@ export const UserApiFetchParamCreator = function (configuration?: Configuration)
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @param {string} ids 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        userControllerGetUsersByIDs(ids: string, options: any = {}): FetchArgs {
+            // verify required parameter 'ids' is not null or undefined
+            if (ids === null || ids === undefined) {
+                throw new RequiredError('ids','Required parameter ids was null or undefined when calling userControllerGetUsersByIDs.');
+            }
+            const localVarPath = `/api/user/byIds`;
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (ids !== undefined) {
+                localVarQueryParameter['ids'] = ids;
+            }
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -2519,6 +2563,24 @@ export const UserApiFp = function(configuration?: Configuration) {
          */
         userControllerGetUser(options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<UserDto> {
             const localVarFetchArgs = UserApiFetchParamCreator(configuration).userControllerGetUser(options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * 
+         * @param {string} ids 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        userControllerGetUsersByIDs(ids: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<GetUsersSuccessDto> {
+            const localVarFetchArgs = UserApiFetchParamCreator(configuration).userControllerGetUsersByIDs(ids, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -2546,6 +2608,15 @@ export const UserApiFactory = function (configuration?: Configuration, fetch?: F
         userControllerGetUser(options?: any) {
             return UserApiFp(configuration).userControllerGetUser(options)(fetch, basePath);
         },
+        /**
+         * 
+         * @param {string} ids 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        userControllerGetUsersByIDs(ids: string, options?: any) {
+            return UserApiFp(configuration).userControllerGetUsersByIDs(ids, options)(fetch, basePath);
+        },
     };
 };
 
@@ -2564,6 +2635,17 @@ export class UserApi extends BaseAPI {
      */
     public userControllerGetUser(options?: any) {
         return UserApiFp(this.configuration).userControllerGetUser(options)(this.fetch, this.basePath);
+    }
+
+    /**
+     * 
+     * @param {string} ids 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UserApi
+     */
+    public userControllerGetUsersByIDs(ids: string, options?: any) {
+        return UserApiFp(this.configuration).userControllerGetUsersByIDs(ids, options)(this.fetch, this.basePath);
     }
 
 }

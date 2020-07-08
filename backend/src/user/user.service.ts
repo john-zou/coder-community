@@ -2,9 +2,10 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 
 import { UserModel } from '../mongoModels';
 import { PostDto } from '../posts/dto/posts.dto';
-import { convertToStrArr } from '../util/helperFunctions';
-import { UserDto } from './dto/user.dto';
+import { convertToStrArr, convertUserToUserDto } from '../util/helperFunctions';
+import { UserDto, GetUsersSuccessDto } from './dto/user.dto';
 import { User } from './user.schema';
+import { ObjectId } from 'mongodb';
 
 /**
  * typed like in UserSchema
@@ -17,25 +18,24 @@ type ExtraGitHubUserInfo = {
 
 @Injectable()
 export class UserService {
+
+  async findUsersByIds(ids: string[]): Promise<GetUsersSuccessDto> {
+    const users = await UserModel.find({
+      _id: {
+        $in: ids
+      }
+    })
+    return {
+      users: users.map((user) => convertUserToUserDto(user))
+    }
+  }
+
   async findUserById(userObjectID: string): Promise<UserDto> {
     const foundUser = await UserModel.findById(userObjectID);
     if (!foundUser) {
       throw new NotFoundException();
     }
-    return {
-      _id: foundUser._id,
-      userID: foundUser.userID,
-      name: foundUser.name,
-      profilePic: foundUser.profilePic,
-      profileBanner: foundUser.profileBanner,
-      status: foundUser.status,
-      followers: convertToStrArr(foundUser.followers),
-      following: convertToStrArr(foundUser.following),
-      groups: convertToStrArr(foundUser.groups),
-      posts: convertToStrArr(foundUser.posts),
-      savedPosts: convertToStrArr(foundUser.savedPosts),
-      likedPosts: convertToStrArr(foundUser.likedPosts),
-    };
+    return convertUserToUserDto(foundUser);
   }
 
   async saveProfileBannerPic(userObjectID: string, url: string): Promise<void> {

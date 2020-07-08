@@ -14,3 +14,7 @@ export class UserDto {
   savedPosts?: string[];
   likedPosts: string[];
 }
+
+export class GetUsersSuccessDto {
+  users: UserDto[];
+}
