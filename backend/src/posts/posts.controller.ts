@@ -12,7 +12,7 @@ export class PostsController {
     }
 
     @ApiBearerAuth()
-    @Personal() //provides @UserObjectID to get userid
+    // @Personal() //provides @UserObjectID to get userid
     @Post()
     createPost(@Body('newPost') createPostDto: CreatePostBodyDto, @UserObjectID() author: string): Promise<CreatePostSuccessDto> {
         // createPost(@Body('newPost') createPostDto: CreatePostBodyDto) {
@@ -26,8 +26,10 @@ export class PostsController {
         return this.postsService.getPostBySlug(slug);
     }
 
+
     @Put()
-    updatePostBySlug(@Param('slug') slug: string) {
-        this.postsService.updatePostBySlug(slug);
+    updatePostBySlug(@Body('newPost') newPost: CreatePostBodyDto, @Param('slug') slug: string) {
+        console.log("CONTORLLER::NEWPOST");
+        this.postsService.updatePostBySlug(newPost, slug);
     }
 }

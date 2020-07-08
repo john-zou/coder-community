@@ -64,6 +64,7 @@ export class PostsService {
 
     async getPostBySlug(slug: string): Promise<PostDetailsDto> {
         const post = await PostModel.findOne({slug});
+        // console.log(slug);
         if (post) {
             return {
                 _id: post._id,
@@ -91,6 +92,8 @@ export class PostsService {
     ): Promise<CreatePostSuccessDto> {
         // Logger.log("PostsService::createPost")
         const slug = urlSlug(body.title);
+        const findPost = await PostModel.findOne({slug});
+
         const doc = {
             author: authorObjectID,
             title: body.title,
@@ -106,14 +109,22 @@ export class PostsService {
         };
         const newPost = new PostModel(doc);
         await newPost.save();
+
         return {
             _id: newPost._id,
             slug,
         };
     }
 
-    async updatePostBySlug(slug: string, newPost: CreatePostBodyDto): Promise<> {
 
+    async updatePostBySlug(newPost: CreatePostBodyDto, slug: string) {
+        console.log("SERVICE::" + slug);
+        const post = await PostModel.findOneAndUpdate({slug}, {
+            content: newPost.content,
+            title: newPost.title,
+            tags: newPost.tags,
+            featuredImg: newPost.featuredImg
+        });
     }
 
     isLikedByUser(likes: Ref<User, ObjectID>[], userObjectID: string): boolean {
