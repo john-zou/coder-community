@@ -6,20 +6,29 @@ export const isLoggedInSlice = createSlice({
   name: "isLoggedIn",
   initialState: !!localStorage.getItem(JwtLocalStorageKey),//also has ids[] and entities{}
   reducers: {
-    loginSuccess: (state, action: PayloadAction<{ jwt: string }>) => {
-      const jwt = action.payload.jwt;
-      localStorage.setItem(JwtLocalStorageKey, jwt);
-      return true
+    loginSuccess: {
+      reducer: (user, action: PayloadAction<null>) => {
+        return true;
+      },
+      prepare: ({jwt}: {jwt: string}) => {
+        localStorage.setItem(JwtLocalStorageKey, jwt);
+        return {payload: null};
+      },
     },
-    logout: () => {
-      localStorage.removeItem(JwtLocalStorageKey);
-      return false
-    }
+    logOut: {
+      reducer: (user, action: PayloadAction<null>) => {
+        return false;
+      },
+      prepare: () => {
+        localStorage.removeItem(JwtLocalStorageKey);
+        return { payload: null };
+      }
+    },
   }
 })
 
 export default isLoggedInSlice.reducer;
 
 export const {
-  loginSuccess, logout
+  loginSuccess, logOut
 } = isLoggedInSlice.actions;

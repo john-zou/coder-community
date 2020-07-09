@@ -1,6 +1,6 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { HttpException, Injectable, NotFoundException } from '@nestjs/common';
 
-import { UserModel } from '../mongoModels';
+import { PostModel, UserModel } from '../mongoModels';
 import { PostDto } from '../posts/dto/posts.dto';
 import { convertToStrArr, convertUserToUserDto } from '../util/helperFunctions';
 import { UserDto, GetUsersSuccessDto } from './dto/user.dto';
@@ -69,7 +69,26 @@ export class UserService {
     await UserModel.updateOne({ _id: userObjectID }, { profilePic: url });
   }
 
-  //to get the authors of trending posts
+  async savePost(userObjectID: string, postID: string): Promise<void> {
+    const user = await UserModel.findById(userObjectID);
+    if (!user) {
+      throw new HttpException("User does not exist in MongoDB!", 500);
+    }
+    const post = await PostModel.findById(postID);
+    if (!post) {
+      throw new NotFoundException();
+    }
+    const postAlreadyExists = user.savedPosts.find(savedPostID => savedPostID.toString() === postID);
+    if (postAlreadyExists) {
+      throw new HttpException("User already saved this post!", 400);
+    }
+
+    // Add to saved posts
+    user.savedPosts.push(post);
+    await user.save();
+  }
+
+  // To get the authors of the trending posts
   async getAuthors(posts: PostDto[]): Promise<UserDto[]> {
     const result: UserDto[] = [];
     for (const post of posts) {

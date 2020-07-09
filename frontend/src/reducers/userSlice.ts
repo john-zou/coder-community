@@ -1,10 +1,12 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import { UserApi, GetInitialDataDto, GetInitialDataLoggedInDto } from "../api";
+import {UserApi, GetInitialDataDto, GetInitialDataLoggedInDto, PostsApi, AuthApi} from "../api";
 import { fetchTrendingPosts } from "./postsSlice";
 import { CurrentLoggedInUser } from "../store/types";
 import _ from "lodash";
 import { isGetInitialDataLoggedInDto } from "../util/helperFunctions";
 import { postsSlice } from "./postsSlice";
+import {JwtLocalStorageKey} from "../constants";
+import {isLoggedInSlice} from "./isLoggedInSlice";
 
 const api = new UserApi();
 export const getLoggedInUser = createAsyncThunk(
@@ -12,6 +14,13 @@ export const getLoggedInUser = createAsyncThunk(
   async () => {
     return await api.userControllerGetUser();
   }
+)
+
+export const login = createAsyncThunk(
+    'loginStatus',
+    async ({code, state}: {code: string, state: string}) => {
+      await new AuthApi().authControllerLoginGitHub({code, state})
+    }
 )
 
 export const getUserForViewProfile = (userName) => createAsyncThunk(
@@ -38,6 +47,24 @@ export const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
+    loginSuccess: {
+      reducer: (user, action: PayloadAction<null>) => {
+        return null;
+      },
+      prepare: ({jwt}: {jwt: string}) => {
+        localStorage.setItem(JwtLocalStorageKey, jwt);
+        return {payload: null};
+      },
+    },
+    logOut: {
+      reducer: (user, action: PayloadAction<null>) => {
+        return null;
+      },
+      prepare: () => {
+        localStorage.removeItem(JwtLocalStorageKey);
+        return { payload: null };
+      }
+    },
     savePost: {
       reducer: (user, action: PayloadAction<PostIDPayload>) => {
         // optimistic update
@@ -50,8 +77,10 @@ export const userSlice = createSlice({
       },
       // to perform side effect. Does not affect payload
       prepare: (payload: PostIDPayload) => {
-        // TODO: make endpoint
-        // new UserApi().userControllerSavePost(payload.postId);
+        // Send request to back end silently
+        new UserApi().userControllerSavePost(payload.postID)
+            .then(_ => console.log("Optimistic update (SAVE POST) finished in back end"))
+            .catch(err => console.log("Optimistic update (SAVE POST) rejected! ", err));
         return { payload };
       },
     },
@@ -72,17 +101,20 @@ export const userSlice = createSlice({
         }
         return user;
       },
-      prepare: ({ postID, increment }: LikePostPayload) => {
-        // update postsSlice
+      prepare: ({postID, increment}: LikePostPayload) => {
+        // Send request to back end silently
         if (increment) {
-          postsSlice.actions.incrementPostLikes({ postID });
+          postsSlice.actions.incrementPostLikes({postID});
+          new PostsApi().postsControllerLikePost(postID)
+              .then(_ => console.log("Optimistic update (LIKE POST) finished in back end for Post ID"))
+              .catch(err => console.log("Optimistic update (LIKE POST) rejected! ", err));
         } else {
-          postsSlice.actions.decrementPostLikes({ postID });
+          postsSlice.actions.decrementPostLikes({postID});
+          new PostsApi().postsControllerUnlikePost(postID)
+              .then(_ => console.log("Optimistic update (UNLIKE POST) finished in back end for Post ID"))
+              .catch(err => console.log("Optimistic update (UNLIKE POST) rejected! ", err));
         }
-
-        // TODO: make endpoint
-        // new UserApi().userControllerToggleLike(payload.postID);
-        return { payload: { postID } };
+        return { payload: {postID} };
       }
     }
   },
@@ -106,16 +138,19 @@ export const userSlice = createSlice({
           userDto.savedPosts?.forEach(postID => freshlyLoggedInUser.savedPostsSet[postID] = true);
           return freshlyLoggedInUser;
         }
-
-
       }
 
       // state may be null, so must explicitly return it
       return state;
+    },
+
+    // Logging out should clear the state
+    [isLoggedInSlice.actions.logOut.type]: () => {
+      return null;
     }
   }
 })
 
 export default userSlice.reducer;
 
-export const { savePost, toggleLikePost } = userSlice.actions;
+export const { savePost, toggleLikePost, loginSuccess, logOut } = userSlice.actions;
