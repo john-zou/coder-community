@@ -1,6 +1,13 @@
 
 import { createEntityAdapter, createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import { TrendingApi, GetInitialDataLoggedInDto, GetInitialDataDto, PostsApi, GetPostDetailsSuccessDto } from "../api";
+import {
+    TrendingApi,
+    GetInitialDataLoggedInDto,
+    GetInitialDataDto,
+    PostsApi,
+    GetPostDetailsSuccessDto,
+    GetPostsByTagDto
+} from "../api";
 import { RootState } from "./rootReducer";
 import { Post } from "../store/types";
 import { PostIDPayload } from './userSlice';
@@ -74,6 +81,9 @@ export const postsSlice = createSlice({
       state.slugToID[post.slug] = _id;
       postsAdapter.upsertOne(state, post);
     },
+    [fetchPostsByTag.fulfilled.type]: (state, action: PayloadAction<GetPostsByTagDto>) => {
+      postsAdapter.upsertMany(state, action.payload.posts);
+    }
   }
 })
 
