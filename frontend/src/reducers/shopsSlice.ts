@@ -4,8 +4,6 @@ import { Shop } from './../store/types';
 import { createEntityAdapter, createAsyncThunk } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
 
-
-
 const shopsAdapter = createEntityAdapter<Shop>({
   selectId: shop => shop._id,
 })

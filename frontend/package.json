@@ -17,6 +17,7 @@
     "@types/react-router-dom": "^5.1.5",
     "@types/uuid": "^8.0.0",
     "antd": "^4.3.1",
+    "immer": "^7.0.5",
     "lodash": "^4.17.15",
     "material-ui-dropzone": "^3.2.1",
     "portable-fetch": "^3.0.0",
@@ -33,6 +34,7 @@
     "redux-thunk": "^2.3.0",
     "rxjs": "^6.5.5",
     "typescript": "^3.9.5",
+    "url-slug": "^2.3.1",
     "uuid": "^8.2.0"
   },
   "scripts": {

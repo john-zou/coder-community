@@ -6,7 +6,6 @@ import { RootState } from "../../reducers/rootReducer";
 import { CreatePostBodyDto } from "../../../../backend/src/posts/dto/posts.dto";
 import { UserObjectID } from '../../../../backend/src/user/user-object-id.decorator';
 import { submitPost, updatePost } from "../../reducers/postsCreationSlice";
-import {urlslug} from "urlslug";
 
 const useStyles = makeStyles({
   operation: {
@@ -15,7 +14,6 @@ const useStyles = makeStyles({
   }
 });
 
-// const onSubmit = (createdPost, dispatch) => {
 const onSubmit = (params, dispatch) => {
     const newPost = {
         title: params.title,
@@ -34,8 +32,7 @@ const onCancel = (params, dispatch) => {
         tags: params.tags,
         featuredImg: params.img,
     }
-    console.log(newPost);
-    const slug = urlslug(params.title);
+    console.log("SUBMIT" + newPost);
     dispatch(updatePost(newPost));
 }
 

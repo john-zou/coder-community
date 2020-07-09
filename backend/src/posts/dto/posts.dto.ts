@@ -62,3 +62,7 @@ export class CreatePostSuccessDto {
   _id: string;
   slug: string;
 }
+
+export class UpdatePostSuccessDto {
+  CreatePostBodyDto
+}

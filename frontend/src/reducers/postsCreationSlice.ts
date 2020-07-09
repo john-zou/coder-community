@@ -1,18 +1,12 @@
+import * as urlSlug from 'url-slug';
 import {PostsApi, ShopApi} from '../api/api';
 import {PostsCreation, Tag} from "../store/types";
-import {CreatePostBodyDto} from "../../../backend/src/posts/dto/posts.dto";
+import {UpdatePostSuccessDto, CreatePostBodyDto, CreatePostSuccessDto} from "../../../backend/src/posts/dto/posts.dto";
 import {createEntityAdapter, createSlice, createAsyncThunk, PayloadAction} from "@reduxjs/toolkit";
 
 const postsCreationAdapter = createEntityAdapter<PostsCreation>({
-    selectId: item => item._id
+    selectId: postCreation => postCreation._id
 })
-
-export const initialState = {
-    _id: '',
-    title: '',
-    content: '',
-    tags: []
-}
 
 export const getAllShops = createAsyncThunk(
     'getAllShopsStatus',
@@ -29,29 +23,6 @@ export const createShop = createAsyncThunk(
     }
 )
 
-//https://redux-toolkit.js.org/api/createSlice
-export const postsCreationSlice = createSlice({
-    name: "postsCreation",
-    initialState, //: postsCreationAdapter.getInitialState(),
-    reducers: {
-        createTitle: (state, action) => {
-            let updated = Object.assign({}, state);
-            updated.title = action.payload;
-            return updated;
-        },
-        createContent: (state, action) => {
-            let updated = Object.assign({}, state);
-            updated.content = action.payload;
-            return updated;
-        },
-        createTags: (state, action) => {
-            let updated = Object.assign({}, state);
-            updated.tags = action.payload;
-            return updated;
-        }
-    }
-})
-
 export const submitPost = createAsyncThunk(
     'submitPost',
     async(createdPost: any) => {
@@ -61,22 +32,56 @@ export const submitPost = createAsyncThunk(
             tags: createdPost.tags,
             featuredImg: ''
         }
+        console.log(createdPost.title + " " + createdPost.content);
         return await new PostsApi().postsControllerCreatePost(newPost);
     }
 )
 
 export const updatePost = createAsyncThunk(
     'updatePost',
-    async(slug: string, createdPost: any) => {
+    async(createdPost: any) => {
         let newPost: CreatePostBodyDto = {
             title: createdPost.title,
             content: createdPost.content,
             tags: createdPost.tags,
             featuredImg: ''
         }
-        return await new PostsApi().postsControllerUpdatePostBySlug(slug, newPost);
+        let body = {
+            newPost: newPost,
+            user: {_id: "5eeebd4d1333dd0f79ca9be3"}
+        }
+        const slug = urlSlug(createdPost.title);
+        console.log("POST CREATION SLICE " + slug);
+        // return await new PostsApi().postsControllerUpdatePostBySlug(slug, newPost);
+        return await new PostsApi().postsControllerUpdatePostBySlug(slug, body);
     }
 )
+
+export const initialState = {
+    _id: '',
+    title: '',
+    content: '',
+    tags: []
+}
+
+export const postsCreationSlice = createSlice({
+    name: "postsCreation",
+    initialState: postsCreationAdapter.getInitialState(), //: postsCreationAdapter.getInitialState(),
+    reducers: {
+
+    },
+    extraReducers: {
+        [submitPost.fulfilled.type]: (state, action: PayloadAction<PostsCreation>) => {
+            console.log("***" + action.payload);
+            const newPost = action.payload;
+            postsCreationAdapter.addOne(state, newPost);
+        },
+        [updatePost.fulfilled.type]: (state, action: PayloadAction<UpdatePostSuccessDto>) => {
+            const newPost = action.payload.CreatePostBodyDto;
+            postsCreationAdapter.updateOne(state, newPost);
+        }
+    }
+})
 
 /*
 export const submitPost = createdPost => {
@@ -95,7 +100,7 @@ export const submitPost = createdPost => {
             },
             body: JSON.stringify({
                 newPost,
-                user: { _id: "5eeebd4d1333dd0f79ca9be3" } //curUser._id }
+                user: {_id: "5eeebd4d1333dd0f79ca9be3"} //curUser._id }
             }),
         }).then((response) => {
             return response.json();
@@ -104,19 +109,19 @@ export const submitPost = createdPost => {
         }).catch(e => console.log(e))
     }
 }
-*/
 
-/*
-export const testUpdatePost = createdPost => {
+
+export const updatePost = createdPost => {
     let newPost: CreatePostBodyDto = {
         title: createdPost.title,
         content: createdPost.content,
         tags: createdPost.tags,
         featuredImg: ''
     }
-
+    const slug = urlSlug(createdPost.title);
+    console.log(slug);
     return dispatch => {
-        return fetch(`http://localhost:3001/api/posts`, {
+        return fetch(`http://localhost:3001/api/posts/${slug}`, {
             method: 'PUT',
             headers: {
                 'Accept': 'application/json',
@@ -126,18 +131,9 @@ export const testUpdatePost = createdPost => {
                 newPost,
                 // user: { _id: "5eeebd4d1333dd0f79ca9be3" } //curUser._id }
             }),
-        }).then((response) => {
-            return response.json();
-        }).then((res) => {
-            console.log(res);
         }).catch(e => console.log(e))
     }
 }
- */
-
+*/
 
 export default postsCreationSlice.reducer;
-
-export const {
-    createTitle, createContent, createTags
-} = postsCreationSlice.actions;

@@ -14,17 +14,17 @@ export class PostsController {
     }
 
     @ApiBearerAuth()
-    @Personal() //provides @UserObjectID to get userid
+    // @Personal() //provides @UserObjectID to get userid
     @Post()
     createPost(@Body('newPost') createPostDto: CreatePostBodyDto, @UserObjectID() author: string): Promise<CreatePostSuccessDto> {
-        // createPost(@Body('newPost') createPostDto: CreatePostBodyDto) {
-        // console.log("*** " + createPostDto.content + "  " + createPostDto.title + " ***");
-        // console.log(author);
+        //createPost(@Body('newPost') createPostDto: CreatePostBodyDto) {
+        console.log("*** " + createPostDto.content + "  " + createPostDto.title + " ***");
         return this.postsService.createPost(author, createPostDto);
     }
 
-    @Put()
-    updatePostBySlug(@Body('newPost') newPost: CreatePostBodyDto, @Param('slug') slug: string) {
+    @Put(':slug')
+    @UsePipes(new ValidationPipe({transform: true}))
+    updatePostBySlug(@Param('slug') slug: string, @Body('newPost') newPost: CreatePostBodyDto) {
         console.log("CONTORLLER::NEWPOST");
         this.postsService.updatePostBySlug(newPost, slug);
     }
@@ -34,7 +34,6 @@ export class PostsController {
     async getPostBySlug(@Param('slug') slug: string, @Query('get-author') getAuthor?: boolean): Promise<GetPostDetailsSuccessDto> {
         const post = await this.postsService.getPostBySlug(slug);
         if (getAuthor) {
-
             const author = await this.userService.findUserById(post.author);
             return {post, author};
         } else {

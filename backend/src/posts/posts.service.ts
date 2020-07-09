@@ -136,8 +136,10 @@ export class PostsService {
             content: newPost.content,
             title: newPost.title,
             tags: newPost.tags,
-            featuredImg: newPost.featuredImg
+            featuredImg: newPost.featuredImg,
+            previewContent: newPost.content.substring(0, previewContentLength),
         });
+        console.log()
     }
 
     isLikedByUser(likes: Ref<User, ObjectID>[], userObjectID: string): boolean {

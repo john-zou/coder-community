@@ -1947,7 +1947,7 @@ export const PostsApiFetchParamCreator = function (configuration?: Configuration
             if (slug === null || slug === undefined) {
                 throw new RequiredError('slug','Required parameter slug was null or undefined when calling postsControllerUpdatePostBySlug.');
             }
-            const localVarPath = `/api/posts`
+            const localVarPath = `/api/posts/{slug}`
                 .replace(`{${"slug"}}`, encodeURIComponent(String(slug)));
             const localVarUrlObj = url.parse(localVarPath, true);
             const localVarRequestOptions = Object.assign({ method: 'PUT' }, options);
@@ -2080,6 +2080,8 @@ export class PostsApi extends BaseAPI {
      * @memberof PostsApi
      */
     public postsControllerCreatePost(options?: any) {
+        console.log("API::CREATEPOST");
+        console.log(options);
         return PostsApiFp(this.configuration).postsControllerCreatePost(options)(this.fetch, this.basePath);
     }
 
@@ -2103,6 +2105,8 @@ export class PostsApi extends BaseAPI {
      * @memberof PostsApi
      */
     public postsControllerUpdatePostBySlug(slug: string, options?: any) {
+        console.log("API::UPDATEPOST");
+        console.log(options);
         return PostsApiFp(this.configuration).postsControllerUpdatePostBySlug(slug, options)(this.fetch, this.basePath);
     }
 
