@@ -109,6 +109,12 @@ export interface CreateGroupDto {
      */
     description?: string;
     /**
+     * The ObjectIDs of the invited users of the new group
+     * @type {Array<string>}
+     * @memberof CreateGroupDto
+     */
+    users: Array<string>;
+    /**
      * The URL for the group's circular profile avatar image
      * @type {string}
      * @memberof CreateGroupDto

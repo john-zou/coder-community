@@ -52,16 +52,15 @@ const GroupCard = ({ currentGroup, isUserAMember }) => {
 export default function GroupTab() {
   const user = useSelector<RootState, User>(state => state.user);
   const groups = useSelector<RootState, Dictionary<Group>>(state => state.groups.entities);
+
   const dispatch: AppDispatch = useDispatch();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    console.log("hellooooo");
     setLoading(true);
     dispatch(fetchGroups()).then(unwrapResult).then(() => {
       setLoading(false);
-
     }).catch(err => {
       setLoading(false);
       setError(err);
@@ -75,8 +74,8 @@ export default function GroupTab() {
     return <ErrorPage error={error} />
   }
 
-  // console.log("User's groups array: ", groups);
-  // console.log("User's groups array: ", user.groups);
+  console.log("User's groups array: ", groups);
+  console.log("User's groups array: ", user.groups);
 
   const joinedGroupIDs = user.groups;
   const otherGroupsIDs = Object.keys(groups).filter((_id) => {

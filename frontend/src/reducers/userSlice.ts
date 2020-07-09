@@ -23,7 +23,7 @@ export const getUserForViewProfile = (userName) => createAsyncThunk(
 
 export const addFollowing = (id: string) => createAsyncThunk(
   'addFollowing', async () => {
-    return
+    //TODO
   }
 )
 

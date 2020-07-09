@@ -1,4 +1,4 @@
-import { Controller, Post, UploadedFile } from '@nestjs/common';
+import { Controller, Post, UploadedFile, Logger } from '@nestjs/common';
 import { Personal } from '../auth/guards/personal.decorator';
 import { FileUpload } from './upload.decorator';
 import { UploadService } from './upload.service';
@@ -12,8 +12,8 @@ import { ApiTags, ApiConsumes, ApiBody } from '@nestjs/swagger';
 @Personal() // Applies authentication to the entire controller
 @Controller('upload')
 export class UploadController {
-  constructor(private readonly uploadService: UploadService) {}
-  
+  constructor(private readonly uploadService: UploadService) { }
+
   @ApiBody({
     type: FileUploadDto
   })
@@ -46,6 +46,7 @@ export class UploadController {
     @UploadedFile() file: Express.Multer.File,
     @UserObjectID() _id: string,
   ): Promise<UploadSuccess> {
+    Logger.log(file);
     return { url: await this.uploadService.uploadPublicAsset(_id, file) };
   }
 

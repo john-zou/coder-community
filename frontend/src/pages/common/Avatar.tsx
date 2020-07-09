@@ -1,10 +1,11 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
+
 const useStyles = makeStyles({
   account: {
     display: "flex",
     flexDirection: "row",
-    paddingTop: "1em",
+    // paddingTop: "1em",
   },
   accountImg: {
     width: "3em",

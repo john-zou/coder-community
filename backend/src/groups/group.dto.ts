@@ -15,6 +15,11 @@ export class CreateGroupDto {
   description?: string;
 
   @ApiProperty({
+    description: "The ObjectIDs of the invited users of the new group",
+  })
+  users: string[];
+
+  @ApiProperty({
     description: "The URL for the group's circular profile avatar image",
     example: "http://images.com/react.png"
   })

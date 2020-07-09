@@ -81,7 +81,6 @@ const LeftSideBar = () => {
         <h3>Videos</h3>
 
         <h3 onClick={() => {
-          console.log("line 85...")
           history.push("/home/groups");
         }}>Groups</h3>
 

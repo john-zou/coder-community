@@ -1,8 +1,9 @@
 /* eslint-disable no-use-before-define */
-import React from 'react';
+import React, { useState } from 'react';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import TextField from '@material-ui/core/TextField';
+import Avatar from '../common/Avatar';
+import { CssTextField } from './TextFields';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -15,8 +16,14 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-export default function AddMultiple({ label, options }: { label: string, options: Array<{ name: string }> }) {
+export default function AddMultiple({ label, options, imgKey, setItems }: { label: string, options: Array<{ name: string }>, imgKey?: string, setItems: Function }) {
   const classes = useStyles();
+
+  const handleChange = (e, values) => {
+    const ids = values.map(value => value._id);
+    console.log(ids);
+    setItems(ids);
+  }
 
   return (
     <div className={classes.root}>
@@ -24,16 +31,20 @@ export default function AddMultiple({ label, options }: { label: string, options
         multiple
         id="tags-standard"
         options={options}
+        disableCloseOnSelect={true}
+        renderOption={imgKey && ((option) =>
+          <Avatar pic={option[imgKey]} title={option.name} subtitle="" extraText="" />
+        )}
         getOptionLabel={(option) => option.name}
-        // defaultValue={[options[13]]}
         renderInput={(params) => (
-          <TextField
+          <CssTextField
             {...params}
             variant="standard"
             label={label}
-            placeholder="Favorites"
+            placeholder=""
           />
         )}
+        onChange={handleChange}
       />
     </div>
   );

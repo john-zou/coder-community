@@ -1,6 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { createStyles, Theme, withStyles, WithStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import MuiDialogTitle from '@material-ui/core/DialogTitle';
 import MuiDialogContent from '@material-ui/core/DialogContent';
@@ -11,6 +10,8 @@ import Typography from '@material-ui/core/Typography';
 import styled from '@emotion/styled';
 import PurpleButton from '../common/PurpleButton';
 import { CreateGroupForm } from './CreateGroupForm';
+import { useDispatch } from 'react-redux';
+import { createGroup } from '../../reducers/groupsSlice';
 
 const CreateGroupButton = styled.p`
   margin-top: 10px;
@@ -59,19 +60,27 @@ const DialogContent = withStyles((theme: Theme) => ({
   },
 }))(MuiDialogContent);
 
-const DialogActions = withStyles((theme: Theme) => ({
-  root: {
-    margin: 0,
-    padding: theme.spacing(1),
-  },
-}))(MuiDialogActions);
+
+
+const intialState = {
+  name: "",
+  description: "",
+  private: false,
+  profilePic: "",
+  profileBanner: "",
+  admins: [],
+  users: [],
+  posts: [],
+  videos: [],
+}
 
 export const CreateGroupModal = () => {
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
 
   const handleClickOpen = () => {
     setOpen(true);
   };
+
   const handleClose = () => {
     setOpen(false);
   };
@@ -81,18 +90,19 @@ export const CreateGroupModal = () => {
       <CreateGroupButton onClick={handleClickOpen}>
         Create Group
       </CreateGroupButton>
+
       <Dialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={open}>
+
         <DialogTitle id="customized-dialog-title" onClose={handleClose}>
           Create a Group
         </DialogTitle>
+
         <DialogContent dividers>
-          <CreateGroupForm />
+          <CreateGroupForm handleClose={handleClose} />
         </DialogContent>
-        <DialogActions>
-          <div onClick={handleClose}>
-            <PurpleButton content="Create group" />
-          </div>
-        </DialogActions>
+
+
+
       </Dialog>
     </div>
   );

@@ -8,9 +8,11 @@ import { convertToStrArr } from '../util/helperFunctions';
 export class GroupsService {
 
   async createGroup(creatorID: string, createGroupDto: CreateGroupDto): Promise<CreateGroupSuccessDto> {
+    // TODO: add createGroupDto.users to new group, and add new group to those users
+
     const user = await UserModel.findById(creatorID);
     // add admins, users, posts and videos arrays to the CreateGroupDto
-    const groupDoc = createGroupDto as Group;
+    const groupDoc = createGroupDto as unknown as Group;
     groupDoc.admins = [];
     groupDoc.users = [];
     groupDoc.posts = [];
