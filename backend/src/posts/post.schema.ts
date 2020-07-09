@@ -23,7 +23,7 @@ export class Post extends TimeStamps {//mapped to MongoDb collection 'posts"
   content: string;
 
   @prop({ ref: 'Tag' })
-  tags: Ref<Tag>[];
+  tags: Ref<Tag>[]; // This is automatically initialized as empty array
 
   @prop()
   featuredImg: string;
@@ -32,7 +32,7 @@ export class Post extends TimeStamps {//mapped to MongoDb collection 'posts"
   likes: number;
 
   @prop({ ref: 'Comment' })
-  comments: Ref<Comment>[];
+  comments: Ref<Comment>[]; // This is automatically initialized as empty array
 
   @prop()
   views: number;
@@ -40,3 +40,4 @@ export class Post extends TimeStamps {//mapped to MongoDb collection 'posts"
   @prop({ ref: 'Group' })
   group: Ref<Group>;
 }
+
