@@ -76,7 +76,7 @@ export type Post = {
 export type Tag = {
   _id: string,
   name: string,
-  posts: string[],
+  postsSet: Record<string, boolean>, // posts that have this tag, that Redux is aware of
 };
 
 export type User = {

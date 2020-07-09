@@ -1,7 +1,8 @@
+import { UserModel, TagModel } from './../mongoModels';
 import { HttpService, Injectable, NotFoundException } from '@nestjs/common';
-import { Ref } from '@typegoose/typegoose';
+import { Ref, DocumentType } from '@typegoose/typegoose';
 import { ObjectID } from 'mongodb';
-import { convertToStrArr } from '../util/helperFunctions';
+import { convertToStrArr, convertPostDocumentToPostDto } from '../util/helperFunctions';
 import * as urlSlug from 'url-slug';
 
 import { PostModel } from '../mongoModels';
@@ -12,6 +13,7 @@ import {
   PostDto,
   PostWithDetails,
 } from './dto/posts.dto';
+import { Post } from './post.schema';
 
 // Unused -- can use later for different feature
 type DevToArticle = {
@@ -122,6 +124,17 @@ export class PostsService {
       newPost.slug = newPost._id;
       await newPost.save();
     }
+
+    // Add post to author
+    const author = await UserModel.findById(authorObjectID);
+    author.posts.push(newPost._id);
+    await author.save();
+
+    // Add post to tags
+    const tags = newPost.tags;
+    const expressions = tags.map(tagID => ({ _id: tagID }));
+    await TagModel.updateMany({ $or: expressions }, { $push: {posts: newPost._id }});
+
     return {
       _id: newPost._id,
       slug,
@@ -139,21 +152,7 @@ export class PostsService {
    */
   async getInitialPosts(userObjectID?: string): Promise<PostDto[]> {
     const foundPosts = await PostModel.find().limit(5);
-    return foundPosts.map(post => ({
-      _id: post._id.toString(),
-      author: post.author.toString(),
-      title: post.title,
-      slug: post.slug,
-      previewContent: post.previewContent,
-      content: post.content,
-      tags: convertToStrArr(post.tags),
-      createdAt: post.createdAt.toString(),
-      featuredImg: post.featuredImg,
-      likes: post.likes,
-      views: post.views,
-      comments: convertToStrArr(post.comments),
-      commentsCount: post.comments.length,
-    }));
+    return foundPosts.map(convertPostDocumentToPostDto);
   }
 
   // Unused -- can use later for different feature
