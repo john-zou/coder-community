@@ -1,6 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable, NotFoundException } from '@nestjs/common';
 
-import { UserModel } from '../mongoModels';
+import { PostModel, UserModel } from '../mongoModels';
 import { PostDto } from '../posts/dto/posts.dto';
 import { convertToStrArr } from '../util/helperFunctions';
 import { UserDto } from './dto/user.dto';
@@ -41,6 +41,25 @@ export class UserService {
 
   async saveProfilePic(userObjectID: string, url: string): Promise<void> {
     await UserModel.updateOne({ _id: userObjectID }, { profilePic: url });
+  }
+
+  async savePost(userObjectID: string, postID: string): Promise<void> {
+    const user = await UserModel.findById(userObjectID);
+    if (!user) {
+      throw new HttpException("User does not exist in MongoDB!", 500);
+    }
+    const post = await PostModel.findById(postID);
+    if (!post) {
+      throw new NotFoundException();
+    }
+    const postAlreadyExists = user.savedPosts.find(savedPostID => savedPostID.toString() === postID);
+    if (postAlreadyExists) {
+      throw new HttpException("User already saved this post!", 400);
+    }
+
+    // Add to saved posts
+    user.savedPosts.push(post);
+    await user.save();
   }
 
   async getAuthors(posts: PostDto[]): Promise<UserDto[]> {
