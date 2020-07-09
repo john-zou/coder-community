@@ -705,7 +705,7 @@ export interface TagsDto {
  */
 export interface UploadSuccess {
     /**
-     * The relative static URL of the file
+     * The URL of the file which is now statically served as a result of this upload.
      * @type {string}
      * @memberof UploadSuccess
      */
@@ -2456,7 +2456,7 @@ export class TrendingApi extends BaseAPI {
 export const UploadApiFetchParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * 
+         * Not implemented. Once implemented, use helper function in 'frontend/src/api-upload'. (Don't use 'new UploadApi().uploadController ...' from 'frontend/src/api' as it does not work.)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -2478,7 +2478,7 @@ export const UploadApiFetchParamCreator = function (configuration?: Configuratio
             };
         },
         /**
-         * 
+         * Note: use helper function in 'frontend/src/api-upload'. (Don't use 'new UploadApi().uploadController ...' from 'frontend/src/api' as it does not work. )
          * @param {FileUploadDto} body 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -2509,7 +2509,7 @@ export const UploadApiFetchParamCreator = function (configuration?: Configuratio
             };
         },
         /**
-         * 
+         * Note: use helper function in 'frontend/src/api-upload'. The generated version for this front end API helpers (frontend/src/api) doesn't work.
          * @param {FileUploadDto} body 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -2540,7 +2540,7 @@ export const UploadApiFetchParamCreator = function (configuration?: Configuratio
             };
         },
         /**
-         * 
+         * Note: use helper function in 'frontend/src/api-upload'. (Don't use 'new UploadApi().uploadController ...' from 'frontend/src/api' as it does not work.)
          * @param {FileUploadDto} body 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -2580,7 +2580,7 @@ export const UploadApiFetchParamCreator = function (configuration?: Configuratio
 export const UploadApiFp = function(configuration?: Configuration) {
     return {
         /**
-         * 
+         * Not implemented. Once implemented, use helper function in 'frontend/src/api-upload'. (Don't use 'new UploadApi().uploadController ...' from 'frontend/src/api' as it does not work.)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -2597,7 +2597,7 @@ export const UploadApiFp = function(configuration?: Configuration) {
             };
         },
         /**
-         * 
+         * Note: use helper function in 'frontend/src/api-upload'. (Don't use 'new UploadApi().uploadController ...' from 'frontend/src/api' as it does not work. )
          * @param {FileUploadDto} body 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -2615,7 +2615,7 @@ export const UploadApiFp = function(configuration?: Configuration) {
             };
         },
         /**
-         * 
+         * Note: use helper function in 'frontend/src/api-upload'. The generated version for this front end API helpers (frontend/src/api) doesn't work.
          * @param {FileUploadDto} body 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -2633,7 +2633,7 @@ export const UploadApiFp = function(configuration?: Configuration) {
             };
         },
         /**
-         * 
+         * Note: use helper function in 'frontend/src/api-upload'. (Don't use 'new UploadApi().uploadController ...' from 'frontend/src/api' as it does not work.)
          * @param {FileUploadDto} body 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -2660,7 +2660,7 @@ export const UploadApiFp = function(configuration?: Configuration) {
 export const UploadApiFactory = function (configuration?: Configuration, fetch?: FetchAPI, basePath?: string) {
     return {
         /**
-         * 
+         * Not implemented. Once implemented, use helper function in 'frontend/src/api-upload'. (Don't use 'new UploadApi().uploadController ...' from 'frontend/src/api' as it does not work.)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -2668,7 +2668,7 @@ export const UploadApiFactory = function (configuration?: Configuration, fetch?:
             return UploadApiFp(configuration).uploadControllerUploadPrivateFile(options)(fetch, basePath);
         },
         /**
-         * 
+         * Note: use helper function in 'frontend/src/api-upload'. (Don't use 'new UploadApi().uploadController ...' from 'frontend/src/api' as it does not work. )
          * @param {FileUploadDto} body 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -2677,7 +2677,7 @@ export const UploadApiFactory = function (configuration?: Configuration, fetch?:
             return UploadApiFp(configuration).uploadControllerUploadProfileBannerPic(body, options)(fetch, basePath);
         },
         /**
-         * 
+         * Note: use helper function in 'frontend/src/api-upload'. The generated version for this front end API helpers (frontend/src/api) doesn't work.
          * @param {FileUploadDto} body 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -2686,7 +2686,7 @@ export const UploadApiFactory = function (configuration?: Configuration, fetch?:
             return UploadApiFp(configuration).uploadControllerUploadProfilePic(body, options)(fetch, basePath);
         },
         /**
-         * 
+         * Note: use helper function in 'frontend/src/api-upload'. (Don't use 'new UploadApi().uploadController ...' from 'frontend/src/api' as it does not work.)
          * @param {FileUploadDto} body 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -2705,7 +2705,7 @@ export const UploadApiFactory = function (configuration?: Configuration, fetch?:
  */
 export class UploadApi extends BaseAPI {
     /**
-     * 
+     * Not implemented. Once implemented, use helper function in 'frontend/src/api-upload'. (Don't use 'new UploadApi().uploadController ...' from 'frontend/src/api' as it does not work.)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof UploadApi
@@ -2715,7 +2715,7 @@ export class UploadApi extends BaseAPI {
     }
 
     /**
-     * 
+     * Note: use helper function in 'frontend/src/api-upload'. (Don't use 'new UploadApi().uploadController ...' from 'frontend/src/api' as it does not work. )
      * @param {FileUploadDto} body 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -2726,7 +2726,7 @@ export class UploadApi extends BaseAPI {
     }
 
     /**
-     * 
+     * Note: use helper function in 'frontend/src/api-upload'. The generated version for this front end API helpers (frontend/src/api) doesn't work.
      * @param {FileUploadDto} body 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -2737,7 +2737,7 @@ export class UploadApi extends BaseAPI {
     }
 
     /**
-     * 
+     * Note: use helper function in 'frontend/src/api-upload'. (Don't use 'new UploadApi().uploadController ...' from 'frontend/src/api' as it does not work.)
      * @param {FileUploadDto} body 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}

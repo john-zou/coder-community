@@ -20,12 +20,11 @@ const AcceptedExtensions: Record<string, boolean> = {
 }
 
 /**
- * Does Multer file validatoin
+ * Does Multer file validation
  */
 export function multerFileFilter(_: Request, file: Express.Multer.File, callback: (error: Error, acceptFile: boolean) => void): void {
-  Logger.log(file);
+  Logger.log(file, "Received file");
   const extension = path.extname(file.originalname);
-  Logger.log("File extension:", extension);
   const accepted = AcceptedExtensions[extension];
   if (accepted) {
     callback(null, true);

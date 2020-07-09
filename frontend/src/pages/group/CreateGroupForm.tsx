@@ -19,6 +19,7 @@ import PurpleButton from '../common/PurpleButton';
 import { createGroup } from '../../reducers/groupsSlice';
 import { UploadApi } from '../../api';
 import { JwtLocalStorageKey } from '../../constants';
+import {uploadPublicAsset} from "../../api-upload";
 
 const TextWrapper = styled.div`
   margin-left: 10px;
@@ -98,35 +99,11 @@ export const CreateGroupForm = ({ handleClose }) => {
     // upload profile pic
     if (profilePicFile) {
       // TODO: show loading while uploading
-      try {
-        const data = new FormData();
-        data.append('file', profilePicFile);
-        const profilePicUploadResult = await fetch('http://localhost:3001/api/upload/public/asset', {
-          headers: {
-            'Authorization': 'Bearer ' + localStorage.getItem(JwtLocalStorageKey),
-          },
-          method: 'POST',
-          body: data
-        }).then(res => res.json());
-        console.log(profilePicUploadResult);
-        // const profilePicUploadResult = await new UploadApi().uploadControllerUploadPublicAsset({
-        //   file: profilePicFile
-        // });
-        profilePic = profilePicUploadResult.url;
-      } catch (err) {
-        console.log(err);
-      }
+      profilePic = await uploadPublicAsset(profilePicFile);
     }
 
     if (profileBannerFile) {
-      try {
-        const profileBannerUploadResult = await new UploadApi().uploadControllerUploadPublicAsset({
-          file: profileBannerFile
-        });
-        profileBanner = profileBannerUploadResult.url;
-      } catch (err) {
-        console.log(err);
-      }
+      profileBanner = await uploadPublicAsset(profileBannerFile);
     }
 
     const group = {

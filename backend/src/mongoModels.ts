@@ -10,6 +10,7 @@ import { Post } from './posts/post.schema';
 import { Tag } from './tags/tag.schema';
 import { User } from './user/user.schema';
 import * as chalk from 'chalk';
+import { Logger } from '@nestjs/common';
 
 let mongooseInstance: typeof mongoose;
 
@@ -31,8 +32,7 @@ export const DefaultMongoOptions = {
 
 export async function initializeMongo(connectionString: string): Promise<void> {
   mongooseInstance = await mongoose.connect(connectionString, DefaultMongoOptions);
-  console.log(chalk.blue('You are connected to MongoDB: '));
-  console.log(chalk.green(connectionString));
+  Logger.log("Connected to: " + connectionString, "initializeMongo");
 }
 
 export function disconnectMongo(): Promise<void> {
