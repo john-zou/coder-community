@@ -52,6 +52,7 @@ export const CreateGroupForm = ({ handleClose }) => {
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [creatingGroupLoading, setCreatingGroupLoading] = useState(false);
 
   const dispatch = useDispatch<AppDispatch>();
   useEffect(() => {
@@ -138,58 +139,67 @@ export const CreateGroupForm = ({ handleClose }) => {
       profileBanner,
     };
 
-    dispatch(createGroup(group));
+    dispatch(createGroup(group)).then(unwrapResult).then(() => {
+      setCreatingGroupLoading(true);
+    }).catch(err => {
+      setLoading(false);
+      setError(err);
+    })
     handleClose();
   }
 
+
   return (
-    <form onSubmit={handleSubmit}>
-      {/* https://github.com/jakehartnell/react-images-upload#readme */}
-      <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-        <ImageUploader
-          // {...props}
-          buttonText='Upload cover photo'
-          withPreview={true}
-          withIcon={true}
-          onChange={handleBannerImageChange}
-          imgExtension={[".jpg", ".jpeg", ".gif", ".png", ".gif"]}
-          maxFileSize={5242880}
-          singleImage={true}
-          buttonStyles={{ backgroundColor: "#6a6a6a" }}
-        />
-        {/* <div style={{ width: "20px" }}></div> */}
-        <ImageUploader
-          // {...props}
-          buttonText='Upload profile pic'
-          withPreview={true}
-          withIcon={false}
-          onChange={handleProfilePicChange}
-          imgExtension={[".jpg", ".jpeg", ".gif", ".png", ".gif"]}
-          maxFileSize={5242880}
-          style={{ width: "50%" }}
-          singleImage={true}
-          buttonStyles={{ backgroundColor: "#6a6a6a" }}
-        />
-      </div>
+    <>
+      {creatingGroupLoading ? <Loading /> :
+        <form onSubmit={handleSubmit}>
+          {/* https://github.com/jakehartnell/react-images-upload#readme */}
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+            <ImageUploader
+              // {...props}
+              buttonText='Upload cover photo'
+              withPreview={true}
+              withIcon={true}
+              onChange={handleBannerImageChange}
+              imgExtension={[".jpg", ".jpeg", ".gif", ".png", ".gif"]}
+              maxFileSize={5242880}
+              singleImage={true}
+              buttonStyles={{ backgroundColor: "#6a6a6a" }}
+            />
+            {/* <div style={{ width: "20px" }}></div> */}
+            <ImageUploader
+              // {...props}
+              buttonText='Upload profile pic'
+              withPreview={true}
+              withIcon={false}
+              onChange={handleProfilePicChange}
+              imgExtension={[".jpg", ".jpeg", ".gif", ".png", ".gif"]}
+              maxFileSize={5242880}
+              style={{ width: "50%" }}
+              singleImage={true}
+              buttonStyles={{ backgroundColor: "#6a6a6a" }}
+            />
+          </div>
 
-      <TextFields name="Add Group Name" description="Add Group Description" setName={setName} setDescription={setDescription} />
+          <TextFields name="Add Group Name" description="Add Group Description" setName={setName} setDescription={setDescription} />
 
-      {/* https://material-ui.com/components/autocomplete/#Tags.tsx */}
-      <TextWrapper>
-        <AddMultiple label="Add People" options={followingFollowers} imgKey="profilePic" setItems={setPeople} />
-      </TextWrapper>
+          {/* https://material-ui.com/components/autocomplete/#Tags.tsx */}
+          <TextWrapper>
+            <AddMultiple label="Add People" options={followingFollowers} imgKey="profilePic" setItems={setPeople} />
+          </TextWrapper>
 
-      <div style={{ height: "25px" }}></div>
+          <div style={{ height: "25px" }}></div>
 
-      <TextWrapper>
-        <RadioButtons setItem={setPrivate} />
-      </TextWrapper>
+          <TextWrapper>
+            <RadioButtons setItem={setPrivate} />
+          </TextWrapper>
 
-      <DialogActions>
-        <div>
-          <PurpleButton content="Create group" />
-        </div>
-      </DialogActions>
-    </form>
+          <DialogActions>
+            <div>
+              <PurpleButton content="Create group" />
+            </div>
+          </DialogActions>
+        </form>}
+    </>
   )
 }

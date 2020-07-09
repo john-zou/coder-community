@@ -8,9 +8,10 @@ import { Dictionary, unwrapResult } from "@reduxjs/toolkit";
 import { AppDispatch } from "../../store";
 import { Loading } from "../common/Loading";
 import ErrorPage from "../common/ErrorPage";
-import { fetchGroups } from "../../reducers/groupsSlice";
+import { fetchGroups, leaveGroup } from "../../reducers/groupsSlice";
 import PurpleButton from "../common/PurpleButton";
 import { CreateGroupModal } from "./CreateGroupModal";
+import { dispatch } from "rxjs/internal/observable/range";
 
 const GroupContainer = styled.div`
   width: 90%;
@@ -36,14 +37,23 @@ const GroupContent = styled.div`
   padding-right: 30px;
 `;
 
-const GroupCard = ({ currentGroup, isUserAMember }) => {
+const GroupCard = ({ currentGroup, isUserAMember }: { currentGroup: Group, isUserAMember: boolean }) => {
+  const dispatch = useDispatch();
+
+  const handleJoinGroup = () => {
+
+  }
+  const handleLeaveGroup = () => {
+    dispatch(leaveGroup(currentGroup._id));
+  }
   return <div>
     <div style={{ display: "flex", flexDirection: "row" }}>
       <Avatar pic={currentGroup.profilePic} title={currentGroup.name} subtitle={currentGroup.description} extraText=""></Avatar>
       <div style={{ flex: 1 }}></div>
       <div style={{ marginTop: "30px" }}>
-        {!isUserAMember && <PurpleButton content="Join Group" />}
-        {isUserAMember && <PurpleButton content="Leave Group" />}
+        {!isUserAMember && <div onClick={handleJoinGroup}>
+          <PurpleButton content="Join Group" /> </div>}
+        {isUserAMember && <div onClick={handleLeaveGroup}> <PurpleButton content="Leave Group" /> </div>}
       </div>
     </div>
   </div>
@@ -74,9 +84,6 @@ export default function GroupTab() {
     return <ErrorPage error={error} />
   }
 
-  console.log("User's groups array: ", groups);
-  console.log("User's groups array: ", user.groups);
-
   const joinedGroupIDs = user.groups;
   const otherGroupsIDs = Object.keys(groups).filter((_id) => {
     return !joinedGroupIDs.includes(_id);
@@ -97,7 +104,6 @@ export default function GroupTab() {
         {joinedGroupIDs.length > 0 && <>
           <h3>Your groups</h3>
           {joinedGroupIDs.map((_id) => {
-            console.log(joinedGroupIDs);
             return <GroupCard currentGroup={groups[_id]} key={_id} isUserAMember={true} />
           })}
         </>}
@@ -105,7 +111,6 @@ export default function GroupTab() {
         {joinedGroupIDs.length === 0 && <h3>Groups you may be interested in</h3>}
         {joinedGroupIDs.length > 0 && <h3>Other groups</h3>}
         {otherGroupsIDs.map((_id) => {
-          console.log(otherGroupsIDs);
           return <GroupCard currentGroup={groups[_id]} key={_id} isUserAMember={false} />
         })}
       </GroupContent>
