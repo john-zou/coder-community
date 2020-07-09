@@ -39,8 +39,8 @@ export default function UpdatePost() {
     const oldPost = getOld(slug);
     return (
         <div className={classes.updatePost}>
-            <ImgP img={oldPost.img} />
-            <TextP title={oldPost.payload} />
+            {/* <ImgP img={oldPost.img} />
+            <TextP title={oldPost.payload} />*/}
             <TagP/>
             <Submit/>
         </div>

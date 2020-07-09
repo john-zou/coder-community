@@ -1,5 +1,5 @@
 import { PayloadAction } from '@reduxjs/toolkit';
-import { PostsApi, ShopApi, GetAllShopsDto, ShopDto } from './../api/api';
+import { ShopApi, GetAllShopsDto, ShopDto } from './../api/api';
 import { Shop } from './../store/types';
 import { createEntityAdapter, createAsyncThunk } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';

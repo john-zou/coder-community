@@ -14,7 +14,7 @@ export class PostsController {
     }
 
     @ApiBearerAuth()
-    // @Personal() //provides @UserObjectID to get userid
+    @Personal() //provides @UserObjectID to get userid
     @Post()
     createPost(@Body('newPost') createPostDto: CreatePostBodyDto, @UserObjectID() author: string): Promise<CreatePostSuccessDto> {
         // createPost(@Body('newPost') createPostDto: CreatePostBodyDto) {

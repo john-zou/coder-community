@@ -3,8 +3,10 @@ import { makeStyles } from "@material-ui/core/styles";
 import { useSelector, useDispatch } from 'react-redux';
 import {PostsCreation, User} from "../../store/types";
 import { RootState } from "../../reducers/rootReducer";
-import {CreatePostBodyDto} from "../../../../backend/src/posts/dto/posts.dto";
+import { CreatePostBodyDto } from "../../../../backend/src/posts/dto/posts.dto";
 import { UserObjectID } from '../../../../backend/src/user/user-object-id.decorator';
+import { submitPost, updatePost } from "../../reducers/postsCreationSlice";
+import {urlslug} from "urlslug";
 
 const useStyles = makeStyles({
   operation: {
@@ -12,67 +14,6 @@ const useStyles = makeStyles({
     flex: 0
   }
 });
-
-let curUser;
-const submitPost = createdPost => {
-    let newPost: CreatePostBodyDto = {
-        title: createdPost.title,
-        content: createdPost.content,
-        tags: createdPost.tags,
-        featuredImg: ''
-    }
-    return dispatch => {
-        return fetch(`http://localhost:3001/api/posts`, {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                newPost,
-                user: { _id: "5eeebd4d1333dd0f79ca9be3" } //curUser._id }
-            }),
-            /*
-            user: JSON.stringify( {
-                _id: '',
-            }),
-             */
-        }).then((response) => {
-            return response.json();
-        }).then((res) => {
-            console.log(res);
-        }).catch(e => console.log(e))
-    }
-}
-
-const testUpdatePost = createdPost => {
-    let newPost: CreatePostBodyDto = {
-        title: createdPost.title,
-        content: createdPost.content,
-        tags: createdPost.tags,
-        featuredImg: ''
-    }
-
-    return dispatch => {
-        return fetch(`http://localhost:3001/api/posts`, {
-            method: 'PUT',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                newPost,
-                // user: { _id: "5eeebd4d1333dd0f79ca9be3" } //curUser._id }
-            }),
-            /*
-        }).then((response) => {
-            return response.json();
-        }).then((res) => {
-            console.log(res);
-             */
-        }).catch(e => console.log(e))
-    }
-}
 
 // const onSubmit = (createdPost, dispatch) => {
 const onSubmit = (params, dispatch) => {
@@ -86,12 +27,17 @@ const onSubmit = (params, dispatch) => {
     dispatch(submitPost(newPost));
 }
 
-
-const onCancel = (newPost, dispatch) => {
-    dispatch(testUpdatePost(newPost));
+const onCancel = (params, dispatch) => {
+    const newPost = {
+        title: params.title,
+        content: params.content,
+        tags: params.tags,
+        featuredImg: params.img,
+    }
+    console.log(newPost);
+    const slug = urlslug(params.title);
+    dispatch(updatePost(newPost));
 }
-
-const _onCancel = (event) => {}
 
 export default function Submit(params) {
   const classes = useStyles();
@@ -103,7 +49,7 @@ export default function Submit(params) {
   return (
      <div className={classes.operation}>
         <button color="primary" onClick={(event) => {
-            /* onCancel(createdPost, dispatch); */
+            onCancel(params, dispatch);
         }}>Cancel</button>
         <button color="primary" onClick={(event) =>{
             onSubmit(params, dispatch);
