@@ -150,9 +150,14 @@ export default function Header(props) {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={() => history.push(`/user/${user.userID}`)}>Profile</MenuItem>
-      <MenuItem onClick={handleMenuClose}>My account</MenuItem> // TODO: implement account management
-      <MenuItem onClick={() => history.push('/logout')}>Log Out</MenuItem>
+      <MenuItem onClick={() => {
+        history.push(`/user/${user.userID}`);
+        handleMenuClose();
+      }}>Profile</MenuItem>
+      <MenuItem onClick={() => {
+        history.push('/logout');
+        handleMenuClose();
+      }}>Log Out</MenuItem>
     </Menu>
   );
 

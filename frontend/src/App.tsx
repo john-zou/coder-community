@@ -16,11 +16,12 @@ import { LogOut } from "./pages/login/Logout";
 import { Experimental } from "./pages/experimental/Experimental";
 import { LoginGitHub } from "./pages/login/LoginGitHub";
 import { AppDispatch } from "./store";
-import { useDispatch } from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import { fetchTrendingPosts } from "./reducers/postsSlice";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { Loading } from "./pages/common/Loading";
 import ErrorPage from "./pages/common/ErrorPage";
+import {RootState} from "./reducers/rootReducer";
 
 export type ViewProfileParams = {
   username: string;
@@ -33,8 +34,9 @@ export type PostDetailParams = {
 export default function App() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
+  const isLoggedIn = useSelector<RootState, boolean>(state => state.isLoggedIn);
   const dispatch = useDispatch<AppDispatch>();
+
   useEffect(() => {
     setLoading(true);
     dispatch(fetchTrendingPosts())
@@ -47,7 +49,7 @@ export default function App() {
         setError(error);
         setLoading(false);
       });
-  }, []);
+  }, [isLoggedIn]);
 
   if (loading) {
     return <Loading />

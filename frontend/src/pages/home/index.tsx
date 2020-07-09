@@ -1,12 +1,11 @@
 import { makeStyles } from '@material-ui/core/styles';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import LeftSideBar from './LeftSideBar';
 import Main from './Main';
 import RightSideBar from './RightSideBar';
 import GroupTab from '../group';
 import { Route, Switch } from 'react-router-dom';
 import { BrowserRouter as Router } from 'react-router-dom';
-import { createBrowserHistory } from 'history';
 
 const useStyles = makeStyles({
   home: {
@@ -27,7 +26,6 @@ const useStyles = makeStyles({
 
 export default function Home() {
   const classes = useStyles();
-  const history = createBrowserHistory();
 
   return (
     <div className={classes.home}>

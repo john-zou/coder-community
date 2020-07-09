@@ -6,6 +6,7 @@ import _ from "lodash";
 import { isGetInitialDataLoggedInDto } from "../util/helperFunctions";
 import { postsSlice } from "./postsSlice";
 import {JwtLocalStorageKey} from "../constants";
+import {isLoggedInSlice} from "./isLoggedInSlice";
 
 
 export const getLoggedInUser = createAsyncThunk(
@@ -133,12 +134,15 @@ export const userSlice = createSlice({
           userDto.savedPosts?.forEach(postID => freshlyLoggedInUser.savedPostsSet[postID] = true);
           return freshlyLoggedInUser;
         }
-
-
       }
 
       // state may be null, so must explicitly return it
       return state;
+    },
+
+    // Logging out should clear the state
+    [isLoggedInSlice.actions.logOut.type]: () => {
+      return null;
     }
   }
 })
