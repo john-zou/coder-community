@@ -6,11 +6,10 @@ import _ from "lodash";
 import { isGetInitialDataLoggedInDto } from "../util/helperFunctions";
 import { postsSlice } from "./postsSlice";
 
-
+const api = new UserApi();
 export const getLoggedInUser = createAsyncThunk(
   '/user/getLoggedInUserStatus',
   async () => {
-    const api = new UserApi();
     return await api.userControllerGetUser();
   }
 )
@@ -22,6 +21,11 @@ export const getUserForViewProfile = (userName) => createAsyncThunk(
   }
 )
 
+export const addFollowing = (id: string) => createAsyncThunk(
+  'addFollowing', async () => {
+    return
+  }
+)
 
 export type PostIDPayload = { postID: string };
 export type LikePostPayload = { postID: string, increment: boolean };
@@ -68,17 +72,17 @@ export const userSlice = createSlice({
         }
         return user;
       },
-      prepare: ({postID, increment}: LikePostPayload) => {
+      prepare: ({ postID, increment }: LikePostPayload) => {
         // update postsSlice
         if (increment) {
-          postsSlice.actions.incrementPostLikes({postID});
+          postsSlice.actions.incrementPostLikes({ postID });
         } else {
-          postsSlice.actions.decrementPostLikes({postID});
+          postsSlice.actions.decrementPostLikes({ postID });
         }
 
         // TODO: make endpoint
         // new UserApi().userControllerToggleLike(payload.postID);
-        return { payload: {postID} };
+        return { payload: { postID } };
       }
     }
   },

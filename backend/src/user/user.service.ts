@@ -6,6 +6,8 @@ import { convertToStrArr, convertUserToUserDto } from '../util/helperFunctions';
 import { UserDto, GetUsersSuccessDto } from './dto/user.dto';
 import { User } from './user.schema';
 import { ObjectId } from 'mongodb';
+import { userInfo } from 'os';
+import { Model } from 'mongoose';
 
 /**
  * typed like in UserSchema
@@ -18,6 +20,27 @@ type ExtraGitHubUserInfo = {
 
 @Injectable()
 export class UserService {
+
+  async addFollower(userObjectID: string, id: string): Promise<boolean> {
+    const foundUser = UserModel.findById(id);
+    console.log(foundUser);
+    await UserModel.updateOne({ _id: userObjectID }, {
+      $push: {
+        followers: (await foundUser)._id,
+      }
+    })
+    return true;
+  }
+
+  async addFollowing(userObjectID: string, id: string): Promise<boolean> {
+    const foundUser = UserModel.findById(id);
+    await UserModel.updateOne({ _id: userObjectID }, {
+      $push: {
+        following: (await foundUser)._id,
+      }
+    })
+    return true;
+  }
 
   async findUsersByIds(ids: string[]): Promise<GetUsersSuccessDto> {
     const users = await UserModel.find({
@@ -46,6 +69,7 @@ export class UserService {
     await UserModel.updateOne({ _id: userObjectID }, { profilePic: url });
   }
 
+  //to get the authors of trending posts
   async getAuthors(posts: PostDto[]): Promise<UserDto[]> {
     const result: UserDto[] = [];
     for (const post of posts) {
