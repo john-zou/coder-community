@@ -300,6 +300,31 @@ export interface GetPostDetailsSuccessDto {
 /**
  * 
  * @export
+ * @interface GetPostsByTagDto
+ */
+export interface GetPostsByTagDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof GetPostsByTagDto
+     */
+    cursor: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetPostsByTagDto
+     */
+    tagID: string;
+    /**
+     * 
+     * @type {Array<PostDto>}
+     * @memberof GetPostsByTagDto
+     */
+    posts: Array<PostDto>;
+}
+/**
+ * 
+ * @export
  * @interface GitHubLoginBody
  */
 export interface GitHubLoginBody {
@@ -653,12 +678,6 @@ export interface TagsDto {
      * @memberof TagsDto
      */
     name: string;
-    /**
-     * 
-     * @type {Array<string>}
-     * @memberof TagsDto
-     */
-    posts: Array<string>;
 }
 /**
  * 
@@ -1919,6 +1938,52 @@ export const PostsApiFetchParamCreator = function (configuration?: Configuration
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @param {string} tagID The ObjectID of the tag
+         * @param {number} [requestedCount] How many posts to fetch
+         * @param {number} [startIdx] What index to start at, e.g. if startIdx &#x3D; 5, then the 5 posts (0th, 1st, 2nd, 3rd, 4th) of this tag will not be fetched
+         * @param {any} [excludePostIDs] An object that works like a set of Post ObjectIDs to exclude
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        tagsControllerGetPostsByTag(tagID: string, requestedCount?: number, startIdx?: number, excludePostIDs?: any, options: any = {}): FetchArgs {
+            // verify required parameter 'tagID' is not null or undefined
+            if (tagID === null || tagID === undefined) {
+                throw new RequiredError('tagID','Required parameter tagID was null or undefined when calling tagsControllerGetPostsByTag.');
+            }
+            const localVarPath = `/api/tags/posts`;
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (tagID !== undefined) {
+                localVarQueryParameter['tagID'] = tagID;
+            }
+
+            if (requestedCount !== undefined) {
+                localVarQueryParameter['requestedCount'] = requestedCount;
+            }
+
+            if (startIdx !== undefined) {
+                localVarQueryParameter['startIdx'] = startIdx;
+            }
+
+            if (excludePostIDs !== undefined) {
+                localVarQueryParameter['excludePostIDs'] = excludePostIDs;
+            }
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -1965,6 +2030,27 @@ export const PostsApiFp = function(configuration?: Configuration) {
                 });
             };
         },
+        /**
+         * 
+         * @param {string} tagID The ObjectID of the tag
+         * @param {number} [requestedCount] How many posts to fetch
+         * @param {number} [startIdx] What index to start at, e.g. if startIdx &#x3D; 5, then the 5 posts (0th, 1st, 2nd, 3rd, 4th) of this tag will not be fetched
+         * @param {any} [excludePostIDs] An object that works like a set of Post ObjectIDs to exclude
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        tagsControllerGetPostsByTag(tagID: string, requestedCount?: number, startIdx?: number, excludePostIDs?: any, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<GetPostsByTagDto> {
+            const localVarFetchArgs = PostsApiFetchParamCreator(configuration).tagsControllerGetPostsByTag(tagID, requestedCount, startIdx, excludePostIDs, options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
     }
 };
 
@@ -1992,6 +2078,18 @@ export const PostsApiFactory = function (configuration?: Configuration, fetch?: 
          */
         postsControllerGetPostBySlug(slug: string, getAuthor: boolean, options?: any) {
             return PostsApiFp(configuration).postsControllerGetPostBySlug(slug, getAuthor, options)(fetch, basePath);
+        },
+        /**
+         * 
+         * @param {string} tagID The ObjectID of the tag
+         * @param {number} [requestedCount] How many posts to fetch
+         * @param {number} [startIdx] What index to start at, e.g. if startIdx &#x3D; 5, then the 5 posts (0th, 1st, 2nd, 3rd, 4th) of this tag will not be fetched
+         * @param {any} [excludePostIDs] An object that works like a set of Post ObjectIDs to exclude
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        tagsControllerGetPostsByTag(tagID: string, requestedCount?: number, startIdx?: number, excludePostIDs?: any, options?: any) {
+            return PostsApiFp(configuration).tagsControllerGetPostsByTag(tagID, requestedCount, startIdx, excludePostIDs, options)(fetch, basePath);
         },
     };
 };
@@ -2024,6 +2122,20 @@ export class PostsApi extends BaseAPI {
      */
     public postsControllerGetPostBySlug(slug: string, getAuthor: boolean, options?: any) {
         return PostsApiFp(this.configuration).postsControllerGetPostBySlug(slug, getAuthor, options)(this.fetch, this.basePath);
+    }
+
+    /**
+     * 
+     * @param {string} tagID The ObjectID of the tag
+     * @param {number} [requestedCount] How many posts to fetch
+     * @param {number} [startIdx] What index to start at, e.g. if startIdx &#x3D; 5, then the 5 posts (0th, 1st, 2nd, 3rd, 4th) of this tag will not be fetched
+     * @param {any} [excludePostIDs] An object that works like a set of Post ObjectIDs to exclude
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof PostsApi
+     */
+    public tagsControllerGetPostsByTag(tagID: string, requestedCount?: number, startIdx?: number, excludePostIDs?: any, options?: any) {
+        return PostsApiFp(this.configuration).tagsControllerGetPostsByTag(tagID, requestedCount, startIdx, excludePostIDs, options)(this.fetch, this.basePath);
     }
 
 }

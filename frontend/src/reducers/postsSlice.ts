@@ -8,7 +8,7 @@ import { PostIDPayload } from './userSlice';
 
 const postsAdapter = createEntityAdapter<Post>({
   selectId: item => item._id
-})
+});
 
 //https://redux-toolkit.js.org/api/createAsyncThunk
 export const fetchTrendingPosts = createAsyncThunk(
@@ -26,6 +26,14 @@ export const fetchTrendingPosts = createAsyncThunk(
     console.log(initialData);
     return initialData; //{users[], posts[], tags[]}
   }
+);
+
+// The backend endpoint can also take optional parameters for excluded post IDs and startIdx
+export const fetchPostsByTag = createAsyncThunk(
+  'fetchPostsByTag',
+  ({tagID /* May add optional parameters here */}: {tagID: string}) => {
+    return new PostsApi().tagsControllerGetPostsByTag(tagID /* May add optional parameters here */);
+  }
 )
 
 export const fetchPostBySlug = createAsyncThunk(
@@ -36,9 +44,9 @@ export const fetchPostBySlug = createAsyncThunk(
 //https://redux-toolkit.js.org/api/createSlice
 export const postsSlice = createSlice({
   name: "posts",
-  initialState: postsAdapter.getInitialState<{ trendingPosts: string[], trendingPostsSet: Set<string>, slugToID: Record<string, string> }>({ //extends EntityState
+  initialState: postsAdapter.getInitialState<{ trendingPosts: string[], trendingPostsSet: Record<string, boolean>, slugToID: Record<string, string> }>({ //extends EntityState
     trendingPosts: [],
-    trendingPostsSet: new Set<string>(),
+    trendingPostsSet: {},
     slugToID: {},
   }),//also has ids[] and entities{}
   reducers: {
@@ -53,8 +61,8 @@ export const postsSlice = createSlice({
     [fetchTrendingPosts.fulfilled.type]: (state, action: PayloadAction<GetInitialDataDto | GetInitialDataLoggedInDto>) => {
       action.payload.posts.forEach(post => {
         state.slugToID[post.slug] = post._id;
-        if (!state.trendingPostsSet.has(post._id)) {
-          state.trendingPostsSet.add(post._id);
+        if (!state.trendingPostsSet[post._id]) {
+          state.trendingPostsSet[post._id] = true;
           state.trendingPosts.push(post._id);
         }
       })
