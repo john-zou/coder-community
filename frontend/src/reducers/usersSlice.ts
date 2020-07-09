@@ -2,7 +2,7 @@ import { createEntityAdapter, createSlice, PayloadAction, createAsyncThunk } fro
 import { fetchTrendingPosts, fetchPostBySlug } from "./postsSlice";
 import { User } from "../store/types";
 import { GetInitialDataDto, GetInitialDataLoggedInDto, GetPostDetailsSuccessDto, UserApi, GetUsersSuccessDto } from "../api";
-import { leaveGroup } from "./groupsSlice";
+import { leaveGroup, joinGroup } from "./groupsSlice";
 import _ from "lodash";
 
 const usersAdapter = createEntityAdapter<User>({
@@ -35,6 +35,11 @@ export const usersSlice = createSlice({
     [leaveGroup.fulfilled.type]: (state, action: PayloadAction<{ groupID: string, userID: string }>) => {
       if (state.entities[action.payload.userID]) {
         _.pull(state.entities[action.payload.userID].groups, action.payload.groupID);
+      }
+    },
+    [joinGroup.fulfilled.type]: (state, action: PayloadAction<{ groupID: string, userID: string }>) => {
+      if (state.entities[action.payload.userID]) {
+        state.entities[action.payload.userID].groups.push(action.payload.groupID)
       }
     }
   }

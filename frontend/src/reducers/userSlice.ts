@@ -7,7 +7,7 @@ import { isGetInitialDataLoggedInDto } from "../util/helperFunctions";
 import { postsSlice } from "./postsSlice";
 import { JwtLocalStorageKey } from "../constants";
 import { isLoggedInSlice } from "./isLoggedInSlice";
-import { createGroup, leaveGroup } from "./groupsSlice";
+import { createGroup, leaveGroup, joinGroup } from "./groupsSlice";
 
 const api = new UserApi();
 export const getLoggedInUser = createAsyncThunk(
@@ -155,6 +155,9 @@ export const userSlice = createSlice({
     },
     [leaveGroup.fulfilled.type]: (state, action: PayloadAction<{ groupID: string, userID: string }>) => {
       _.pull(state.groups, action.payload.groupID);
+    },
+    [joinGroup.fulfilled.type]: (state, action: PayloadAction<{ groupID: string, userID: string }>) => {
+      state.groups.push(action.payload.groupID);
     }
   }
 })

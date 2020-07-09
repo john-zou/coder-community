@@ -37,6 +37,15 @@ export const leaveGroup = createAsyncThunk(
   }
 )
 
+export const joinGroup = createAsyncThunk(
+  'joinGroup',
+  async (groupID: string, { getState }) => {
+    const user = (getState() as RootState).user as CurrentLoggedInUser;
+    await api.groupsControllerJoinGroup(groupID, user._id);
+    return { groupID: groupID, userID: user._id }
+  }
+)
+
 //https://redux-toolkit.js.org/api/createSlice
 export const groupsSlice = createSlice({
   name: "groups",
@@ -62,6 +71,9 @@ export const groupsSlice = createSlice({
     },
     [leaveGroup.fulfilled.type]: (state, action: PayloadAction<{ groupID: string, userID: string }>) => {
       _.pull(state.entities[action.payload.groupID].users, action.payload.userID); //lodash mutates the state
+    },
+    [joinGroup.fulfilled.type]: (state, action: PayloadAction<{ groupID: string, userID: string }>) => {
+      state.entities[action.payload.groupID].users.push(action.payload.userID)
     }
   }
 })

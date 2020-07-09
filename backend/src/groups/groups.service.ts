@@ -96,7 +96,18 @@ export class GroupsService {
   }
 
   async joinGroup(userID: string, groupID: string): Promise<void> {
-    throw new Error("Method not implemented.");
+    //add group to user's list of groups
+    await UserModel.updateOne({ _id: new ObjectId(userID) }, {
+      $push: {
+        groups: new ObjectId(groupID)
+      }
+    })
+    //add user to group's list of users
+    await GroupModel.updateOne({ _id: new ObjectId(groupID) }, {
+      $push: {
+        users: new ObjectId(userID)
+      }
+    })
   }
 
   async leaveGroup(userID: string, groupID: string): Promise<void> {

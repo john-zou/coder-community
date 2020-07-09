@@ -8,7 +8,7 @@ import { Dictionary, unwrapResult } from "@reduxjs/toolkit";
 import { AppDispatch } from "../../store";
 import { Loading } from "../common/Loading";
 import ErrorPage from "../common/ErrorPage";
-import { fetchGroups, leaveGroup } from "../../reducers/groupsSlice";
+import { fetchGroups, leaveGroup, joinGroup } from "../../reducers/groupsSlice";
 import PurpleButton from "../common/PurpleButton";
 import { CreateGroupModal } from "./CreateGroupModal";
 import { dispatch } from "rxjs/internal/observable/range";
@@ -41,7 +41,7 @@ const GroupCard = ({ currentGroup, isUserAMember }: { currentGroup: Group, isUse
   const dispatch = useDispatch();
 
   const handleJoinGroup = () => {
-
+    dispatch(joinGroup(currentGroup._id));
   }
   const handleLeaveGroup = () => {
     dispatch(leaveGroup(currentGroup._id));
