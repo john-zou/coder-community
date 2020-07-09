@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import { UserApi, GetInitialDataDto, GetInitialDataLoggedInDto } from "../api";
+import {UserApi, GetInitialDataDto, GetInitialDataLoggedInDto, PostsApi} from "../api";
 import { fetchTrendingPosts } from "./postsSlice";
 import { CurrentLoggedInUser } from "../store/types";
 import _ from "lodash";
@@ -46,8 +46,10 @@ export const userSlice = createSlice({
       },
       // to perform side effect. Does not affect payload
       prepare: (payload: PostIDPayload) => {
-        // TODO: make endpoint
-        // new UserApi().userControllerSavePost(payload.postId);
+        // Send request to back end silently
+        new UserApi().userControllerSavePost(payload.postID)
+            .then(_ => console.log("Optimistic update (SAVE POST) finished in back end"))
+            .catch(err => console.log("Optimistic update (SAVE POST) rejected! ", err));
         return { payload };
       },
     },
@@ -69,15 +71,18 @@ export const userSlice = createSlice({
         return user;
       },
       prepare: ({postID, increment}: LikePostPayload) => {
-        // update postsSlice
+        // Send request to back end silently
         if (increment) {
           postsSlice.actions.incrementPostLikes({postID});
+          new PostsApi().postsControllerLikePost(postID)
+              .then(_ => console.log("Optimistic update (LIKE POST) finished in back end for Post ID"))
+              .catch(err => console.log("Optimistic update (LIKE POST) rejected! ", err));
         } else {
           postsSlice.actions.decrementPostLikes({postID});
+          new PostsApi().postsControllerUnlikePost(postID)
+              .then(_ => console.log("Optimistic update (UNLIKE POST) finished in back end for Post ID"))
+              .catch(err => console.log("Optimistic update (UNLIKE POST) rejected! ", err));
         }
-
-        // TODO: make endpoint
-        // new UserApi().userControllerToggleLike(payload.postID);
         return { payload: {postID} };
       }
     }

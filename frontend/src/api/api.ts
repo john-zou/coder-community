@@ -1940,6 +1940,72 @@ export const PostsApiFetchParamCreator = function (configuration?: Configuration
         },
         /**
          * 
+         * @param {string} postID 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        postsControllerLikePost(postID: string, options: any = {}): FetchArgs {
+            // verify required parameter 'postID' is not null or undefined
+            if (postID === null || postID === undefined) {
+                throw new RequiredError('postID','Required parameter postID was null or undefined when calling postsControllerLikePost.');
+            }
+            const localVarPath = `/api/posts/like`;
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'PUT' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+
+            if (postID !== undefined) {
+                localVarQueryParameter['postID'] = postID;
+            }
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} postID 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        postsControllerUnlikePost(postID: string, options: any = {}): FetchArgs {
+            // verify required parameter 'postID' is not null or undefined
+            if (postID === null || postID === undefined) {
+                throw new RequiredError('postID','Required parameter postID was null or undefined when calling postsControllerUnlikePost.');
+            }
+            const localVarPath = `/api/posts/unlike`;
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'PUT' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+
+            if (postID !== undefined) {
+                localVarQueryParameter['postID'] = postID;
+            }
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {string} tagID The ObjectID of the tag
          * @param {number} [requestedCount] How many posts to fetch
          * @param {number} [startIdx] What index to start at, e.g. if startIdx &#x3D; 5, then the 5 posts (0th, 1st, 2nd, 3rd, 4th) of this tag will not be fetched
@@ -2032,6 +2098,42 @@ export const PostsApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {string} postID 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        postsControllerLikePost(postID: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Response> {
+            const localVarFetchArgs = PostsApiFetchParamCreator(configuration).postsControllerLikePost(postID, options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response;
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * 
+         * @param {string} postID 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        postsControllerUnlikePost(postID: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Response> {
+            const localVarFetchArgs = PostsApiFetchParamCreator(configuration).postsControllerUnlikePost(postID, options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response;
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * 
          * @param {string} tagID The ObjectID of the tag
          * @param {number} [requestedCount] How many posts to fetch
          * @param {number} [startIdx] What index to start at, e.g. if startIdx &#x3D; 5, then the 5 posts (0th, 1st, 2nd, 3rd, 4th) of this tag will not be fetched
@@ -2081,6 +2183,24 @@ export const PostsApiFactory = function (configuration?: Configuration, fetch?: 
         },
         /**
          * 
+         * @param {string} postID 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        postsControllerLikePost(postID: string, options?: any) {
+            return PostsApiFp(configuration).postsControllerLikePost(postID, options)(fetch, basePath);
+        },
+        /**
+         * 
+         * @param {string} postID 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        postsControllerUnlikePost(postID: string, options?: any) {
+            return PostsApiFp(configuration).postsControllerUnlikePost(postID, options)(fetch, basePath);
+        },
+        /**
+         * 
          * @param {string} tagID The ObjectID of the tag
          * @param {number} [requestedCount] How many posts to fetch
          * @param {number} [startIdx] What index to start at, e.g. if startIdx &#x3D; 5, then the 5 posts (0th, 1st, 2nd, 3rd, 4th) of this tag will not be fetched
@@ -2122,6 +2242,28 @@ export class PostsApi extends BaseAPI {
      */
     public postsControllerGetPostBySlug(slug: string, getAuthor: boolean, options?: any) {
         return PostsApiFp(this.configuration).postsControllerGetPostBySlug(slug, getAuthor, options)(this.fetch, this.basePath);
+    }
+
+    /**
+     * 
+     * @param {string} postID 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof PostsApi
+     */
+    public postsControllerLikePost(postID: string, options?: any) {
+        return PostsApiFp(this.configuration).postsControllerLikePost(postID, options)(this.fetch, this.basePath);
+    }
+
+    /**
+     * 
+     * @param {string} postID 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof PostsApi
+     */
+    public postsControllerUnlikePost(postID: string, options?: any) {
+        return PostsApiFp(this.configuration).postsControllerUnlikePost(postID, options)(this.fetch, this.basePath);
     }
 
     /**
@@ -2605,6 +2747,38 @@ export const UserApiFetchParamCreator = function (configuration?: Configuration)
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication bearer required
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} postID 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        userControllerSavePost(postID: string, options: any = {}): FetchArgs {
+            // verify required parameter 'postID' is not null or undefined
+            if (postID === null || postID === undefined) {
+                throw new RequiredError('postID','Required parameter postID was null or undefined when calling userControllerSavePost.');
+            }
+            const localVarPath = `/api/user/save-post/{postID}`
+                .replace(`{${"postID"}}`, encodeURIComponent(String(postID)));
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'PUT' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
             // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
             delete localVarUrlObj.search;
@@ -2641,6 +2815,24 @@ export const UserApiFp = function(configuration?: Configuration) {
                 });
             };
         },
+        /**
+         * 
+         * @param {string} postID 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        userControllerSavePost(postID: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Response> {
+            const localVarFetchArgs = UserApiFetchParamCreator(configuration).userControllerSavePost(postID, options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response;
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
     }
 };
 
@@ -2657,6 +2849,15 @@ export const UserApiFactory = function (configuration?: Configuration, fetch?: F
          */
         userControllerGetUser(options?: any) {
             return UserApiFp(configuration).userControllerGetUser(options)(fetch, basePath);
+        },
+        /**
+         * 
+         * @param {string} postID 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        userControllerSavePost(postID: string, options?: any) {
+            return UserApiFp(configuration).userControllerSavePost(postID, options)(fetch, basePath);
         },
     };
 };
@@ -2676,6 +2877,17 @@ export class UserApi extends BaseAPI {
      */
     public userControllerGetUser(options?: any) {
         return UserApiFp(this.configuration).userControllerGetUser(options)(this.fetch, this.basePath);
+    }
+
+    /**
+     * 
+     * @param {string} postID 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UserApi
+     */
+    public userControllerSavePost(postID: string, options?: any) {
+        return UserApiFp(this.configuration).userControllerSavePost(postID, options)(this.fetch, this.basePath);
     }
 
 }
