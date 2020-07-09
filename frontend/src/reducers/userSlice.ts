@@ -1,10 +1,11 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import {UserApi, GetInitialDataDto, GetInitialDataLoggedInDto, PostsApi} from "../api";
+import {UserApi, GetInitialDataDto, GetInitialDataLoggedInDto, PostsApi, AuthApi} from "../api";
 import { fetchTrendingPosts } from "./postsSlice";
 import { CurrentLoggedInUser } from "../store/types";
 import _ from "lodash";
 import { isGetInitialDataLoggedInDto } from "../util/helperFunctions";
 import { postsSlice } from "./postsSlice";
+import {JwtLocalStorageKey} from "../constants";
 
 
 export const getLoggedInUser = createAsyncThunk(
@@ -13,6 +14,13 @@ export const getLoggedInUser = createAsyncThunk(
     const api = new UserApi();
     return await api.userControllerGetUser();
   }
+)
+
+export const login = createAsyncThunk(
+    'loginStatus',
+    async ({code, state}: {code: string, state: string}) => {
+      await new AuthApi().authControllerLoginGitHub({code, state})
+    }
 )
 
 export const getUserForViewProfile = (userName) => createAsyncThunk(
@@ -34,6 +42,24 @@ export const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
+    loginSuccess: {
+      reducer: (user, action: PayloadAction<null>) => {
+        return null;
+      },
+      prepare: ({jwt}: {jwt: string}) => {
+        localStorage.setItem(JwtLocalStorageKey, jwt);
+        return {payload: null};
+      },
+    },
+    logOut: {
+      reducer: (user, action: PayloadAction<null>) => {
+        return null;
+      },
+      prepare: () => {
+        localStorage.removeItem(JwtLocalStorageKey);
+        return { payload: null };
+      }
+    },
     savePost: {
       reducer: (user, action: PayloadAction<PostIDPayload>) => {
         // optimistic update
@@ -119,4 +145,4 @@ export const userSlice = createSlice({
 
 export default userSlice.reducer;
 
-export const { savePost, toggleLikePost } = userSlice.actions;
+export const { savePost, toggleLikePost, loginSuccess, logOut } = userSlice.actions;
