@@ -18,10 +18,10 @@ export class DevController {
     private readonly authService: AuthService,
     private readonly userService: UserService,
     private readonly postsService: PostsService,
-  ) {}
+  ) { }
 
   @Get('marco')
-  marco(): { polo: boolean} {
+  marco(): { polo: boolean } {
     return { polo: true };
   }
 
@@ -76,7 +76,7 @@ export class DevController {
    * 
    * @param _id UserObjectID
    */
-  @Get('jwt')
+  @Get('jwt/:id')
   getJwt(@Param('id') _id: string): Promise<string> {
     try {
       const oid = new ObjectID(_id);

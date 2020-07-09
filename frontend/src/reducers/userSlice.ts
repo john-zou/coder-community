@@ -8,11 +8,10 @@ import { postsSlice } from "./postsSlice";
 import {JwtLocalStorageKey} from "../constants";
 import {isLoggedInSlice} from "./isLoggedInSlice";
 
-
+const api = new UserApi();
 export const getLoggedInUser = createAsyncThunk(
   '/user/getLoggedInUserStatus',
   async () => {
-    const api = new UserApi();
     return await api.userControllerGetUser();
   }
 )
@@ -31,6 +30,11 @@ export const getUserForViewProfile = (userName) => createAsyncThunk(
   }
 )
 
+export const addFollowing = (id: string) => createAsyncThunk(
+  'addFollowing', async () => {
+    //TODO
+  }
+)
 
 export type PostIDPayload = { postID: string };
 export type LikePostPayload = { postID: string, increment: boolean };

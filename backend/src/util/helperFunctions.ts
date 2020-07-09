@@ -1,8 +1,9 @@
-import { Ref } from "@typegoose/typegoose";
+import { Ref, DocumentType } from "@typegoose/typegoose";
 import { ObjectID } from "mongodb";
+import { UserDto } from "../user/dto/user.dto";
+import { User } from "../user/user.schema";
 import { Post } from "../posts/post.schema";
 import { PostDto } from "../posts/dto/posts.dto";
-import { DocumentType } from '@typegoose/typegoose';
 
 export const convertToStrArr = (list: Ref<any, ObjectID>[]): string[] => {
   return list.map((item) => {
@@ -10,6 +11,22 @@ export const convertToStrArr = (list: Ref<any, ObjectID>[]): string[] => {
   })
 }
 
+export const convertUserToUserDto = (user: DocumentType<User>): UserDto => {
+  return {
+    _id: user._id,
+    userID: user.userID,
+    name: user.name,
+    profilePic: user.profilePic,
+    profileBanner: user.profileBanner,
+    status: user.status,
+    followers: convertToStrArr(user.followers),
+    following: convertToStrArr(user.following),
+    groups: convertToStrArr(user.groups),
+    posts: convertToStrArr(user.posts),
+    savedPosts: convertToStrArr(user.savedPosts),
+    likedPosts: convertToStrArr(user.likedPosts),
+  }
+}
 export const convertPostDocumentToPostDto = (post: DocumentType<Post>): PostDto => {
   return {
     _id: post._id.toString(),

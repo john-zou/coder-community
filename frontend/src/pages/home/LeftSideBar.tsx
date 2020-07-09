@@ -1,5 +1,5 @@
 import { makeStyles } from '@material-ui/core/styles';
-import React, { useState } from 'react';
+import React from 'react';
 import { useSelector } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
 
@@ -81,7 +81,6 @@ const LeftSideBar = () => {
         <h3>Videos</h3>
 
         <h3 onClick={() => {
-          console.log("line 85...")
           history.push("/home/groups");
         }}>Groups</h3>
 

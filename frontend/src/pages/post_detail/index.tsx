@@ -58,8 +58,8 @@ const PostDetail = () => {
   const classes = useStyles();
   const dispatch = useDispatch<AppDispatch>();
   const currentUser = useSelector<RootState, CurrentLoggedInUser>(state => state.user);
-  
-  const { post, author } = useSelector<RootState, {post: Post, author: User}>(state => {
+
+  const { post, author } = useSelector<RootState, { post: Post, author: User }>(state => {
     const postID = state.posts.slugToID[slug];
     if (!postID) {
       return { post: null, author: null };
@@ -76,7 +76,7 @@ const PostDetail = () => {
       return;
     }
     if (!post?.content) {
-      dispatch(fetchPostBySlug({slug, getAuthor: !author})).catch(setError);
+      dispatch(fetchPostBySlug({ slug, getAuthor: !author })).catch(setError);
     }
   }, []);
 
