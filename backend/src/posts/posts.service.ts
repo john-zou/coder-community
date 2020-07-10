@@ -1,16 +1,19 @@
-import {HttpService, Injectable} from '@nestjs/common';
-import {Ref} from '@typegoose/typegoose';
-import {ObjectID} from 'mongodb';
-import {convertToStrArr} from '../util/helperFunctions';
+import { UserModel, TagModel } from './../mongoModels';
+import { HttpService, Injectable, NotFoundException } from '@nestjs/common';
+import { Ref, DocumentType } from '@typegoose/typegoose';
+import { ObjectID } from 'mongodb';
+import { convertToStrArr, convertPostDocumentToPostDto } from '../util/helperFunctions';
 import * as urlSlug from 'url-slug';
-import {PostModel} from '../mongoModels';
-import {User} from '../user/user.schema';
+
+import { PostModel } from '../mongoModels';
+import { User } from '../user/user.schema';
 import {
     CreatePostBodyDto,
     CreatePostSuccessDto,
     PostDto,
-    PostDetailsDto,
+    PostWithDetails,
 } from './dto/posts.dto';
+import { Post } from './post.schema';
 
 // Unused -- can use later for different feature
 type DevToArticle = {
@@ -57,14 +60,12 @@ const DevToApiKey = 'QG7J1McHHMV7UZ9jwDTeZFHf';
 const DevToApiUrlArticles = 'https://dev.to/api/articles/'; //retrieve a list of articles (with no content)
 
 const previewContentLength = 100;
-
 @Injectable()
 export class PostsService {
     constructor(private readonly httpService: HttpService) {}
 
-    async getPostBySlug(slug: string): Promise<PostDetailsDto> {
-        const post = await PostModel.findOne({slug});
-        // console.log(slug);
+    async getPostBySlug(slug: string): Promise<PostWithDetails> {
+        const post = await PostModel.findOne({ slug });
         if (post) {
             return {
                 _id: post._id,
@@ -83,6 +84,8 @@ export class PostsService {
                 views: post.views,
                 group: post.group?.toString(),
             };
+        } else {
+            throw new NotFoundException();
         }
     }
 
@@ -91,8 +94,12 @@ export class PostsService {
         body: CreatePostBodyDto,
     ): Promise<CreatePostSuccessDto> {
         // Logger.log("PostsService::createPost")
-        const slug = urlSlug(body.title);
-        const findPost = await PostModel.findOne({slug});
+        let slug = urlSlug(body.title);
+
+        // TODO: optimize with model.collection.find() / limit() / size()
+        if (await PostModel.findOne({slug})) {
+            slug = undefined;
+        }
 
         const doc = {
             author: authorObjectID,
@@ -107,15 +114,32 @@ export class PostsService {
             views: 0,
             group: body.group,
         };
+        // Logger.log(doc);
+        // Logger.log("Done create");
         const newPost = new PostModel(doc);
         await newPost.save();
+        if (!slug) {
+            // set _id as slug (if slug is already taken)
+            // TODO: create a better slug than just the id if taken
+            newPost.slug = newPost._id;
+            await newPost.save();
+        }
+
+        // Add post to author
+        const author = await UserModel.findById(authorObjectID);
+        author.posts.push(newPost._id);
+        await author.save();
+
+        // Add post to tags
+        const tags = newPost.tags;
+        const expressions = tags.map(tagID => ({ _id: tagID }));
+        await TagModel.updateMany({ $or: expressions }, { $push: {posts: newPost._id }});
 
         return {
             _id: newPost._id,
             slug,
         };
     }
-
 
     async updatePostBySlug(newPost: CreatePostBodyDto, slug: string) {
         console.log("SERVICE::" + slug);
@@ -132,28 +156,13 @@ export class PostsService {
         return found !== null;
     }
 
-
     /**
      *
      * @param userObjectID? only needed if user logged in
      */
     async getInitialPosts(userObjectID?: string): Promise<PostDto[]> {
         const foundPosts = await PostModel.find().limit(5);
-        return foundPosts.map(post => ({
-            _id: post._id.toString(),
-            author: post.author.toString(),
-            title: post.title,
-            slug: post.slug,
-            previewContent: post.previewContent,
-            content: post.content,
-            tags: convertToStrArr(post.tags),
-            createdAt: post.createdAt.toString(),
-            featuredImg: post.featuredImg,
-            likes: post.likes,
-            views: post.views,
-            comments: convertToStrArr(post.comments),
-            commentsCount: post.comments.length,
-        }));
+        return foundPosts.map(convertPostDocumentToPostDto);
     }
 
     // Unused -- can use later for different feature

@@ -1,5 +1,5 @@
 import { TimeStamps } from "@typegoose/typegoose/lib/defaultClasses";
-import { prop, Ref, ReturnModelType } from "@typegoose/typegoose";
+import { prop, Ref } from "@typegoose/typegoose";
 import { Post } from "../posts/post.schema";
 
 export class Tag extends TimeStamps {
@@ -10,4 +10,3 @@ export class Tag extends TimeStamps {
   posts: Ref<Post>[];
 }
 
-export type TagModel = ReturnModelType<typeof Tag>;

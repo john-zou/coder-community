@@ -6,11 +6,13 @@ import { AuthApi } from "../../api";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { loginSuccess } from "../../reducers/isLoggedInSlice";
+import {fetchTrendingPosts} from "../../reducers/postsSlice";
+import {AppDispatch} from "../../store";
 
 export function LoginGitHub() {
   const location = useLocation();
   const history = useHistory();
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
   const parsed = qs.parse(location.search);
   const code = parsed["?code"];

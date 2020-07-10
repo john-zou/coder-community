@@ -6,6 +6,9 @@ import { Provider } from 'react-redux';
 import App from './App';
 import theme from './theme';
 import store from './store';
+import { enableMapSet } from 'immer';
+
+enableMapSet();
 
 /*
 import { JwtLocalStorageKey } from './constants';

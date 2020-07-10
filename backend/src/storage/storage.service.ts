@@ -10,6 +10,7 @@ export class StorageService {
    * @param at destination e.g. "public/profile-pics/x.jpg"
    */
   save(file: Express.Multer.File, at: string): Promise<void> {
+    // TODO: create new folder if doesn't exist
     return fs.rename(file.path, at);
   }
 }

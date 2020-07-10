@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import path from 'path';
+import * as path from 'path';
 import { v4 as uuid } from 'uuid';
-import { ProfileBannerDir, ProfilePicsDir } from '../storage/storage.constants';
+import { ProfileBannerDir, ProfilePicsDir, PublicUserContentSrc } from '../storage/storage.constants';
 import { StorageService } from '../storage/storage.service';
 import { UserService } from '../user/user.service';
 import {
@@ -11,7 +11,7 @@ import {
 
 @Injectable()
 export class UploadService {
-  constructor(private readonly storageService: StorageService, private readonly userService: UserService) {}
+  constructor(private readonly storageService: StorageService, private readonly userService: UserService) { }
 
   async uploadProfilePic(_id: string, file: Express.Multer.File): Promise<string> {
     const url = await this.uploadProfileItem(_id, file, ProfilePicsDir);
@@ -39,11 +39,11 @@ export class UploadService {
       assetName,
     );
     await this.storageService.save(file, savePath);
-    const servePath = path.join(
-      PublicUserContentServeRoot,
-      PublicAssetsDir,
-      assetName,
-    );
+
+    const envURL = process.env.URL || "http://localhost:3001";
+    const servePathParts = [envURL, PublicUserContentSrc, PublicAssetsDir, assetName];
+    const servePath = servePathParts.join('/');
+
     return servePath;
   }
 
@@ -57,16 +57,19 @@ export class UploadService {
     to: string,
   ): Promise<string> {
     const extension = path.extname(file.originalname);
-    const subPath = path.join(to, fileName + '.' + extension);
+    const fileNameWithExtension = fileName + extension;
+    const subPath = path.join(to, fileNameWithExtension);
     const serverPath = path.join(PublicUserContentDir, subPath);
     await this.storageService.save(file, serverPath);
-    const servePath = path.join(PublicUserContentServeRoot, subPath);
+    const envURL = process.env.URL || "http://localhost:3001";
+    const servePathParts = [envURL, PublicUserContentSrc, to, fileNameWithExtension];
+    const servePath = servePathParts.join('/');
     return servePath;
   }
 
   private generateAssetName(originalName: string) {
     const extension = path.extname(originalName);
-    return uuid() + '.' + extension;
+    return uuid() + extension;
   }
 
 

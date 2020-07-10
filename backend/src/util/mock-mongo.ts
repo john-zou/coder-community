@@ -1,15 +1,12 @@
-import { MockMongoose } from 'mock-mongoose';
-import * as mongoose from 'mongoose';
-
+require("dotenv").config();
 import { disconnectMongo, initializeMongo } from '../mongoModels';
 import { Secrets } from '../secrets';
 
 
 let started = false;
-let mockMongoose: MockMongoose;
 
 /**
- * Set up in-memory database for use in testing when used in beforeAll; tears it down in after-all
+ * Set up MongoDB during tests. It used to, but no longer, uses in-memory MongoDB.
  *
  * Usage: in `x.test.ts`
  *
@@ -27,8 +24,8 @@ let mockMongoose: MockMongoose;
  *
  */
 export async function MockMongo(): Promise<void> {
+  // GitHub
   if (process.env.CI) {
-    // GitHub action, true local MongoDB
     if (!started) {
       await initializeMongo(Secrets.MongoConnectionString)
       started = true;
@@ -37,14 +34,12 @@ export async function MockMongo(): Promise<void> {
       started = false;
     }
   } else {
-    // Use in-memory DB (MockMongoose)
+    // Computer
     if (!started) {
-      mockMongoose = new MockMongoose(mongoose);
-      await mockMongoose.prepareStorage();
-      await initializeMongo(Secrets.MongoConnectionString);
+      await initializeMongo(Secrets.TestMongoConnectionString);
       started = true;
     } else {
-      await mockMongoose.killMongo();
+      await disconnectMongo();
       started = false;
     }
   }

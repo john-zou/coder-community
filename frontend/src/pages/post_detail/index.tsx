@@ -1,7 +1,7 @@
 import { makeStyles } from '@material-ui/core/styles';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useHistory, useParams } from 'react-router-dom';
+import { useParams, Redirect } from 'react-router-dom';
 
 import { PostDetailParams } from '../../App';
 import Avatar from '../common/Avatar';
@@ -9,9 +9,10 @@ import { Loading } from '../common/Loading';
 import { NotFoundError } from '../common/NotFoundError';
 import NewComment from './NewComment';
 import { RootState } from '../../reducers/rootReducer';
-import { fetchPostBySlug, fetchPostContentByID } from '../../reducers/postsSlice';
-import { Post, User } from '../../store/types';
-import { Dictionary } from '@reduxjs/toolkit';
+import { fetchPostBySlug } from '../../reducers/postsSlice';
+import { Post, User, CurrentLoggedInUser } from '../../store/types';
+import { unwrapResult } from '@reduxjs/toolkit';
+import { AppDispatch } from '../../store';
 
 // import { useParams } from "react-router-dom";
 const useStyles = makeStyles({
@@ -54,34 +55,36 @@ const Comments = () => {
 
 const PostDetail = () => {
   const { slug } = useParams<PostDetailParams>(); //get the url param to render the appropriate post
-
   const classes = useStyles();
-  const dispatch: any = useDispatch();
-  // const history = useHistory();
-  // const isLoggedIn = useSelector<RootState, boolean>(state => state.isLoggedIn);
-  const post = useSelector<RootState, Post>(state => {
-    const postID = state.posts.slugToID[slug];
-    return state.posts[postID];
-  });
-  const users = useSelector<RootState, Dictionary<User>>(state => state.users.entities);
+  const dispatch = useDispatch<AppDispatch>();
+  const currentUser = useSelector<RootState, CurrentLoggedInUser>(state => state.user);
 
-  const [loading, setLoading] = useState(false);
+  const { post, author } = useSelector<RootState, { post: Post, author: User }>(state => {
+    const postID = state.posts.slugToID[slug];
+    if (!postID) {
+      return { post: null, author: null };
+    }
+    const post = state.posts.entities[postID];
+    const author = state.users.entities[post.author];
+    return { post, author };
+  });
+
   const [error, setError] = useState(null);
 
-
   useEffect(() => {
-    setLoading(true);
-    if (!post) {
-      dispatch(fetchPostBySlug(slug));
+    if (slug == null || slug === "") {
       return;
     }
-
-    if (!post.content) {
-      dispatch(fetchPostContentByID(post._id));
+    if (!post?.content) {
+      dispatch(fetchPostBySlug({ slug, getAuthor: !author })).catch(setError);
     }
-  }, [post, slug, dispatch]);
+  }, []);
 
-  if (loading || !post || !post.content) {
+  if (slug == null || slug === "") {
+    return <Redirect to="/" />
+  }
+
+  if (!post?.content || !author) {
     return <Loading />
   }
 
@@ -101,7 +104,7 @@ const PostDetail = () => {
         />
         <h1>{post.title}</h1>
 
-        <Avatar pic={users[post.author]} title={post.title} subtitle={post.createdAt} extraText="follow"></Avatar>
+        <Avatar pic={author.profilePic} title={post.title} subtitle={post.createdAt} extraText="follow"></Avatar>
 
         <p>{post.content}</p>
 
