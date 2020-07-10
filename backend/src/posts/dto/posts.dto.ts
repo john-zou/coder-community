@@ -51,8 +51,7 @@ export class GetPostDetailsSuccessDto {
 export class CreatePostBodyDto {
   title: string;
   content: string;
-  // tags: string[];
-  tags: Ref<Tag>[];
+  tags: string[];
   featuredImg: string;
   group?: string;
 }

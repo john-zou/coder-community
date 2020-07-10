@@ -20,6 +20,7 @@ const onSubmit = (params, dispatch) => {
         content: params.content,
         tags: params.tags,
         featuredImg: params.img,
+        // author: params.userID,
     }
     console.log(newPost);
     dispatch(submitPost(newPost));
