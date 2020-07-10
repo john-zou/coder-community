@@ -23,67 +23,6 @@ export const createShop = createAsyncThunk(
     }
 )
 
-export const submitPost = createAsyncThunk(
-    'submitPost',
-    async(createdPost: any) => {
-        let newPost: CreatePostBodyDto = {
-            title: createdPost.title,
-            content: createdPost.content,
-            tags: createdPost.tags,
-            featuredImg: ''
-        }
-        console.log(createdPost.title + " " + createdPost.content);
-        return await new PostsApi().postsControllerCreatePost(newPost);
-    }
-)
-
-export const updatePost = createAsyncThunk(
-    'updatePost',
-    async(createdPost: any) => {
-        let newPost: CreatePostBodyDto = {
-            title: createdPost.title,
-            content: createdPost.content,
-            tags: createdPost.tags,
-            featuredImg: ''
-        }
-        let body = {
-            newPost: newPost,
-            user: {_id: "5eeebd4d1333dd0f79ca9be3"}
-        }
-        const slug = urlSlug(createdPost.title);
-        console.log("POST CREATION SLICE " + slug);
-        // return await new PostsApi().postsControllerUpdatePostBySlug(slug, newPost);
-        return await new PostsApi().postsControllerUpdatePostBySlug(slug, body);
-    }
-)
-
-export const initialState = {
-    _id: '',
-    title: '',
-    content: '',
-    tags: []
-}
-
-export const postsCreationSlice = createSlice({
-    name: "postsCreation",
-    initialState: postsCreationAdapter.getInitialState(), //: postsCreationAdapter.getInitialState(),
-    reducers: {
-
-    },
-    extraReducers: {
-        [submitPost.fulfilled.type]: (state, action: PayloadAction<PostsCreation>) => {
-            console.log("***" + action.payload);
-            const newPost = action.payload;
-            postsCreationAdapter.addOne(state, newPost);
-        },
-        [updatePost.fulfilled.type]: (state, action: PayloadAction<UpdatePostSuccessDto>) => {
-            const newPost = action.payload.CreatePostBodyDto;
-            postsCreationAdapter.updateOne(state, newPost);
-        }
-    }
-})
-
-/*
 export const submitPost = createdPost => {
     let newPost: CreatePostBodyDto = {
         title: createdPost.title,
@@ -110,7 +49,6 @@ export const submitPost = createdPost => {
     }
 }
 
-
 export const updatePost = createdPost => {
     let newPost: CreatePostBodyDto = {
         title: createdPost.title,
@@ -134,6 +72,3 @@ export const updatePost = createdPost => {
         }).catch(e => console.log(e))
     }
 }
-*/
-
-export default postsCreationSlice.reducer;

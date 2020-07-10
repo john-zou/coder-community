@@ -43,6 +43,7 @@ export default function Home() {
 
   useEffect(() => {
     setLoading(true);
+    console.log("HOME::INDEX");
     dispatch(fetchTrendingPosts())
       .then(unwrapResult).then( //must set dispatch to any to use .then
         () => {

@@ -49,6 +49,7 @@ const store = createStore(rootReducer, initialState, composeWithDevTools(applyMi
  */
 
 const Root = () => {
+    console.log("INDEX::ROOT");
   return (
     <React.StrictMode>
       <ThemeProvider theme={theme}>
