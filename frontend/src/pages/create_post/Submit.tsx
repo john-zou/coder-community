@@ -14,13 +14,13 @@ const useStyles = makeStyles({
   }
 });
 
-const onSubmit = (params, dispatch) => {
+const onSubmit = (params, author, dispatch) => {
     const newPost = {
         title: params.title,
         content: params.content,
         tags: params.tags,
         featuredImg: params.img,
-        // author: params.userID,
+        author: author,
     }
     console.log(newPost);
     dispatch(submitPost(newPost));
@@ -50,7 +50,7 @@ export default function Submit(params) {
             onCancel(params, dispatch);
         }}>Cancel</button>
         <button color="primary" onClick={(event) =>{
-            onSubmit(params, dispatch);
+            onSubmit(params, curUser, dispatch);
         }}>Submit</button>
      </div>
   );

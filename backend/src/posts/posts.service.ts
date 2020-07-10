@@ -148,6 +148,7 @@ export class PostsService {
     async updatePostBySlug(newPost: CreatePostBodyDto, slug: string) {
         console.log("POSTS::SERVICE");
         console.log(slug);
+        console.log(newPost);
         const post = await PostModel.findOneAndUpdate({slug}, {
             content: newPost.content,
             title: newPost.title,

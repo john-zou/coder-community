@@ -59,7 +59,7 @@ export default function UpdatePost() {
             <ImgP setImg={setImg} img={oldPost.featuredImg} />
             <TextP setTitle={setTitle} setContent={setContent} title={oldPost.title} content={oldPost.content}/>
             <TagP setTags={setTags} tags={oldPost.tags} />
-            <Submit title={title} content={content} tags={tags} img={featuredImg} />
+            <Submit title={title} content={content} tags={tags} img={featuredImg} slug={slug} />
         </div>
     )
 }

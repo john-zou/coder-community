@@ -84,9 +84,8 @@ export class PostsController {
     })
     @Personal() //provides @UserObjectID to get userid
     @Post()
-    // createPost(@Body('newPost') createPostDto: CreatePostBodyDto): Promise<CreatePostSuccessDto> {
     createPost(@Body() createPostDto: CreatePostBodyDto, @UserObjectID() author: string): Promise<CreatePostSuccessDto> {
-        console.log("POST CONTROLLER");
+        console.log("POSTS::CONTROLLER");
         console.log(author);
         console.log(createPostDto);
         // let author = "5f07dd25be9a5c6510208dce";
@@ -108,9 +107,13 @@ export class PostsController {
     }
 
 
+    @ApiBody({
+        type: CreatePostBodyDto
+    })
     @Put(':slug')
     updatePostBySlug(@Body('newPost') newPost: CreatePostBodyDto, @Param('slug') slug: string) {
         console.log("CONTORLLER::NEWPOST");
+        console.log(newPost);
         this.postsService.updatePostBySlug(newPost, slug);
     }
 }

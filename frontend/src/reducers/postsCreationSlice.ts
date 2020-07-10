@@ -4,27 +4,11 @@ import {Post, PostsCreation, Tag} from "../store/types";
 import {UpdatePostSuccessDto, CreatePostBodyDto, CreatePostSuccessDto} from "../../../backend/src/posts/dto/posts.dto";
 import {createEntityAdapter, createSlice, createAsyncThunk, PayloadAction} from "@reduxjs/toolkit";
 
+/*
 const postsCreationAdapter = createEntityAdapter<PostsCreation>({
     selectId: postCreation => postCreation._id
 })
-
-/*
-export const getAllShops = createAsyncThunk(
-    'getAllShopsStatus',
-    async () => {
-        return await new ShopApi().shopControllerGetAllShops();
-    }
-);
-
-export const createShop = createAsyncThunk(
-    'createShopStatus',
-    async (shop: any) => {
-        const shopDto = {name: shop.name, description: shop.description};
-        return await new ShopApi().shopControllerCreateShop(shopDto);
-    }
-)
-
- */
+*/
 
 /*
 export const submitPost = createdPost => {
@@ -53,6 +37,7 @@ export const submitPost = createdPost => {
         }).catch(e => console.log(e))
     }
 }
+*/
 
 export const updatePost = createdPost => {
     let newPost: CreatePostBodyDto = {
@@ -61,10 +46,10 @@ export const updatePost = createdPost => {
         tags: createdPost.tags,
         featuredImg: ''
     }
-    const slug = urlSlug(createdPost.title);
-    console.log(slug);
+    // const slug = urlSlug(createdPost.title);
+    console.log(createdPost.slug);
     return dispatch => {
-        return fetch(`http://localhost:3001/api/posts/${slug}`, {
+        return fetch(`http://localhost:3001/api/posts/${createdPost.slug}`, {
             method: 'PUT',
             headers: {
                 'Accept': 'application/json',
@@ -77,7 +62,6 @@ export const updatePost = createdPost => {
         }).catch(e => console.log(e))
     }
 }
- */
 
 export const submitPost = createAsyncThunk(
     'submitPost',
@@ -88,26 +72,31 @@ export const submitPost = createAsyncThunk(
             tags: createdPost.tags,
             featuredImg: ''
         }
-        console.log(createdPost.title + " " + createdPost.content);
+        // console.log(createdPost.title + " " + createdPost.content);
         const createPostSuccessDto = await new PostsApi().postsControllerCreatePost(newPost);
         const { _id, slug } = createPostSuccessDto;
         const post: Post = {
+            featuredImg: "",
+            likes: 0,
+            tags: [],
+            title: "",
+            views: 0,
             _id: _id,
             slug: slug,
             author: createdPost.author,
             comments: [],
             commentsCount: 0,
             content: createdPost.content,
-            createdAt: Date.now().toString(),
-
+            createdAt: Date.now().toString()
         }
         return post;
     }
 )
 
+/*
 export const updatePost = createAsyncThunk(
     'updatePost',
-    async(createdPost: any) => {
+    async(createdPost: any & {slug: string}) => {
         let newPost: CreatePostBodyDto = {
             title: createdPost.title,
             content: createdPost.content,
@@ -116,15 +105,17 @@ export const updatePost = createAsyncThunk(
         }
         let body = {
             newPost: newPost,
-            user: {_id: "5eeebd4d1333dd0f79ca9be3"}
+            // user: {_id: "5eeebd4d1333dd0f79ca9be3"}
         }
-        const slug = urlSlug(createdPost.title);
-        console.log("POST CREATION SLICE " + slug);
+        // const slug = urlSlug(createdPost.title);
+        console.log("POST CREATION SLICE " + createdPost.slug);
         // return await new PostsApi().postsControllerUpdatePostBySlug(slug, newPost);
-        return await new PostsApi().postsControllerUpdatePostBySlug(slug, body);
+        return await new PostsApi().postsControllerUpdatePostBySlug(createdPost.slug, body);
     }
-)
+}
+*/
 
+/*
 export const postsCreationSlice = createSlice({
     name: "postsCreation",
     initialState: postsCreationAdapter.getInitialState(), //: postsCreationAdapter.getInitialState(),
@@ -132,16 +123,9 @@ export const postsCreationSlice = createSlice({
 
     },
     extraReducers: {
-        [submitPost.fulfilled.type]: (state, action: PayloadAction<PostsCreation>) => {
-            console.log("***" + action.payload);
-            const newPost = action.payload;
-            postsCreationAdapter.addOne(state, newPost);
-        },
-        [updatePost.fulfilled.type]: (state, action: PayloadAction<UpdatePostSuccessDto>) => {
-            const newPost = action.payload.CreatePostBodyDto;
-            postsCreationAdapter.updateOne(state, newPost);
-        }
+
     }
 })
 
 export default postsCreationSlice.reducer;
+*/

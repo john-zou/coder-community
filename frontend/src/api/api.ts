@@ -2411,6 +2411,9 @@ export class PostsApi extends BaseAPI {
      * @memberof PostsApi
      */
     public postsControllerUpdatePostBySlug(slug: string, options?: any) {
+        console.log("API::API");
+        console.log(slug);
+        console.log(options);
         return PostsApiFp(this.configuration).postsControllerUpdatePostBySlug(slug, options)(this.fetch, this.basePath);
     }
 

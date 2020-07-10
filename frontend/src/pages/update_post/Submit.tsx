@@ -14,12 +14,13 @@ const useStyles = makeStyles({
     }
 });
 
-const onSubmit = (params, dispatch) => {
+const onSubmit = (params, slug, dispatch) => {
     const newPost = {
         title: params.title,
         content: params.content,
         tags: params.tags,
         featuredImg: params.img,
+        slug: slug
     }
     // console.log(newPost);
     dispatch(updatePost(newPost));
@@ -36,13 +37,15 @@ export default function Submit(params) {
     // const curUser = useSelector<RootState, User>(state => state.user);
     // console.log(curUser);
 
+    console.log("UPDATEPOST::SUMIT");
+    console.log(params.slug);
     return (
         <div className={classes.operation}>
             <button color="primary" onClick={(event) => {
                 onCancel(params, dispatch);
             }}>Cancel</button>
             <button color="primary" onClick={(event) =>{
-                onSubmit(params, dispatch);
+                onSubmit(params, params.slug, dispatch);
             }}>Submit</button>
         </div>
     );
