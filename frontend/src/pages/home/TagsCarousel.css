@@ -23,3 +23,11 @@
   padding-top: 30px;
   padding-bottom: 10px;
 }
+
+aside.ScrollUpButton__Container.ScrollUpButton__Toggled {
+  fill: white !important;
+  border-radius: 50% !important;
+  background-color: lightgray !important;
+  padding: 10px !important;
+  text-decoration: none;
+}

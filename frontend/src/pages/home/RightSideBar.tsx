@@ -2,7 +2,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../reducers/rootReducer';
-import ScrollUpButton from "react-scroll-up-button";
+import { TinyButton as ScrollUpButton } from "react-scroll-up-button"; //https://www.npmjs.com/package/react-scroll-up-button
+import "./TagsCarousel.css";
 
 const useStyles = makeStyles({
   root: {

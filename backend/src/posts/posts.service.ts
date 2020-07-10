@@ -1,7 +1,7 @@
 import { UserModel, TagModel } from './../mongoModels';
 import { HttpService, Injectable, NotFoundException } from '@nestjs/common';
-import { Ref } from '@typegoose/typegoose';
-import { ObjectID } from 'mongodb';
+import { post, Ref } from '@typegoose/typegoose';
+import { Logger, ObjectID } from 'mongodb';
 import { convertToStrArr, convertPostDocumentToPostDto } from '../util/helperFunctions';
 import * as urlSlug from 'url-slug';
 
@@ -13,7 +13,6 @@ import {
   PostDto,
   PostWithDetails,
 } from './dto/posts.dto';
-import { Post } from './post.schema';
 
 // Unused -- can use later for different feature
 type DevToArticle = {
@@ -151,10 +150,37 @@ export class PostsService {
   /**
    *
    * @param userObjectID? only needed if user logged in
-   */
+   */  /**
+* Get the top 5 posts based on:
+*
+* - Ratio of likes to views, higher the better (if 0 views then score is 0.5)
+* - Tie breaker: most recent
+* - Only in past week
+*
+* TODO: make this scalable (optimize)
+*/
   async getInitialPosts(userObjectID?: string): Promise<PostDto[]> {
-    const foundPosts = await PostModel.find().limit(5);
-    return foundPosts.map(convertPostDocumentToPostDto);
+    const result: PostDto[] = [];
+    const allPosts = await PostModel.find();
+    //TODO: only show posts in the past week
+    // allPosts.sort((post1, post2) => parseInt(post1.createdAt.toString()) - parseInt(post2.createdAt.toString()));
+    const likesToViewsRatios: Record<string, number>[] = [];
+    allPosts.forEach((post) => {
+      let likeToViewRatio = 0;
+      if (post.views > 0) {
+        likeToViewRatio = post.likes / post.views;
+      }
+      likesToViewsRatios.push({ [post._id.toString()]: likeToViewRatio });
+    })
+    likesToViewsRatios.sort((ratio1, ratio2) => ratio2[Object.keys(ratio2)[0]] - ratio1[Object.keys(ratio1)[0]]);
+
+    const foundPosts = await PostModel.find({
+      _id: {
+        $in: likesToViewsRatios.slice(0, 5).map(ratio => new ObjectID(Object.keys(ratio)[0]))
+      }
+    })
+
+    return foundPosts.map((post) => convertPostDocumentToPostDto(post));
   }
 
   // Unused -- can use later for different feature
