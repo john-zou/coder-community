@@ -3,9 +3,14 @@ export class GetAllVideosDto {
   videos: VideoDto[];
 }
 
-class VideoDto {
+export class VideoDto {
    name: string;
-    description: string;
-    _id: string;
-    createdAt: string;
-}
+   description: string;
+   _id: string;
+   createdAt: string;
+ }
+
+ export class CreateVideoDto {
+   name: string;
+   description: string;
+ }

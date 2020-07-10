@@ -9,6 +9,7 @@ import { Message } from './messages/message.schema';
 import { Post } from './posts/post.schema';
 import { Tag } from './tags/tag.schema';
 import { User } from './user/user.schema';
+import { Video } from './video/video.schema';
 import * as chalk from 'chalk';
 
 let mongooseInstance: typeof mongoose;
@@ -22,6 +23,7 @@ export const MessageModel = getModelForClass(Message);
 export const PostModel = getModelForClass(Post);
 export const TagModel = getModelForClass(Tag);
 export const UserModel = getModelForClass(User);
+export const VideoModel = getModelForClass(Video);
 
 export const DefaultMongoOptions = {
   useNewUrlParser: true,

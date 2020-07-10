@@ -18,7 +18,7 @@ import { TagsModule } from './tags/tags.module';
 import { TrendingModule } from './trending/trending.module';
 import { UploadModule } from './upload/upload.module';
 import { UserModule } from './user/user.module';
-import { VideosModule } from './videos/videos.module';
+import { VideoModule } from './video/video.module';
 
 @Module({
   imports: [
@@ -27,7 +27,7 @@ import { VideosModule } from './videos/videos.module';
     TagsModule,
     PostsModule,
     CommentsModule,
-    VideosModule,
+    VideoModule,
     GroupsModule,
     StorageModule,
     UploadModule,
@@ -47,7 +47,10 @@ import { VideosModule } from './videos/videos.module';
     }),
 
     // Module for dev convenience -- remove when deploying
-    DevModule
+    DevModule,
+    DevModule,
+
+     VideoModule
   ],
 
   controllers: [AppController],

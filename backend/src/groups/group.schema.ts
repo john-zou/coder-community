@@ -3,7 +3,7 @@ import { TimeStamps } from '@typegoose/typegoose/lib/defaultClasses';
 
 import { Post } from '../posts/post.schema';
 import { User } from '../user/user.schema';
-import { Video } from '../videos/video.schema';
+import { Video } from '../video/video.schema';
 
 export class Group extends TimeStamps {
   @prop()
