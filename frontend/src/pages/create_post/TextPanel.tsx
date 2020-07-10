@@ -66,13 +66,11 @@ export default function TextPanel(param) {
     <div className={classes.cptext}>
       <form>
         <input className={classes.cptitle} type="text" placeholder="Title" onChange={(event) => {
-          // updateTitle(event, dispatch);
           param.setTitle(event.target.value);
         }}>
         </input>
         <br></br>
         <textarea className={classes.cpcontent} id="text" onChange={(event) => {
-          // updateContent(event, dispatch);
           param.setContent(event.target.value);
         }} placeholder="Type content"></textarea>
       </form>

@@ -65,7 +65,10 @@ export class PostsService {
     }
 
     async getPostBySlug(slug: string): Promise<PostWithDetails> {
+        // console.log("POST::SERVOCE::GETPOSTS")
+        // console.log(slug);
         const post = await PostModel.findOne({ slug });
+        // console.log(post);
         if (post) {
             return {
                 _id: post._id,
@@ -93,7 +96,7 @@ export class PostsService {
         authorObjectID: string,
         body: CreatePostBodyDto,
     ): Promise<CreatePostSuccessDto> {
-        // Logger.log("PostsService::createPost")
+        console.log("POSTS::Service::createPost")
         let slug = urlSlug(body.title);
 
         // TODO: optimize with model.collection.find() / limit() / size()
@@ -117,6 +120,7 @@ export class PostsService {
         // Logger.log(doc);
         // Logger.log("Done create");
         const newPost = new PostModel(doc);
+        console.log(newPost);
         await newPost.save();
         if (!slug) {
             // set _id as slug (if slug is already taken)
@@ -132,8 +136,7 @@ export class PostsService {
         // Add post to tags
         const tags = newPost.tags;
         const expressions = tags.map(tagID => ({ _id: tagID }));
-        await TagModel.updateMany({ $or: expressions }, { $push: {posts: newPost._id }});
-
+        // awaitModel.updateMany({ $or: expressions }, { $push: {posts: newPost._id }});
         return {
             _id: newPost._id,
             slug,
@@ -141,7 +144,8 @@ export class PostsService {
     }
 
     async updatePostBySlug(newPost: CreatePostBodyDto, slug: string) {
-        console.log("SERVICE::" + slug);
+        console.log("POSTS::SERVICE");
+        console.log(slug);
         const post = await PostModel.findOneAndUpdate({slug}, {
             content: newPost.content,
             title: newPost.title,

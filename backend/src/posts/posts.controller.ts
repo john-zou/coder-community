@@ -81,14 +81,21 @@ export class PostsController {
     @ApiBearerAuth()
     @Personal() //provides @UserObjectID to get userid
     @Post()
-    createPost(@Body() createPostDto: CreatePostBodyDto, @UserObjectID() author: string): Promise<CreatePostSuccessDto> {
+    // createPost(@Body('newPost') createPostDto: CreatePostBodyDto): Promise<CreatePostSuccessDto> {
+    createPost(@Body('newPost') createPostDto: CreatePostBodyDto, @UserObjectID() author: string): Promise<CreatePostSuccessDto> {
+        console.log("POST CONTROLLER");
+        console.log(author);
+        console.log(createPostDto);
+        // let author = "5f07dd25be9a5c6510208dce";
         return this.postsService.createPost(author, createPostDto);
     }
 
     @Get(':slug')
     @UsePipes(new ValidationPipe({transform: true}))
     async getPostBySlug(@Param('slug') slug: string, @Query('get-author') getAuthor?: boolean): Promise<GetPostDetailsSuccessDto> {
+        // console.log("POSTS::CONTROLLER::GET");
         const post = await this.postsService.getPostBySlug(slug);
+        // console.log(post);
         if (getAuthor) {
             const author = await this.userService.findUserById(post.author);
             return {post, author};

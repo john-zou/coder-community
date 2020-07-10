@@ -18,6 +18,8 @@ export class TrendingController {
   @Personal()
   @Get('loggedIn')
   getTrendingLoggedIn(@UserObjectID() userObjectID: string): Promise<GetInitialDataLoggedInDto> {
+    console.log("TRENDING::CONTROLLER::LOGGEDIN")
+    console.log(userObjectID);
     return this.trendingService.getInitialLoggedInData(userObjectID);
   }
 }

@@ -30,6 +30,7 @@ export const submitPost = createdPost => {
         tags: createdPost.tags,
         featuredImg: ''
     }
+    // console.log("POST CREATE SLICE");
     return dispatch => {
         return fetch(`http://localhost:3001/api/posts`, {
             method: 'POST',
@@ -39,7 +40,7 @@ export const submitPost = createdPost => {
             },
             body: JSON.stringify({
                 newPost,
-                user: {_id: "5eeebd4d1333dd0f79ca9be3"} //curUser._id }
+                // user: {_id: "5f07dd25be9a5c6510208dce"} // curUser._id }
             }),
         }).then((response) => {
             return response.json();

@@ -37,11 +37,12 @@ export class TrendingService {
   }
 
   async getInitialLoggedInData(userObjectID: string): Promise<GetInitialDataLoggedInDto> {
-    console.log("***" + userObjectID);
+    console.log("TRENDINGSERVICE::INITIAL LOGGED DATA");
+    console.log(userObjectID);
     const posts = await this.postsService.getInitialPosts(userObjectID);
-    console.log("***" + posts);
+    console.log(posts);
     const users = await this.userService.getAuthors(posts);
-    console.log("******" + users);
+    console.log(users);
     const user = await this.userService.findUserById(userObjectID);
     const tags = await this.tagsService.getTags();
     return {

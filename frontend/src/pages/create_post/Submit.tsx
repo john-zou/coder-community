@@ -40,8 +40,8 @@ export default function Submit(params) {
   const classes = useStyles();
   const dispatch = useDispatch();
   // const createdPost = useSelector<RootState, PostsCreation>(state => state.postsCreation);
-  // curUser = useSelector<RootState, User>(state => state.user);
-  // console.log(curUser);
+  const curUser = useSelector<RootState, User>(state => state.user);
+  console.log(curUser);
 
   return (
      <div className={classes.operation}>

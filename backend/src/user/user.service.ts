@@ -90,12 +90,12 @@ export class UserService {
 
   // To get the authors of the trending posts
   async getAuthors(posts: PostDto[]): Promise<UserDto[]> {
-    console.log("**** get authors")
+    console.log("USER::SERVICE::GET AUTHORS")
     const result: UserDto[] = [];
     for (const post of posts) {
-      console.log(post);
+      // console.log(post);
       const foundUser = await UserModel.findById(post.author);
-      console.log(foundUser);
+      // console.log(foundUser);
       result.push({
         _id: foundUser._id,
         userID: foundUser.userID,
