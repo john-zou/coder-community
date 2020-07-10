@@ -11,7 +11,6 @@ import ErrorPage from "../common/ErrorPage";
 import { fetchGroups, leaveGroup, joinGroup } from "../../reducers/groupsSlice";
 import PurpleButton from "../common/PurpleButton";
 import { CreateGroupModal } from "./CreateGroupModal";
-import { dispatch } from "rxjs/internal/observable/range";
 
 const GroupContainer = styled.div`
   width: 90%;
@@ -20,6 +19,7 @@ const GroupContainer = styled.div`
   flex-direction: column;
   justify-content: flex-start;
   background-color: white;
+ 
 `;
 const Header = styled.div`
   display: flex;
@@ -35,6 +35,8 @@ const GroupContent = styled.div`
   flex-direction: column;
   padding-left: 30px;
   padding-right: 30px;
+  overflow-y: scroll;
+  margin-bottom: 5vh;
 `;
 
 const GroupCard = ({ currentGroup, isUserAMember }: { currentGroup: Group, isUserAMember: boolean }) => {
