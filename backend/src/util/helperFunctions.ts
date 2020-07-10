@@ -4,6 +4,7 @@ import { UserDto } from "../user/dto/user.dto";
 import { User } from "../user/user.schema";
 import { Post } from "../posts/post.schema";
 import { PostDto } from "../posts/dto/posts.dto";
+import * as moment from 'moment';
 
 export const convertToStrArr = (list: Ref<any, ObjectID>[]): string[] => {
   return list.map((item) => {
@@ -27,7 +28,16 @@ export const convertUserToUserDto = (user: DocumentType<User>): UserDto => {
     likedPosts: convertToStrArr(user.likedPosts),
   }
 }
+
 export const convertPostDocumentToPostDto = (post: DocumentType<Post>): PostDto => {
+  let createdAt = post.createdAt.toString();
+  if (Date.now() - post.createdAt.getHours() > 24) {
+    createdAt = moment(createdAt).format('lll'); //https://momentjs.com/
+  } else if (Date.now() - post.createdAt.getHours() < 1) {
+    createdAt = moment(createdAt).startOf('hour').fromNow();
+  } else {
+    createdAt = moment(createdAt).startOf('day').fromNow();
+  }
   return {
     _id: post._id.toString(),
     author: post.author.toString(),
@@ -36,7 +46,7 @@ export const convertPostDocumentToPostDto = (post: DocumentType<Post>): PostDto 
     previewContent: post.previewContent,
     content: post.content,
     tags: convertToStrArr(post.tags),
-    createdAt: post.createdAt.toString(),
+    createdAt,
     featuredImg: post.featuredImg,
     likes: post.likes,
     views: post.views,
