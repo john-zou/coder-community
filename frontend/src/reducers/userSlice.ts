@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import {UserApi, GetInitialDataDto, GetInitialDataLoggedInDto, PostsApi, AuthApi} from "../api";
+import {UserApi, GetInitialDataDto, GetInitialDataLoggedInDto, PostsApi, AuthApi, UpdateProfileReqDto} from "../api";
 import { fetchTrendingPosts } from "./postsSlice";
 import { CurrentLoggedInUser } from "../store/types";
 import _ from "lodash";
@@ -20,6 +20,14 @@ export const login = createAsyncThunk(
     'loginStatus',
     async ({code, state}: {code: string, state: string}) => {
       await new AuthApi().authControllerLoginGitHub({code, state})
+    }
+);
+
+export const updateProfile = createAsyncThunk(
+    'updateProfile',
+    async (update: UpdateProfileReqDto) => {
+      await api.userControllerEditProfile(update);
+      return { update };
     }
 )
 
@@ -147,6 +155,21 @@ export const userSlice = createSlice({
     // Logging out should clear the state
     [isLoggedInSlice.actions.logOut.type]: () => {
       return null;
+    },
+
+    [updateProfile.fulfilled.type]: (state, action: PayloadAction<UpdateProfileReqDto>) => {
+      if (!state) {
+        return null;
+      }
+      if (action.payload.name) {
+        state.name = action.payload.name;
+      }
+      if (action.payload.status) {
+        state.status = action.payload.status;
+      }
+      if (Array.isArray(action.payload.tags)) {
+        state.tags = action.payload.tags;
+      }
     }
   }
 })
