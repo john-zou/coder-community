@@ -83,7 +83,7 @@ export type PostsCreation = {
 export type Tag = {
   _id: string,
   name: string,
-  posts: string[],
+  postsSet: Record<string, boolean>, // posts that have this tag, that Redux is aware of
 };
 
 export type User = {
@@ -91,7 +91,7 @@ export type User = {
   userID: string,
   gitHubID?: number,
   name: string,
-  profilePic: string,
+  profilePic?: string,
   profileBanner?: string,
   status?: string,
   followers?: string[],//list of ids

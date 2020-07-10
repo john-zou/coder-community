@@ -16,8 +16,8 @@ import MoreIcon from '@material-ui/icons/MoreVert';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import SearchIcon from '@material-ui/icons/Search';
 import React from 'react';
-import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { Link, useHistory } from 'react-router-dom';
 
 import Logo from '../../assets/ccLogo.svg';
 import PurpleButton from '../../pages/common/PurpleButton';
@@ -25,6 +25,7 @@ import { initializeGitHubOAuth } from '../../pages/login/login';
 import { Avatar } from '@material-ui/core';
 import { RootState } from '../../reducers/rootReducer';
 import { User } from '../../store/types';
+import {AppDispatch} from "../../store";
 
 const drawerWidth = 240;
 const useStyles = makeStyles((theme) => ({
@@ -111,6 +112,8 @@ export default function Header(props) {
 `;
   const isLoggedIn = useSelector<RootState, boolean>((state) => state.isLoggedIn);
   const user = useSelector<RootState, User>(state => state.user);
+  const history = useHistory();
+  const dispatch = useDispatch<AppDispatch>();
 
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -147,8 +150,14 @@ export default function Header(props) {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+      <MenuItem onClick={() => {
+        history.push(`/user/${user.userID}`);
+        handleMenuClose();
+      }}>Profile</MenuItem>
+      <MenuItem onClick={() => {
+        history.push('/logout');
+        handleMenuClose();
+      }}>Log Out</MenuItem>
     </Menu>
   );
 

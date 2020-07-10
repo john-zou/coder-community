@@ -11,7 +11,6 @@ export const createImgUrl = url => {
 }
 
 export const createTitle = title => {
-    // console.log("*** CREATLE TITLE ***");
     return {
         type: CREATE_POSTS_TITLE,
         payload: {
@@ -21,7 +20,6 @@ export const createTitle = title => {
 }
 
 export const createContent = content => {
-    // console.log("*** CREATLE CONTENT ***");
     return {
         type: CREATE_POSTS_CONTENT,
         payload: {
@@ -48,9 +46,9 @@ export const submitPost = createdPost => {
                 newPost
             })
         }).then((response) => {
-            //return response.json();
-        // }).then((res) => {
-            //console.log(res);
+            return response.json();
+        }).then((res) => {
+            console.log(res);
         }).catch(e => console.log(e))
     }
 }

@@ -31,9 +31,6 @@ const FilterPost = () => {
           <label className={classes.label}>#{tag}</label>
           <input
             type="checkbox"
-            id="vehicle1"
-            name="vehicle1"
-            value="Bike"
             className={classes.checkBox}
           />
         </div>

@@ -1,10 +1,13 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable, NotFoundException } from '@nestjs/common';
 
-import { UserModel } from '../mongoModels';
+import { PostModel, UserModel } from '../mongoModels';
 import { PostDto } from '../posts/dto/posts.dto';
-import { convertToStrArr } from '../util/helperFunctions';
-import { UserDto } from './dto/user.dto';
+import { convertToStrArr, convertUserToUserDto } from '../util/helperFunctions';
+import { UserDto, GetUsersSuccessDto } from './dto/user.dto';
 import { User } from './user.schema';
+import { ObjectId } from 'mongodb';
+import { userInfo } from 'os';
+import { Model } from 'mongoose';
 
 /**
  * typed like in UserSchema
@@ -17,22 +20,45 @@ type ExtraGitHubUserInfo = {
 
 @Injectable()
 export class UserService {
+
+  async addFollower(userObjectID: string, id: string): Promise<boolean> {
+    const foundUser = UserModel.findById(id);
+    console.log(foundUser);
+    await UserModel.updateOne({ _id: userObjectID }, {
+      $push: {
+        followers: (await foundUser)._id,
+      }
+    })
+    return true;
+  }
+
+  async addFollowing(userObjectID: string, id: string): Promise<boolean> {
+    const foundUser = UserModel.findById(id);
+    await UserModel.updateOne({ _id: userObjectID }, {
+      $push: {
+        following: (await foundUser)._id,
+      }
+    })
+    return true;
+  }
+
+  async findUsersByIds(ids: string[]): Promise<GetUsersSuccessDto> {
+    const users = await UserModel.find({
+      _id: {
+        $in: ids
+      }
+    })
+    return {
+      users: users.map((user) => convertUserToUserDto(user))
+    }
+  }
+
   async findUserById(userObjectID: string): Promise<UserDto> {
     const foundUser = await UserModel.findById(userObjectID);
-    return {
-      _id: foundUser._id,
-      userID: foundUser.userID,
-      name: foundUser.name,
-      profilePic: foundUser.profilePic,
-      profileBanner: foundUser.profileBanner,
-      status: foundUser.status,
-      followers: convertToStrArr(foundUser.followers),
-      following: convertToStrArr(foundUser.following),
-      groups: convertToStrArr(foundUser.groups),
-      posts: convertToStrArr(foundUser.posts),
-      savedPosts: convertToStrArr(foundUser.savedPosts),
-      likedPosts: convertToStrArr(foundUser.likedPosts),
-    };
+    if (!foundUser) {
+      throw new NotFoundException();
+    }
+    return convertUserToUserDto(foundUser);
   }
 
   async saveProfileBannerPic(userObjectID: string, url: string): Promise<void> {
@@ -43,10 +69,33 @@ export class UserService {
     await UserModel.updateOne({ _id: userObjectID }, { profilePic: url });
   }
 
+  async savePost(userObjectID: string, postID: string): Promise<void> {
+    const user = await UserModel.findById(userObjectID);
+    if (!user) {
+      throw new HttpException("User does not exist in MongoDB!", 500);
+    }
+    const post = await PostModel.findById(postID);
+    if (!post) {
+      throw new NotFoundException();
+    }
+    const postAlreadyExists = user.savedPosts.find(savedPostID => savedPostID.toString() === postID);
+    if (postAlreadyExists) {
+      throw new HttpException("User already saved this post!", 400);
+    }
+
+    // Add to saved posts
+    user.savedPosts.push(post);
+    await user.save();
+  }
+
+  // To get the authors of the trending posts
   async getAuthors(posts: PostDto[]): Promise<UserDto[]> {
+    console.log("**** get authors")
     const result: UserDto[] = [];
     for (const post of posts) {
+      console.log(post);
       const foundUser = await UserModel.findById(post.author);
+      console.log(foundUser);
       result.push({
         _id: foundUser._id,
         userID: foundUser.userID,

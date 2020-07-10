@@ -66,3 +66,10 @@ export class CreatePostSuccessDto {
 export class UpdatePostSuccessDto {
   CreatePostBodyDto
 }
+
+// Response
+export class GetPostsByTagDto {
+  cursor: number; // so the front end knows what index they are at for retrieving posts by this tag
+  tagID: string;
+  posts: PostDto[];
+}

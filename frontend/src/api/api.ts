@@ -109,6 +109,12 @@ export interface CreateGroupDto {
      */
     description?: string;
     /**
+     * The ObjectIDs of the invited users of the new group
+     * @type {Array<string>}
+     * @memberof CreateGroupDto
+     */
+    users: Array<string>;
+    /**
      * The URL for the group's circular profile avatar image
      * @type {string}
      * @memberof CreateGroupDto
@@ -139,6 +145,43 @@ export interface CreateGroupSuccessDto {
      * @memberof CreateGroupSuccessDto
      */
     _id: string; // modified by backend/scripts/generate-api.js
+}
+/**
+ * 
+ * @export
+ * @interface CreatePostBodyDto
+ */
+export interface CreatePostBodyDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof CreatePostBodyDto
+     */
+    title: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreatePostBodyDto
+     */
+    content: string;
+    /**
+     * 
+     * @type {Array<any>}
+     * @memberof CreatePostBodyDto
+     */
+    tags: Array<any>;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreatePostBodyDto
+     */
+    featuredImg: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreatePostBodyDto
+     */
+    group?: string;
 }
 /**
  * 
@@ -291,6 +334,44 @@ export interface GetPostDetailsSuccessDto {
      * @memberof GetPostDetailsSuccessDto
      */
     author?: UserDto;
+}
+/**
+ * 
+ * @export
+ * @interface GetPostsByTagDto
+ */
+export interface GetPostsByTagDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof GetPostsByTagDto
+     */
+    cursor: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetPostsByTagDto
+     */
+    tagID: string;
+    /**
+     * 
+     * @type {Array<PostDto>}
+     * @memberof GetPostsByTagDto
+     */
+    posts: Array<PostDto>;
+}
+/**
+ * 
+ * @export
+ * @interface GetUsersSuccessDto
+ */
+export interface GetUsersSuccessDto {
+    /**
+     * 
+     * @type {Array<UserDto>}
+     * @memberof GetUsersSuccessDto
+     */
+    users: Array<UserDto>;
 }
 /**
  * 
@@ -679,12 +760,6 @@ export interface TagsDto {
      * @memberof TagsDto
      */
     name: string;
-    /**
-     * 
-     * @type {Array<string>}
-     * @memberof TagsDto
-     */
-    posts: Array<string>;
 }
 /**
  * 
@@ -693,7 +768,7 @@ export interface TagsDto {
  */
 export interface UploadSuccess {
     /**
-     * The relative static URL of the file
+     * The URL of the file which is now statically served as a result of this upload.
      * @type {string}
      * @memberof UploadSuccess
      */
@@ -1182,7 +1257,7 @@ export const DevApiFetchParamCreator = function (configuration?: Configuration) 
             if (id === null || id === undefined) {
                 throw new RequiredError('id','Required parameter id was null or undefined when calling devControllerGetJwt.');
             }
-            const localVarPath = `/api/dev/jwt`
+            const localVarPath = `/api/dev/jwt/{id}`
                 .replace(`{${"id"}}`, encodeURIComponent(String(id)));
             const localVarUrlObj = url.parse(localVarPath, true);
             const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
@@ -1877,10 +1952,15 @@ export const PostsApiFetchParamCreator = function (configuration?: Configuration
     return {
         /**
          * 
+         * @param {CreatePostBodyDto} body 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        postsControllerCreatePost(options: any = {}): FetchArgs {
+        postsControllerCreatePost(body: CreatePostBodyDto, options: any = {}): FetchArgs {
+            // verify required parameter 'body' is not null or undefined
+            if (body === null || body === undefined) {
+                throw new RequiredError('body','Required parameter body was null or undefined when calling postsControllerCreatePost.');
+            }
             const localVarPath = `/api/posts`;
             const localVarUrlObj = url.parse(localVarPath, true);
             const localVarRequestOptions = Object.assign({ method: 'POST' }, options);
@@ -1889,10 +1969,14 @@ export const PostsApiFetchParamCreator = function (configuration?: Configuration
 
             // authentication bearer required
 
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
             // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
             delete localVarUrlObj.search;
             localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+            const needsSerialization = (<any>"CreatePostBodyDto" !== "string") || localVarRequestOptions.headers['Content-Type'] === 'application/json';
+            localVarRequestOptions.body =  needsSerialization ? JSON.stringify(body || {}) : (body || "");
 
             return {
                 url: url.format(localVarUrlObj),
@@ -1938,6 +2022,72 @@ export const PostsApiFetchParamCreator = function (configuration?: Configuration
         },
         /**
          * 
+         * @param {string} postID 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        postsControllerLikePost(postID: string, options: any = {}): FetchArgs {
+            // verify required parameter 'postID' is not null or undefined
+            if (postID === null || postID === undefined) {
+                throw new RequiredError('postID','Required parameter postID was null or undefined when calling postsControllerLikePost.');
+            }
+            const localVarPath = `/api/posts/like`;
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'PUT' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+
+            if (postID !== undefined) {
+                localVarQueryParameter['postID'] = postID;
+            }
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} postID 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        postsControllerUnlikePost(postID: string, options: any = {}): FetchArgs {
+            // verify required parameter 'postID' is not null or undefined
+            if (postID === null || postID === undefined) {
+                throw new RequiredError('postID','Required parameter postID was null or undefined when calling postsControllerUnlikePost.');
+            }
+            const localVarPath = `/api/posts/unlike`;
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'PUT' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+
+            if (postID !== undefined) {
+                localVarQueryParameter['postID'] = postID;
+            }
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {string} slug 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1964,6 +2114,52 @@ export const PostsApiFetchParamCreator = function (configuration?: Configuration
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @param {string} tagID The ObjectID of the tag
+         * @param {number} [requestedCount] How many posts to fetch
+         * @param {number} [startIdx] What index to start at, e.g. if startIdx &#x3D; 5, then the 5 posts (0th, 1st, 2nd, 3rd, 4th) of this tag will not be fetched
+         * @param {any} [excludePostIDs] An object that works like a set of Post ObjectIDs to exclude
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        tagsControllerGetPostsByTag(tagID: string, requestedCount?: number, startIdx?: number, excludePostIDs?: any, options: any = {}): FetchArgs {
+            // verify required parameter 'tagID' is not null or undefined
+            if (tagID === null || tagID === undefined) {
+                throw new RequiredError('tagID','Required parameter tagID was null or undefined when calling tagsControllerGetPostsByTag.');
+            }
+            const localVarPath = `/api/tags/posts`;
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (tagID !== undefined) {
+                localVarQueryParameter['tagID'] = tagID;
+            }
+
+            if (requestedCount !== undefined) {
+                localVarQueryParameter['requestedCount'] = requestedCount;
+            }
+
+            if (startIdx !== undefined) {
+                localVarQueryParameter['startIdx'] = startIdx;
+            }
+
+            if (excludePostIDs !== undefined) {
+                localVarQueryParameter['excludePostIDs'] = excludePostIDs;
+            }
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -1975,11 +2171,12 @@ export const PostsApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
+         * @param {CreatePostBodyDto} body 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        postsControllerCreatePost(options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<CreatePostSuccessDto> {
-            const localVarFetchArgs = PostsApiFetchParamCreator(configuration).postsControllerCreatePost(options);
+        postsControllerCreatePost(body: CreatePostBodyDto, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<CreatePostSuccessDto> {
+            const localVarFetchArgs = PostsApiFetchParamCreator(configuration).postsControllerCreatePost(body, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -2011,6 +2208,42 @@ export const PostsApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {string} postID 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        postsControllerLikePost(postID: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Response> {
+            const localVarFetchArgs = PostsApiFetchParamCreator(configuration).postsControllerLikePost(postID, options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response;
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * 
+         * @param {string} postID 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        postsControllerUnlikePost(postID: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Response> {
+            const localVarFetchArgs = PostsApiFetchParamCreator(configuration).postsControllerUnlikePost(postID, options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response;
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * 
          * @param {string} slug 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -2021,6 +2254,27 @@ export const PostsApiFp = function(configuration?: Configuration) {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
                         return response;
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * 
+         * @param {string} tagID The ObjectID of the tag
+         * @param {number} [requestedCount] How many posts to fetch
+         * @param {number} [startIdx] What index to start at, e.g. if startIdx &#x3D; 5, then the 5 posts (0th, 1st, 2nd, 3rd, 4th) of this tag will not be fetched
+         * @param {any} [excludePostIDs] An object that works like a set of Post ObjectIDs to exclude
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        tagsControllerGetPostsByTag(tagID: string, requestedCount?: number, startIdx?: number, excludePostIDs?: any, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<GetPostsByTagDto> {
+            const localVarFetchArgs = PostsApiFetchParamCreator(configuration).tagsControllerGetPostsByTag(tagID, requestedCount, startIdx, excludePostIDs, options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
                     } else {
                         throw response;
                     }
@@ -2038,11 +2292,12 @@ export const PostsApiFactory = function (configuration?: Configuration, fetch?: 
     return {
         /**
          * 
+         * @param {CreatePostBodyDto} body 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        postsControllerCreatePost(options?: any) {
-            return PostsApiFp(configuration).postsControllerCreatePost(options)(fetch, basePath);
+        postsControllerCreatePost(body: CreatePostBodyDto, options?: any) {
+            return PostsApiFp(configuration).postsControllerCreatePost(body, options)(fetch, basePath);
         },
         /**
          * 
@@ -2056,12 +2311,42 @@ export const PostsApiFactory = function (configuration?: Configuration, fetch?: 
         },
         /**
          * 
+         * @param {string} postID 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        postsControllerLikePost(postID: string, options?: any) {
+            return PostsApiFp(configuration).postsControllerLikePost(postID, options)(fetch, basePath);
+        },
+        /**
+         * 
+         * @param {string} postID 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        postsControllerUnlikePost(postID: string, options?: any) {
+            return PostsApiFp(configuration).postsControllerUnlikePost(postID, options)(fetch, basePath);
+        },
+        /**
+         * 
          * @param {string} slug 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         postsControllerUpdatePostBySlug(slug: string, options?: any) {
             return PostsApiFp(configuration).postsControllerUpdatePostBySlug(slug, options)(fetch, basePath);
+        },
+        /**
+         * 
+         * @param {string} tagID The ObjectID of the tag
+         * @param {number} [requestedCount] How many posts to fetch
+         * @param {number} [startIdx] What index to start at, e.g. if startIdx &#x3D; 5, then the 5 posts (0th, 1st, 2nd, 3rd, 4th) of this tag will not be fetched
+         * @param {any} [excludePostIDs] An object that works like a set of Post ObjectIDs to exclude
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        tagsControllerGetPostsByTag(tagID: string, requestedCount?: number, startIdx?: number, excludePostIDs?: any, options?: any) {
+            return PostsApiFp(configuration).tagsControllerGetPostsByTag(tagID, requestedCount, startIdx, excludePostIDs, options)(fetch, basePath);
         },
     };
 };
@@ -2075,14 +2360,13 @@ export const PostsApiFactory = function (configuration?: Configuration, fetch?: 
 export class PostsApi extends BaseAPI {
     /**
      * 
+     * @param {CreatePostBodyDto} body 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof PostsApi
      */
-    public postsControllerCreatePost(options?: any) {
-        console.log("API::CREATEPOST");
-        console.log(options);
-        return PostsApiFp(this.configuration).postsControllerCreatePost(options)(this.fetch, this.basePath);
+    public postsControllerCreatePost(body: CreatePostBodyDto, options?: any) {
+        return PostsApiFp(this.configuration).postsControllerCreatePost(body, options)(this.fetch, this.basePath);
     }
 
     /**
@@ -2099,15 +2383,49 @@ export class PostsApi extends BaseAPI {
 
     /**
      * 
+     * @param {string} postID 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof PostsApi
+     */
+    public postsControllerLikePost(postID: string, options?: any) {
+        return PostsApiFp(this.configuration).postsControllerLikePost(postID, options)(this.fetch, this.basePath);
+    }
+
+    /**
+     * 
+     * @param {string} postID 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof PostsApi
+     */
+    public postsControllerUnlikePost(postID: string, options?: any) {
+        return PostsApiFp(this.configuration).postsControllerUnlikePost(postID, options)(this.fetch, this.basePath);
+    }
+
+    /**
+     * 
      * @param {string} slug 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof PostsApi
      */
     public postsControllerUpdatePostBySlug(slug: string, options?: any) {
-        console.log("API::UPDATEPOST");
-        console.log(options);
         return PostsApiFp(this.configuration).postsControllerUpdatePostBySlug(slug, options)(this.fetch, this.basePath);
+    }
+
+    /**
+     * 
+     * @param {string} tagID The ObjectID of the tag
+     * @param {number} [requestedCount] How many posts to fetch
+     * @param {number} [startIdx] What index to start at, e.g. if startIdx &#x3D; 5, then the 5 posts (0th, 1st, 2nd, 3rd, 4th) of this tag will not be fetched
+     * @param {any} [excludePostIDs] An object that works like a set of Post ObjectIDs to exclude
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof PostsApi
+     */
+    public tagsControllerGetPostsByTag(tagID: string, requestedCount?: number, startIdx?: number, excludePostIDs?: any, options?: any) {
+        return PostsApiFp(this.configuration).tagsControllerGetPostsByTag(tagID, requestedCount, startIdx, excludePostIDs, options)(this.fetch, this.basePath);
     }
 
 }
@@ -2432,7 +2750,7 @@ export class TrendingApi extends BaseAPI {
 export const UploadApiFetchParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * 
+         * Not implemented. Once implemented, use helper function in 'frontend/src/api-upload'. (Don't use 'new UploadApi().uploadController ...' from 'frontend/src/api' as it does not work.)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -2454,7 +2772,7 @@ export const UploadApiFetchParamCreator = function (configuration?: Configuratio
             };
         },
         /**
-         * 
+         * Note: use helper function in 'frontend/src/api-upload'. (Don't use 'new UploadApi().uploadController ...' from 'frontend/src/api' as it does not work. )
          * @param {FileUploadDto} body 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -2485,7 +2803,7 @@ export const UploadApiFetchParamCreator = function (configuration?: Configuratio
             };
         },
         /**
-         * 
+         * Note: use helper function in 'frontend/src/api-upload'. The generated version for this front end API helpers (frontend/src/api) doesn't work.
          * @param {FileUploadDto} body 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -2516,7 +2834,7 @@ export const UploadApiFetchParamCreator = function (configuration?: Configuratio
             };
         },
         /**
-         * 
+         * Note: use helper function in 'frontend/src/api-upload'. (Don't use 'new UploadApi().uploadController ...' from 'frontend/src/api' as it does not work.)
          * @param {FileUploadDto} body 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -2556,7 +2874,7 @@ export const UploadApiFetchParamCreator = function (configuration?: Configuratio
 export const UploadApiFp = function(configuration?: Configuration) {
     return {
         /**
-         * 
+         * Not implemented. Once implemented, use helper function in 'frontend/src/api-upload'. (Don't use 'new UploadApi().uploadController ...' from 'frontend/src/api' as it does not work.)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -2573,7 +2891,7 @@ export const UploadApiFp = function(configuration?: Configuration) {
             };
         },
         /**
-         * 
+         * Note: use helper function in 'frontend/src/api-upload'. (Don't use 'new UploadApi().uploadController ...' from 'frontend/src/api' as it does not work. )
          * @param {FileUploadDto} body 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -2591,7 +2909,7 @@ export const UploadApiFp = function(configuration?: Configuration) {
             };
         },
         /**
-         * 
+         * Note: use helper function in 'frontend/src/api-upload'. The generated version for this front end API helpers (frontend/src/api) doesn't work.
          * @param {FileUploadDto} body 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -2609,7 +2927,7 @@ export const UploadApiFp = function(configuration?: Configuration) {
             };
         },
         /**
-         * 
+         * Note: use helper function in 'frontend/src/api-upload'. (Don't use 'new UploadApi().uploadController ...' from 'frontend/src/api' as it does not work.)
          * @param {FileUploadDto} body 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -2636,7 +2954,7 @@ export const UploadApiFp = function(configuration?: Configuration) {
 export const UploadApiFactory = function (configuration?: Configuration, fetch?: FetchAPI, basePath?: string) {
     return {
         /**
-         * 
+         * Not implemented. Once implemented, use helper function in 'frontend/src/api-upload'. (Don't use 'new UploadApi().uploadController ...' from 'frontend/src/api' as it does not work.)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -2644,7 +2962,7 @@ export const UploadApiFactory = function (configuration?: Configuration, fetch?:
             return UploadApiFp(configuration).uploadControllerUploadPrivateFile(options)(fetch, basePath);
         },
         /**
-         * 
+         * Note: use helper function in 'frontend/src/api-upload'. (Don't use 'new UploadApi().uploadController ...' from 'frontend/src/api' as it does not work. )
          * @param {FileUploadDto} body 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -2653,7 +2971,7 @@ export const UploadApiFactory = function (configuration?: Configuration, fetch?:
             return UploadApiFp(configuration).uploadControllerUploadProfileBannerPic(body, options)(fetch, basePath);
         },
         /**
-         * 
+         * Note: use helper function in 'frontend/src/api-upload'. The generated version for this front end API helpers (frontend/src/api) doesn't work.
          * @param {FileUploadDto} body 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -2662,7 +2980,7 @@ export const UploadApiFactory = function (configuration?: Configuration, fetch?:
             return UploadApiFp(configuration).uploadControllerUploadProfilePic(body, options)(fetch, basePath);
         },
         /**
-         * 
+         * Note: use helper function in 'frontend/src/api-upload'. (Don't use 'new UploadApi().uploadController ...' from 'frontend/src/api' as it does not work.)
          * @param {FileUploadDto} body 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -2681,7 +2999,7 @@ export const UploadApiFactory = function (configuration?: Configuration, fetch?:
  */
 export class UploadApi extends BaseAPI {
     /**
-     * 
+     * Not implemented. Once implemented, use helper function in 'frontend/src/api-upload'. (Don't use 'new UploadApi().uploadController ...' from 'frontend/src/api' as it does not work.)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof UploadApi
@@ -2691,7 +3009,7 @@ export class UploadApi extends BaseAPI {
     }
 
     /**
-     * 
+     * Note: use helper function in 'frontend/src/api-upload'. (Don't use 'new UploadApi().uploadController ...' from 'frontend/src/api' as it does not work. )
      * @param {FileUploadDto} body 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -2702,7 +3020,7 @@ export class UploadApi extends BaseAPI {
     }
 
     /**
-     * 
+     * Note: use helper function in 'frontend/src/api-upload'. The generated version for this front end API helpers (frontend/src/api) doesn't work.
      * @param {FileUploadDto} body 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -2713,7 +3031,7 @@ export class UploadApi extends BaseAPI {
     }
 
     /**
-     * 
+     * Note: use helper function in 'frontend/src/api-upload'. (Don't use 'new UploadApi().uploadController ...' from 'frontend/src/api' as it does not work.)
      * @param {FileUploadDto} body 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -2732,6 +3050,66 @@ export const UserApiFetchParamCreator = function (configuration?: Configuration)
     return {
         /**
          * 
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        userControllerAddFollower(id: string, options: any = {}): FetchArgs {
+            // verify required parameter 'id' is not null or undefined
+            if (id === null || id === undefined) {
+                throw new RequiredError('id','Required parameter id was null or undefined when calling userControllerAddFollower.');
+            }
+            const localVarPath = `/api/user/addFollower/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'PUT' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        userControllerAddFollowing(id: string, options: any = {}): FetchArgs {
+            // verify required parameter 'id' is not null or undefined
+            if (id === null || id === undefined) {
+                throw new RequiredError('id','Required parameter id was null or undefined when calling userControllerAddFollowing.');
+            }
+            const localVarPath = `/api/user/addFollowing/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'PUT' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -2741,6 +3119,69 @@ export const UserApiFetchParamCreator = function (configuration?: Configuration)
             const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} ids 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        userControllerGetUsersByIDs(ids: string, options: any = {}): FetchArgs {
+            // verify required parameter 'ids' is not null or undefined
+            if (ids === null || ids === undefined) {
+                throw new RequiredError('ids','Required parameter ids was null or undefined when calling userControllerGetUsersByIDs.');
+            }
+            const localVarPath = `/api/user/byIds`;
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (ids !== undefined) {
+                localVarQueryParameter['ids'] = ids;
+            }
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} postID 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        userControllerSavePost(postID: string, options: any = {}): FetchArgs {
+            // verify required parameter 'postID' is not null or undefined
+            if (postID === null || postID === undefined) {
+                throw new RequiredError('postID','Required parameter postID was null or undefined when calling userControllerSavePost.');
+            }
+            const localVarPath = `/api/user/save-post/{postID}`
+                .replace(`{${"postID"}}`, encodeURIComponent(String(postID)));
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'PUT' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
 
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
             // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
@@ -2763,6 +3204,42 @@ export const UserApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        userControllerAddFollower(id: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<boolean> {
+            const localVarFetchArgs = UserApiFetchParamCreator(configuration).userControllerAddFollower(id, options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * 
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        userControllerAddFollowing(id: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<boolean> {
+            const localVarFetchArgs = UserApiFetchParamCreator(configuration).userControllerAddFollowing(id, options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -2772,6 +3249,42 @@ export const UserApiFp = function(configuration?: Configuration) {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
                         return response.json();
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * 
+         * @param {string} ids 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        userControllerGetUsersByIDs(ids: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<GetUsersSuccessDto> {
+            const localVarFetchArgs = UserApiFetchParamCreator(configuration).userControllerGetUsersByIDs(ids, options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * 
+         * @param {string} postID 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        userControllerSavePost(postID: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Response> {
+            const localVarFetchArgs = UserApiFetchParamCreator(configuration).userControllerSavePost(postID, options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response;
                     } else {
                         throw response;
                     }
@@ -2789,11 +3302,47 @@ export const UserApiFactory = function (configuration?: Configuration, fetch?: F
     return {
         /**
          * 
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        userControllerAddFollower(id: string, options?: any) {
+            return UserApiFp(configuration).userControllerAddFollower(id, options)(fetch, basePath);
+        },
+        /**
+         * 
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        userControllerAddFollowing(id: string, options?: any) {
+            return UserApiFp(configuration).userControllerAddFollowing(id, options)(fetch, basePath);
+        },
+        /**
+         * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         userControllerGetUser(options?: any) {
             return UserApiFp(configuration).userControllerGetUser(options)(fetch, basePath);
+        },
+        /**
+         * 
+         * @param {string} ids 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        userControllerGetUsersByIDs(ids: string, options?: any) {
+            return UserApiFp(configuration).userControllerGetUsersByIDs(ids, options)(fetch, basePath);
+        },
+        /**
+         * 
+         * @param {string} postID 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        userControllerSavePost(postID: string, options?: any) {
+            return UserApiFp(configuration).userControllerSavePost(postID, options)(fetch, basePath);
         },
     };
 };
@@ -2807,12 +3356,56 @@ export const UserApiFactory = function (configuration?: Configuration, fetch?: F
 export class UserApi extends BaseAPI {
     /**
      * 
+     * @param {string} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UserApi
+     */
+    public userControllerAddFollower(id: string, options?: any) {
+        return UserApiFp(this.configuration).userControllerAddFollower(id, options)(this.fetch, this.basePath);
+    }
+
+    /**
+     * 
+     * @param {string} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UserApi
+     */
+    public userControllerAddFollowing(id: string, options?: any) {
+        return UserApiFp(this.configuration).userControllerAddFollowing(id, options)(this.fetch, this.basePath);
+    }
+
+    /**
+     * 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof UserApi
      */
     public userControllerGetUser(options?: any) {
         return UserApiFp(this.configuration).userControllerGetUser(options)(this.fetch, this.basePath);
+    }
+
+    /**
+     * 
+     * @param {string} ids 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UserApi
+     */
+    public userControllerGetUsersByIDs(ids: string, options?: any) {
+        return UserApiFp(this.configuration).userControllerGetUsersByIDs(ids, options)(this.fetch, this.basePath);
+    }
+
+    /**
+     * 
+     * @param {string} postID 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UserApi
+     */
+    public userControllerSavePost(postID: string, options?: any) {
+        return UserApiFp(this.configuration).userControllerSavePost(postID, options)(this.fetch, this.basePath);
     }
 
 }
