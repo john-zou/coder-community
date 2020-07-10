@@ -3,7 +3,7 @@ export const Secrets = {
   GitHubOAuthClientSecret: process.env.GH_SECRET,
   GoogleOAuthClientSecret: process.env.GG_SECRET,
   MongoConnectionString: (process.env.CI || (process.env.USE_LOCAL_MONGODB && process.env.USE_LOCAL_MONGODB !== "false")) ? process.env.LOCAL_MONGODB : process.env.REMOTE_MONGODB,
-  TestMongoConnectionString: process.env.TEST_MONGODB,
+  TestMongoConnectionString: process.env.TEST_MONGODB || 'mongodb://localhost/coderCommunityUnitTests',
 };
 
 // console.log(process.env);

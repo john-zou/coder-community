@@ -13,14 +13,14 @@ const useStyles = makeStyles({
     display: "flex",
   },
   main: {
-    marginTop: "3vh",
+    marginTop: "5vh",
     display: "flex",
     flex: 1,
-    marginBottom: "0",
+    marginBottom: "1vh",
     height: "120vh",
     flexDirection: "column",
     alignItems: "center",
-    overflowY: "scroll",
+    // overflowY: "scroll",
   },
 });
 

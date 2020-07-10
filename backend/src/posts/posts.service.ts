@@ -1,6 +1,6 @@
 import { UserModel, TagModel } from './../mongoModels';
 import { HttpService, Injectable, NotFoundException } from '@nestjs/common';
-import { Ref, DocumentType } from '@typegoose/typegoose';
+import { Ref } from '@typegoose/typegoose';
 import { ObjectID } from 'mongodb';
 import { convertToStrArr, convertPostDocumentToPostDto } from '../util/helperFunctions';
 import * as urlSlug from 'url-slug';
@@ -62,7 +62,7 @@ const DevToApiUrlArticles = 'https://dev.to/api/articles/'; //retrieve a list of
 const previewContentLength = 100;
 @Injectable()
 export class PostsService {
-  constructor(private readonly httpService: HttpService) {}
+  constructor(private readonly httpService: HttpService) { }
 
   async getPostBySlug(slug: string): Promise<PostWithDetails> {
     const post = await PostModel.findOne({ slug });
@@ -97,10 +97,10 @@ export class PostsService {
     let slug = urlSlug(body.title);
 
     // TODO: optimize with model.collection.find() / limit() / size()
-    if (await PostModel.findOne({slug})) { 
+    if (await PostModel.findOne({ slug })) {
       slug = undefined;
     }
-    
+
     const doc = {
       author: authorObjectID,
       title: body.title,
@@ -133,7 +133,7 @@ export class PostsService {
     // Add post to tags
     const tags = newPost.tags;
     const expressions = tags.map(tagID => ({ _id: tagID }));
-    await TagModel.updateMany({ $or: expressions }, { $push: {posts: newPost._id }});
+    await TagModel.updateMany({ $or: expressions }, { $push: { posts: newPost._id } });
 
     return {
       _id: newPost._id,

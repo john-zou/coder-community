@@ -8,6 +8,7 @@ import { User } from './user.schema';
 import { ObjectId } from 'mongodb';
 import { userInfo } from 'os';
 import { Model } from 'mongoose';
+import { DocumentType } from '@typegoose/typegoose';
 
 /**
  * typed like in UserSchema
@@ -42,12 +43,19 @@ export class UserService {
     return true;
   }
 
-  async findUsersByIds(ids: string[]): Promise<GetUsersSuccessDto> {
-    const users = await UserModel.find({
+  async convertUserIDsToUsersDoc(ids: string[]): Promise<DocumentType<User>[]> {
+    // console.log("ids: " + ids);
+    const foundUsers = await UserModel.find({
       _id: {
-        $in: ids
+        $in: ids //mongoose automatically turn a string[] of ids into a list of ObjectId
       }
     })
+    // console.log("list of user docs: " + foundUsers);
+    return foundUsers;
+  }
+
+  async findUsersByIds(ids: string[]): Promise<GetUsersSuccessDto> {
+    const users = await this.convertUserIDsToUsersDoc(ids);
     return {
       users: users.map((user) => convertUserToUserDto(user))
     }
