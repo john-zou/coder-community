@@ -12,7 +12,7 @@ const useStyles = makeStyles({
     flexDirection: "column",
     cursor: "pointer",
     paddingLeft: "2em",
-    paddingTop: "12vh",
+    paddingTop: "10vh",
     marginRight: "5vw",
     position: "fixed",
     right: 0,

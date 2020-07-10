@@ -16,7 +16,7 @@ const useStyles = makeStyles({
     paddingLeft: "7em",
     position: "fixed",
     marginLeft: "8vw",
-    marginTop: "7vh",
+    marginTop: "4vh",
   },
   diplayAccount: {
     display: "flex",
