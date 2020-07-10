@@ -2,6 +2,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../reducers/rootReducer';
+import ScrollUpButton from "react-scroll-up-button";
 
 const useStyles = makeStyles({
   root: {
@@ -10,7 +11,7 @@ const useStyles = makeStyles({
     flexDirection: "column",
     cursor: "pointer",
     paddingLeft: "2em",
-    paddingTop: "10vh",
+    paddingTop: "12vh",
     marginRight: "5vw",
     position: "fixed",
     right: 0,
@@ -62,6 +63,7 @@ export default function RightSideBar() {
         </div>
 
         <p className={classes.savePostText}># WHO TO FOLLOW</p>
+        <ScrollUpButton />
       </div>}
 
     </div>

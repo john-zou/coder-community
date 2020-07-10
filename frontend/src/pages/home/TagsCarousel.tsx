@@ -45,8 +45,6 @@ const useStyles = makeStyles((theme: Theme) => ({
     flexGrow: 1,
     width: "50%",
     backgroundColor: theme.palette.background.paper,
-    marginBottom: "20px",
-    marginTop: "10px",
   },
 }));
 
@@ -109,8 +107,8 @@ export const TagsCarousel = () => {
       </AppBar>
       {/* <TabPanel value={value} index={0}>
         Item One
-      </TabPanel> */}
-      {/* <TabPanel value={value} index={1}>
+      </TabPanel>
+      <TabPanel value={value} index={1}>
         Item Two
       </TabPanel>
       <TabPanel value={value} index={2}>

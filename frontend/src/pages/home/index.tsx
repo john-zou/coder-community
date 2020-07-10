@@ -22,7 +22,6 @@ const useStyles = makeStyles({
     flexDirection: "column",
     alignItems: "center",
     width: "100%",
-    overflowX: "hidden",
   },
 });
 
@@ -34,7 +33,6 @@ export default function Home() {
       <Router>
         <LeftSideBar />
         <div className={classes.main}>
-          <TagsCarousel />
           <Switch>
             <Route path="/home/groups" component={GroupTab}>
             </Route>
@@ -44,7 +42,6 @@ export default function Home() {
           </Switch>
         </div>
         <RightSideBar />
-
       </Router>
     </div>
   );

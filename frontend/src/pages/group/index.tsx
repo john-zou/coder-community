@@ -13,7 +13,7 @@ import PurpleButton from "../common/PurpleButton";
 import { CreateGroupModal } from "./CreateGroupModal";
 
 const GroupContainer = styled.div`
-  width: 90%;
+  width: 40%;
   height: 100%;
   display: flex;
   flex-direction: column;

@@ -25,20 +25,25 @@ const Main = () => {
 
   return (
     <>
-      <InfiniteScroll
-        dataLength={items.length} //This is important field to render the next data
-        next={fetchMoreData}
-        hasMore={true}
-        loader={<Loading />}
-        endMessage={
-          <p style={{ textAlign: 'center' }}>
-            <b>Yay! You have seen it all</b>
-          </p>
-        }>
-        {items.map((_id, idx) => (
-          <Card postID={_id} key={idx} />
-        ))}
-      </InfiniteScroll>
+      <div style={{ display: "flex", position: "fixed", justifyContent: "center", width: "50%", zIndex: 10, marginTop: "-40px" }}>
+        <TagsCarousel />
+      </div>
+      <div style={{ marginTop: "50px" }}>
+        <InfiniteScroll
+          dataLength={items.length} //This is important field to render the next data
+          next={fetchMoreData}
+          hasMore={true}
+          loader={<Loading />}
+          endMessage={
+            <p style={{ textAlign: 'center' }}>
+              <b>Yay! You have seen it all</b>
+            </p>
+          }>
+          {items.map((_id, idx) => (
+            <Card postID={_id} key={idx} />
+          ))}
+        </InfiniteScroll>
+      </div>
     </>
   );
 };

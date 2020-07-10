@@ -18,3 +18,8 @@
 .PrivateTabIndicator-colorPrimary-25 {
   background-color:#5D67E9 !important;
 }
+
+.MuiAppBar-colorDefault {
+  padding-top: 30px;
+  padding-bottom: 10px;
+}

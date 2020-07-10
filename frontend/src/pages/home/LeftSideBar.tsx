@@ -2,8 +2,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
-
-import FilterPost from './FilterPost';
 import { RootState } from '../../reducers/rootReducer';
 import { User } from '../../store/types';
 import { Loading } from '../common/Loading';
@@ -17,8 +15,8 @@ const useStyles = makeStyles({
     cursor: "pointer",
     paddingLeft: "7em",
     position: "fixed",
-    marginLeft: "5vw",
-    marginTop: "4vh",
+    marginLeft: "8vw",
+    marginTop: "7vh",
   },
   diplayAccount: {
     display: "flex",
@@ -32,7 +30,7 @@ const useStyles = makeStyles({
     marginRight: "1em",
   },
   displayName: {
-    marginTop: "3em",
+    marginTop: "4em",
     color: "#5DCBAF",
   },
   groupLinks: {
