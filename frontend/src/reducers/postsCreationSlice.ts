@@ -1,6 +1,6 @@
 import * as urlSlug from 'url-slug';
 import {PostsApi} from '../api/api';
-import {PostsCreation, Tag} from "../store/types";
+import {Post, PostsCreation, Tag} from "../store/types";
 import {UpdatePostSuccessDto, CreatePostBodyDto, CreatePostSuccessDto} from "../../../backend/src/posts/dto/posts.dto";
 import {createEntityAdapter, createSlice, createAsyncThunk, PayloadAction} from "@reduxjs/toolkit";
 
@@ -77,11 +77,11 @@ export const updatePost = createdPost => {
         }).catch(e => console.log(e))
     }
 }
-
  */
+
 export const submitPost = createAsyncThunk(
     'submitPost',
-    async(createdPost: any) => {
+    async(createdPost: CreatePostBodyDto & {author: string}) => {
         let newPost: CreatePostBodyDto = {
             title: createdPost.title,
             content: createdPost.content,
@@ -89,7 +89,19 @@ export const submitPost = createAsyncThunk(
             featuredImg: ''
         }
         console.log(createdPost.title + " " + createdPost.content);
-        return await new PostsApi().postsControllerCreatePost(newPost);
+        const createPostSuccessDto = await new PostsApi().postsControllerCreatePost(newPost);
+        const { _id, slug } = createPostSuccessDto;
+        const post: Post = {
+            _id: _id,
+            slug: slug,
+            author: createdPost.author,
+            comments: [],
+            commentsCount: 0,
+            content: createdPost.content,
+            createdAt: Date.now().toString(),
+
+        }
+        return post;
     }
 )
 

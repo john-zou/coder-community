@@ -11,7 +11,7 @@ import {
     Put,
     NotFoundException, HttpException,
 } from '@nestjs/common';
-import {ApiBearerAuth, ApiTags} from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
 
 import {Personal} from '../auth/guards/personal.decorator';
 import {UserObjectID} from '../user/user-object-id.decorator';
@@ -79,6 +79,9 @@ export class PostsController {
     }
 
     @ApiBearerAuth()
+    @ApiBody({
+        type: CreatePostBodyDto
+    })
     @Personal() //provides @UserObjectID to get userid
     @Post()
     // createPost(@Body('newPost') createPostDto: CreatePostBodyDto): Promise<CreatePostSuccessDto> {

@@ -1,7 +1,7 @@
 import { UserModel, TagModel } from './../mongoModels';
 import { HttpService, Injectable, NotFoundException } from '@nestjs/common';
 import { Ref, DocumentType } from '@typegoose/typegoose';
-import { ObjectID } from 'mongodb';
+import { ObjectID, ObjectId } from 'mongodb';
 import { convertToStrArr, convertPostDocumentToPostDto } from '../util/helperFunctions';
 import * as urlSlug from 'url-slug';
 import { PostModel } from '../mongoModels';
@@ -13,9 +13,7 @@ import {
     PostWithDetails,
 } from './dto/posts.dto';
 import { Post } from './post.schema';
-import {Types} from "mongoose";
-import ObjectId = module
-
+import { Schema } from 'mongoose';
 
 // Unused -- can use later for different feature
 type DevToArticle = {
@@ -146,13 +144,14 @@ export class PostsService {
         };
     }
 
+
     async updatePostBySlug(newPost: CreatePostBodyDto, slug: string) {
         console.log("POSTS::SERVICE");
         console.log(slug);
         const post = await PostModel.findOneAndUpdate({slug}, {
             content: newPost.content,
             title: newPost.title,
-            tags: newPost.tags.map(tag => ObjectId(tag)),
+            tags: newPost.tags.map(tag => new ObjectId(tag)),
             featuredImg: newPost.featuredImg,
             previewContent: newPost.content.substring(0, previewContentLength),
         });

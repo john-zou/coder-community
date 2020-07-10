@@ -11,6 +11,7 @@ import {
 import { RootState } from "./rootReducer";
 import { Post } from "../store/types";
 import { PostIDPayload } from './userSlice';
+import {submitPost} from "./postsCreationSlice";
 
 
 const postsAdapter = createEntityAdapter<Post>({
@@ -83,7 +84,17 @@ export const postsSlice = createSlice({
     },
     [fetchPostsByTag.fulfilled.type]: (state, action: PayloadAction<GetPostsByTagDto>) => {
       postsAdapter.upsertMany(state, action.payload.posts);
-    }
+    },
+      [submitPost.fulfilled.type]: (state, action: PayloadAction<Post>) => {
+        // update slugToID
+          postsAdapter.addOne(state, action.payload);
+      }
+        // action.payload === ****
+
+        // export function postsReducer(state = initialState, action) {
+          // switch (action.type)
+          //    case SUBMIT_POST_FULFILLED:
+          //           return updated state
   }
 })
 
