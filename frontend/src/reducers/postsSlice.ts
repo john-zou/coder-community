@@ -1,5 +1,4 @@
-
-import { createEntityAdapter, createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
+import {createEntityAdapter, createSlice, createAsyncThunk, PayloadAction} from "@reduxjs/toolkit";
 import {
   TrendingApi,
   GetInitialDataLoggedInDto,
@@ -11,6 +10,8 @@ import {
 import { RootState } from "./rootReducer";
 import { Post } from "../store/types";
 import { PostIDPayload, toggleLikePost } from './userSlice';
+import { submitPost, updatePost } from "./postsCreationSlice";
+import { UpdatePostSuccessDto } from "../../../backend/src/posts/dto/posts.dto";
 
 
 const postsAdapter = createEntityAdapter<Post>({
@@ -27,7 +28,6 @@ export const fetchTrendingPosts = createAsyncThunk(
     console.log(isLoggedIn);
     try {
       if (isLoggedIn) {
-        // Surround with try catch
         initialData = await api.trendingControllerGetTrendingLoggedIn(fetchCount);
       } else {
         initialData = await api.trendingControllerGetTrending(fetchCount);
@@ -106,7 +106,25 @@ export const postsSlice = createSlice({
       } else {
         state.entities[action.payload.postID].likes--;
       }
+    },
+
+    // Create and update post:
+    [submitPost.fulfilled.type]: (state, action: PayloadAction<Post>) => {
+      console.log("***" + action.payload);
+      const newPost = action.payload;
+      postsAdapter.addOne(state, newPost);
+      // action.payload === ****
+
+      // export function postsReducer(state = initialState, action) {
+      // switch (action.type)
+      //    case SUBMIT_POST_FULFILLED:
+      //           return updated state
     }
+/*
+[updatePost.fulfilled.type]: (state, action: PayloadAction<UpdatePostSuccessDto>) => {
+    const newPost = action.payload.CreatePostBodyDto;
+    postsAdapter.updateOne(state, newPost);
+}*/
   }
 })
 

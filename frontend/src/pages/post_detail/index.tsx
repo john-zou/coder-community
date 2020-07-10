@@ -2,7 +2,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams, Redirect } from 'react-router-dom';
-
+import { Link } from 'react-router-dom';
 import { PostDetailParams } from '../../App';
 import Avatar from '../common/Avatar';
 import { Loading } from '../common/Loading';
@@ -14,7 +14,7 @@ import { Post, User, CurrentLoggedInUser } from '../../store/types';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { AppDispatch } from '../../store';
 
-// import { useParams } from "react-router-dom";
+
 const useStyles = makeStyles({
   root: {
     display: "flex",
@@ -128,6 +128,7 @@ const PostDetail = () => {
 
         <NewComment></NewComment>
         <Comments></Comments>
+        <Link to={`/update-post/${slug}`}>Update</Link>
         {/* {post.comments.map((comment) => (
         <>
           <Avatar post={comment} extraText="reply"></Avatar>

@@ -1,8 +1,11 @@
 import React from "react";
-import { connect } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
-// import { setImg, setTitle, setText, setTag, delTag, setPeople } from '../../actions';
-
+import { useSelector, useDispatch } from 'react-redux';
+import {CurrentLoggedInUser, PostsCreation, User} from "../../store/types";
+import { RootState } from "../../reducers/rootReducer";
+import { CreatePostBodyDto } from "../../../../backend/src/posts/dto/posts.dto";
+import { UserObjectID } from '../../../../backend/src/user/user-object-id.decorator';
+import { submitPost, updatePost } from "../../reducers/postsCreationSlice";
 
 const useStyles = makeStyles({
   operation: {
@@ -11,25 +14,44 @@ const useStyles = makeStyles({
   }
 });
 
-const _onSubmit = (event) => {
+const onSubmit = (params, author, dispatch) => {
+    const newPost = {
+        title: params.title,
+        content: params.content,
+        tags: params.tags,
+        featuredImg: params.img,
+        author: author,
+    }
+    console.log(newPost);
+    dispatch(submitPost(newPost));
 }
 
-const _onCancel = (event) => {}
+const onCancel = (params, dispatch) => {
+    const newPost = {
+        title: params.title,
+        content: params.content,
+        tags: params.tags,
+        featuredImg: params.img,
+    }
+    console.log("SUBMIT" + newPost);
+    dispatch(updatePost(newPost));
+}
 
-function Submit() {
+export default function Submit(params) {
   const classes = useStyles();
+  const dispatch = useDispatch();
+  // const createdPost = useSelector<RootState, PostsCreation>(state => state.postsCreation);
+  const curUser = useSelector<RootState, User>(state => state.user);
+  console.log(curUser);
+
   return (
      <div className={classes.operation}>
-        <button color="primary" onClick={_onCancel}>Cancel</button>
-        <button color="primary" onClick={_onSubmit}>Submit</button>
+        <button color="primary" onClick={(event) => {
+            onCancel(params, dispatch);
+        }}>Cancel</button>
+        <button color="primary" onClick={(event) =>{
+            onSubmit(params, curUser, dispatch);
+        }}>Submit</button>
      </div>
   );
 }
-
-const mapStateToProps = (state) => {
-    return { img: state.imgurl, tit: state.title, txt: state.text, tags: state.tags, people: state.people };
-}
-
-export default connect(mapStateToProps, 
-  // { setImg, setTitle, setText, setTag, delTag, setPeople }
-  )(Submit);

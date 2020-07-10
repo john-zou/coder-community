@@ -11,7 +11,7 @@ import {
   Put,
   NotFoundException, HttpException,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
 
 import { Personal } from '../auth/guards/personal.decorator';
 import { UserObjectID } from '../user/user-object-id.decorator';
@@ -23,8 +23,8 @@ import * as _ from "lodash";
 @ApiTags('Posts')
 @Controller('posts')
 export class PostsController {
-  constructor(private readonly postsService: PostsService,
-    private readonly userService: UserService) { }
+    constructor(private readonly postsService: PostsService,
+                private readonly userService: UserService) { }
 
   @ApiBearerAuth()
   @Personal()
@@ -77,12 +77,19 @@ export class PostsController {
     await post.save();
   }
 
-  @ApiBearerAuth()
-  @Personal() //provides @UserObjectID to get userid
-  @Post()
-  createPost(@Body() createPostDto: CreatePostBodyDto, @UserObjectID() author: string): Promise<CreatePostSuccessDto> {
-    return this.postsService.createPost(author, createPostDto);
-  }
+    @ApiBearerAuth()
+    @ApiBody({
+        type: CreatePostBodyDto
+    })
+    @Personal() //provides @UserObjectID to get userid
+    @Post()
+    createPost(@Body() createPostDto: CreatePostBodyDto, @UserObjectID() author: string): Promise<CreatePostSuccessDto> {
+        console.log("POSTS::CONTROLLER");
+        console.log(author);
+        console.log(createPostDto);
+        // let author = "5f07dd25be9a5c6510208dce";
+        return this.postsService.createPost(author, createPostDto);
+    }
 
   @Get(':slug')
   @UsePipes(new ValidationPipe({ transform: true }))
@@ -95,4 +102,14 @@ export class PostsController {
       return { post }
     }
   }
+
+  @ApiBody({
+    type: CreatePostBodyDto
+  })
+  @Put(':slug')
+  updatePostBySlug(@Body('newPost') newPost: CreatePostBodyDto, @Param('slug') slug: string): Promise<void> {
+      console.log("CONTORLLER::NEWPOST");
+      console.log(newPost);
+      return this.postsService.updatePostBySlug(newPost, slug);
+    }
 }
