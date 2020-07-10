@@ -1,5 +1,5 @@
 import * as urlSlug from 'url-slug';
-import {PostsApi, ShopApi} from '../api/api';
+import {PostsApi} from '../api/api';
 import {PostsCreation, Tag} from "../store/types";
 import {UpdatePostSuccessDto, CreatePostBodyDto, CreatePostSuccessDto} from "../../../backend/src/posts/dto/posts.dto";
 import {createEntityAdapter, createSlice, createAsyncThunk, PayloadAction} from "@reduxjs/toolkit";
@@ -8,6 +8,7 @@ const postsCreationAdapter = createEntityAdapter<PostsCreation>({
     selectId: postCreation => postCreation._id
 })
 
+/*
 export const getAllShops = createAsyncThunk(
     'getAllShopsStatus',
     async () => {
@@ -22,6 +23,8 @@ export const createShop = createAsyncThunk(
         return await new ShopApi().shopControllerCreateShop(shopDto);
     }
 )
+
+ */
 
 export const submitPost = createdPost => {
     let newPost: CreatePostBodyDto = {

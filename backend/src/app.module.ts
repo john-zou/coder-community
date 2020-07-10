@@ -18,8 +18,7 @@ import { TagsModule } from './tags/tags.module';
 import { TrendingModule } from './trending/trending.module';
 import { UploadModule } from './upload/upload.module';
 import { UserModule } from './user/user.module';
-import { VideosModule } from './videos/videos.module';
-import { ShopModule } from './shop/shop.module';
+import { VideoModule } from './video/video.module';
 
 @Module({
   imports: [
@@ -28,7 +27,7 @@ import { ShopModule } from './shop/shop.module';
     TagsModule,
     PostsModule,
     CommentsModule,
-    VideosModule,
+    VideoModule,
     GroupsModule,
     StorageModule,
     UploadModule,
@@ -49,8 +48,7 @@ import { ShopModule } from './shop/shop.module';
 
     // Module for dev convenience -- remove when deploying
     DevModule,
-
-    ShopModule // Automatically added by "yarn nestgen module shop"
+    VideoModule
   ],
 
   controllers: [AppController],

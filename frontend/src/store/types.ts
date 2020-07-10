@@ -106,26 +106,27 @@ export type User = {
   updatedAt?: string,
 };
 
-export type Shop = {
-  _id: string,
-  name: string,
-  description: string,
-  createdAt: string,
-}
+// export type Video = {
+//   _id: string,
+//   author: string,
+//   name: string,
+//   description: string,
+//   likesCount: number,
+//   commentsCount: number,
+//   comments: string[],
+//   createdAt: string,
+//   updatedAt: string,
+// };
 
 export interface CurrentLoggedInUser extends User {
   likedPostsSet: Record<string, boolean>;
   savedPostsSet: Record<string, boolean>;
 }
 
+
 export type Video = {
-  _id: string,
-  author: string,
-  name: string,
-  description: string,
-  likesCount: number,
-  commentsCount: number,
-  comments: string[],
-  createdAt: string,
-  updatedAt: string,
-};
+   _id: string,
+   name: string,
+   description: string,
+   createdAt: string,
+ }
