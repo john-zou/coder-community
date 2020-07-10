@@ -2308,15 +2308,24 @@ export const TrendingApiFetchParamCreator = function (configuration?: Configurat
     return {
         /**
          * 
+         * @param {number} fetchCount 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        trendingControllerGetTrending(options: any = {}): FetchArgs {
-            const localVarPath = `/api/trending`;
+        trendingControllerGetTrending(fetchCount: number, options: any = {}): FetchArgs {
+            // verify required parameter 'fetchCount' is not null or undefined
+            if (fetchCount === null || fetchCount === undefined) {
+                throw new RequiredError('fetchCount','Required parameter fetchCount was null or undefined when calling trendingControllerGetTrending.');
+            }
+            const localVarPath = `/api/trending/fetchCount`;
             const localVarUrlObj = url.parse(localVarPath, true);
             const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            if (fetchCount !== undefined) {
+                localVarQueryParameter['fetchCount'] = fetchCount;
+            }
 
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
             // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
@@ -2330,15 +2339,24 @@ export const TrendingApiFetchParamCreator = function (configuration?: Configurat
         },
         /**
          * 
+         * @param {number} fetchCount 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        trendingControllerGetTrendingLoggedIn(options: any = {}): FetchArgs {
+        trendingControllerGetTrendingLoggedIn(fetchCount: number, options: any = {}): FetchArgs {
+            // verify required parameter 'fetchCount' is not null or undefined
+            if (fetchCount === null || fetchCount === undefined) {
+                throw new RequiredError('fetchCount','Required parameter fetchCount was null or undefined when calling trendingControllerGetTrendingLoggedIn.');
+            }
             const localVarPath = `/api/trending/loggedIn`;
             const localVarUrlObj = url.parse(localVarPath, true);
             const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            if (fetchCount !== undefined) {
+                localVarQueryParameter['fetchCount'] = fetchCount;
+            }
 
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
             // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
@@ -2361,11 +2379,12 @@ export const TrendingApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
+         * @param {number} fetchCount 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        trendingControllerGetTrending(options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<GetInitialDataDto> {
-            const localVarFetchArgs = TrendingApiFetchParamCreator(configuration).trendingControllerGetTrending(options);
+        trendingControllerGetTrending(fetchCount: number, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<GetInitialDataDto> {
+            const localVarFetchArgs = TrendingApiFetchParamCreator(configuration).trendingControllerGetTrending(fetchCount, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -2378,11 +2397,12 @@ export const TrendingApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {number} fetchCount 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        trendingControllerGetTrendingLoggedIn(options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<GetInitialDataLoggedInDto> {
-            const localVarFetchArgs = TrendingApiFetchParamCreator(configuration).trendingControllerGetTrendingLoggedIn(options);
+        trendingControllerGetTrendingLoggedIn(fetchCount: number, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<GetInitialDataLoggedInDto> {
+            const localVarFetchArgs = TrendingApiFetchParamCreator(configuration).trendingControllerGetTrendingLoggedIn(fetchCount, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -2404,19 +2424,21 @@ export const TrendingApiFactory = function (configuration?: Configuration, fetch
     return {
         /**
          * 
+         * @param {number} fetchCount 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        trendingControllerGetTrending(options?: any) {
-            return TrendingApiFp(configuration).trendingControllerGetTrending(options)(fetch, basePath);
+        trendingControllerGetTrending(fetchCount: number, options?: any) {
+            return TrendingApiFp(configuration).trendingControllerGetTrending(fetchCount, options)(fetch, basePath);
         },
         /**
          * 
+         * @param {number} fetchCount 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        trendingControllerGetTrendingLoggedIn(options?: any) {
-            return TrendingApiFp(configuration).trendingControllerGetTrendingLoggedIn(options)(fetch, basePath);
+        trendingControllerGetTrendingLoggedIn(fetchCount: number, options?: any) {
+            return TrendingApiFp(configuration).trendingControllerGetTrendingLoggedIn(fetchCount, options)(fetch, basePath);
         },
     };
 };
@@ -2430,22 +2452,24 @@ export const TrendingApiFactory = function (configuration?: Configuration, fetch
 export class TrendingApi extends BaseAPI {
     /**
      * 
+     * @param {number} fetchCount 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof TrendingApi
      */
-    public trendingControllerGetTrending(options?: any) {
-        return TrendingApiFp(this.configuration).trendingControllerGetTrending(options)(this.fetch, this.basePath);
+    public trendingControllerGetTrending(fetchCount: number, options?: any) {
+        return TrendingApiFp(this.configuration).trendingControllerGetTrending(fetchCount, options)(this.fetch, this.basePath);
     }
 
     /**
      * 
+     * @param {number} fetchCount 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof TrendingApi
      */
-    public trendingControllerGetTrendingLoggedIn(options?: any) {
-        return TrendingApiFp(this.configuration).trendingControllerGetTrendingLoggedIn(options)(this.fetch, this.basePath);
+    public trendingControllerGetTrendingLoggedIn(fetchCount: number, options?: any) {
+        return TrendingApiFp(this.configuration).trendingControllerGetTrendingLoggedIn(fetchCount, options)(this.fetch, this.basePath);
     }
 
 }

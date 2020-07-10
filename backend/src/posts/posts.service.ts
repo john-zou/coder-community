@@ -4,6 +4,7 @@ import { post, Ref } from '@typegoose/typegoose';
 import { Logger, ObjectID } from 'mongodb';
 import { convertToStrArr, convertPostDocumentToPostDto } from '../util/helperFunctions';
 import * as urlSlug from 'url-slug';
+import { DocumentType } from '@typegoose/typegoose';
 
 import { PostModel } from '../mongoModels';
 import { User } from '../user/user.schema';
@@ -13,6 +14,7 @@ import {
   PostDto,
   PostWithDetails,
 } from './dto/posts.dto';
+import { Post } from './post.schema';
 
 // Unused -- can use later for different feature
 type DevToArticle = {
@@ -148,22 +150,22 @@ export class PostsService {
   }
 
   /**
-   *
-   * @param userObjectID? only needed if user logged in
-   */  /**
-* Get the top 5 posts based on:
-*
-* - Ratio of likes to views, higher the better (if 0 views then score is 0.5)
-* - Tie breaker: most recent
-* - Only in past week
-*
-* TODO: make this scalable (optimize)
-*/
-  async getInitialPosts(userObjectID?: string): Promise<PostDto[]> {
-    const result: PostDto[] = [];
+  * Get the top 5 posts based on:
+  *
+  * - Ratio of likes to views, higher the better (if 0 views then score is 0.5)
+  * - Tie breaker: most recent
+  * - Only in past week
+  *
+  * TODO: make this scalable (optimize)
+  */
+  async getInitialPosts(fetchCount: number, userObjectID?: string): Promise<PostDto[]> {
     const allPosts = await PostModel.find();
+
     //TODO: only show posts in the past week
     // allPosts.sort((post1, post2) => parseInt(post1.createdAt.toString()) - parseInt(post2.createdAt.toString()));
+    const start: number = 5 * fetchCount;
+    const end: number = start + 5;
+
     const likesToViewsRatios: Record<string, number>[] = [];
     allPosts.forEach((post) => {
       let likeToViewRatio = 0;
@@ -176,9 +178,13 @@ export class PostsService {
 
     const foundPosts = await PostModel.find({
       _id: {
-        $in: likesToViewsRatios.slice(0, 5).map(ratio => new ObjectID(Object.keys(ratio)[0]))
+        $in: likesToViewsRatios.slice(start, end).map(ratio => new ObjectID(Object.keys(ratio)[0]))
       }
     })
+
+    if (foundPosts.length === 0) {
+      throw new NotFoundException();
+    }
 
     return foundPosts.map((post) => convertPostDocumentToPostDto(post));
   }

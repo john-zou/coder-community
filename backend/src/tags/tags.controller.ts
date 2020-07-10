@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Query } from '@nestjs/common';
+import { Controller, Get, Query } from '@nestjs/common';
 import { TagsService } from './tags.service';
 import { GetPostsByTagDto } from '../posts/dto/posts.dto';
 import { GetPostsByTagQueryParams } from './tag.dto';

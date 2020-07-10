@@ -8,6 +8,7 @@ import { fetchTrendingPosts } from '../../reducers/postsSlice';
 import { AppDispatch } from '../../store';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { TagsCarousel } from './TagsCarousel';
+import { Post } from '../../store/types';
 
 //parent: Home
 const Main = () => {
@@ -16,11 +17,17 @@ const Main = () => {
   );
   const dispatch: AppDispatch = useDispatch();
   const [items, setItems] = useState(trendingPosts);//has 5 things initially
+  const currFetchCount: number = useSelector<RootState, number>(state => state.posts.trendingPostFetchCount);
+  const hasMorePosts: boolean = useSelector<RootState, boolean>(state => state.posts.hasMorePosts);
 
   const fetchMoreData = () => {
-    dispatch(fetchTrendingPosts()).then(unwrapResult).then(res => {
-      setItems(prev => prev.concat(res.posts.map(post => post._id)))
-    })
+    if (hasMorePosts) {
+      dispatch(fetchTrendingPosts({ fetchCount: currFetchCount })).then(unwrapResult).then(res => {
+        setItems(prev => prev.concat(res.posts.map(post => post._id)))
+      }).catch(err => console.log(err))
+    } else {
+      console.log('no more post');
+    }
   }
 
   return (
@@ -32,11 +39,11 @@ const Main = () => {
         <InfiniteScroll
           dataLength={items.length} //This is important field to render the next data
           next={fetchMoreData}
-          hasMore={true}
+          hasMore={hasMorePosts}
           loader={<Loading />}
           endMessage={
             <p style={{ textAlign: 'center' }}>
-              <b>Yay! You have seen it all</b>
+              <b></b>
             </p>
           }>
           {items.map((_id, idx) => (

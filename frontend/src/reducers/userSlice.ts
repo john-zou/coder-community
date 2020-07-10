@@ -86,7 +86,7 @@ export const userSlice = createSlice({
       },
     },
     toggleLikePost: {
-      reducer: (user, action: PayloadAction<PostIDPayload>) => {
+      reducer: (user, action: PayloadAction<PostIDPayload & { increment: boolean }>) => {
         if (user) {
           // optimistic update
           const { postID } = action.payload;
@@ -105,17 +105,15 @@ export const userSlice = createSlice({
       prepare: ({ postID, increment }: LikePostPayload) => {
         // Send request to back end silently
         if (increment) {
-          postsSlice.actions.incrementPostLikes({ postID });
           new PostsApi().postsControllerLikePost(postID)
             .then(_ => console.log("Optimistic update (LIKE POST) finished in back end for Post ID"))
             .catch(err => console.log("Optimistic update (LIKE POST) rejected! ", err));
         } else {
-          postsSlice.actions.decrementPostLikes({ postID });
           new PostsApi().postsControllerUnlikePost(postID)
             .then(_ => console.log("Optimistic update (UNLIKE POST) finished in back end for Post ID"))
             .catch(err => console.log("Optimistic update (UNLIKE POST) rejected! ", err));
         }
-        return { payload: { postID } };
+        return { payload: { postID, increment } };
       }
     }
   },
@@ -158,7 +156,7 @@ export const userSlice = createSlice({
     },
     [joinGroup.fulfilled.type]: (state, action: PayloadAction<{ groupID: string, userID: string }>) => {
       state.groups.push(action.payload.groupID);
-    }
+    },
   }
 })
 
