@@ -61,6 +61,14 @@ export class UserService {
     return convertUserToUserDto(foundUser);
   }
 
+  async findUserByUsername(username: string): Promise<UserDto> {
+    const foundUser = await UserModel.findOne({userID: username});
+    if (!foundUser) {
+      throw new NotFoundException();
+    }
+    return convertUserToUserDto(foundUser);
+  }
+
   async saveProfileBannerPic(userObjectID: string, url: string): Promise<void> {
     await UserModel.updateOne({ _id: userObjectID }, { backgroundImg: url });
   }

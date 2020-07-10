@@ -2873,7 +2873,7 @@ export const UserApiFetchParamCreator = function (configuration?: Configuration)
             };
         },
         /**
-         * 
+         * Retrieve the current logged in user
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -2885,6 +2885,34 @@ export const UserApiFetchParamCreator = function (configuration?: Configuration)
             const localVarQueryParameter = {} as any;
 
             // authentication bearer required
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} username 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        userControllerGetUserByUsername(username: string, options: any = {}): FetchArgs {
+            // verify required parameter 'username' is not null or undefined
+            if (username === null || username === undefined) {
+                throw new RequiredError('username','Required parameter username was null or undefined when calling userControllerGetUserByUsername.');
+            }
+            const localVarPath = `/api/user/byUsername/{username}`
+                .replace(`{${"username"}}`, encodeURIComponent(String(username)));
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
 
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
             // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
@@ -2912,6 +2940,8 @@ export const UserApiFetchParamCreator = function (configuration?: Configuration)
             const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
 
             if (ids !== undefined) {
                 localVarQueryParameter['ids'] = ids;
@@ -3021,12 +3051,30 @@ export const UserApiFp = function(configuration?: Configuration) {
             };
         },
         /**
-         * 
+         * Retrieve the current logged in user
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         userControllerGetUser(options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<UserDto> {
             const localVarFetchArgs = UserApiFetchParamCreator(configuration).userControllerGetUser(options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * 
+         * @param {string} username 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        userControllerGetUserByUsername(username: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<UserDto> {
+            const localVarFetchArgs = UserApiFetchParamCreator(configuration).userControllerGetUserByUsername(username, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -3110,12 +3158,21 @@ export const UserApiFactory = function (configuration?: Configuration, fetch?: F
             return UserApiFp(configuration).userControllerEditProfile(body, options)(fetch, basePath);
         },
         /**
-         * 
+         * Retrieve the current logged in user
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         userControllerGetUser(options?: any) {
             return UserApiFp(configuration).userControllerGetUser(options)(fetch, basePath);
+        },
+        /**
+         * 
+         * @param {string} username 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        userControllerGetUserByUsername(username: string, options?: any) {
+            return UserApiFp(configuration).userControllerGetUserByUsername(username, options)(fetch, basePath);
         },
         /**
          * 
@@ -3179,13 +3236,24 @@ export class UserApi extends BaseAPI {
     }
 
     /**
-     * 
+     * Retrieve the current logged in user
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof UserApi
      */
     public userControllerGetUser(options?: any) {
         return UserApiFp(this.configuration).userControllerGetUser(options)(this.fetch, this.basePath);
+    }
+
+    /**
+     * 
+     * @param {string} username 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UserApi
+     */
+    public userControllerGetUserByUsername(username: string, options?: any) {
+        return UserApiFp(this.configuration).userControllerGetUserByUsername(username, options)(this.fetch, this.basePath);
     }
 
     /**

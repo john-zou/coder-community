@@ -5,11 +5,17 @@ import { UserService } from './user.service';
 import { Personal } from '../auth/guards/personal.decorator';
 import { UserObjectID } from './user-object-id.decorator';
 import { UserDto, GetUsersSuccessDto, UpdateProfileReqDto } from './dto/user.dto';
+import { UserModel } from '../mongoModels';
 
 @ApiTags('User')
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {  }
+
+  @Get('byUsername/:username')
+  async getUserByUsername(@Param('username') username: string): Promise<UserDto> {
+    return this.userService.findUserByUsername(username);
+  }
 
   @ApiBearerAuth()
   @Personal()
@@ -18,6 +24,9 @@ export class UserController {
     await this.userService.savePost(userObjectID, postID);
   }
 
+  @ApiOperation({
+    description: "Retrieve the current logged in user"
+  })
   @ApiBearerAuth()
   @Personal()
   @Get()
