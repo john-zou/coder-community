@@ -97,14 +97,21 @@ export type User = {
   updatedAt?: string,
 };
 
+// export type Video = {
+//   _id: string,
+//   author: string,
+//   name: string,
+//   description: string,
+//   likesCount: number,
+//   commentsCount: number,
+//   comments: string[],
+//   createdAt: string,
+//   updatedAt: string,
+// };
+
 export type Video = {
-  _id: string,
-  author: string,
-  name: string,
-  description: string,
-  likesCount: number,
-  commentsCount: number,
-  comments: string[],
-  createdAt: string,
-  updatedAt: string,
-};
+   _id: string,
+   name: string,
+   description: string,
+   createdAt: string,
+ }
