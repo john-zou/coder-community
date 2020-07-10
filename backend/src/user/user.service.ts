@@ -3,7 +3,7 @@ import { HttpException, Injectable, NotFoundException } from '@nestjs/common';
 import { PostModel, UserModel } from '../mongoModels';
 import { PostDto } from '../posts/dto/posts.dto';
 import { convertToStrArr, convertUserToUserDto } from '../util/helperFunctions';
-import { UserDto, GetUsersSuccessDto } from './dto/user.dto';
+import { UserDto, GetUsersSuccessDto, UpdateProfileReqDto } from './dto/user.dto';
 import { User } from './user.schema';
 import { ObjectId } from 'mongodb';
 import { userInfo } from 'os';
@@ -142,5 +142,22 @@ export class UserService {
 
       return { _id: newUser._id.toString(), isNewUser: true };
     }
+  }
+
+  /**
+   * Used for editing profile
+   */
+  async updateProfile(userID: string, update: UpdateProfileReqDto): Promise<void> {
+    const cleanUpdate: UpdateProfileReqDto = {};
+    if (update.name) {
+      cleanUpdate.name = update.name;
+    }
+    if (update.status) {
+      cleanUpdate.status = update.status;
+    }
+    if (Array.isArray(update.tags)) {
+      cleanUpdate.tags = update.tags;
+    }
+    await UserModel.updateOne({_id: userID}, <any>cleanUpdate);
   }
 }

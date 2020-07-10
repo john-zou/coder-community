@@ -701,6 +701,31 @@ export interface TagsDto {
 /**
  * 
  * @export
+ * @interface UpdateProfileReqDto
+ */
+export interface UpdateProfileReqDto {
+    /**
+     * Updated name
+     * @type {string}
+     * @memberof UpdateProfileReqDto
+     */
+    name?: string;
+    /**
+     * Updated status
+     * @type {string}
+     * @memberof UpdateProfileReqDto
+     */
+    status?: string;
+    /**
+     * Array of tag ObjectIDs, which will completely replace the previous tags of the user
+     * @type {Array<string>}
+     * @memberof UpdateProfileReqDto
+     */
+    tags?: Array<string>;
+}
+/**
+ * 
+ * @export
  * @interface UploadSuccess
  */
 export interface UploadSuccess {
@@ -2815,6 +2840,39 @@ export const UserApiFetchParamCreator = function (configuration?: Configuration)
             };
         },
         /**
+         * For updating user's name, status and tags. To update profile image or banner image, use their upload endpoints instead.
+         * @param {UpdateProfileReqDto} body 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        userControllerEditProfile(body: UpdateProfileReqDto, options: any = {}): FetchArgs {
+            // verify required parameter 'body' is not null or undefined
+            if (body === null || body === undefined) {
+                throw new RequiredError('body','Required parameter body was null or undefined when calling userControllerEditProfile.');
+            }
+            const localVarPath = `/api/user/edit-profile`;
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'PUT' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+            const needsSerialization = (<any>"UpdateProfileReqDto" !== "string") || localVarRequestOptions.headers['Content-Type'] === 'application/json';
+            localVarRequestOptions.body =  needsSerialization ? JSON.stringify(body || {}) : (body || "");
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -2945,6 +3003,24 @@ export const UserApiFp = function(configuration?: Configuration) {
             };
         },
         /**
+         * For updating user's name, status and tags. To update profile image or banner image, use their upload endpoints instead.
+         * @param {UpdateProfileReqDto} body 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        userControllerEditProfile(body: UpdateProfileReqDto, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Response> {
+            const localVarFetchArgs = UserApiFetchParamCreator(configuration).userControllerEditProfile(body, options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response;
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
          * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -3025,6 +3101,15 @@ export const UserApiFactory = function (configuration?: Configuration, fetch?: F
             return UserApiFp(configuration).userControllerAddFollowing(id, options)(fetch, basePath);
         },
         /**
+         * For updating user's name, status and tags. To update profile image or banner image, use their upload endpoints instead.
+         * @param {UpdateProfileReqDto} body 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        userControllerEditProfile(body: UpdateProfileReqDto, options?: any) {
+            return UserApiFp(configuration).userControllerEditProfile(body, options)(fetch, basePath);
+        },
+        /**
          * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -3080,6 +3165,17 @@ export class UserApi extends BaseAPI {
      */
     public userControllerAddFollowing(id: string, options?: any) {
         return UserApiFp(this.configuration).userControllerAddFollowing(id, options)(this.fetch, this.basePath);
+    }
+
+    /**
+     * For updating user's name, status and tags. To update profile image or banner image, use their upload endpoints instead.
+     * @param {UpdateProfileReqDto} body 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UserApi
+     */
+    public userControllerEditProfile(body: UpdateProfileReqDto, options?: any) {
+        return UserApiFp(this.configuration).userControllerEditProfile(body, options)(this.fetch, this.basePath);
     }
 
     /**

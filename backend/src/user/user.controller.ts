@@ -1,10 +1,10 @@
-import { Controller, Get, Query, HttpException, Param, Put } from '@nestjs/common';
-import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
+import { Controller, Get, Query, HttpException, Param, Put, Body } from '@nestjs/common';
+import { ApiTags, ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
 
 import { UserService } from './user.service';
 import { Personal } from '../auth/guards/personal.decorator';
 import { UserObjectID } from './user-object-id.decorator';
-import { UserDto, GetUsersSuccessDto } from './dto/user.dto';
+import { UserDto, GetUsersSuccessDto, UpdateProfileReqDto } from './dto/user.dto';
 
 @ApiTags('User')
 @Controller('user')
@@ -25,6 +25,7 @@ export class UserController {
     return this.userService.findUserById(userObjectID);
   }
 
+  @ApiBearerAuth()
   @Personal()
   @Get('byIds')
   //used in add people to groups
@@ -49,5 +50,15 @@ export class UserController {
   @Put('addFollower/:id')
   addFollower(@UserObjectID() userObjectID: string, @Param('id') id: string): Promise<boolean> {
     return this.userService.addFollower(userObjectID, id);
+  }
+
+  @ApiOperation({
+    description: "For updating user's name, status and tags. To update profile image or banner image, use their upload endpoints instead."
+  })
+  @ApiBearerAuth()
+  @Personal()
+  @Put('edit-profile')
+  editProfile(@UserObjectID() userObjectID: string, @Body() updateProfileDto: UpdateProfileReqDto): Promise<void> {
+    return this.userService.updateProfile(userObjectID, updateProfileDto);
   }
 }
