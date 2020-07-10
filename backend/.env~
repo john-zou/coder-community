@@ -1,0 +1,5 @@
+CC_SECRET=b
+GH_SECRET=2d30b651e8b59f283c164cdf0aeebaca4defe47d
+GG_SECRET=_w6a5asudS6T9yJTqnmw_cnV
+# REMOTE_MONGODB='mongodb+srv://m001-student:gfW9CxVVWqRVoc4t@cluster0-wykga.mongodb.net/coderCommunity?retryWrites=true&w=majority'
+REMOTE_MONGODB='mongodb+srv://m001-student:m001-mongodb-basics@sandbox-wu78a.mongodb.net/message?retryWrites=true&w=majority'
