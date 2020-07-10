@@ -30,6 +30,8 @@ yarn start:prod
 yarn gen
 ```
 
+#### Note: Any Data Transfer Objects with both key `id` and type `string` will be transformed to `_id` in order to fix [this](https://github.com/john-zou/coder-community/issues/99). So, please do not use `id` as a key in any request or response, as it will break the code generation!
+
 ## Generating `backend/docs` (English)
 
 ```bash

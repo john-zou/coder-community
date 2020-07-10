@@ -38,9 +38,6 @@ const useStyles = makeStyles({
 //parent:
 export default function RightSideBar() {
   const classes = useStyles();
-  const currViewedPost = null;
-
-  const savedPosts = [];
   const isLoggedIn = useSelector<RootState, boolean>((state) => state.isLoggedIn);
 
   return (
@@ -48,7 +45,7 @@ export default function RightSideBar() {
       {isLoggedIn && <div>
         <p className={classes.savePostText}># TRENDING POSTS</p>
         <div className={classes.savePostSection}>
-          {savedPosts.map((sp) => (
+          {/* {savedPosts.map((sp) => (
             <div key={sp.postID}>
               <Avatar post={sp} extraText=""></Avatar>
               <Link
@@ -63,7 +60,7 @@ export default function RightSideBar() {
                 </p>
               </Link>
             </div>
-          ))}
+          ))} */}
         </div>
 
         <p className={classes.savePostText}># WHO TO FOLLOW</p>

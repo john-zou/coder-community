@@ -13,7 +13,8 @@ import { Post } from "../../store/types";
 import { User } from "../../store/types";
 import { Tag } from "../../store/types";
 import { Dictionary } from "@reduxjs/toolkit";
-import { savePost, toggleLikePost } from "../../reducers/userSlice";
+import { savePost } from "../../reducers/userSlice";
+import { useLikePost } from "../../hooks/useLikePost";
 
 const useStyles = makeStyles({
   root: {
@@ -96,6 +97,8 @@ const Card = ({ postID }: Props) => {
     (state) => state.posts.entities[postID]
   );
 
+  const { postIsLikedByUser, handleToggleLike } = useLikePost(post._id);
+
   const authorID = post.author;
   const author = useSelector<RootState, User>(
     (state) => state.users.entities[authorID]
@@ -109,12 +112,12 @@ const Card = ({ postID }: Props) => {
       <div className={classes.account}>
         <img
           className={classes.accountImg}
-          src={author.profilePic && DefaultPic}
+          src={author.profilePic || DefaultPic}
           alt=""
         />
         <div className={classes.nameTime}>
           <p>
-            <Link to={`/user/${author._id}`} className={classes.link}>
+            <Link to={`/user/${author.userID}`} className={classes.link}>
               <span
                 style={{
                   fontWeight: "bold",
@@ -127,7 +130,7 @@ const Card = ({ postID }: Props) => {
             posted&nbsp;
             <span style={{ fontWeight: "bolder" }}>
               <Link
-                to={`/post/${post._id}`}
+                to={`/post/${post.slug}`}
                 className={classes.link}
                 onClick={() => {
                   handleViewPost(post, dispatch);
@@ -190,13 +193,11 @@ const Card = ({ postID }: Props) => {
         <div className={classes.interactionsIcons}>
           <img
             className={classes.heartIcon}
-            src={post.likedByUser ? HeartIconRed : HeartIcon}
+            src={postIsLikedByUser ? HeartIconRed : HeartIcon}
             alt=""
-            onClick={() => {
-              dispatch(toggleLikePost({ postID: post._id }));
-            }}
+            onClick={handleToggleLike}
           />
-          <p>&nbsp;{post.likesCount}</p>
+          <p>&nbsp;{post.likes}</p>
           <Link to={`/post/${post.slug}`} className={classes.link}>
             <img className={classes.commentIcon} src={CommentIcon} alt="" />
           </Link>

@@ -1,7 +1,7 @@
 import { makeStyles } from '@material-ui/core/styles';
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 
 import FilterPost from './FilterPost';
 import { RootState } from '../../reducers/rootReducer';
@@ -52,11 +52,13 @@ const LeftSideBar = () => {
   const user = useSelector<RootState, User>(state => state.user);
   const isLoggedIn = useSelector<RootState, boolean>(state => state.isLoggedIn);
 
+
+  const history = useHistory(); //to redirect to different route (from current route)
+
   if (!user) {
     return <Loading />
   }
 
-  // console.log(isLoggedIn);
   return (
     <div className={classes.root}>
       {isLoggedIn &&
@@ -77,8 +79,11 @@ const LeftSideBar = () => {
         <h3>Hacker News</h3>
         <h3>Posts</h3>
         <h3>Videos</h3>
-        <h3>Groups</h3>
-        {/* <GroupList /> */}
+
+        <h3 onClick={() => {
+          history.push("/home/groups");
+        }}>Groups</h3>
+
         <p className={classes.showPostsText}># BROWSE BY TAGS</p>
         <FilterPost />
       </div>

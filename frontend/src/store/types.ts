@@ -34,8 +34,11 @@ export type Conversation = {
 export type Group = {
   _id: string,
   name: string,
+  description: string,
+  private: boolean,
   profilePic: string,
   profileBanner: string,
+  admins: string[],
   users: string[],
   posts: string[],
   videos: string[],
@@ -56,16 +59,16 @@ export type Post = {
   _id: string,
   author: string,
   title: string,
-  previewContent: string,
-  content: string,
+  previewContent?: string,
+  content?: string,
   tags: string[],
   featuredImg: string,
-  likesCount: number,
+  likes: number, // Renamed from likesCount to match updated MongoDB schema
   comments: string[],
   commentsCount: number,
   views: number,
   createdAt: string,
-  likedByUser: boolean,
+  // likedByUser: boolean, // Removed for simplicity. use state.user.likedPosts instead.
   slug: string,
   group?: string,
 }
@@ -73,7 +76,7 @@ export type Post = {
 export type Tag = {
   _id: string,
   name: string,
-  posts: string[],
+  postsSet: Record<string, boolean>, // posts that have this tag, that Redux is aware of
 };
 
 export type User = {
@@ -81,7 +84,7 @@ export type User = {
   userID: string,
   gitHubID?: number,
   name: string,
-  profilePic: string,
+  profilePic?: string,
   profileBanner?: string,
   status?: string,
   followers?: string[],//list of ids
@@ -92,10 +95,10 @@ export type User = {
   likedPosts?: string[],
   tags?: string[],
   conversations?: string[],
-  lastLoggedIn?: string,
   createdAt?: string,
   updatedAt?: string,
 };
+
 
 // export type Video = {
 //   _id: string,
@@ -108,6 +111,12 @@ export type User = {
 //   createdAt: string,
 //   updatedAt: string,
 // };
+
+export interface CurrentLoggedInUser extends User {
+  likedPostsSet: Record<string, boolean>;
+  savedPostsSet: Record<string, boolean>;
+}
+
 
 export type Video = {
    _id: string,
