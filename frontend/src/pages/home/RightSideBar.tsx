@@ -1,9 +1,6 @@
 import { makeStyles } from '@material-ui/core/styles';
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
-import Avatar from '../common/Avatar';
-import { handleViewPost } from './Card';
 import { RootState } from '../../reducers/rootReducer';
 
 const useStyles = makeStyles({
@@ -11,17 +8,18 @@ const useStyles = makeStyles({
     width: "20vw",
     display: "flex",
     flexDirection: "column",
-    // height: "100%",
     cursor: "pointer",
     paddingLeft: "2em",
     paddingTop: "5vh",
     marginRight: "5vw",
+    position: "fixed",
+    right: 0,
   },
   savePostSection: {
     display: "flex",
     flexDirection: "column",
     height: "50vh",
-    overflowY: "scroll",
+
   },
   savePostText: {
     marginBottom: "-1px",

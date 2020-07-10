@@ -6,6 +6,7 @@ import RightSideBar from './RightSideBar';
 import GroupTab from '../group';
 import { Route, Switch } from 'react-router-dom';
 import { BrowserRouter as Router } from 'react-router-dom';
+import { TagsCarousel } from './TagsCarousel';
 
 const useStyles = makeStyles({
   home: {
@@ -17,7 +18,7 @@ const useStyles = makeStyles({
     display: "flex",
     flex: 1,
     marginBottom: "1vh",
-    height: "120vh",
+    height: "86vh",
     flexDirection: "column",
     alignItems: "center",
     // overflowY: "scroll",
@@ -32,6 +33,7 @@ export default function Home() {
       <Router>
         <LeftSideBar />
         <div className={classes.main}>
+          <TagsCarousel />
           <Switch>
             <Route path="/home/groups" component={GroupTab}>
             </Route>

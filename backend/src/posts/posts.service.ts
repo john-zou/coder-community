@@ -135,6 +135,8 @@ export class PostsService {
     const expressions = tags.map(tagID => ({ _id: tagID }));
     await TagModel.updateMany({ $or: expressions }, { $push: { posts: newPost._id } });
 
+    // TOD  O: Add post to group (if post created for group)
+
     return {
       _id: newPost._id,
       slug,

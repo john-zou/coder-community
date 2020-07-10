@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Logger } from '@nestjs/common';
 import { TrendingService } from './trending.service';
 import { ApiTags } from '@nestjs/swagger';
 import { GetInitialDataDto, GetInitialDataLoggedInDto } from './initialData.dto';
@@ -12,12 +12,14 @@ export class TrendingController {
 
   @Get()
   getTrending(): Promise<GetInitialDataDto> {
+    Logger.log("Getting more trending posts!", "TrendingController");
     return this.trendingService.getInitialData();
   }
 
   @Personal()
   @Get('loggedIn')
   getTrendingLoggedIn(@UserObjectID() userObjectID: string): Promise<GetInitialDataLoggedInDto> {
+    Logger.log("Getting more trending posts!", "TrendingController");
     return this.trendingService.getInitialLoggedInData(userObjectID);
   }
 }

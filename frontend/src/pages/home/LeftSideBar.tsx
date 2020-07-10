@@ -13,9 +13,12 @@ const useStyles = makeStyles({
     width: "14vw",
     display: "flex",
     flexDirection: "column",
-    height: "94vh",
+    height: "93vh",
     cursor: "pointer",
     paddingLeft: "7em",
+    position: "fixed",
+    marginLeft: "5vw",
+    marginTop: "4vh",
   },
   diplayAccount: {
     display: "flex",
@@ -51,7 +54,6 @@ const LeftSideBar = () => {
   const classes = useStyles();
   const user = useSelector<RootState, User>(state => state.user);
   const isLoggedIn = useSelector<RootState, boolean>(state => state.isLoggedIn);
-
 
   const history = useHistory(); //to redirect to different route (from current route)
 
