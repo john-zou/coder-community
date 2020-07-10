@@ -77,8 +77,8 @@ export const updatePost = createdPost => {
         }).catch(e => console.log(e))
     }
 }
- */
 
+ */
 export const submitPost = createAsyncThunk(
     'submitPost',
     async(createdPost: any) => {

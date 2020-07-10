@@ -82,7 +82,7 @@ export class PostsController {
     @Personal() //provides @UserObjectID to get userid
     @Post()
     // createPost(@Body('newPost') createPostDto: CreatePostBodyDto): Promise<CreatePostSuccessDto> {
-    createPost(@Body('newPost') createPostDto: CreatePostBodyDto, @UserObjectID() author: string): Promise<CreatePostSuccessDto> {
+    createPost(@Body() createPostDto: CreatePostBodyDto, @UserObjectID() author: string): Promise<CreatePostSuccessDto> {
         console.log("POST CONTROLLER");
         console.log(author);
         console.log(createPostDto);

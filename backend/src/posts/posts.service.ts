@@ -13,6 +13,9 @@ import {
     PostWithDetails,
 } from './dto/posts.dto';
 import { Post } from './post.schema';
+import {Types} from "mongoose";
+import ObjectId = module
+
 
 // Unused -- can use later for different feature
 type DevToArticle = {
@@ -149,7 +152,7 @@ export class PostsService {
         const post = await PostModel.findOneAndUpdate({slug}, {
             content: newPost.content,
             title: newPost.title,
-            tags: newPost.tags,
+            tags: newPost.tags.map(tag => ObjectId(tag)),
             featuredImg: newPost.featuredImg,
             previewContent: newPost.content.substring(0, previewContentLength),
         });
