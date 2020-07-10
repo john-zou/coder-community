@@ -1,0 +1,20 @@
+.MuiTab-root {
+  min-width: 0 !important;
+}
+
+.MuiPaper-elevation4 {
+  box-shadow: none !important;
+}
+
+.MuiTab-textColorPrimary {
+  font-weight: 500 !important;
+}
+
+.MuiTab-textColorPrimary.Mui-selected {
+  color: #5D67E9 !important;
+  font-weight: bolder !important;
+}
+
+.PrivateTabIndicator-colorPrimary-25 {
+  background-color:#5D67E9 !important;
+}

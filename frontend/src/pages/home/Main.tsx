@@ -7,6 +7,7 @@ import { Loading } from '../common/Loading';
 import { fetchTrendingPosts } from '../../reducers/postsSlice';
 import { AppDispatch } from '../../store';
 import { unwrapResult } from '@reduxjs/toolkit';
+import { TagsCarousel } from './TagsCarousel';
 
 //parent: Home
 const Main = () => {
@@ -23,20 +24,22 @@ const Main = () => {
   }
 
   return (
-    <InfiniteScroll
-      dataLength={items.length} //This is important field to render the next data
-      next={fetchMoreData}
-      hasMore={true}
-      loader={<Loading />}
-      endMessage={
-        <p style={{ textAlign: 'center' }}>
-          <b>Yay! You have seen it all</b>
-        </p>
-      }>
-      {items.map((_id, idx) => (
-        <Card postID={_id} key={idx} />
-      ))}
-    </InfiniteScroll>
+    <>
+      <InfiniteScroll
+        dataLength={items.length} //This is important field to render the next data
+        next={fetchMoreData}
+        hasMore={true}
+        loader={<Loading />}
+        endMessage={
+          <p style={{ textAlign: 'center' }}>
+            <b>Yay! You have seen it all</b>
+          </p>
+        }>
+        {items.map((_id, idx) => (
+          <Card postID={_id} key={idx} />
+        ))}
+      </InfiniteScroll>
+    </>
   );
 };
 export default Main;

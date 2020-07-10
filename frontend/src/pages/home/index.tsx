@@ -21,7 +21,8 @@ const useStyles = makeStyles({
     height: "86vh",
     flexDirection: "column",
     alignItems: "center",
-    // overflowY: "scroll",
+    width: "100%",
+    overflowX: "hidden",
   },
 });
 
