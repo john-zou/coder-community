@@ -14,6 +14,7 @@ export class CreateGroupDto {
   })
   description?: string;
 
+  //includes people who are added during group creation
   @ApiProperty({
     description: "The ObjectIDs of the invited users of the new group",
   })

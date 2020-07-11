@@ -18,7 +18,7 @@ import { UserObjectID } from '../user/user-object-id.decorator';
 import { CreatePostBodyDto, CreatePostSuccessDto, GetPostDetailsSuccessDto } from './dto/posts.dto';
 import { PostsService } from './posts.service';
 import { PostModel, UserModel } from '../mongoModels';
-import _ from "lodash";
+import * as _ from "lodash";
 
 @ApiTags('Posts')
 @Controller('posts')
@@ -85,7 +85,7 @@ export class PostsController {
   }
 
   @Get(':slug')
-  @UsePipes(new ValidationPipe({transform: true}))
+  @UsePipes(new ValidationPipe({ transform: true }))
   async getPostBySlug(@Param('slug') slug: string, @Query('get-author') getAuthor?: boolean): Promise<GetPostDetailsSuccessDto> {
     const post = await this.postsService.getPostBySlug(slug);
     if (getAuthor) {

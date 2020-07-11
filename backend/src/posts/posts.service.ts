@@ -1,9 +1,10 @@
 import { UserModel, TagModel } from './../mongoModels';
 import { HttpService, Injectable, NotFoundException } from '@nestjs/common';
-import { Ref, DocumentType } from '@typegoose/typegoose';
-import { ObjectID } from 'mongodb';
+import { post, Ref } from '@typegoose/typegoose';
+import { Logger, ObjectID } from 'mongodb';
 import { convertToStrArr, convertPostDocumentToPostDto } from '../util/helperFunctions';
 import * as urlSlug from 'url-slug';
+import { DocumentType } from '@typegoose/typegoose';
 
 import { PostModel } from '../mongoModels';
 import { User } from '../user/user.schema';
@@ -62,7 +63,7 @@ const DevToApiUrlArticles = 'https://dev.to/api/articles/'; //retrieve a list of
 const previewContentLength = 100;
 @Injectable()
 export class PostsService {
-  constructor(private readonly httpService: HttpService) {}
+  constructor(private readonly httpService: HttpService) { }
 
   async getPostBySlug(slug: string): Promise<PostWithDetails> {
     const post = await PostModel.findOne({ slug });
@@ -97,10 +98,10 @@ export class PostsService {
     let slug = urlSlug(body.title);
 
     // TODO: optimize with model.collection.find() / limit() / size()
-    if (await PostModel.findOne({slug})) { 
+    if (await PostModel.findOne({ slug })) {
       slug = undefined;
     }
-    
+
     const doc = {
       author: authorObjectID,
       title: body.title,
@@ -133,7 +134,9 @@ export class PostsService {
     // Add post to tags
     const tags = newPost.tags;
     const expressions = tags.map(tagID => ({ _id: tagID }));
-    await TagModel.updateMany({ $or: expressions }, { $push: {posts: newPost._id }});
+    await TagModel.updateMany({ $or: expressions }, { $push: { posts: newPost._id } });
+
+    // TOD  O: Add post to group (if post created for group)
 
     return {
       _id: newPost._id,
@@ -147,12 +150,43 @@ export class PostsService {
   }
 
   /**
-   *
-   * @param userObjectID? only needed if user logged in
-   */
-  async getInitialPosts(userObjectID?: string): Promise<PostDto[]> {
-    const foundPosts = await PostModel.find().limit(5);
-    return foundPosts.map(convertPostDocumentToPostDto);
+  * Get the top 5 posts based on:
+  *
+  * - Ratio of likes to views, higher the better (if 0 views then score is 0.5)
+  * - Tie breaker: most recent
+  * - Only in past week
+  *
+  * TODO: make this scalable (optimize)
+  */
+  async getInitialPosts(fetchCount: number, userObjectID?: string): Promise<PostDto[]> {
+    const allPosts = await PostModel.find();
+
+    //TODO: only show posts in the past week
+    // allPosts.sort((post1, post2) => parseInt(post1.createdAt.toString()) - parseInt(post2.createdAt.toString()));
+    const start: number = 5 * fetchCount;
+    const end: number = start + 5;
+
+    const likesToViewsRatios: Record<string, number>[] = [];
+    allPosts.forEach((post) => {
+      let likeToViewRatio = 0;
+      if (post.views > 0) {
+        likeToViewRatio = post.likes / post.views;
+      }
+      likesToViewsRatios.push({ [post._id.toString()]: likeToViewRatio });
+    })
+    likesToViewsRatios.sort((ratio1, ratio2) => ratio2[Object.keys(ratio2)[0]] - ratio1[Object.keys(ratio1)[0]]);
+
+    const foundPosts = await PostModel.find({
+      _id: {
+        $in: likesToViewsRatios.slice(start, end).map(ratio => new ObjectID(Object.keys(ratio)[0]))
+      }
+    })
+
+    if (foundPosts.length === 0) {
+      throw new NotFoundException();
+    }
+
+    return foundPosts.map((post) => convertPostDocumentToPostDto(post));
   }
 
   // Unused -- can use later for different feature

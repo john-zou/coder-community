@@ -1,16 +1,16 @@
 
 import { createEntityAdapter, createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import {
-    TrendingApi,
-    GetInitialDataLoggedInDto,
-    GetInitialDataDto,
-    PostsApi,
-    GetPostDetailsSuccessDto,
-    GetPostsByTagDto
+  TrendingApi,
+  GetInitialDataLoggedInDto,
+  GetInitialDataDto,
+  PostsApi,
+  GetPostDetailsSuccessDto,
+  GetPostsByTagDto
 } from "../api";
 import { RootState } from "./rootReducer";
 import { Post } from "../store/types";
-import { PostIDPayload } from './userSlice';
+import { PostIDPayload, toggleLikePost } from './userSlice';
 
 
 const postsAdapter = createEntityAdapter<Post>({
@@ -20,17 +20,23 @@ const postsAdapter = createEntityAdapter<Post>({
 //https://redux-toolkit.js.org/api/createAsyncThunk
 export const fetchTrendingPosts = createAsyncThunk(
   'fetchTrendingPosts',
-  async (_, { getState }) => {
+  async ({ fetchCount }: { fetchCount: number }, { getState, rejectWithValue }) => {
     const api = new TrendingApi();
     let initialData: GetInitialDataLoggedInDto | GetInitialDataDto;
     const isLoggedIn = (getState() as RootState).isLoggedIn;
     console.log(isLoggedIn);
-    if (isLoggedIn) {
-      initialData = await api.trendingControllerGetTrendingLoggedIn();
-    } else {
-      initialData = await api.trendingControllerGetTrending();
+    try {
+      if (isLoggedIn) {
+        // Surround with try catch
+        initialData = await api.trendingControllerGetTrendingLoggedIn(fetchCount);
+      } else {
+        initialData = await api.trendingControllerGetTrending(fetchCount);
+      }
+    } catch (err) {
+      console.log("Got err from fetchTrendingPosts api call", err);
+      return rejectWithValue(null);
     }
-    console.log(initialData);
+
     return initialData; //{users[], posts[], tags[]}
   }
 );
@@ -38,28 +44,33 @@ export const fetchTrendingPosts = createAsyncThunk(
 // The backend endpoint can also take optional parameters for excluded post IDs and startIdx
 export const fetchPostsByTag = createAsyncThunk(
   'fetchPostsByTag',
-  ({tagID /* May add optional parameters here */}: {tagID: string}) => {
+  ({ tagID /* May add optional parameters here */ }: { tagID: string }) => {
     return new PostsApi().tagsControllerGetPostsByTag(tagID /* May add optional parameters here */);
   }
 )
 
 export const fetchPostBySlug = createAsyncThunk(
   'fetchPostBySlug',
-  ({slug, getAuthor}: {slug: string, getAuthor: boolean }) => new PostsApi().postsControllerGetPostBySlug(slug, getAuthor)
+  ({ slug, getAuthor }: { slug: string, getAuthor: boolean }) => new PostsApi().postsControllerGetPostBySlug(slug, getAuthor)
 )
 
 //https://redux-toolkit.js.org/api/createSlice
 export const postsSlice = createSlice({
   name: "posts",
-  initialState: postsAdapter.getInitialState<{ trendingPosts: string[], trendingPostsSet: Record<string, boolean>, slugToID: Record<string, string> }>({ //extends EntityState
+  initialState: postsAdapter.getInitialState<{ trendingPosts: string[], trendingPostsSet: Record<string, boolean>, slugToID: Record<string, string>, trendingPostFetchCount: number, hasMorePosts: boolean }>({ //extends EntityState
     trendingPosts: [],
     trendingPostsSet: {},
     slugToID: {},
+    trendingPostFetchCount: 0,
+    hasMorePosts: true,
   }),//also has ids[] and entities{}
   reducers: {
 
   },
   extraReducers: {
+    [fetchTrendingPosts.pending.type]: (state, action: PayloadAction<GetInitialDataDto | GetInitialDataLoggedInDto>) => {
+      state.trendingPostFetchCount++;
+    },
     [fetchTrendingPosts.fulfilled.type]: (state, action: PayloadAction<GetInitialDataDto | GetInitialDataLoggedInDto>) => {
       action.payload.posts.forEach(post => {
         state.slugToID[post.slug] = post._id;
@@ -70,6 +81,9 @@ export const postsSlice = createSlice({
       })
       postsAdapter.upsertMany(state, action.payload.posts) //add posts to ids and entities
     },
+    [fetchTrendingPosts.rejected.type]: (state, action) => {
+      state.hasMorePosts = false;
+    },
     [fetchPostBySlug.fulfilled.type]: (state, action: PayloadAction<GetPostDetailsSuccessDto>) => {
       const post = action.payload.post;
       const _id = post._id;
@@ -78,6 +92,13 @@ export const postsSlice = createSlice({
     },
     [fetchPostsByTag.fulfilled.type]: (state, action: PayloadAction<GetPostsByTagDto>) => {
       postsAdapter.upsertMany(state, action.payload.posts);
+    },
+    'user/toggleLikePost': (state, action: PayloadAction<PostIDPayload & { increment: boolean }>) => {
+      if (action.payload.increment) {
+        state.entities[action.payload.postID].likes++;
+      } else {
+        state.entities[action.payload.postID].likes--;
+      }
     }
   }
 })

@@ -9,6 +9,8 @@ import {
   GetUsersSuccessDto,
   UserDto
 } from "../api";
+import { leaveGroup, joinGroup } from "./groupsSlice";
+import _ from "lodash";
 
 const api = new UserApi();
 
@@ -45,6 +47,16 @@ export const usersSlice = createSlice({
     },
     [fetchUserByUsername.fulfilled.type]: (state, action: PayloadAction<UserDto>) => {
       usersAdapter.upsertOne(state, action.payload);
+    },
+    [leaveGroup.fulfilled.type]: (state, action: PayloadAction<{ groupID: string, userID: string }>) => {
+      if (state.entities[action.payload.userID]) {
+        _.pull(state.entities[action.payload.userID].groups, action.payload.groupID);
+      }
+    },
+    [joinGroup.fulfilled.type]: (state, action: PayloadAction<{ groupID: string, userID: string }>) => {
+      if (state.entities[action.payload.userID]) {
+        state.entities[action.payload.userID].groups.push(action.payload.groupID)
+      }
     }
   }
 })

@@ -1,15 +1,25 @@
-import { Test, TestingModule } from '@nestjs/testing';
 import { GroupsService } from './groups.service';
+import { MockMongo } from '../util/mock-mongo';
+import { GroupModel, PostModel, TagModel, UserModel } from '../mongoModels';
 
 describe('GroupsService', () => {
   let service: GroupsService;
 
-  beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      providers: [GroupsService],
-    }).compile();
+  beforeAll(MockMongo);
+  afterAll(MockMongo);
 
-    service = module.get<GroupsService>(GroupsService);
+  afterEach(async () => {
+    // Drop collections (if exist)
+    try {
+      await UserModel.collection.drop();
+    } catch (err) {
+      // do nothing
+    }
+    try {
+      await GroupModel.collection.drop();
+    } catch (err) {
+      // do nothing
+    }
   });
 
   it('should be defined', () => {

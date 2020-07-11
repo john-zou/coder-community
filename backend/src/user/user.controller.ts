@@ -10,7 +10,7 @@ import { UserModel } from '../mongoModels';
 @ApiTags('User')
 @Controller('user')
 export class UserController {
-  constructor(private readonly userService: UserService) {  }
+  constructor(private readonly userService: UserService) { }
 
   @Get('byUsername/:username')
   async getUserByUsername(@Param('username') username: string): Promise<UserDto> {
@@ -37,7 +37,6 @@ export class UserController {
   @ApiBearerAuth()
   @Personal()
   @Get('byIds')
-  //used in add people to groups
   getUsersByIDs(@Query('ids') ids: string): Promise<GetUsersSuccessDto> {//@Query() returns the object {ids: string} while Query('ids') returns the string
     if (ids === "") {
       throw new HttpException('id string is empty', 400);

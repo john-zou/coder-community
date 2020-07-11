@@ -2,8 +2,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
-
-import FilterPost from './FilterPost';
 import { RootState } from '../../reducers/rootReducer';
 import {CurrentLoggedInUser, User} from '../../store/types';
 import { Loading } from '../common/Loading';
@@ -13,9 +11,12 @@ const useStyles = makeStyles({
     width: "14vw",
     display: "flex",
     flexDirection: "column",
-    height: "94vh",
+    height: "93vh",
     cursor: "pointer",
     paddingLeft: "7em",
+    position: "fixed",
+    marginLeft: "8vw",
+    marginTop: "4vh",
   },
   diplayAccount: {
     display: "flex",
@@ -29,7 +30,7 @@ const useStyles = makeStyles({
     marginRight: "1em",
   },
   displayName: {
-    marginTop: "3em",
+    marginTop: "4em",
     color: "#5DCBAF",
   },
   groupLinks: {
@@ -83,8 +84,7 @@ const LeftSideBar = () => {
           history.push("/home/groups");
         }}>Groups</h3>
 
-        <p className={classes.showPostsText}># BROWSE BY TAGS</p>
-        <FilterPost />
+        {/* <FilterPost /> */}
       </div>
     </div>
   );
