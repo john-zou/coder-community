@@ -5,6 +5,7 @@ import { User } from "../user/user.schema";
 import { Post } from "../posts/post.schema";
 import { PostDto } from "../posts/dto/posts.dto";
 import * as moment from 'moment';
+import { Logger } from '@nestjs/common';
 
 export const convertToStrArr = (list: Ref<any, ObjectID>[]): string[] => {
   return list.map((item) => {
@@ -30,14 +31,16 @@ export const convertUserToUserDto = (user: DocumentType<User>): UserDto => {
 }
 
 export const convertPostDocumentToPostDto = (post: DocumentType<Post>): PostDto => {
-  let createdAt = post.createdAt.toString();
-  if (Date.now() - post.createdAt.getHours() > 24) {
-    createdAt = moment(createdAt).format('lll'); //https://momentjs.com/
-  } else if (Date.now() - post.createdAt.getHours() < 1) {
-    createdAt = moment(createdAt).startOf('hour').fromNow();
+  let createdAt: string;
+  const dateCopy = new Date(post.createdAt.getTime());
+  const nowHours = Date.now() / (1000*60*60);
+  const postCreateAtHours = post.createdAt.getTime() / (1000*60*60);
+  if (nowHours - postCreateAtHours > 24) {
+    createdAt = moment(dateCopy).format('lll'); //https://momentjs.com/
   } else {
-    createdAt = moment(createdAt).startOf('day').fromNow();
+    createdAt = moment(dateCopy).fromNow(); //https://momentjs.com/docs/#/displaying/fromnow/
   }
+  Logger.log(createdAt, "convertPostDocumentToPostDto");
   return {
     _id: post._id.toString(),
     author: post.author.toString(),
