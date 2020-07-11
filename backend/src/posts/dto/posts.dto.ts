@@ -4,6 +4,7 @@ import {Ref} from "@typegoose/typegoose";
 //GET POST DTO
 
 import { UserDto } from "../../user/dto/user.dto";
+import { ApiPropertyOptional } from '@nestjs/swagger';
 
 //response
 export class PostDto {
@@ -72,4 +73,20 @@ export class GetPostsByTagDto {
   cursor: number; // so the front end knows what index they are at for retrieving posts by this tag
   tagID: string;
   posts: PostDto[];
+}
+
+// Update Request
+export class UpdatePostBodyDto {
+
+  @ApiPropertyOptional()
+  title?: string;
+
+  @ApiPropertyOptional()
+  content?: string;
+
+  @ApiPropertyOptional()
+  featuredImg?: string;
+
+  @ApiPropertyOptional()
+  tags?: string[];
 }

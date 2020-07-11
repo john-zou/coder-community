@@ -2,14 +2,15 @@ import { UserService } from '../user/user.service';
 import {
   Body,
   Controller,
-  Post,
   Get,
+  HttpException,
+  NotFoundException,
   Param,
+  Post,
+  Put,
   Query,
   UsePipes,
   ValidationPipe,
-  Put,
-  NotFoundException, HttpException,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
 
@@ -19,11 +20,12 @@ import {
   CreatePostBodyDto,
   CreatePostSuccessDto,
   GetPostDetailsSuccessDto,
+  UpdatePostBodyDto,
   UpdatePostSuccessDto,
 } from './dto/posts.dto';
 import { PostsService } from './posts.service';
 import { PostModel, UserModel } from '../mongoModels';
-import * as _ from "lodash";
+import * as _ from 'lodash';
 
 @ApiTags('Posts')
 @Controller('posts')
@@ -109,12 +111,10 @@ export class PostsController {
   }
 
   @ApiBody({
-    type: CreatePostBodyDto
+    type: UpdatePostBodyDto
   })
   @Put(':slug')
-  updatePostBySlug(@Body('newPost') newPost: CreatePostBodyDto, @Param('slug') slug: string): Promise<UpdatePostSuccessDto> {
-      console.log("CONTORLLER::NEWPOST");
-      console.log(newPost);
-      return this.postsService.updatePostBySlug(newPost, slug);
+  updatePostBySlug(@Body() update: UpdatePostBodyDto, @Param('slug') slug: string):Promise<UpdatePostSuccessDto> {
+      return this.postsService.updatePostBySlug(update, slug);
     }
 }

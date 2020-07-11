@@ -733,6 +733,37 @@ export interface TagsDto {
 /**
  * 
  * @export
+ * @interface UpdatePostBodyDto
+ */
+export interface UpdatePostBodyDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdatePostBodyDto
+     */
+    title?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdatePostBodyDto
+     */
+    content?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdatePostBodyDto
+     */
+    featuredImg?: string;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof UpdatePostBodyDto
+     */
+    tags?: Array<string>;
+}
+/**
+ * 
+ * @export
  * @interface UpdatePostSuccessDto
  */
 export interface UpdatePostSuccessDto {
@@ -2132,12 +2163,12 @@ export const PostsApiFetchParamCreator = function (configuration?: Configuration
         },
         /**
          * 
-         * @param {CreatePostBodyDto} body 
+         * @param {UpdatePostBodyDto} body 
          * @param {string} slug 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        postsControllerUpdatePostBySlug(body: CreatePostBodyDto, slug: string, options: any = {}): FetchArgs {
+        postsControllerUpdatePostBySlug(body: UpdatePostBodyDto, slug: string, options: any = {}): FetchArgs {
             // verify required parameter 'body' is not null or undefined
             if (body === null || body === undefined) {
                 throw new RequiredError('body','Required parameter body was null or undefined when calling postsControllerUpdatePostBySlug.');
@@ -2159,7 +2190,7 @@ export const PostsApiFetchParamCreator = function (configuration?: Configuration
             // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
             delete localVarUrlObj.search;
             localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
-            const needsSerialization = (<any>"CreatePostBodyDto" !== "string") || localVarRequestOptions.headers['Content-Type'] === 'application/json';
+            const needsSerialization = (<any>"UpdatePostBodyDto" !== "string") || localVarRequestOptions.headers['Content-Type'] === 'application/json';
             localVarRequestOptions.body =  needsSerialization ? JSON.stringify(body || {}) : (body || "");
 
             return {
@@ -2297,12 +2328,12 @@ export const PostsApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @param {CreatePostBodyDto} body 
+         * @param {UpdatePostBodyDto} body 
          * @param {string} slug 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        postsControllerUpdatePostBySlug(body: CreatePostBodyDto, slug: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<UpdatePostSuccessDto> {
+        postsControllerUpdatePostBySlug(body: UpdatePostBodyDto, slug: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<UpdatePostSuccessDto> {
             const localVarFetchArgs = PostsApiFetchParamCreator(configuration).postsControllerUpdatePostBySlug(body, slug, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
@@ -2383,12 +2414,12 @@ export const PostsApiFactory = function (configuration?: Configuration, fetch?: 
         },
         /**
          * 
-         * @param {CreatePostBodyDto} body 
+         * @param {UpdatePostBodyDto} body 
          * @param {string} slug 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        postsControllerUpdatePostBySlug(body: CreatePostBodyDto, slug: string, options?: any) {
+        postsControllerUpdatePostBySlug(body: UpdatePostBodyDto, slug: string, options?: any) {
             return PostsApiFp(configuration).postsControllerUpdatePostBySlug(body, slug, options)(fetch, basePath);
         },
         /**
@@ -2460,13 +2491,13 @@ export class PostsApi extends BaseAPI {
 
     /**
      * 
-     * @param {CreatePostBodyDto} body 
+     * @param {UpdatePostBodyDto} body 
      * @param {string} slug 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof PostsApi
      */
-    public postsControllerUpdatePostBySlug(body: CreatePostBodyDto, slug: string, options?: any) {
+    public postsControllerUpdatePostBySlug(body: UpdatePostBodyDto, slug: string, options?: any) {
         return PostsApiFp(this.configuration).postsControllerUpdatePostBySlug(body, slug, options)(this.fetch, this.basePath);
     }
 

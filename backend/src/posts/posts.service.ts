@@ -9,7 +9,7 @@ import {
   CreatePostBodyDto,
   CreatePostSuccessDto,
   PostDto,
-  PostWithDetails,
+  PostWithDetails, UpdatePostBodyDto,
   UpdatePostSuccessDto,
 } from './dto/posts.dto';
 
@@ -146,32 +146,33 @@ export class PostsService {
   }
 
 
-    async updatePostBySlug(newPost: CreatePostBodyDto, slug: string): Promise<UpdatePostSuccessDto> {
-      console.log("SERVICE::" + slug);
-
+    async updatePostBySlug(update: UpdatePostBodyDto, slug: string): Promise<UpdatePostSuccessDto> {
       // 1. Find post
       const post = await PostModel.findOne({slug});
       if (!post) {
         throw new NotFoundException();
       }
 
-      if (newPost.title) {
-        post.title = newPost.title;
-        let newSlug = urlSlug(newPost.title);
+      if (update.title) {
+        post.title = update.title;
+        let newSlug = urlSlug(update.title);
         const existingPostWithSlug = await PostModel.findOne({newSlug});
         if (existingPostWithSlug) {
           newSlug = post._id;
         }
       }
-      if (newPost.content) {
-        post.content = newPost.content;
+
+      if (update.content) {
+        post.content = update.content;
         post.previewContent = post.content.substring(0, previewContentLength);
       }
-      if (newPost.featuredImg) {
-        post.featuredImg = newPost.featuredImg;
+
+      if (update.featuredImg) {
+        post.featuredImg = update.featuredImg;
       }
-      if (Array.isArray(newPost.tags)) {
-        post.tags = newPost.tags.map(tag => new ObjectId(tag));
+
+      if (Array.isArray(update.tags)) {
+        post.tags = update.tags.map(tag => new ObjectId(tag));
       }
 
       await post.save();
