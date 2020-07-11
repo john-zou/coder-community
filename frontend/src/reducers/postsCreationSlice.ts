@@ -65,14 +65,8 @@ export const submitPost = createdPost => {
 export const submitPost = createAsyncThunk(
     'submitPost',
     async(createdPost: CreatePostBodyDto & {author: string}) => {
-        let newPost: CreatePostBodyDto = {
-            title: createdPost.title,
-            content: createdPost.content,
-            tags: createdPost.tags,
-            featuredImg: ''
-        }
         // console.log(createdPost.title + " " + createdPost.content);
-        const createPostSuccessDto = await new PostsApi().postsControllerCreatePost(newPost);
+        const createPostSuccessDto = await new PostsApi().postsControllerCreatePost(createdPost);
         const { _id, slug } = createPostSuccessDto;
         const post: Post = {
             featuredImg: "",

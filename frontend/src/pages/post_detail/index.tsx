@@ -71,7 +71,12 @@ const PostDetail = () => {
 
   const [error, setError] = useState(null);
 
-  const featuredImg = post?.featuredImg !== "" ? post.featuredImg : defaultPostFeaturedImage;
+  let featuredImg: string;
+  if (!post?.featuredImg) {
+    featuredImg = defaultPostFeaturedImage;
+  } else {
+    featuredImg = post.featuredImg;
+  }
 
 
   useEffect(() => {

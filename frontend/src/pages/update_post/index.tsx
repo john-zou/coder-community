@@ -48,9 +48,9 @@ export default function UpdatePost() {
 
     return (
         <div className={classes.updatePost}>
-            <ImgP setImg={setImg} img={oldPost.featuredImg} />
-            <TextP setTitle={setTitle} setContent={setContent} title={oldPost.title} content={oldPost.content}/>
-            <TagP setTags={setTags} tags={oldPost.tags} />
+            <ImgP setImg={setImg} img={oldPost?.featuredImg} />
+            <TextP setTitle={setTitle} setContent={setContent} title={oldPost?.title} content={oldPost?.content}/>
+            <TagP setTags={setTags} tags={oldPost?.tags} />
             <Submit title={title} content={content} tags={tags} img={featuredImg} slug={slug} />
         </div>
     );

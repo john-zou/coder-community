@@ -60,7 +60,6 @@ export default function ImgPanel({ setImg }) {
   // const [image, setImage] = useState<File>(null);
 
   const handleImageUpload = img => {
-    // console.log(image);
     setImg(img)
   }
   return (

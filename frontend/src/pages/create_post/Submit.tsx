@@ -40,8 +40,8 @@ export default function Submit(params) {
   const onSubmit = async (params, author, dispatch, history) => {
     // console.log(newPost);
     let featuredImg: string;
-    if (params.image) {
-      featuredImg = await uploadPublicAsset(params.image);
+    if (params.img) {
+      featuredImg = await uploadPublicAsset(params.img);
     }
 
     const newPost = {
