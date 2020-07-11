@@ -12,8 +12,18 @@ type HandleToggleLike = () => void;
  * @param postID The ID of the post
  */
 export function useLikePost(postID: string): { postIsLikedByUser: boolean, handleToggleLike: HandleToggleLike} {
+
+
   const user = useSelector<RootState, CurrentLoggedInUser>(state => state.user);
   const dispatch = useDispatch();
+
+  if (!postID) {
+    return {
+      postIsLikedByUser: null,
+      handleToggleLike: () => {}
+    }
+  }
+
   if (!user) {
     return {
       postIsLikedByUser: false,

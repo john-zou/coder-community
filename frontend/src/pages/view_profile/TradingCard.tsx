@@ -110,14 +110,14 @@ export function TradingCard({user, isCurrentUser}: {user: User, isCurrentUser?: 
             <SpaceAround />
             <FollowersCountContainer>
                 <BigBoldNumber>
-                    {user.followers.length}
+                    {user.followers?.length || 'x'}
                 </BigBoldNumber>
                 followers
             </FollowersCountContainer>
             <SpaceBetweenFollowersAndPosts />
             <PostsCountContainer>
                 <BigBoldNumber>
-                    {user.posts.length}
+                    {user.posts?.length || 'x'}
                 </BigBoldNumber>
                 posts
             </PostsCountContainer>
