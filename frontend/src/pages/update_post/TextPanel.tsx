@@ -45,7 +45,7 @@ const useStyles = makeStyles({
   },
 });
 
-export default function TextPanel() {
+export default function TextPanel(props) {
   const classes = useStyles();
   const dispatch = useDispatch();
   return (

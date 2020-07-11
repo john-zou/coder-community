@@ -1,7 +1,7 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { useSelector, useDispatch } from 'react-redux';
-import {CurrentLoggedInUser, PostsCreation, User} from "../../store/types";
+import {CurrentLoggedInUser, User} from "../../store/types";
 import { RootState } from "../../reducers/rootReducer";
 import { CreatePostBodyDto } from "../../../../backend/src/posts/dto/posts.dto";
 import { UserObjectID } from '../../../../backend/src/user/user-object-id.decorator';

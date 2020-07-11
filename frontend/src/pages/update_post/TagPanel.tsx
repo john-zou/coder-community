@@ -57,7 +57,7 @@ const _onDel = (event) => {
   event.preventDefault();
 };
 
-export default function TagPanel() {
+export default function TagPanel(props) {
   const classes = useStyles();
   const alltags = [];
   return (

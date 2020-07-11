@@ -51,8 +51,7 @@ export class GetPostDetailsSuccessDto {
 export class CreatePostBodyDto {
   title: string;
   content: string;
-  // tags: string[];
-  tags: Ref<Tag>[];
+  tags: string[];
   featuredImg: string;
   group?: string;
 }
@@ -63,6 +62,10 @@ export class CreatePostSuccessDto {
   slug: string;
 }
 
+export class UpdatePostSuccessDto {
+  _id: string;
+  slug: string;
+}
 
 // Response
 export class GetPostsByTagDto {

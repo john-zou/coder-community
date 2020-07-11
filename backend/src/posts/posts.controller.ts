@@ -15,7 +15,12 @@ import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
 
 import { Personal } from '../auth/guards/personal.decorator';
 import { UserObjectID } from '../user/user-object-id.decorator';
-import { CreatePostBodyDto, CreatePostSuccessDto, GetPostDetailsSuccessDto } from './dto/posts.dto';
+import {
+  CreatePostBodyDto,
+  CreatePostSuccessDto,
+  GetPostDetailsSuccessDto,
+  UpdatePostSuccessDto,
+} from './dto/posts.dto';
 import { PostsService } from './posts.service';
 import { PostModel, UserModel } from '../mongoModels';
 import * as _ from "lodash";
@@ -107,7 +112,7 @@ export class PostsController {
     type: CreatePostBodyDto
   })
   @Put(':slug')
-  updatePostBySlug(@Body('newPost') newPost: CreatePostBodyDto, @Param('slug') slug: string): Promise<void> {
+  updatePostBySlug(@Body('newPost') newPost: CreatePostBodyDto, @Param('slug') slug: string): Promise<UpdatePostSuccessDto> {
       console.log("CONTORLLER::NEWPOST");
       console.log(newPost);
       return this.postsService.updatePostBySlug(newPost, slug);

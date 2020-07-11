@@ -1,20 +1,18 @@
-import { UserModel, TagModel } from './../mongoModels';
+import { PostModel, TagModel, UserModel } from '../mongoModels';
 import { HttpService, Injectable, NotFoundException } from '@nestjs/common';
 import { Ref } from '@typegoose/typegoose';
-import { Logger, ObjectID } from 'mongodb';
-import { convertToStrArr, convertPostDocumentToPostDto } from '../util/helperFunctions';
+import { ObjectID, ObjectId } from 'mongodb';
+import { convertPostDocumentToPostDto, convertToStrArr } from '../util/helperFunctions';
 import * as urlSlug from 'url-slug';
-import { DocumentType } from '@typegoose/typegoose';
-
-import { PostModel } from '../mongoModels';
 import { User } from '../user/user.schema';
 import {
   CreatePostBodyDto,
   CreatePostSuccessDto,
   PostDto,
   PostWithDetails,
+  UpdatePostSuccessDto,
 } from './dto/posts.dto';
-import { Post } from './post.schema';
+
 
 // Unused -- can use later for different feature
 type DevToArticle = {
@@ -134,10 +132,12 @@ export class PostsService {
 
     // Add post to tags
     const tags = newPost.tags;
-    const expressions = tags.map(tagID => ({ _id: tagID }));
-    await TagModel.updateMany({ $or: expressions }, { $push: { posts: newPost._id } });
+    if (tags.length > 0) {
+      const expressions = tags.map(tagID => ({ _id: tagID }));
+      await TagModel.updateMany({ $or: expressions }, { $push: { posts: newPost._id } });
+    }
 
-    // TOD  O: Add post to group (if post created for group)
+    // TODO: Add post to group (if post created for group)
 
     return {
       _id: newPost._id,
@@ -146,14 +146,37 @@ export class PostsService {
   }
 
 
-    async updatePostBySlug(newPost: CreatePostBodyDto, slug: string) {
-        console.log("SERVICE::" + slug);
-        const post = await PostModel.findOneAndUpdate({slug}, {
-            content: newPost.content,
-            title: newPost.title,
-            tags: newPost.tags,
-            featuredImg: newPost.featuredImg
-        });
+    async updatePostBySlug(newPost: CreatePostBodyDto, slug: string): Promise<UpdatePostSuccessDto> {
+      console.log("SERVICE::" + slug);
+
+      // 1. Find post
+      const post = await PostModel.findOne({slug});
+      if (!post) {
+        throw new NotFoundException();
+      }
+
+      if (newPost.title) {
+        post.title = newPost.title;
+        let newSlug = urlSlug(newPost.title);
+        const existingPostWithSlug = await PostModel.findOne({newSlug});
+        if (existingPostWithSlug) {
+          newSlug = post._id;
+        }
+      }
+      if (newPost.content) {
+        post.content = newPost.content;
+        post.previewContent = post.content.substring(0, previewContentLength);
+      }
+      if (newPost.featuredImg) {
+        post.featuredImg = newPost.featuredImg;
+      }
+      if (Array.isArray(newPost.tags)) {
+        post.tags = newPost.tags.map(tag => new ObjectId(tag));
+      }
+
+      await post.save();
+
+      return { _id: post._id, slug: post.slug };
     }
 
     isLikedByUser(likes: Ref<User, ObjectID>[], userObjectID: string): boolean {

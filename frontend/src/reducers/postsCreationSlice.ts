@@ -1,6 +1,5 @@
-import * as urlSlug from 'url-slug';
 import {PostsApi} from '../api/api';
-import {Post, PostsCreation, Tag} from "../store/types";
+import {Post, Tag} from "../store/types";
 import {UpdatePostSuccessDto, CreatePostBodyDto, CreatePostSuccessDto} from "../../../backend/src/posts/dto/posts.dto";
 import {createEntityAdapter, createSlice, createAsyncThunk, PayloadAction} from "@reduxjs/toolkit";
 

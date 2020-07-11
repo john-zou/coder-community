@@ -54,7 +54,7 @@ const _omImgRm = (event) => {
 	*/
 }
     
-export default function ImgPanel() {
+export default function ImgPanel(props) {
   const classes = useStyles();
 
   return (
