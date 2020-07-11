@@ -1,16 +1,29 @@
 import { createEntityAdapter, createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import { fetchTrendingPosts, fetchPostBySlug } from "./postsSlice";
 import { User } from "../store/types";
-import { GetInitialDataDto, GetInitialDataLoggedInDto, GetPostDetailsSuccessDto, UserApi, GetUsersSuccessDto } from "../api";
+import {
+  GetInitialDataDto,
+  GetInitialDataLoggedInDto,
+  GetPostDetailsSuccessDto,
+  UserApi,
+  GetUsersSuccessDto,
+  UserDto
+} from "../api";
 import { leaveGroup, joinGroup } from "./groupsSlice";
 import _ from "lodash";
 
+const api = new UserApi();
+
 const usersAdapter = createEntityAdapter<User>({
   selectId: item => item._id
-})
+});
+
 export const fetchUsersByIDs = createAsyncThunk('fetchUsersByIDs', async (IDs: string[]) => {
-  const api = new UserApi();
   return await api.userControllerGetUsersByIDs(IDs.join());
+});
+
+export const fetchUserByUsername = createAsyncThunk('fetchUserByUsername', async (username: string) => {
+  return await api.userControllerGetUserByUsername(username);
 })
 
 //https://redux-toolkit.js.org/api/createSlice
@@ -31,6 +44,9 @@ export const usersSlice = createSlice({
     },
     [fetchUsersByIDs.fulfilled.type]: (state, action: PayloadAction<GetUsersSuccessDto>) => {
       usersAdapter.upsertMany(state, action.payload.users);
+    },
+    [fetchUserByUsername.fulfilled.type]: (state, action: PayloadAction<UserDto>) => {
+      usersAdapter.upsertOne(state, action.payload);
     },
     [leaveGroup.fulfilled.type]: (state, action: PayloadAction<{ groupID: string, userID: string }>) => {
       if (state.entities[action.payload.userID]) {

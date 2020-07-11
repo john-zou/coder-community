@@ -1,31 +1,38 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import { UserApi, GetInitialDataDto, GetInitialDataLoggedInDto, PostsApi, AuthApi, CreateGroupSuccessDto } from "../api";
+import {UserApi, GetInitialDataDto, GetInitialDataLoggedInDto, PostsApi, AuthApi, UpdateProfileReqDto, CreateGroupSuccessDto } from "../api";
 import { fetchTrendingPosts } from "./postsSlice";
 import { CurrentLoggedInUser } from "../store/types";
 import _ from "lodash";
 import { isGetInitialDataLoggedInDto } from "../util/helperFunctions";
-import { postsSlice } from "./postsSlice";
 import { JwtLocalStorageKey } from "../constants";
 import { isLoggedInSlice } from "./isLoggedInSlice";
 import { createGroup, leaveGroup, joinGroup } from "./groupsSlice";
 
 const api = new UserApi();
 export const getLoggedInUser = createAsyncThunk(
-  '/user/getLoggedInUserStatus',
+  'getLoggedInUser',
   async () => {
     return await api.userControllerGetUser();
   }
 )
 
 export const login = createAsyncThunk(
-  'loginStatus',
-  async ({ code, state }: { code: string, state: string }) => {
-    await new AuthApi().authControllerLoginGitHub({ code, state })
-  }
+    'loginStatus',
+    async ({ code, state }: { code: string, state: string }) => {
+      await new AuthApi().authControllerLoginGitHub({ code, state })
+    }
+);
+
+export const updateProfile = createAsyncThunk(
+    'updateProfile',
+    async (update: UpdateProfileReqDto) => {
+      await api.userControllerEditProfile(update);
+      return { update };
+    }
 )
 
 export const getUserForViewProfile = (userName) => createAsyncThunk(
-  '/user/getUserForViewProfileStatus',
+  'getUserForViewProfile',
   async () => {
     //TODO
   }
@@ -147,16 +154,32 @@ export const userSlice = createSlice({
       state.groups.push(action.payload._id);
     },
 
-    // Logging out should clear the state
-    [isLoggedInSlice.actions.logOut.type]: () => {
-      return null;
-    },
     [leaveGroup.fulfilled.type]: (state, action: PayloadAction<{ groupID: string, userID: string }>) => {
       _.pull(state.groups, action.payload.groupID);
     },
     [joinGroup.fulfilled.type]: (state, action: PayloadAction<{ groupID: string, userID: string }>) => {
       state.groups.push(action.payload.groupID);
     },
+
+    // Logging out should clear the state
+    [isLoggedInSlice.actions.logOut.type]: () => {
+      return null;
+    },
+
+    [updateProfile.fulfilled.type]: (state, action: PayloadAction<UpdateProfileReqDto>) => {
+      if (!state) {
+        return null;
+      }
+      if (action.payload.name) {
+        state.name = action.payload.name;
+      }
+      if (action.payload.status) {
+        state.status = action.payload.status;
+      }
+      if (Array.isArray(action.payload.tags)) {
+        state.tags = action.payload.tags;
+      }
+    }
   }
 })
 

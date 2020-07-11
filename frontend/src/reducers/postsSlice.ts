@@ -72,12 +72,7 @@ export const postsSlice = createSlice({
     hasMorePosts: true,//only for trending posts (of all tags)
   }),//also has ids[] and entities{}
   reducers: {
-    incrementPostLikes: (state, action: PayloadAction<PostIDPayload>) => {
-      ++state.entities[action.payload.postID].likes;
-    },
-    decrementPostLikes: (state, action: PayloadAction<PostIDPayload>) => {
-      --state.entities[action.payload.postID].likes;
-    }
+
   },
   extraReducers: {
     [fetchTrendingPosts.pending.type]: (state, action: PayloadAction<GetInitialDataDto | GetInitialDataLoggedInDto>) => {
