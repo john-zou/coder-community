@@ -16,12 +16,12 @@ import { LogOut } from "./pages/login/Logout";
 import { Experimental } from "./pages/experimental/Experimental";
 import { LoginGitHub } from "./pages/login/LoginGitHub";
 import { AppDispatch } from "./store";
-import {useDispatch, useSelector} from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { fetchTrendingPosts } from "./reducers/postsSlice";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { Loading } from "./pages/common/Loading";
 import ErrorPage from "./pages/common/ErrorPage";
-import {RootState} from "./reducers/rootReducer";
+import { RootState } from "./reducers/rootReducer";
 
 export type ViewProfileParams = {
   username: string;
@@ -39,7 +39,7 @@ export default function App() {
 
   useEffect(() => {
     setLoading(true);
-    dispatch(fetchTrendingPosts())
+    dispatch(fetchTrendingPosts({ fetchCount: 0 }))
       .then(unwrapResult).then( //must set dispatch to any to use .then
         () => {
           setLoading(false)

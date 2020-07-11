@@ -1,12 +1,13 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import {UserApi, GetInitialDataDto, GetInitialDataLoggedInDto, PostsApi, AuthApi} from "../api";
+import { UserApi, GetInitialDataDto, GetInitialDataLoggedInDto, PostsApi, AuthApi, CreateGroupSuccessDto } from "../api";
 import { fetchTrendingPosts } from "./postsSlice";
 import { CurrentLoggedInUser } from "../store/types";
 import _ from "lodash";
 import { isGetInitialDataLoggedInDto } from "../util/helperFunctions";
 import { postsSlice } from "./postsSlice";
-import {JwtLocalStorageKey} from "../constants";
-import {isLoggedInSlice} from "./isLoggedInSlice";
+import { JwtLocalStorageKey } from "../constants";
+import { isLoggedInSlice } from "./isLoggedInSlice";
+import { createGroup, leaveGroup, joinGroup } from "./groupsSlice";
 
 const api = new UserApi();
 export const getLoggedInUser = createAsyncThunk(
@@ -17,10 +18,10 @@ export const getLoggedInUser = createAsyncThunk(
 )
 
 export const login = createAsyncThunk(
-    'loginStatus',
-    async ({code, state}: {code: string, state: string}) => {
-      await new AuthApi().authControllerLoginGitHub({code, state})
-    }
+  'loginStatus',
+  async ({ code, state }: { code: string, state: string }) => {
+    await new AuthApi().authControllerLoginGitHub({ code, state })
+  }
 )
 
 export const getUserForViewProfile = (userName) => createAsyncThunk(
@@ -51,9 +52,9 @@ export const userSlice = createSlice({
       reducer: (user, action: PayloadAction<null>) => {
         return null;
       },
-      prepare: ({jwt}: {jwt: string}) => {
+      prepare: ({ jwt }: { jwt: string }) => {
         localStorage.setItem(JwtLocalStorageKey, jwt);
-        return {payload: null};
+        return { payload: null };
       },
     },
     logOut: {
@@ -79,13 +80,13 @@ export const userSlice = createSlice({
       prepare: (payload: PostIDPayload) => {
         // Send request to back end silently
         new UserApi().userControllerSavePost(payload.postID)
-            .then(_ => console.log("Optimistic update (SAVE POST) finished in back end"))
-            .catch(err => console.log("Optimistic update (SAVE POST) rejected! ", err));
+          .then(_ => console.log("Optimistic update (SAVE POST) finished in back end"))
+          .catch(err => console.log("Optimistic update (SAVE POST) rejected! ", err));
         return { payload };
       },
     },
     toggleLikePost: {
-      reducer: (user, action: PayloadAction<PostIDPayload>) => {
+      reducer: (user, action: PayloadAction<PostIDPayload & { increment: boolean }>) => {
         if (user) {
           // optimistic update
           const { postID } = action.payload;
@@ -101,20 +102,18 @@ export const userSlice = createSlice({
         }
         return user;
       },
-      prepare: ({postID, increment}: LikePostPayload) => {
+      prepare: ({ postID, increment }: LikePostPayload) => {
         // Send request to back end silently
         if (increment) {
-          postsSlice.actions.incrementPostLikes({postID});
           new PostsApi().postsControllerLikePost(postID)
-              .then(_ => console.log("Optimistic update (LIKE POST) finished in back end for Post ID"))
-              .catch(err => console.log("Optimistic update (LIKE POST) rejected! ", err));
+            .then(_ => console.log("Optimistic update (LIKE POST) finished in back end for Post ID"))
+            .catch(err => console.log("Optimistic update (LIKE POST) rejected! ", err));
         } else {
-          postsSlice.actions.decrementPostLikes({postID});
           new PostsApi().postsControllerUnlikePost(postID)
-              .then(_ => console.log("Optimistic update (UNLIKE POST) finished in back end for Post ID"))
-              .catch(err => console.log("Optimistic update (UNLIKE POST) rejected! ", err));
+            .then(_ => console.log("Optimistic update (UNLIKE POST) finished in back end for Post ID"))
+            .catch(err => console.log("Optimistic update (UNLIKE POST) rejected! ", err));
         }
-        return { payload: {postID} };
+        return { payload: { postID, increment } };
       }
     }
   },
@@ -143,11 +142,21 @@ export const userSlice = createSlice({
       // state may be null, so must explicitly return it
       return state;
     },
+    //add group to user's list of groups
+    [createGroup.fulfilled.type]: (state, action: PayloadAction<CreateGroupSuccessDto>) => {
+      state.groups.push(action.payload._id);
+    },
 
     // Logging out should clear the state
     [isLoggedInSlice.actions.logOut.type]: () => {
       return null;
-    }
+    },
+    [leaveGroup.fulfilled.type]: (state, action: PayloadAction<{ groupID: string, userID: string }>) => {
+      _.pull(state.groups, action.payload.groupID);
+    },
+    [joinGroup.fulfilled.type]: (state, action: PayloadAction<{ groupID: string, userID: string }>) => {
+      state.groups.push(action.payload.groupID);
+    },
   }
 })
 
