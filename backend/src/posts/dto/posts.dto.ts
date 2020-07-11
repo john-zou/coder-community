@@ -1,7 +1,10 @@
+import { Tag } from '../../tags/tag.schema';
+import {Ref} from "@typegoose/typegoose";
 // import { ObjectID } from "mongodb";
 //GET POST DTO
 
 import { UserDto } from "../../user/dto/user.dto";
+import { ApiPropertyOptional } from '@nestjs/swagger';
 
 //response
 export class PostDto {
@@ -60,10 +63,30 @@ export class CreatePostSuccessDto {
   slug: string;
 }
 
+export class UpdatePostSuccessDto {
+  _id: string;
+  slug: string;
+}
 
 // Response
 export class GetPostsByTagDto {
   cursor: number; // so the front end knows what index they are at for retrieving posts by this tag
   tagID: string;
   posts: PostDto[];
+}
+
+// Update Request
+export class UpdatePostBodyDto {
+
+  @ApiPropertyOptional()
+  title?: string;
+
+  @ApiPropertyOptional()
+  content?: string;
+
+  @ApiPropertyOptional()
+  featuredImg?: string;
+
+  @ApiPropertyOptional()
+  tags?: string[];
 }

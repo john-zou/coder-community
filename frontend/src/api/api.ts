@@ -203,24 +203,24 @@ export interface CreatePostSuccessDto {
     slug: string;
 }
 /**
-  *
-  * @export
-  * @interface CreateVideoDto
-  */
- export interface CreateVideoDto {
-     /**
-      *
-      * @type {string}
-      * @memberof CreateVideoDto
-      */
-     name: string;
-     /**
-      *
-      * @type {string}
-      * @memberof CreateVideoDto
-      */
-     description: string;
- }
+ * 
+ * @export
+ * @interface CreateVideoDto
+ */
+export interface CreateVideoDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateVideoDto
+     */
+    name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateVideoDto
+     */
+    description: string;
+}
 /**
  * 
  * @export
@@ -235,18 +235,18 @@ export interface FileUploadDto {
     file: any;
 }
 /**
-  *
-  * @export
-  * @interface GetAllVideosDto
-  */
- export interface GetAllVideosDto {
-     /**
-      *
-      * @type {Array<VideoDto>}
-      * @memberof GetAllVideosDto
-      */
-     videos: Array<VideoDto>;
- }
+ * 
+ * @export
+ * @interface GetAllVideosDto
+ */
+export interface GetAllVideosDto {
+    /**
+     * 
+     * @type {Array<VideoDto>}
+     * @memberof GetAllVideosDto
+     */
+    videos: Array<VideoDto>;
+}
 /**
  * 
  * @export
@@ -285,37 +285,6 @@ export interface GetInitialDataDto {
      */
     tags: Array<TagsDto>;
 }
-/**
-  *
-  * @export
-  * @interface VideoDto
-  */
- export interface VideoDto {
-     /**
-      *
-      * @type {string}
-      * @memberof VideoDto
-      */
-     name: string;
-     /**
-      *
-      * @type {string}
-      * @memberof VideoDto
-      */
-     description: string;
-     /**
-      *
-      * @type {string}
-      * @memberof VideoDto
-      */
-     _id: string; // modified by backend/scripts/generate-api.js
-     /**
-      *
-      * @type {string}
-      * @memberof VideoDto
-      */
-     createdAt: string;
- }
 /**
  * 
  * @export
@@ -764,6 +733,56 @@ export interface TagsDto {
 /**
  * 
  * @export
+ * @interface UpdatePostBodyDto
+ */
+export interface UpdatePostBodyDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdatePostBodyDto
+     */
+    title?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdatePostBodyDto
+     */
+    content?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdatePostBodyDto
+     */
+    featuredImg?: string;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof UpdatePostBodyDto
+     */
+    tags?: Array<string>;
+}
+/**
+ * 
+ * @export
+ * @interface UpdatePostSuccessDto
+ */
+export interface UpdatePostSuccessDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdatePostSuccessDto
+     */
+    _id: string; // modified by backend/scripts/generate-api.js
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdatePostSuccessDto
+     */
+    slug: string;
+}
+/**
+ * 
+ * @export
  * @interface UpdateProfileReqDto
  */
 export interface UpdateProfileReqDto {
@@ -877,6 +896,37 @@ export interface UserDto {
      * @memberof UserDto
      */
     likedPosts: Array<string>;
+}
+/**
+ * 
+ * @export
+ * @interface VideoDto
+ */
+export interface VideoDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoDto
+     */
+    name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoDto
+     */
+    description: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoDto
+     */
+    _id: string; // modified by backend/scripts/generate-api.js
+    /**
+     * 
+     * @type {string}
+     * @memberof VideoDto
+     */
+    createdAt: string;
 }
 /**
  * AuthApi - fetch parameter creator
@@ -2113,6 +2163,43 @@ export const PostsApiFetchParamCreator = function (configuration?: Configuration
         },
         /**
          * 
+         * @param {UpdatePostBodyDto} body 
+         * @param {string} slug 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        postsControllerUpdatePostBySlug(body: UpdatePostBodyDto, slug: string, options: any = {}): FetchArgs {
+            // verify required parameter 'body' is not null or undefined
+            if (body === null || body === undefined) {
+                throw new RequiredError('body','Required parameter body was null or undefined when calling postsControllerUpdatePostBySlug.');
+            }
+            // verify required parameter 'slug' is not null or undefined
+            if (slug === null || slug === undefined) {
+                throw new RequiredError('slug','Required parameter slug was null or undefined when calling postsControllerUpdatePostBySlug.');
+            }
+            const localVarPath = `/api/posts/{slug}`
+                .replace(`{${"slug"}}`, encodeURIComponent(String(slug)));
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'PUT' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+            const needsSerialization = (<any>"UpdatePostBodyDto" !== "string") || localVarRequestOptions.headers['Content-Type'] === 'application/json';
+            localVarRequestOptions.body =  needsSerialization ? JSON.stringify(body || {}) : (body || "");
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {string} tagID The ObjectID of the tag
          * @param {number} [requestedCount] How many posts to fetch
          * @param {number} [startIdx] What index to start at, e.g. if startIdx &#x3D; 5, then the 5 posts (0th, 1st, 2nd, 3rd, 4th) of this tag will not be fetched
@@ -2241,6 +2328,25 @@ export const PostsApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {UpdatePostBodyDto} body 
+         * @param {string} slug 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        postsControllerUpdatePostBySlug(body: UpdatePostBodyDto, slug: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<UpdatePostSuccessDto> {
+            const localVarFetchArgs = PostsApiFetchParamCreator(configuration).postsControllerUpdatePostBySlug(body, slug, options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * 
          * @param {string} tagID The ObjectID of the tag
          * @param {number} [requestedCount] How many posts to fetch
          * @param {number} [startIdx] What index to start at, e.g. if startIdx &#x3D; 5, then the 5 posts (0th, 1st, 2nd, 3rd, 4th) of this tag will not be fetched
@@ -2305,6 +2411,16 @@ export const PostsApiFactory = function (configuration?: Configuration, fetch?: 
          */
         postsControllerUnlikePost(postID: string, options?: any) {
             return PostsApiFp(configuration).postsControllerUnlikePost(postID, options)(fetch, basePath);
+        },
+        /**
+         * 
+         * @param {UpdatePostBodyDto} body 
+         * @param {string} slug 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        postsControllerUpdatePostBySlug(body: UpdatePostBodyDto, slug: string, options?: any) {
+            return PostsApiFp(configuration).postsControllerUpdatePostBySlug(body, slug, options)(fetch, basePath);
         },
         /**
          * 
@@ -2375,6 +2491,18 @@ export class PostsApi extends BaseAPI {
 
     /**
      * 
+     * @param {UpdatePostBodyDto} body 
+     * @param {string} slug 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof PostsApi
+     */
+    public postsControllerUpdatePostBySlug(body: UpdatePostBodyDto, slug: string, options?: any) {
+        return PostsApiFp(this.configuration).postsControllerUpdatePostBySlug(body, slug, options)(this.fetch, this.basePath);
+    }
+
+    /**
+     * 
      * @param {string} tagID The ObjectID of the tag
      * @param {number} [requestedCount] How many posts to fetch
      * @param {number} [startIdx] What index to start at, e.g. if startIdx &#x3D; 5, then the 5 posts (0th, 1st, 2nd, 3rd, 4th) of this tag will not be fetched
@@ -2388,172 +2516,6 @@ export class PostsApi extends BaseAPI {
     }
 
 }
-/**
-  * VideoApi - fetch parameter creator
-  * @export
-  */
- export const VideoApiFetchParamCreator = function (configuration?: Configuration) {
-     return {
-         /**
-          *
-          * @param {CreateVideoDto} body
-          * @param {*} [options] Override http request option.
-          * @throws {RequiredError}
-          */
-         videoControllerCreateVideo(body: CreateVideoDto, options: any = {}): FetchArgs {
-             // verify required parameter 'body' is not null or undefined
-             if (body === null || body === undefined) {
-                 throw new RequiredError('body','Required parameter body was null or undefined when calling videoControllerCreateVideo.');
-             }
-             const localVarPath = `/api/video`;
-             const localVarUrlObj = url.parse(localVarPath, true);
-             const localVarRequestOptions = Object.assign({ method: 'POST' }, options);
-             const localVarHeaderParameter = {} as any;
-             const localVarQueryParameter = {} as any;
-
-             // authentication bearer required
-
-             localVarHeaderParameter['Content-Type'] = 'application/json';
-
-             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
-             // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
-             delete localVarUrlObj.search;
-             localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
-             const needsSerialization = (<any>"CreateVideoDto" !== "string") || localVarRequestOptions.headers['Content-Type'] === 'application/json';
-             localVarRequestOptions.body =  needsSerialization ? JSON.stringify(body || {}) : (body || "");
-
-             return {
-                 url: url.format(localVarUrlObj),
-                 options: localVarRequestOptions,
-             };
-         },
-         /**
-          *
-          * @param {*} [options] Override http request option.
-          * @throws {RequiredError}
-          */
-         videoControllerGetAllVideos(options: any = {}): FetchArgs {
-             const localVarPath = `/api/video`;
-             const localVarUrlObj = url.parse(localVarPath, true);
-             const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
-             const localVarHeaderParameter = {} as any;
-             const localVarQueryParameter = {} as any;
-
-             // authentication bearer required
-
-             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
-             // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
-             delete localVarUrlObj.search;
-             localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
-
-             return {
-                 url: url.format(localVarUrlObj),
-                 options: localVarRequestOptions,
-             };
-         },
-     }
- };
-
- /**
-  * VideoApi - functional programming interface
-  * @export
-  */
- export const VideoApiFp = function(configuration?: Configuration) {
-     return {
-         /**
-          *
-          * @param {CreateVideoDto} body
-          * @param {*} [options] Override http request option.
-          * @throws {RequiredError}
-          */
-         videoControllerCreateVideo(body: CreateVideoDto, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<VideoDto> {
-             const localVarFetchArgs = VideoApiFetchParamCreator(configuration).videoControllerCreateVideo(body, options);
-             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
-                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
-                     if (response.status >= 200 && response.status < 300) {
-                         return response.json();
-                     } else {
-                         throw response;
-                     }
-                 });
-             };
-         },
-         /**
-          *
-          * @param {*} [options] Override http request option.
-          * @throws {RequiredError}
-          */
-         videoControllerGetAllVideos(options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<GetAllVideosDto> {
-             const localVarFetchArgs = VideoApiFetchParamCreator(configuration).videoControllerGetAllVideos(options);
-             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
-                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
-                     if (response.status >= 200 && response.status < 300) {
-                         return response.json();
-                     } else {
-                         throw response;
-                     }
-                 });
-             };
-         },
-     }
- };
-
- /**
-  * VideoApi - factory interface
-  * @export
-  */
- export const VideoApiFactory = function (configuration?: Configuration, fetch?: FetchAPI, basePath?: string) {
-     return {
-         /**
-          *
-          * @param {CreateVideoDto} body
-          * @param {*} [options] Override http request option.
-          * @throws {RequiredError}
-          */
-         videoControllerCreateVideo(body: CreateVideoDto, options?: any) {
-             return VideoApiFp(configuration).videoControllerCreateVideo(body, options)(fetch, basePath);
-         },
-         /**
-          *
-          * @param {*} [options] Override http request option.
-          * @throws {RequiredError}
-          */
-         videoControllerGetAllVideos(options?: any) {
-             return VideoApiFp(configuration).videoControllerGetAllVideos(options)(fetch, basePath);
-         },
-     };
- };
-
- /**
-  * VideoApi - object-oriented interface
-  * @export
-  * @class VideoApi
-  * @extends {BaseAPI}
-  */
- export class VideoApi extends BaseAPI {
-     /**
-      *
-      * @param {CreateVideoDto} body
-      * @param {*} [options] Override http request option.
-      * @throws {RequiredError}
-      * @memberof VideoApi
-      */
-     public videoControllerCreateVideo(body: CreateVideoDto, options?: any) {
-         return VideoApiFp(this.configuration).videoControllerCreateVideo(body, options)(this.fetch, this.basePath);
-     }
-
-     /**
-      *
-      * @param {*} [options] Override http request option.
-      * @throws {RequiredError}
-      * @memberof VideoApi
-      */
-     public videoControllerGetAllVideos(options?: any) {
-         return VideoApiFp(this.configuration).videoControllerGetAllVideos(options)(this.fetch, this.basePath);
-     }
-
- }
-
 /**
  * TrendingApi - fetch parameter creator
  * @export
@@ -3529,6 +3491,171 @@ export class UserApi extends BaseAPI {
      */
     public userControllerSavePost(postID: string, options?: any) {
         return UserApiFp(this.configuration).userControllerSavePost(postID, options)(this.fetch, this.basePath);
+    }
+
+}
+/**
+ * VideoApi - fetch parameter creator
+ * @export
+ */
+export const VideoApiFetchParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {CreateVideoDto} body 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        videoControllerCreateVideo(body: CreateVideoDto, options: any = {}): FetchArgs {
+            // verify required parameter 'body' is not null or undefined
+            if (body === null || body === undefined) {
+                throw new RequiredError('body','Required parameter body was null or undefined when calling videoControllerCreateVideo.');
+            }
+            const localVarPath = `/api/video`;
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'POST' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+            const needsSerialization = (<any>"CreateVideoDto" !== "string") || localVarRequestOptions.headers['Content-Type'] === 'application/json';
+            localVarRequestOptions.body =  needsSerialization ? JSON.stringify(body || {}) : (body || "");
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        videoControllerGetAllVideos(options: any = {}): FetchArgs {
+            const localVarPath = `/api/video`;
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * VideoApi - functional programming interface
+ * @export
+ */
+export const VideoApiFp = function(configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {CreateVideoDto} body 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        videoControllerCreateVideo(body: CreateVideoDto, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<VideoDto> {
+            const localVarFetchArgs = VideoApiFetchParamCreator(configuration).videoControllerCreateVideo(body, options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        videoControllerGetAllVideos(options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<GetAllVideosDto> {
+            const localVarFetchArgs = VideoApiFetchParamCreator(configuration).videoControllerGetAllVideos(options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+    }
+};
+
+/**
+ * VideoApi - factory interface
+ * @export
+ */
+export const VideoApiFactory = function (configuration?: Configuration, fetch?: FetchAPI, basePath?: string) {
+    return {
+        /**
+         * 
+         * @param {CreateVideoDto} body 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        videoControllerCreateVideo(body: CreateVideoDto, options?: any) {
+            return VideoApiFp(configuration).videoControllerCreateVideo(body, options)(fetch, basePath);
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        videoControllerGetAllVideos(options?: any) {
+            return VideoApiFp(configuration).videoControllerGetAllVideos(options)(fetch, basePath);
+        },
+    };
+};
+
+/**
+ * VideoApi - object-oriented interface
+ * @export
+ * @class VideoApi
+ * @extends {BaseAPI}
+ */
+export class VideoApi extends BaseAPI {
+    /**
+     * 
+     * @param {CreateVideoDto} body 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof VideoApi
+     */
+    public videoControllerCreateVideo(body: CreateVideoDto, options?: any) {
+        return VideoApiFp(this.configuration).videoControllerCreateVideo(body, options)(this.fetch, this.basePath);
+    }
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof VideoApi
+     */
+    public videoControllerGetAllVideos(options?: any) {
+        return VideoApiFp(this.configuration).videoControllerGetAllVideos(options)(this.fetch, this.basePath);
     }
 
 }

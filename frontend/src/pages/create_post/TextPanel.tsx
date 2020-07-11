@@ -1,8 +1,8 @@
 import React from "react";
-import { connect } from "react-redux";
-import { fade, makeStyles } from "@material-ui/core/styles";
-// import { setTitle, setText } from '../../actions';
-// import { useSelector } from 'react-redux';
+import { makeStyles } from "@material-ui/core/styles";
+import { useDispatch } from 'react-redux';
+// import { createTitle, createContent } from '../../actions/postsCreation';
+// import { createTitle, createContent } from '../../reducers/postsCreationSlice';
 // import { RootState, Post } from '../../initialData';
 
 const useStyles = makeStyles({
@@ -48,33 +48,33 @@ const useStyles = makeStyles({
   },
 });
 
-const _onTitle = (event) => {
-  this.props.setTitle(event.target.value);
+/*
+const updateContent = (event, dispatch) => {
+  dispatch(createContent(event.target.value));
 }
 
-const _onText = (event) => {
-  this.props.setText(event.target.value);
+const updateTitle = (event, dispatch) => {
+  // alert(event.target.value);
+  dispatch(createTitle(event.target.value));
 }
+ */
 
-function TextPanel() {
+export default function TextPanel(param) {
+  const { title, content } = param;
   const classes = useStyles();
-  // const posts = useSelector<RootState, Post[]>(
-  //	(state) => state.posts);
   return (
     <div className={classes.cptext}>
       <form>
-        <input className={classes.cptitle} type="text" placeholder="Title" onChange={_onTitle}></input>
+        <input className={classes.cptitle} type="text" placeholder={title || "Title"} onChange={(event) => {
+          // updateTitle(event, dispatch);
+          param.setTitle(event.target.value);
+        }}>
+        </input>
         <br></br>
-        <textarea className={classes.cpcontent} id="text" onChange={_onText} placeholder="Type content"></textarea>
+        <textarea className={classes.cpcontent} id="text" onChange={(event) => {
+          param.setContent(event.target.value);
+        }} placeholder={content || "Type content"}></textarea>
       </form>
     </div>
   );
 }
-
-const mapStateToProps = (state) => {
-  return {};
-}
-
-export default connect(mapStateToProps, 
-  // { setTitle, setText }
-  )(TextPanel);

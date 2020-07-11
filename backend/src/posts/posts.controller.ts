@@ -2,29 +2,36 @@ import { UserService } from '../user/user.service';
 import {
   Body,
   Controller,
-  Post,
   Get,
+  HttpException,
+  NotFoundException,
   Param,
+  Post,
+  Put,
   Query,
   UsePipes,
   ValidationPipe,
-  Put,
-  NotFoundException, HttpException,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
 
 import { Personal } from '../auth/guards/personal.decorator';
 import { UserObjectID } from '../user/user-object-id.decorator';
-import { CreatePostBodyDto, CreatePostSuccessDto, GetPostDetailsSuccessDto } from './dto/posts.dto';
+import {
+  CreatePostBodyDto,
+  CreatePostSuccessDto,
+  GetPostDetailsSuccessDto,
+  UpdatePostBodyDto,
+  UpdatePostSuccessDto,
+} from './dto/posts.dto';
 import { PostsService } from './posts.service';
 import { PostModel, UserModel } from '../mongoModels';
-import * as _ from "lodash";
+import * as _ from 'lodash';
 
 @ApiTags('Posts')
 @Controller('posts')
 export class PostsController {
-  constructor(private readonly postsService: PostsService,
-    private readonly userService: UserService) { }
+    constructor(private readonly postsService: PostsService,
+                private readonly userService: UserService) { }
 
   @ApiBearerAuth()
   @Personal()
@@ -77,12 +84,19 @@ export class PostsController {
     await post.save();
   }
 
-  @ApiBearerAuth()
-  @Personal() //provides @UserObjectID to get userid
-  @Post()
-  createPost(@Body() createPostDto: CreatePostBodyDto, @UserObjectID() author: string): Promise<CreatePostSuccessDto> {
-    return this.postsService.createPost(author, createPostDto);
-  }
+    @ApiBearerAuth()
+    @ApiBody({
+        type: CreatePostBodyDto
+    })
+    @Personal() //provides @UserObjectID to get userid
+    @Post()
+    createPost(@Body() createPostDto: CreatePostBodyDto, @UserObjectID() author: string): Promise<CreatePostSuccessDto> {
+        console.log("POSTS::CONTROLLER");
+        console.log(author);
+        console.log(createPostDto);
+        // let author = "5f07dd25be9a5c6510208dce";
+        return this.postsService.createPost(author, createPostDto);
+    }
 
   @Get(':slug')
   @UsePipes(new ValidationPipe({ transform: true }))
@@ -95,4 +109,12 @@ export class PostsController {
       return { post }
     }
   }
+
+  @ApiBody({
+    type: UpdatePostBodyDto
+  })
+  @Put(':slug')
+  updatePostBySlug(@Body() update: UpdatePostBodyDto, @Param('slug') slug: string):Promise<UpdatePostSuccessDto> {
+      return this.postsService.updatePostBySlug(update, slug);
+    }
 }
