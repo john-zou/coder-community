@@ -6,10 +6,18 @@ import Tab from "@material-ui/core/Tab";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import "./TagsCarousel.css";
+<<<<<<< HEAD
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../reducers/rootReducer";
+import { Tag } from "../../store/types";
+import { Dictionary } from "@reduxjs/toolkit";
+import { fetchPostsByTag } from "../../reducers/postsSlice";
+=======
 import { useSelector } from "react-redux";
 import { RootState } from "../../reducers/rootReducer";
 import { Tag } from "../../store/types";
 import { Dictionary } from "@reduxjs/toolkit";
+>>>>>>> master
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -52,6 +60,18 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
+<<<<<<< HEAD
+export const TagsCarousel = ({ value, setValue }) => {
+  const classes = useStyles();
+  const tags = useSelector<RootState, Dictionary<Tag>>(state => state.tags.entities);
+  const tagsArr = [null].concat(Object.values(tags));
+
+  const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
+    if (newValue === value) {
+      return;
+    }
+    setValue(newValue);//triggers handleTabChange in Main
+=======
 export const TagsCarousel = () => {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
@@ -91,6 +111,7 @@ export const TagsCarousel = () => {
 
   const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
     setValue(newValue);
+>>>>>>> master
   };
 
   return (
@@ -105,7 +126,14 @@ export const TagsCarousel = () => {
           scrollButtons="auto"
           aria-label="scrollable auto tabs example"
         >
+<<<<<<< HEAD
+          {tagsArr.map((tag, idx) => {
+            if (idx === 0) {
+              return <Tab label="all" {...a11yProps({ idx })} />;
+            }
+=======
           {Object.values(tags).map((tag, idx) => {
+>>>>>>> master
             return <Tab label={tag.name} {...a11yProps({ idx })} />;
           })}
         </Tabs>

@@ -5,6 +5,7 @@ import { Link, useHistory } from 'react-router-dom';
 import { RootState } from '../../reducers/rootReducer';
 import {CurrentLoggedInUser, User} from '../../store/types';
 import { Loading } from '../common/Loading';
+import "../../App.css";
 
 const useStyles = makeStyles({
   root: {
