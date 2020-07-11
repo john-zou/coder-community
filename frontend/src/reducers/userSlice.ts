@@ -4,14 +4,13 @@ import { fetchTrendingPosts } from "./postsSlice";
 import { CurrentLoggedInUser } from "../store/types";
 import _ from "lodash";
 import { isGetInitialDataLoggedInDto } from "../util/helperFunctions";
-import { postsSlice } from "./postsSlice";
 import { JwtLocalStorageKey } from "../constants";
 import { isLoggedInSlice } from "./isLoggedInSlice";
 import { createGroup, leaveGroup, joinGroup } from "./groupsSlice";
 
 const api = new UserApi();
 export const getLoggedInUser = createAsyncThunk(
-  '/user/getLoggedInUserStatus',
+  'getLoggedInUser',
   async () => {
     return await api.userControllerGetUser();
   }
@@ -33,7 +32,7 @@ export const updateProfile = createAsyncThunk(
 )
 
 export const getUserForViewProfile = (userName) => createAsyncThunk(
-  '/user/getUserForViewProfileStatus',
+  'getUserForViewProfile',
   async () => {
     //TODO
   }
