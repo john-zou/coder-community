@@ -44,8 +44,15 @@ export const fetchTrendingPosts = createAsyncThunk(
 // The backend endpoint can also take optional parameters for excluded post IDs and startIdx
 export const fetchPostsByTag = createAsyncThunk(
   'fetchPostsByTag',
-  ({ tagID /* May add optional parameters here */ }: { tagID: string }) => {
-    return new PostsApi().tagsControllerGetPostsByTag(tagID /* May add optional parameters here */);
+  async ({ tagID, startIdx }: { tagID: string, startIdx: number }, { rejectWithValue }) => {
+    let payload: GetPostsByTagDto;
+    try {
+      payload = await new PostsApi().tagsControllerGetPostsByTag(tagID, undefined, startIdx);
+    } catch (err) {
+      return rejectWithValue(tagID);
+    }
+
+    return payload;
   }
 )
 
@@ -62,7 +69,7 @@ export const postsSlice = createSlice({
     trendingPostsSet: {},
     slugToID: {},
     trendingPostFetchCount: 0,
-    hasMorePosts: true,
+    hasMorePosts: true,//only for trending posts (of all tags)
   }),//also has ids[] and entities{}
   reducers: {
     incrementPostLikes: (state, action: PayloadAction<PostIDPayload>) => {

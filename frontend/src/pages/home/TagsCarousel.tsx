@@ -6,10 +6,11 @@ import Tab from "@material-ui/core/Tab";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import "./TagsCarousel.css";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../reducers/rootReducer";
 import { Tag } from "../../store/types";
 import { Dictionary } from "@reduxjs/toolkit";
+import { fetchPostsByTag } from "../../reducers/postsSlice";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -52,45 +53,16 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-export const TagsCarousel = () => {
+export const TagsCarousel = ({ value, setValue }) => {
   const classes = useStyles();
-  const [value, setValue] = React.useState(0);
-  // const tags = [
-  //   "c",
-  //   "c++",
-  //   "css",
-  //   "backend",
-  //   "frontend",
-  //   "java",
-  //   "javascript",
-  //   "mongodb",
-  //   "nodejs",
-  //   "react",
-  //   "redux",
-  //   "mongodb",
-  //   "nodejs",
-  //   "react",
-  //   "redux",
-  //   "c",
-  //   "c++",
-  //   "css",
-  //   "backend",
-  //   "frontend",
-  //   "java",
-  //   "javascript",
-  //   "mongodb",
-  //   "nodejs",
-  //   "react",
-  //   "redux",
-  //   "mongodb",
-  //   "nodejs",
-  //   "react",
-  //   "redux"
-  // ];
   const tags = useSelector<RootState, Dictionary<Tag>>(state => state.tags.entities);
+  const tagsArr = [null].concat(Object.values(tags));
 
   const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
-    setValue(newValue);
+    if (newValue === value) {
+      return;
+    }
+    setValue(newValue);//triggers handleTabChange in Main
   };
 
   return (
@@ -105,7 +77,10 @@ export const TagsCarousel = () => {
           scrollButtons="auto"
           aria-label="scrollable auto tabs example"
         >
-          {Object.values(tags).map((tag, idx) => {
+          {tagsArr.map((tag, idx) => {
+            if (idx === 0) {
+              return <Tab label="all" {...a11yProps({ idx })} />;
+            }
             return <Tab label={tag.name} {...a11yProps({ idx })} />;
           })}
         </Tabs>

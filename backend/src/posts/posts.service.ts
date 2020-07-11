@@ -185,8 +185,12 @@ export class PostsService {
     if (foundPosts.length === 0) {
       throw new NotFoundException();
     }
-
-    return foundPosts.map((post) => convertPostDocumentToPostDto(post));
+    // if (userObjectID) {
+    //   const followingIDs = (await UserModel.findById(userObjectID)).following;
+    //   const postsByFollowing = foundPosts.filter((post) => followingIDs.includes(post.author));
+    //   return postsByFollowing.map(post => convertPostDocumentToPostDto(post));
+    // }
+    return foundPosts.map(post => convertPostDocumentToPostDto(post));
   }
 
   // Unused -- can use later for different feature
