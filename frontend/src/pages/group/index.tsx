@@ -49,6 +49,10 @@ const GroupCard = ({ currentGroup, isUserAMember }: { currentGroup: Group, isUse
   const handleLeaveGroup = () => {
     dispatch(leaveGroup(currentGroup._id));
   }
+
+  if (!currentGroup)
+    return <div><h1>NULL GROUP</h1></div>
+
   return <div>
     <div style={{ display: "flex", flexDirection: "row" }}>
       <Avatar pic={currentGroup.profilePic} title={currentGroup.name} subtitle={currentGroup.description} extraText=""></Avatar>

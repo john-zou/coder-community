@@ -17,9 +17,10 @@ const Main = () => {
   );
   const dispatch: AppDispatch = useDispatch();
   const [items, setItems] = useState(trendingPosts);//has 5 things initially
-  // 
+
   const currFetchCount: number = useSelector<RootState, number>(state => state.posts.trendingPostFetchCount);
   const hasMoreTrendingPosts: boolean = useSelector<RootState, boolean>(state => state.posts.hasMorePosts);
+
   const [tabIndex, setTabIndex] = React.useState(0);
   const tags = useSelector<RootState, Dictionary<Tag>>(state => state.tags.entities);
   const hasMorePostsInTags = useSelector<RootState, Record<string, boolean>>(state => state.tags.hasMorePostsInTags);

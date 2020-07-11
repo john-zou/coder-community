@@ -15,6 +15,7 @@ import { Tag } from "../../store/types";
 import { Dictionary } from "@reduxjs/toolkit";
 import { savePost } from "../../reducers/userSlice";
 import { useLikePost } from "../../hooks/useLikePost";
+import styled from "@emotion/styled";
 
 const useStyles = makeStyles({
   root: {
@@ -84,6 +85,46 @@ export const handleViewPost = (post, dispatch) => {
   // dispatch(viewPost(post));
 };
 
+export const LargeAvatar = ({ author, post }) => {
+  const classes = useStyles();
+  const dispatch = useDispatch();
+
+  return (<div className={classes.account}>
+    <img
+      className={classes.accountImg}
+      src={author.profilePic || DefaultPic}
+      alt=""
+    />
+    <div className={classes.nameTime}>
+      <p>
+        <Link to={`/user/${author.userID}`} className={classes.link}>
+          <span
+            style={{
+              fontWeight: "bold",
+              color: "#5DCBAF",
+            }}
+          >
+            {author.name}&nbsp;
+              </span>
+        </Link>
+            posted&nbsp;
+            <span style={{ fontWeight: "bolder" }}>
+          <Link
+            to={`/post/${post.slug}`}
+            className={classes.link}
+            onClick={() => {
+              handleViewPost(post, dispatch);
+            }}
+          >
+            {post.title}
+          </Link>
+        </span>
+      </p>
+      <p style={{ marginTop: "-0.8em" }}>{post.createdAt}</p>
+    </div>
+  </div>)
+}
+
 type Props = {
   postID: string;
 };
@@ -109,40 +150,7 @@ const Card = ({ postID }: Props) => {
 
   return (
     <div className={classes.root}>
-      <div className={classes.account}>
-        <img
-          className={classes.accountImg}
-          src={author.profilePic || DefaultPic}
-          alt=""
-        />
-        <div className={classes.nameTime}>
-          <p>
-            <Link to={`/user/${author.userID}`} className={classes.link}>
-              <span
-                style={{
-                  fontWeight: "bold",
-                  color: "#5DCBAF",
-                }}
-              >
-                {author.name}&nbsp;
-              </span>
-            </Link>
-            posted&nbsp;
-            <span style={{ fontWeight: "bolder" }}>
-              <Link
-                to={`/post/${post.slug}`}
-                className={classes.link}
-                onClick={() => {
-                  handleViewPost(post, dispatch);
-                }}
-              >
-                {post.title}
-              </Link>
-            </span>
-          </p>
-          <p style={{ marginTop: "-0.8em" }}>{post.createdAt}</p>
-        </div>
-      </div>
+      <LargeAvatar author={author} post={post}></LargeAvatar>
 
       <div className={classes.imgTitle}>
         <img

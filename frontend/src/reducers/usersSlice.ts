@@ -54,7 +54,7 @@ export const usersSlice = createSlice({
       }
     },
     [joinGroup.fulfilled.type]: (state, action: PayloadAction<{ groupID: string, userID: string }>) => {
-      if (state.entities[action.payload.userID]) {
+      if (state.entities[action.payload.userID].groups) {
         state.entities[action.payload.userID].groups.push(action.payload.groupID)
       }
     }

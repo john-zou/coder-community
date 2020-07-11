@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import styled from "@emotion/styled";
 
@@ -35,13 +35,30 @@ const ExtraText = styled.p`
   font-size: small;
 `;
 
-const SideButton = styled.span`
-  color: #5D67E9;
+export const SideButton = styled.span <{ buttonIsClicked: boolean }>`
+  color: ${({ buttonIsClicked }) => buttonIsClicked ? "white" : "#5D67E9"};
   font-size: small;
+  background-color: ${({ buttonIsClicked }) => buttonIsClicked ? "#5D67E9" : "white"};
+  min-width: fit-content;
+  padding: 5px 10px 5px 10px;
+  border: 1px solid #5D67E9; 
+  border-radius: 5px;
+  cursor: pointer;
 `;
+
+// export const SideButtonClicked = styled.span`
+//   color: white;
+//   font-size: small;
+//   background-color: #5D67E9;
+//   min-width: fit-content;
+//   padding: 5px 10px 5px 10px;
+//   border-radius: 5px;
+//   cursor: pointer;
+// `;
 
 const Avatar = ({ pic, title, subtitle, extraText, isPost, isButton }: { pic: string, title: string, subtitle: string, extraText: string, isPost?: boolean, isButton?: boolean }) => {
   const classes = useStyles();
+  const [buttonIsClicked, setButtonIsClicked] = useState(false);
   return (
     <div className={classes.account}>
       <img className={classes.accountImg} src={pic} alt="" />
@@ -51,7 +68,8 @@ const Avatar = ({ pic, title, subtitle, extraText, isPost, isButton }: { pic: st
             {title}&nbsp;&nbsp;&nbsp;
           </TitleText>
           {!isButton && <ExtraText>{extraText}</ExtraText>}
-          {isButton && <SideButton>{extraText}</SideButton>}
+          {isButton && <SideButton buttonIsClicked={buttonIsClicked} onClick={() => setButtonIsClicked((prevState) => !prevState)}>{extraText}</SideButton>}
+          {/* {isButton && buttonIsClicked && <SideButtonClicked>{extraText}</SideButtonClicked>} */}
         </p>
         <p style={{ marginTop: "-0.8em", fontSize: "medium" }}>{subtitle}</p>
       </div>
