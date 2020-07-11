@@ -53,7 +53,7 @@ const Avatar = ({ pic, title, subtitle, extraText, isPost, isButton }: { pic: st
           {!isButton && <ExtraText>{extraText}</ExtraText>}
           {isButton && <SideButton>{extraText}</SideButton>}
         </p>
-        <p style={{ marginTop: "-0.8em", fontSize: "small" }}>{subtitle}</p>
+        <p style={{ marginTop: "-0.8em", fontSize: "14px" }}>{subtitle}</p>
       </div>
     </div>
   );
