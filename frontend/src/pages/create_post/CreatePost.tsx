@@ -26,7 +26,7 @@ const useStyles = makeStyles({
   }
 });
 
-const TagsContainer = styled.div`
+export const TagsContainer = styled.div`
   background-color: white;
   width: 49em;
   height: 20vh;

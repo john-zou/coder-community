@@ -90,6 +90,8 @@ export const submitPost = createAsyncThunk(
 export const updatePost = createAsyncThunk(
     'updatePost',
     async({update, slug}: {update: UpdatePostBodyDto, slug: string}) => {
+        console.log(update);
+        console.log(slug);
         const {_id, slug: newSlug} = await new PostsApi().postsControllerUpdatePostBySlug(update, slug);
         return { update, _id, slug: newSlug };
         }

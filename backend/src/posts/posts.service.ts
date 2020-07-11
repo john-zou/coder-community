@@ -160,6 +160,7 @@ export class PostsService {
         if (existingPostWithSlug) {
           newSlug = post._id;
         }
+        post.slug = newSlug;
       }
 
       if (update.content) {

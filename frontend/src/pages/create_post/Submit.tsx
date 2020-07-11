@@ -3,7 +3,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { useDispatch, useSelector } from 'react-redux';
 import { User } from "../../store/types";
 import { RootState } from "../../reducers/rootReducer";
-import { submitPost } from "../../reducers/postsCreationSlice";
+import {submitPost, updatePost} from "../../reducers/postsCreationSlice";
 import { AppDispatch } from "../../store";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { useHistory } from "react-router-dom";
@@ -51,11 +51,22 @@ export default function Submit(params) {
       featuredImg,
       author: author,
     }
-    dispatch(submitPost(newPost)).then(unwrapResult).then(
-      dto => {
-        history.push(`/post/${dto.slug}`)
-      }
-    );
+    // Handle update differently
+    if (params.isUpdate) {
+      dispatch(updatePost({update: newPost, slug: params.isUpdate})).then(unwrapResult).then(
+          dto => {
+            history.push(`/post/${dto.slug}`)
+          }
+      );
+    } else {
+      // Create new post
+      dispatch(submitPost(newPost)).then(unwrapResult).then(
+          dto => {
+            history.push(`/post/${dto.slug}`)
+          }
+      );
+    }
+
   }
 
   return (
