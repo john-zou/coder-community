@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import {makeStyles} from "@material-ui/core/styles";
 import ImgP from "./ImgPanel";
 import TextP from "./TextPanel";
@@ -6,7 +6,6 @@ import TagP from "./TagPanel";
 import Submit from "./Submit";
 import {useParams} from "react-router-dom";
 import {PostDetailParams} from "../../App";
-import {PostWithDetails} from "../../../../backend/src/posts/dto/posts.dto";
 import {useSelector} from "react-redux";
 import {RootState} from "../../reducers/rootReducer";
 import {Post} from "../../store/types";
@@ -26,14 +25,16 @@ const useStyles = makeStyles({
 });
 
 export default function UpdatePost() {
+    // TODO: Fetch the post from the server if it's not found
+    // TODO: Only allow the post to be edited if its author is the logged in user
+
     const classes = useStyles();
     const {slug} = useParams<PostDetailParams>(); //get the url param to render the appropriate post
-    console.log("UPDATEPOST::INDEX");
-    console.log(slug);
+
     const postID = useSelector<RootState, string>(
         (state) => state.posts.slugToID[slug]
     );
-    console.log(postID);
+
     const oldPost = useSelector<RootState, Post>(
         (state) => state.posts.entities[postID]
     );
@@ -43,17 +44,8 @@ export default function UpdatePost() {
     const [tags, setTags] = useState([]);
     const [featuredImg, setImg] = useState('');
 
-    // const old: Promise<PostWithDetails> =
-    /*
-    fetch(`http://localhost:3001/api/posts/${slug}`)
-        .then((response) => {
-            return response.json();
-        }).then((res) => {
-            console.log("FOUND");
-            console.log(res);
+    console.log(oldPost);
 
-        }).catch(e => console.log(e));
-    */
     return (
         <div className={classes.updatePost}>
             <ImgP setImg={setImg} img={oldPost.featuredImg} />

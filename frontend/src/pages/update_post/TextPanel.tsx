@@ -45,20 +45,24 @@ const useStyles = makeStyles({
   },
 });
 
-export default function TextPanel(props) {
+export default function TextPanel({setTitle, setContent, title, content}) {
   const classes = useStyles();
   const dispatch = useDispatch();
   return (
     <div className={classes.cptext}>
       <form>
-        <input className={classes.cptitle} type="text" placeholder="Title" onChange={(event) => {
-          // updateTitle(event, dispatch);
-        }}>
+        <input className={classes.cptitle}
+               type="text"
+               placeholder={title}
+               onChange={(event) => {
+                 setTitle(event, dispatch);
+               }}>
         </input>
-        <br></br>
-        <textarea className={classes.cpcontent} id="text" onChange={(event) => {
-          // updateContent(event, dispatch);
-        }} placeholder="Type content"></textarea>
+        <br/>
+        <textarea className={classes.cpcontent} id="text" placeholder={content}
+    onChange={(event) => {
+      setContent(event.target.value);
+    }}/>
       </form>
     </div>
   );

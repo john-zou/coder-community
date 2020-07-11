@@ -1,11 +1,9 @@
 import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import { useSelector, useDispatch } from 'react-redux';
-import {CurrentLoggedInUser, User} from "../../store/types";
-import { RootState } from "../../reducers/rootReducer";
-import { CreatePostBodyDto } from "../../../../backend/src/posts/dto/posts.dto";
-import { UserObjectID } from '../../../../backend/src/user/user-object-id.decorator';
-import { submitPost, updatePost } from "../../reducers/postsCreationSlice";
+import {makeStyles} from "@material-ui/core/styles";
+import {useDispatch} from 'react-redux';
+import {updatePost} from "../../reducers/postsCreationSlice";
+import {useHistory} from "react-router-dom";
+import {UpdatePostBodyDto} from "../../api";
 
 const useStyles = makeStyles({
     operation: {
@@ -14,16 +12,19 @@ const useStyles = makeStyles({
     }
 });
 
-const onSubmit = (params, slug, dispatch) => {
-    const newPost = {
-        title: params.title,
-        content: params.content,
-        tags: params.tags,
-        featuredImg: params.img,
-        slug: slug
+const onSubmit = (params, slug: string, dispatch, history) => {
+    const update: UpdatePostBodyDto = {};
+    if (params.title?.length > 0) {
+        update.title = params.title;
     }
-    // console.log(newPost);
-    dispatch(updatePost(newPost));
+    if (params.content?.length > 0) {
+        update.content = params.content;
+    }
+    update.tags = params.tags;
+
+    // TODO: handle newly uploaded image
+
+    dispatch(updatePost({update, slug}));
 }
 
 const onCancel = (params, dispatch) => {
@@ -33,19 +34,15 @@ const onCancel = (params, dispatch) => {
 export default function Submit(params) {
     const classes = useStyles();
     const dispatch = useDispatch();
-    // const createdPost = useSelector<RootState, PostsCreation>(state => state.postsCreation);
-    // const curUser = useSelector<RootState, User>(state => state.user);
-    // console.log(curUser);
+    const history = useHistory();
 
-    console.log("UPDATEPOST::SUMIT");
-    console.log(params.slug);
     return (
         <div className={classes.operation}>
             <button color="primary" onClick={(event) => {
                 onCancel(params, dispatch);
             }}>Cancel</button>
             <button color="primary" onClick={(event) =>{
-                onSubmit(params, params.slug, dispatch);
+                onSubmit(params, params.slug, dispatch, history);
             }}>Submit</button>
         </div>
     );

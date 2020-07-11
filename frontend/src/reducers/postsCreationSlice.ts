@@ -1,6 +1,6 @@
-import {PostsApi} from '../api/api';
+import {CreatePostBodyDto, PostsApi, UpdatePostBodyDto} from '../api/api';
 import {Post, Tag} from "../store/types";
-import {UpdatePostSuccessDto, CreatePostBodyDto, CreatePostSuccessDto} from "../../../backend/src/posts/dto/posts.dto";
+
 import {createEntityAdapter, createSlice, createAsyncThunk, PayloadAction} from "@reduxjs/toolkit";
 
 /*
@@ -38,29 +38,29 @@ export const submitPost = createdPost => {
 }
 */
 
-export const updatePost = createdPost => {
-    let newPost: CreatePostBodyDto = {
-        title: createdPost.title,
-        content: createdPost.content,
-        tags: createdPost.tags,
-        featuredImg: ''
-    }
-    // const slug = urlSlug(createdPost.title);
-    console.log(createdPost.slug);
-    return dispatch => {
-        return fetch(`http://localhost:3001/api/posts/${createdPost.slug}`, {
-            method: 'PUT',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                newPost,
-                // user: { _id: "5eeebd4d1333dd0f79ca9be3" } //curUser._id }
-            }),
-        }).catch(e => console.log(e))
-    }
-}
+// export const updatePost = createdPost => {
+//     let newPost: CreatePostBodyDto = {
+//         title: createdPost.title,
+//         content: createdPost.content,
+//         tags: createdPost.tags,
+//         featuredImg: ''
+//     }
+//     // const slug = urlSlug(createdPost.title);
+//     console.log(createdPost.slug);
+//     return dispatch => {
+//         return fetch(`http://localhost:3001/api/posts/${createdPost.slug}`, {
+//             method: 'PUT',
+//             headers: {
+//                 'Accept': 'application/json',
+//                 'Content-Type': 'application/json',
+//             },
+//             body: JSON.stringify({
+//                 newPost,
+//                 // user: { _id: "5eeebd4d1333dd0f79ca9be3" } //curUser._id }
+//             }),
+//         }).catch(e => console.log(e))
+//     }
+// }
 
 export const submitPost = createAsyncThunk(
     'submitPost',
@@ -92,27 +92,16 @@ export const submitPost = createAsyncThunk(
     }
 )
 
-/*
+
 export const updatePost = createAsyncThunk(
     'updatePost',
-    async(createdPost: any & {slug: string}) => {
-        let newPost: CreatePostBodyDto = {
-            title: createdPost.title,
-            content: createdPost.content,
-            tags: createdPost.tags,
-            featuredImg: ''
+    async({update, slug}: {update: UpdatePostBodyDto, slug: string}) => {
+        const {_id, slug: newSlug} = await new PostsApi().postsControllerUpdatePostBySlug(update, slug);
+        return { update, _id, slug: newSlug };
         }
-        let body = {
-            newPost: newPost,
-            // user: {_id: "5eeebd4d1333dd0f79ca9be3"}
-        }
-        // const slug = urlSlug(createdPost.title);
-        console.log("POST CREATION SLICE " + createdPost.slug);
-        // return await new PostsApi().postsControllerUpdatePostBySlug(slug, newPost);
-        return await new PostsApi().postsControllerUpdatePostBySlug(createdPost.slug, body);
-    }
-}
-*/
+    );
+
+
 
 /*
 export const postsCreationSlice = createSlice({
