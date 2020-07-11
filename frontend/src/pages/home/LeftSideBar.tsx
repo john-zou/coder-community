@@ -85,13 +85,8 @@ const LeftSideBar = () => {
             history.push("/home/groups");
           }}>Groups</h3>
 
-<<<<<<< HEAD
-          <p className={classes.showPostsText}># BROWSE BY TAGS</p>
-          <FilterPost />
+          {/* <FilterPost /> */}
         </div>
-=======
-        {/* <FilterPost /> */}
->>>>>>> refs/remotes/origin/master
       </div>
   );
 };
