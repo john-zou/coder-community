@@ -4,8 +4,7 @@ import LeftSideBar from './LeftSideBar';
 import Main from './Main';
 import RightSideBar from './RightSideBar';
 import GroupTab from '../group';
-import { Route, Switch } from 'react-router-dom';
-import { BrowserRouter as Router } from 'react-router-dom';
+import { Route, Switch, useRouteMatch } from 'react-router-dom';
 
 const useStyles = makeStyles({
   home: {
@@ -13,35 +12,38 @@ const useStyles = makeStyles({
     display: "flex",
   },
   main: {
-    marginTop: "3vh",
+    marginTop: "5vh",
     display: "flex",
     flex: 1,
-    marginBottom: "0",
-    height: "120vh",
+    marginBottom: "1vh",
+    height: "86vh",
     flexDirection: "column",
     alignItems: "center",
-    overflowY: "scroll",
+    width: "100%",
   },
 });
 
 export default function Home() {
   const classes = useStyles();
-  return (
-      <div className={classes.home}>
-        <Router>
-          <LeftSideBar />
-          <div className={classes.main}>
-            <Switch>
-              <Route path="/home/groups" component={GroupTab}>
-              </Route>
-              <Route exact path="/home" component={Main}>
-                <Main />
-              </Route>
-            </Switch>
-          </div>
-          <RightSideBar />
+  // https://reactrouter.com/web/example/nesting
+  // path and url are both for building relative destinations
+  // path is for route, url is for link
+  const { path } = useRouteMatch();
 
-        </Router>
+  return (
+    <div className={classes.home}>
+      <LeftSideBar />
+      <div className={classes.main}>
+        <Switch>
+          <Route path={`${path}/groups`}>
+            <GroupTab />
+          </Route>
+          <Route exact path={path}>
+            <Main />
+          </Route>
+        </Switch>
       </div>
+      <RightSideBar />
+    </div>
   );
 }

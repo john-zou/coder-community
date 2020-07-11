@@ -2,7 +2,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams, Redirect } from 'react-router-dom';
-
+import { Link } from 'react-router-dom';
 import { PostDetailParams } from '../../App';
 import Avatar from '../common/Avatar';
 import { Loading } from '../common/Loading';
@@ -11,10 +11,10 @@ import NewComment from './NewComment';
 import { RootState } from '../../reducers/rootReducer';
 import { fetchPostBySlug } from '../../reducers/postsSlice';
 import { Post, User, CurrentLoggedInUser } from '../../store/types';
-import { unwrapResult } from '@reduxjs/toolkit';
 import { AppDispatch } from '../../store';
+import defaultPostFeaturedImage from "../../assets/defaultPostFeaturedImage.jpg";
 
-// import { useParams } from "react-router-dom";
+
 const useStyles = makeStyles({
   root: {
     display: "flex",
@@ -46,11 +46,11 @@ const useStyles = makeStyles({
 });
 
 const Interactions = () => {
-  return <h1>TODO</h1>
+  return <> </>
 }
 
 const Comments = () => {
-  return <h1>TODO</h1>
+  return <> </>
 }
 
 const PostDetail = () => {
@@ -70,6 +70,14 @@ const PostDetail = () => {
   });
 
   const [error, setError] = useState(null);
+
+  let featuredImg: string;
+  if (!post?.featuredImg) {
+    featuredImg = defaultPostFeaturedImage;
+  } else {
+    featuredImg = post.featuredImg;
+  }
+
 
   useEffect(() => {
     if (slug == null || slug === "") {
@@ -99,12 +107,12 @@ const PostDetail = () => {
     <div className={classes.root}>
       <div className={classes.postDetail}>
         <img
-          src={post.featuredImg}
+          src={featuredImg}
           style={{ height: "20em", objectFit: "cover", width: "100%" }} alt="featured"
         />
         <h1>{post.title}</h1>
 
-        <Avatar pic={author.profilePic} title={post.title} subtitle={post.createdAt} extraText="follow"></Avatar>
+        <Avatar pic={author.profilePic} title={author.userID} subtitle={post.createdAt} extraText="follow"></Avatar>
 
         <p>{post.content}</p>
 
@@ -128,6 +136,7 @@ const PostDetail = () => {
 
         <NewComment></NewComment>
         <Comments></Comments>
+        <Link to={`/update-post/${slug}`}>Update</Link>
         {/* {post.comments.map((comment) => (
         <>
           <Avatar post={comment} extraText="reply"></Avatar>

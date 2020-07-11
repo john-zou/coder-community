@@ -25,8 +25,8 @@ export class TrendingService {
    * TODO: make this scalable (optimize)
    */
 
-  async getInitialData(): Promise<GetInitialDataDto> {
-    const posts = await this.postsService.getInitialPosts();
+  async getInitialData(fetchCount: number): Promise<GetInitialDataDto> {
+    const posts = await this.postsService.getInitialPosts(fetchCount);
     const users = await this.userService.getAuthors(posts);
     const tags = await this.tagsService.getTags();
     return {
@@ -36,11 +36,8 @@ export class TrendingService {
     }
   }
 
-  async getInitialLoggedInData(userObjectID: string): Promise<GetInitialDataLoggedInDto> {
-    console.log("TRENDINGSERVICE::INITIAL LOGGED DATA");
-    console.log(userObjectID);
-    const posts = await this.postsService.getInitialPosts(userObjectID);
-    console.log(posts);
+  async getInitialLoggedInData(fetchCount: number, userObjectID: string): Promise<GetInitialDataLoggedInDto> {
+    const posts = await this.postsService.getInitialPosts(fetchCount, userObjectID);
     const users = await this.userService.getAuthors(posts);
     console.log(users);
     const user = await this.userService.findUserById(userObjectID);

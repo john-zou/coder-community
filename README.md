@@ -1,3 +1,79 @@
+# Project Progress 4
+
+### _Use collections to store your data in MongoDB._
+
+We are storing many collections in MongoDB:
+![image](https://user-images.githubusercontent.com/61474884/87220200-c2049b00-c316-11ea-87b4-4054b5cdb04b.png)
+
+### _Set up Node and Express to connect your React+Redux frontend with your Mongo DB_
+
+![image](https://user-images.githubusercontent.com/61474884/87220257-24f63200-c317-11ea-9bd6-66527cc785eb.png)
+
+### _Ensure that you are now retrieving your data from the database to display in your React components (at least one API)_
+
+We retrieve the following information from various API endpoints:
+
+- User
+- Tags
+- Posts
+- Groups
+
+### _Ensure that you have a type of input or form element that sends data to the database (at least one API)_
+
+- Login (sends GitHub user info to database)
+  ![image](https://user-images.githubusercontent.com/61474884/87220310-8a4a2300-c317-11ea-88e7-bf1fbab39638.png)
+  ![image](https://user-images.githubusercontent.com/61474884/87220322-a4840100-c317-11ea-9f15-9d7f2080f913.png)
+
+- Create Post
+  ![image](https://user-images.githubusercontent.com/61474884/87220302-76062600-c317-11ea-849a-e8dda5c415ea.png)
+
+- Create Group
+  ![image](https://user-images.githubusercontent.com/61474884/87220425-65a27b00-c318-11ea-8880-65803f7f9e1b.png)
+
+### _Implement EITHER update or delete (or both!) for your data in the database._
+
+- Update Post (looks similar to create post)
+
+## Other Accomplishments
+
+- Trending posts infinite scroll. Fetches posts in order of decreasing popularity and freshness, while the user scrolls through the page.
+
+- File upload and static image hosting of user content
+
+- GitHub OAuth login and custom token-based authentication
+
+- Users can create / join / leave groups
+
+- Users can like / unlike posts
+
+## Goals, Regrouped:
+
+### **3-5 minimal requirements**
+
+- Login and authentication system (Done)
+- Allow users to upload videos, pics, create, delete, update posts (Mostly Done)
+- Create, join and leave groups (Mostly Done)
+- Like and unlike posts (Done)
+
+### **3-7 standard requirements**
+
+- View posts by popularity (trending) and by tag (Done)
+- Search system (Not done)
+- Following/followers system (Some done)
+- Comment system (Not done)
+- Let user have a "saved posts" reading list (Mostly done)
+
+### **2-3 stretch requirements**
+
+- Real time messaging (Not done)
+- Interactive coding tutorial (Not done)
+
+---
+
+---
+
+---
+
 # Project Progress 3
 
 ## Completed Tasks:

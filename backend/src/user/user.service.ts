@@ -3,11 +3,12 @@ import { HttpException, Injectable, NotFoundException } from '@nestjs/common';
 import { PostModel, UserModel } from '../mongoModels';
 import { PostDto } from '../posts/dto/posts.dto';
 import { convertToStrArr, convertUserToUserDto } from '../util/helperFunctions';
-import { UserDto, GetUsersSuccessDto } from './dto/user.dto';
+import { UserDto, GetUsersSuccessDto, UpdateProfileReqDto } from './dto/user.dto';
 import { User } from './user.schema';
 import { ObjectId } from 'mongodb';
 import { userInfo } from 'os';
 import { Model } from 'mongoose';
+import { DocumentType } from '@typegoose/typegoose';
 
 /**
  * typed like in UserSchema
@@ -42,12 +43,19 @@ export class UserService {
     return true;
   }
 
-  async findUsersByIds(ids: string[]): Promise<GetUsersSuccessDto> {
-    const users = await UserModel.find({
+  async convertUserIDsToUsersDoc(ids: string[]): Promise<DocumentType<User>[]> {
+    // console.log("ids: " + ids);
+    const foundUsers = await UserModel.find({
       _id: {
-        $in: ids
+        $in: ids //mongoose automatically turn a string[] of ids into a list of ObjectId
       }
     })
+    // console.log("list of user docs: " + foundUsers);
+    return foundUsers;
+  }
+
+  async findUsersByIds(ids: string[]): Promise<GetUsersSuccessDto> {
+    const users = await this.convertUserIDsToUsersDoc(ids);
     return {
       users: users.map((user) => convertUserToUserDto(user))
     }
@@ -55,6 +63,14 @@ export class UserService {
 
   async findUserById(userObjectID: string): Promise<UserDto> {
     const foundUser = await UserModel.findById(userObjectID);
+    if (!foundUser) {
+      throw new NotFoundException();
+    }
+    return convertUserToUserDto(foundUser);
+  }
+
+  async findUserByUsername(username: string): Promise<UserDto> {
+    const foundUser = await UserModel.findOne({userID: username});
     if (!foundUser) {
       throw new NotFoundException();
     }
@@ -145,5 +161,22 @@ export class UserService {
 
       return { _id: newUser._id.toString(), isNewUser: true };
     }
+  }
+
+  /**
+   * Used for editing profile
+   */
+  async updateProfile(userID: string, update: UpdateProfileReqDto): Promise<void> {
+    const cleanUpdate: UpdateProfileReqDto = {};
+    if (update.name) {
+      cleanUpdate.name = update.name;
+    }
+    if (update.status) {
+      cleanUpdate.status = update.status;
+    }
+    if (Array.isArray(update.tags)) {
+      cleanUpdate.tags = update.tags;
+    }
+    await UserModel.updateOne({_id: userID}, <any>cleanUpdate);
   }
 }

@@ -1,56 +1,87 @@
-import React from "react";
+import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { useSelector, useDispatch } from 'react-redux';
-import {CurrentLoggedInUser, PostsCreation, User} from "../../store/types";
+import { useDispatch, useSelector } from 'react-redux';
+import { User } from "../../store/types";
 import { RootState } from "../../reducers/rootReducer";
-import { CreatePostBodyDto } from "../../../../backend/src/posts/dto/posts.dto";
-import { UserObjectID } from '../../../../backend/src/user/user-object-id.decorator';
-import { submitPost, updatePost } from "../../reducers/postsCreationSlice";
+import {submitPost, updatePost} from "../../reducers/postsCreationSlice";
+import { AppDispatch } from "../../store";
+import { unwrapResult } from "@reduxjs/toolkit";
+import { useHistory } from "react-router-dom";
+import PurpleButton from "../common/PurpleButton";
+import { uploadPublicAsset } from "../../api-upload";
 
 const useStyles = makeStyles({
   operation: {
     display: "flex",
-    flex: 0
+    flexDirection: "row",
+    flex: 0,
+    marginTop: "20px",
   }
 });
 
-const onSubmit = (params, dispatch) => {
-    const newPost = {
-        title: params.title,
-        content: params.content,
-        tags: params.tags,
-        featuredImg: params.img,
-    }
-    console.log(newPost);
-    dispatch(submitPost(newPost));
+const onCancel = (params, dispatch) => {
+  const newPost = {
+    title: params.title,
+    content: params.content,
+    tags: params.tags,
+    featuredImg: params.img,
+  }
+  console.log("SUBMIT" + newPost);
 }
 
-const onCancel = (params, dispatch) => {
-    const newPost = {
-        title: params.title,
-        content: params.content,
-        tags: params.tags,
-        featuredImg: params.img,
-    }
-    console.log("SUBMIT" + newPost);
-    dispatch(updatePost(newPost));
-}
 
 export default function Submit(params) {
   const classes = useStyles();
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
+  const history = useHistory();
   // const createdPost = useSelector<RootState, PostsCreation>(state => state.postsCreation);
   const curUser = useSelector<RootState, User>(state => state.user);
-  console.log(curUser);
+
+  const onSubmit = async (params, author, dispatch, history) => {
+    // console.log(newPost);
+    let featuredImg: string;
+    if (params.img) {
+      featuredImg = await uploadPublicAsset(params.img);
+    }
+
+    const newPost = {
+      title: params.title,
+      content: params.content,
+      tags: params.tags,
+      featuredImg,
+      author: author,
+    }
+    // Handle update differently
+    if (params.isUpdate) {
+      dispatch(updatePost({update: newPost, slug: params.isUpdate})).then(unwrapResult).then(
+          dto => {
+            history.push(`/post/${dto.slug}`)
+          }
+      );
+    } else {
+      // Create new post
+      dispatch(submitPost(newPost)).then(unwrapResult).then(
+          dto => {
+            history.push(`/post/${dto.slug}`)
+          }
+      );
+    }
+
+  }
 
   return (
-     <div className={classes.operation}>
-        <button color="primary" onClick={(event) => {
-            onCancel(params, dispatch);
-        }}>Cancel</button>
-        <button color="primary" onClick={(event) =>{
-            onSubmit(params, dispatch);
-        }}>Submit</button>
-     </div>
+    <div className={classes.operation}>
+      <div onClick={(event) => {
+        onCancel(params, dispatch);
+      }}>
+        <PurpleButton content="Cancel" />
+      </div>
+      <div style={{ width: "15px" }}></div>
+      <div onClick={(event) => {
+        onSubmit(params, curUser, dispatch, history);
+      }}>
+        <PurpleButton content="Submit" />
+      </div>
+    </div>
   );
 }

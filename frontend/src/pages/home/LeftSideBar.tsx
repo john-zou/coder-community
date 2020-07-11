@@ -2,20 +2,22 @@ import { makeStyles } from '@material-ui/core/styles';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
-
-import FilterPost from './FilterPost';
 import { RootState } from '../../reducers/rootReducer';
-import { User } from '../../store/types';
+import {CurrentLoggedInUser, User} from '../../store/types';
 import { Loading } from '../common/Loading';
+import "../../App.css";
 
 const useStyles = makeStyles({
   root: {
     width: "14vw",
     display: "flex",
     flexDirection: "column",
-    height: "94vh",
+    height: "93vh",
     cursor: "pointer",
     paddingLeft: "7em",
+    position: "fixed",
+    marginLeft: "8vw",
+    marginTop: "4vh",
   },
   diplayAccount: {
     display: "flex",
@@ -29,7 +31,7 @@ const useStyles = makeStyles({
     marginRight: "1em",
   },
   displayName: {
-    marginTop: "3em",
+    marginTop: "4em",
     color: "#5DCBAF",
   },
   groupLinks: {
@@ -49,9 +51,8 @@ const useStyles = makeStyles({
 
 const LeftSideBar = () => {
   const classes = useStyles();
-  const user = useSelector<RootState, User>(state => state.user);
+  const user = useSelector<RootState, CurrentLoggedInUser>(state => state.user);
   const isLoggedIn = useSelector<RootState, boolean>(state => state.isLoggedIn);
-
 
   const history = useHistory(); //to redirect to different route (from current route)
 
@@ -84,9 +85,13 @@ const LeftSideBar = () => {
             history.push("/home/groups");
           }}>Groups</h3>
 
+<<<<<<< HEAD
           <p className={classes.showPostsText}># BROWSE BY TAGS</p>
           <FilterPost />
         </div>
+=======
+        {/* <FilterPost /> */}
+>>>>>>> refs/remotes/origin/master
       </div>
   );
 };

@@ -1,5 +1,6 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
+import styled from "@emotion/styled";
 
 const useStyles = makeStyles({
   account: {
@@ -24,24 +25,35 @@ const useStyles = makeStyles({
   },
 });
 
-const Avatar = ({ pic, title, subtitle, extraText }) => {
+const TitleText = styled.span<{ isPost: boolean }>`
+  font-weight: bold;
+  color: ${({ isPost }) => isPost ? "#5D67E9" : "#5DCBAF"}
+`;
+
+const ExtraText = styled.p`
+  color: black;
+  font-size: small;
+`;
+
+const SideButton = styled.span`
+  color: #5D67E9;
+  font-size: small;
+`;
+
+const Avatar = ({ pic, title, subtitle, extraText, isPost, isButton }: { pic: string, title: string, subtitle: string, extraText: string, isPost?: boolean, isButton?: boolean }) => {
   const classes = useStyles();
   return (
     <div className={classes.account}>
       <img className={classes.accountImg} src={pic} alt="" />
       <div className={classes.nameTime}>
         <p>
-          <span
-            style={{
-              fontWeight: "bold",
-              color: "#5DCBAF",
-            }}
-          >
+          <TitleText isPost={isPost}>
             {title}&nbsp;&nbsp;&nbsp;
-          </span>
-          <span style={{ color: "#5D67E9" }}>{extraText}</span>
+          </TitleText>
+          {!isButton && <ExtraText>{extraText}</ExtraText>}
+          {isButton && <SideButton>{extraText}</SideButton>}
         </p>
-        <p style={{ marginTop: "-0.8em" }}>{subtitle}</p>
+        <p style={{ marginTop: "-0.8em", fontSize: "medium" }}>{subtitle}</p>
       </div>
     </div>
   );

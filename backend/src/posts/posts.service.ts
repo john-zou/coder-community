@@ -1,18 +1,18 @@
-import { UserModel, TagModel } from './../mongoModels';
+import { PostModel, TagModel, UserModel } from '../mongoModels';
 import { HttpService, Injectable, NotFoundException } from '@nestjs/common';
-import { Ref, DocumentType } from '@typegoose/typegoose';
-import { ObjectID } from 'mongodb';
-import { convertToStrArr, convertPostDocumentToPostDto } from '../util/helperFunctions';
+import { Ref } from '@typegoose/typegoose';
+import { ObjectID, ObjectId } from 'mongodb';
+import { convertPostDocumentToPostDto, convertToStrArr } from '../util/helperFunctions';
 import * as urlSlug from 'url-slug';
-import { PostModel } from '../mongoModels';
 import { User } from '../user/user.schema';
 import {
     CreatePostBodyDto,
     CreatePostSuccessDto,
     PostDto,
-    PostWithDetails,
+    PostWithDetails, UpdatePostBodyDto,
+    UpdatePostSuccessDto,
 } from './dto/posts.dto';
-import { Post } from './post.schema';
+
 
 // Unused -- can use later for different feature
 type DevToArticle = {
@@ -55,20 +55,17 @@ type DevToArticle = {
         profile_image_90: 'https://res.cloudinary.com/practicaldev/image/fetch/s--8tTU-XkZ--/c_fill,f_auto,fl_progressive,h_90,q_auto,w_90/https://thepracticaldev.s3.amazonaws.com/uploads/organization/profile_image/1/0213bbaa-d5a1-4d25-9e7a-10c30b455af0.png';
     };
 };
-
 const DevToApiKey = 'QG7J1McHHMV7UZ9jwDTeZFHf';
 const DevToApiUrlArticles = 'https://dev.to/api/articles/'; //retrieve a list of articles (with no content)
+
 const previewContentLength = 100;
+
 @Injectable()
 export class PostsService {
-    constructor(private readonly httpService: HttpService) {
-    }
+    constructor(private readonly httpService: HttpService) { }
 
     async getPostBySlug(slug: string): Promise<PostWithDetails> {
-        // console.log("POST::SERVOCE::GETPOSTS")
-        // console.log(slug);
         const post = await PostModel.findOne({ slug });
-        // console.log(post);
         if (post) {
             return {
                 _id: post._id,
@@ -96,11 +93,11 @@ export class PostsService {
         authorObjectID: string,
         body: CreatePostBodyDto,
     ): Promise<CreatePostSuccessDto> {
-        console.log("POSTS::Service::createPost")
+        // Logger.log("PostsService::createPost")
         let slug = urlSlug(body.title);
 
         // TODO: optimize with model.collection.find() / limit() / size()
-        if (await PostModel.findOne({slug})) {
+        if (await PostModel.findOne({ slug })) {
             slug = undefined;
         }
 
@@ -120,7 +117,6 @@ export class PostsService {
         // Logger.log(doc);
         // Logger.log("Done create");
         const newPost = new PostModel(doc);
-        console.log(newPost);
         await newPost.save();
         if (!slug) {
             // set _id as slug (if slug is already taken)
@@ -128,6 +124,7 @@ export class PostsService {
             newPost.slug = newPost._id;
             await newPost.save();
         }
+
         // Add post to author
         const author = await UserModel.findById(authorObjectID);
         author.posts.push(newPost._id);
@@ -135,25 +132,53 @@ export class PostsService {
 
         // Add post to tags
         const tags = newPost.tags;
-        const expressions = tags.map(tagID => ({ _id: tagID }));
-        // awaitModel.updateMany({ $or: expressions }, { $push: {posts: newPost._id }});
+        if (tags.length > 0) {
+            const expressions = tags.map(tagID => ({ _id: tagID }));
+            await TagModel.updateMany({ $or: expressions }, { $push: { posts: newPost._id } });
+        }
+
+        // TODO: Add post to group (if post created for group)
+
         return {
             _id: newPost._id,
             slug,
         };
     }
 
-    async updatePostBySlug(newPost: CreatePostBodyDto, slug: string) {
-        console.log("POSTS::SERVICE");
-        console.log(slug);
-        const post = await PostModel.findOneAndUpdate({slug}, {
-            content: newPost.content,
-            title: newPost.title,
-            tags: newPost.tags,
-            featuredImg: newPost.featuredImg,
-            previewContent: newPost.content.substring(0, previewContentLength),
-        });
-        console.log()
+
+    async updatePostBySlug(update: UpdatePostBodyDto, slug: string): Promise<UpdatePostSuccessDto> {
+        // 1. Find post
+        const post = await PostModel.findOne({slug});
+        if (!post) {
+            throw new NotFoundException();
+        }
+
+        if (update.title) {
+            post.title = update.title;
+            let newSlug = urlSlug(update.title);
+            const existingPostWithSlug = await PostModel.findOne({newSlug});
+            if (existingPostWithSlug) {
+                newSlug = post._id;
+            }
+            post.slug = newSlug;
+        }
+
+        if (update.content) {
+            post.content = update.content;
+            post.previewContent = post.content.substring(0, previewContentLength);
+        }
+
+        if (update.featuredImg) {
+            post.featuredImg = update.featuredImg;
+        }
+
+        if (Array.isArray(update.tags)) {
+            post.tags = update.tags.map(tag => new ObjectId(tag));
+        }
+
+        await post.save();
+
+        return { _id: post._id, slug: post.slug };
     }
 
     isLikedByUser(likes: Ref<User, ObjectID>[], userObjectID: string): boolean {
@@ -162,12 +187,47 @@ export class PostsService {
     }
 
     /**
+     * Get the top 5 posts based on:
      *
-     * @param userObjectID? only needed if user logged in
+     * - Ratio of likes to views, higher the better (if 0 views then score is 0.5)
+     * - Tie breaker: most recent
+     * - Only in past week
+     *
+     * TODO: make this scalable (optimize)
      */
-    async getInitialPosts(userObjectID?: string): Promise<PostDto[]> {
-        const foundPosts = await PostModel.find().limit(5);
-        return foundPosts.map(convertPostDocumentToPostDto);
+    async getInitialPosts(fetchCount: number, userObjectID?: string): Promise<PostDto[]> {
+        const allPosts = await PostModel.find();
+
+        //TODO: only show posts in the past week
+        // allPosts.sort((post1, post2) => parseInt(post1.createdAt.toString()) - parseInt(post2.createdAt.toString()));
+        const start: number = 5 * fetchCount;
+        const end: number = start + 5;
+
+        const likesToViewsRatios: Record<string, number>[] = [];
+        allPosts.forEach((post) => {
+            let likeToViewRatio = 0;
+            if (post.views > 0) {
+                likeToViewRatio = post.likes / post.views;
+            }
+            likesToViewsRatios.push({ [post._id.toString()]: likeToViewRatio });
+        })
+        likesToViewsRatios.sort((ratio1, ratio2) => ratio2[Object.keys(ratio2)[0]] - ratio1[Object.keys(ratio1)[0]]);
+
+        const foundPosts = await PostModel.find({
+            _id: {
+                $in: likesToViewsRatios.slice(start, end).map(ratio => new ObjectID(Object.keys(ratio)[0]))
+            }
+        })
+
+        if (foundPosts.length === 0) {
+            throw new NotFoundException();
+        }
+        // if (userObjectID) {
+        //   const followingIDs = (await UserModel.findById(userObjectID)).following;
+        //   const postsByFollowing = foundPosts.filter((post) => followingIDs.includes(post.author));
+        //   return postsByFollowing.map(post => convertPostDocumentToPostDto(post));
+        // }
+        return foundPosts.map(post => convertPostDocumentToPostDto(post));
     }
 
     // Unused -- can use later for different feature

@@ -60,19 +60,21 @@ const updateTitle = (event, dispatch) => {
  */
 
 export default function TextPanel(param) {
+  const { title, content } = param;
   const classes = useStyles();
-  const dispatch = useDispatch();
   return (
     <div className={classes.cptext}>
       <form>
-        <input className={classes.cptitle} type="text" placeholder="Title" onChange={(event) => {
+        <input className={classes.cptitle} type="text" placeholder={title || "Title"} onChange={(event) => {
+          // updateTitle(event, dispatch);
           param.setTitle(event.target.value);
         }}>
         </input>
         <br></br>
         <textarea className={classes.cpcontent} id="text" onChange={(event) => {
           param.setContent(event.target.value);
-        }} placeholder="Type content"></textarea>
+
+        }} placeholder={content || "Type content"}></textarea>
       </form>
     </div>
   );
