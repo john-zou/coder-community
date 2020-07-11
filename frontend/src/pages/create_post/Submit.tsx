@@ -3,7 +3,10 @@ import {makeStyles} from "@material-ui/core/styles";
 import {useDispatch, useSelector} from 'react-redux';
 import {User} from "../../store/types";
 import {RootState} from "../../reducers/rootReducer";
-import {submitPost, updatePost} from "../../reducers/postsCreationSlice";
+import { submitPost } from "../../reducers/postsCreationSlice";
+import {AppDispatch} from "../../store";
+import {unwrapResult} from "@reduxjs/toolkit";
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles({
   operation: {
@@ -12,7 +15,7 @@ const useStyles = makeStyles({
   }
 });
 
-const onSubmit = (params, author, dispatch) => {
+const onSubmit = (params, author, dispatch, history) => {
     const newPost = {
         title: params.title,
         content: params.content,
@@ -21,7 +24,11 @@ const onSubmit = (params, author, dispatch) => {
         author: author,
     }
     console.log(newPost);
-    dispatch(submitPost(newPost));
+    dispatch(submitPost(newPost)).then(unwrapResult).then(
+        dto => {
+            history.push(`/post/${dto.slug}`)
+        }
+    );
 }
 
 const onCancel = (params, dispatch) => {
@@ -32,14 +39,13 @@ const onCancel = (params, dispatch) => {
         featuredImg: params.img,
     }
     console.log("SUBMIT" + newPost);
-    dispatch(updatePost(newPost));
 }
 
-const _onCancel = (event) => {}
 
 export default function Submit(params) {
   const classes = useStyles();
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
+  const history = useHistory();
   // const createdPost = useSelector<RootState, PostsCreation>(state => state.postsCreation);
   const curUser = useSelector<RootState, User>(state => state.user);
   console.log(curUser);
@@ -50,7 +56,7 @@ export default function Submit(params) {
             onCancel(params, dispatch);
         }}>Cancel</button>
         <button color="primary" onClick={(event) =>{
-            onSubmit(params, curUser, dispatch);
+            onSubmit(params, curUser, dispatch, history);
         }}>Submit</button>
      </div>
   );
