@@ -159,7 +159,7 @@ const Card = ({ postID }: Props) => {
       <div className={classes.imgTitle}>
         <img
           src={post.featuredImg}
-          style={{ marginTop: "10px", width: "200px", height: "200px" }}
+          style={{ marginTop: "10px", width: "200px", height: "200px", objectFit: "cover" }}
           alt=""
         />
         <div>
