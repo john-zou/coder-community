@@ -61,7 +61,6 @@ const updateTitle = (event, dispatch) => {
 
 export default function TextPanel(param) {
   const classes = useStyles();
-  const dispatch = useDispatch();
   return (
     <div className={classes.cptext}>
       <form>

@@ -1,10 +1,9 @@
 import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import { useSelector, useDispatch } from 'react-redux';
-import {PostsCreation, User} from "../../store/types";
-import { RootState } from "../../reducers/rootReducer";
-import {CreatePostBodyDto} from "../../../../backend/src/posts/dto/posts.dto";
-import { UserObjectID } from '../../../../backend/src/user/user-object-id.decorator';
+import {makeStyles} from "@material-ui/core/styles";
+import {useDispatch, useSelector} from 'react-redux';
+import {User} from "../../store/types";
+import {RootState} from "../../reducers/rootReducer";
+import {submitPost, updatePost} from "../../reducers/postsCreationSlice";
 
 const useStyles = makeStyles({
   operation: {

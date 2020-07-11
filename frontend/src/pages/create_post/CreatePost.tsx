@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import ImgP from "./ImgPanel";
 import TextP from "./TextPanel";
