@@ -57,12 +57,7 @@ export const postsSlice = createSlice({
     slugToID: {},
   }),//also has ids[] and entities{}
   reducers: {
-    incrementPostLikes: (state, action: PayloadAction<PostIDPayload>) => {
-      ++state.entities[action.payload.postID].likes;
-    },
-    decrementPostLikes: (state, action: PayloadAction<PostIDPayload>) => {
-      --state.entities[action.payload.postID].likes;
-    }
+
   },
   extraReducers: {
     [fetchTrendingPosts.fulfilled.type]: (state, action: PayloadAction<GetInitialDataDto | GetInitialDataLoggedInDto>) => {

@@ -7,6 +7,7 @@ import {fetchUserByUsername} from "../../reducers/usersSlice";
 import {NotFoundError} from "../common/NotFoundError";
 import {unwrapResult} from "@reduxjs/toolkit";
 
+
 export function OtherProfile({username}: {username: string}) {
     const user = useSelector<RootState, User>(state => state.users[username]);
     const [notFound, setNotFound] = useState(false);
@@ -24,5 +25,5 @@ export function OtherProfile({username}: {username: string}) {
         return <NotFoundError />
     }
 
-    return <><h1>Hello, you are viewing {username}'s profile!</h1></>
+    return <h1>Hello, you are viewing {username}'s profile!</h1>
 }

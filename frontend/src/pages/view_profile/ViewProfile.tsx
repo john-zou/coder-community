@@ -11,6 +11,11 @@ import { RootState } from '../../reducers/rootReducer';
 import {CurrentLoggedInUser, User} from '../../store/types';
 import {OwnProfile} from "./OwnProfile";
 import { OtherProfile } from './OtherProfile';
+import styled from '@emotion/styled';
+
+const Container = styled.div`
+  margin-top: 10vh;
+`
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -42,17 +47,21 @@ export function ViewProfile() {
   const {username} = useParams<ViewProfileParams>();
   const loggedInUsername = useSelector<RootState, string>(state => state.user?.userID);
 
-  if (!username) {
-    return <Redirect to="/"/>
+  function child() {
+      if (!username) {
+          return <Redirect to="/"/>
+      }
+
+      if (username === loggedInUsername) {
+          return <OwnProfile/>
+      }
+
+      if (!loggedInUsername || loggedInUsername !== username) {
+          return <OtherProfile username={username}/>
+      }
   }
 
-  if (username === loggedInUsername) {
-    return <OwnProfile/>
-  }
-
-  if (!loggedInUsername || loggedInUsername !== username) {
-    return <OtherProfile username={username}/>
-  }
+  return (<Container>{child()}</Container>);
 }
 //
 //   let viewedUser = useSelector<RootState, User>(
