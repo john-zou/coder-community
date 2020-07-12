@@ -37,7 +37,7 @@ export function OtherProfile({username}: {username: string}) {
     const src = user.profileBanner || DefaultImg;
 
     useEffect(() => {
-        if (!user) {
+        if (!user?.followers) {
             dispatch(fetchUserByUsername(username))
                 .then(unwrapResult)
                 .catch(err => setNotFound(true));
@@ -48,9 +48,11 @@ export function OtherProfile({username}: {username: string}) {
         return <NotFoundError />
     }
 
-    if (!user) {
+    if (!user?.followers) {
         return <Loading />
     }
+
+    console.log(user);
 
     return <>
         <ProfileBanner imgSrc={src}/>
