@@ -3,7 +3,7 @@ import { ObjectID } from "mongodb";
 import { UserDto } from "../user/dto/user.dto";
 import { User } from "../user/user.schema";
 import { Post } from "../posts/post.schema";
-import { PostDto } from "../posts/dto/posts.dto";
+import { PostDto, PostWithDetails } from '../posts/dto/posts.dto';
 import * as moment from 'moment';
 import { Logger } from '@nestjs/common';
 
@@ -55,5 +55,25 @@ export const convertPostDocumentToPostDto = (post: DocumentType<Post>): PostDto 
     views: post.views,
     comments: convertToStrArr(post.comments),
     commentsCount: post.comments.length,
+  }
+}
+
+export const convertPostDocumentToPostDetailDto = (post: DocumentType<Post>): PostWithDetails => {
+  return {
+    _id: post._id,
+    author: post.author.toString(),
+    comments: convertToStrArr(post.comments),
+    commentsCount: post.comments.length,
+    content: post.content,
+    createdAt: post.createdAt.toString(),
+    updatedAt: post.updatedAt.toString(),
+    featuredImg: post.featuredImg,
+    likes: post.likes,
+    previewContent: post.previewContent,
+    slug: post.slug,
+    tags: convertToStrArr(post.tags),
+    title: post.title,
+    views: post.views,
+    group: post.group?.toString(),
   }
 }

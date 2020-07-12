@@ -112,7 +112,7 @@ const PostDetail = () => {
         />
         <h1>{post.title}</h1>
 
-        <Avatar pic={author.profilePic} title={author.userID} subtitle={post.createdAt} extraText="follow"></Avatar>
+        <Avatar pic={author.profilePic} title={author.userID} subtitle={post.createdAt} isPost={true} extraText="follow" isButton={true}></Avatar>
 
         <p>{post.content}</p>
 

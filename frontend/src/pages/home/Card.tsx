@@ -1,5 +1,5 @@
 import { makeStyles } from "@material-ui/core/styles";
-import React from "react";
+import React, {useEffect} from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
@@ -15,6 +15,8 @@ import { Tag } from "../../store/types";
 import { Dictionary } from "@reduxjs/toolkit";
 import { savePost } from "../../reducers/userSlice";
 import { useLikePost } from "../../hooks/useLikePost";
+import { Loading } from "../common/Loading";
+import {fetchPostByID} from "../../reducers/postsSlice";
 
 const useStyles = makeStyles({
   root: {
@@ -97,15 +99,25 @@ const Card = ({ postID }: Props) => {
     (state) => state.posts.entities[postID]
   );
 
-  const { postIsLikedByUser, handleToggleLike } = useLikePost(post._id);
+  const { postIsLikedByUser, handleToggleLike } = useLikePost(post?._id);
 
-  const authorID = post.author;
+  const authorID = post?.author;
   const author = useSelector<RootState, User>(
     (state) => state.users.entities[authorID]
   );
   const tags = useSelector<RootState, Dictionary<Tag>>(
     (state) => state.tags.entities
   );
+
+  useEffect(() => {
+    if (!post) {
+      dispatch(fetchPostByID({id: postID, getAuthor: !author}));
+    }
+  }, [])
+
+  if (!post) {
+    return <Loading />
+  }
 
   return (
     <div className={classes.root}>
@@ -147,7 +159,7 @@ const Card = ({ postID }: Props) => {
       <div className={classes.imgTitle}>
         <img
           src={post.featuredImg}
-          style={{ marginTop: "10px", width: "200px", height: "200px" }}
+          style={{ marginTop: "10px", width: "200px", height: "200px", objectFit: "cover" }}
           alt=""
         />
         <div>
