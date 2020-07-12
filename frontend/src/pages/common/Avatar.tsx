@@ -44,19 +44,9 @@ export const SideButton = styled.span <{ buttonIsClicked: boolean }>`
   border: 1px solid #5D67E9; 
   border-radius: 5px;
   cursor: pointer;
-`;
+`
 
-// export const SideButtonClicked = styled.span`
-//   color: white;
-//   font-size: small;
-//   background-color: #5D67E9;
-//   min-width: fit-content;
-//   padding: 5px 10px 5px 10px;
-//   border-radius: 5px;
-//   cursor: pointer;
-// `;
-
-const Avatar = ({ pic, title, subtitle, extraText, isPost, isButton }: { pic: string, title: string, subtitle: string, extraText: string, isPost?: boolean, isButton?: boolean }) => {
+const Avatar = ({ pic, title, subtitle, extraText, isPost, isButton }: { pic: string, title: string, subtitle?: string, extraText?: string, isPost?: boolean, isButton?: boolean }) => {
   const classes = useStyles();
   const [buttonIsClicked, setButtonIsClicked] = useState(false);
   return (
@@ -71,7 +61,7 @@ const Avatar = ({ pic, title, subtitle, extraText, isPost, isButton }: { pic: st
           {isButton && <SideButton buttonIsClicked={buttonIsClicked} onClick={() => setButtonIsClicked((prevState) => !prevState)}>{extraText}</SideButton>}
           {/* {isButton && buttonIsClicked && <SideButtonClicked>{extraText}</SideButtonClicked>} */}
         </p>
-        <p style={{ marginTop: "-0.8em", fontSize: "medium" }}>{subtitle}</p>
+        <p style={{ marginTop: "-1.3em", fontSize: "medium" }}>{subtitle}</p>
       </div>
     </div>
   );
