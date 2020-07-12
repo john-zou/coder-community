@@ -23,6 +23,7 @@ import { unwrapResult } from "@reduxjs/toolkit";
 import { Loading } from "./pages/common/Loading";
 import ErrorPage from "./pages/common/ErrorPage";
 import { RootState } from "./reducers/rootReducer";
+import { CodeCollab } from "./pages/code_collab/CodeCollab";
 
 export type ViewProfileParams = {
   username: string;
@@ -66,6 +67,9 @@ export default function App() {
       <Switch>
         <Route path="/user/:username">
           <ViewProfile />
+        </Route>
+        <Route path={"/code-collab"}>
+          <CodeCollab />
         </Route>
         <Route path="/create-post">
           <CreatePost />

@@ -19,6 +19,8 @@ import { TrendingModule } from './trending/trending.module';
 import { UploadModule } from './upload/upload.module';
 import { UserModule } from './user/user.module';
 import { VideoModule } from './video/video.module';
+import { EventModule } from './event/event.module';
+import { CodeCollabGateway } from './code-collab/code-collab.gateway';
 
 @Module({
   imports: [
@@ -48,12 +50,10 @@ import { VideoModule } from './video/video.module';
 
     // Module for dev convenience -- remove when deploying
     DevModule,
-    DevModule,
-
-     VideoModule
+    EventModule
   ],
 
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, CodeCollabGateway],
 })
 export class AppModule { }
