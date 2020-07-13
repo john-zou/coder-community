@@ -1,12 +1,10 @@
-import React from "react";
-import { useHistory, useLocation } from "react-router-dom";
+import React, {useEffect} from "react";
+import {useHistory, useLocation} from "react-router-dom";
 import qs from "qs";
-import { stateContainer } from "./login";
-import { AuthApi } from "../../api";
-import { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { loginSuccess } from "../../reducers/isLoggedInSlice";
-import {fetchTrendingPosts} from "../../reducers/postsSlice";
+import {stateContainer} from "./login";
+import {AuthApi} from "../../api";
+import {useDispatch} from "react-redux";
+import {loginSuccess} from "../../reducers/isLoggedInSlice";
 import {AppDispatch} from "../../store";
 
 export function LoginGitHub() {
