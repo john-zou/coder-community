@@ -15,7 +15,7 @@ import MessageIcon from '@material-ui/icons/Message';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import SearchIcon from '@material-ui/icons/Search';
-import React from 'react';
+import React, {useState} from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
 
@@ -26,6 +26,8 @@ import { Avatar } from '@material-ui/core';
 import { RootState } from '../../reducers/rootReducer';
 import { User } from '../../store/types';
 import {AppDispatch} from "../../store";
+import Autosuggest from "react-autosuggest";
+import {getSuggestions} from "../../pages/search/search-suggestions";
 
 const drawerWidth = 240;
 const useStyles = makeStyles((theme) => ({
@@ -85,6 +87,7 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.up("md")]: {
       width: 550,
     },
+    fontSize: "1em",
   },
   sectionDesktop: {
     display: "none",
@@ -101,6 +104,17 @@ const useStyles = makeStyles((theme) => ({
   link: {
     textDecoration: "none",
   },
+  autosuggestions: {
+    position: "absolute"
+  },
+  autosuggestion: {
+    listStyleType: "none",
+    backgroundColor: "white",
+    width: 400,
+    paddingLeft: "2em",
+    paddingTop: "1em",
+    paddingBottom: "1em"
+  }
 }));
 
 
@@ -113,7 +127,8 @@ export default function Header(props) {
   const isLoggedIn = useSelector<RootState, boolean>((state) => state.isLoggedIn);
   const user = useSelector<RootState, User>(state => state.user);
   const history = useHistory();
-  const dispatch = useDispatch<AppDispatch>();
+  const [searchSuggestions, setSearchSuggestions] = useState([]);
+  const [searchValue, setSearchValue] = useState("");
 
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -231,17 +246,20 @@ export default function Header(props) {
             <div className={classes.searchIcon}>
               <SearchIcon />
             </div>
-            <Typography>
-              <InputBase
-                placeholder="Search…"
-                classes={{
-                  root: classes.inputRoot,
-                  input: classes.inputInput,
-                }}
-                inputProps={{ "aria-label": "search" }}
-                onKeyDown={handleSearchKeyDown}
-              />
-            </Typography>
+            {/*https://www.npmjs.com/package/react-autosuggest*/}
+            <Autosuggest
+              suggestions={searchSuggestions}
+              onSuggestionsFetchRequested={({value}) => {
+                setSearchSuggestions(getSuggestions(value));
+              }}
+              onSuggestionsClearRequested={()=>setSearchSuggestions([])}
+              getSuggestionValue={x => x}
+              theme={{suggestionsContainer: classes.autosuggestions,
+                suggestion: classes.autosuggestion,
+              }}
+              renderSuggestion={suggestion => <div onClick={() => history.push(`/search?q=${suggestion}`)}>{suggestion}</div>}
+              inputProps={{ className: classes.inputInput, placeholder: 'Search...', value: searchValue, onKeyDown: handleSearchKeyDown, onChange: e=>setSearchValue(e.target.value)}}
+            />
           </div>
           <div style={{ display: "flex", flex: 1 }}></div>
 
