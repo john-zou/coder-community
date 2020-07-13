@@ -13,14 +13,7 @@ import { fetchPostBySlug } from '../../reducers/postsSlice';
 import { Post, User, CurrentLoggedInUser } from '../../store/types';
 import { AppDispatch } from '../../store';
 import defaultPostFeaturedImage from "../../assets/defaultPostFeaturedImage.jpg";
-import HeartIcon from "../../icons/heartIcon.svg";
-import HeartIconRed from "../../icons/heartIconRed.svg";
-import CommentIcon from "../../icons/commentIcon.svg";
-import BookmarkIcon from "../../icons/bookmarkEmpty.svg";
-import BookmarkBlack from "../../icons/bookmarkBlack.svg";
-import { useLikePost } from "../../hooks/useLikePost";
-import { savePost } from '../../reducers/userSlice';
-import { Dictionary } from '@reduxjs/toolkit';
+
 
 const useStyles = makeStyles({
   root: {
@@ -56,16 +49,8 @@ const Interactions = () => {
   return <> </>
 }
 
-
-const Comments = ({ users, post }: { users: Dictionary<User>, post: Post }) => {
-  return <>
-    {post.comments.map((comment) => (
-      <>
-        <Avatar pic={users[post.author].profilePic} title={post.title} subtitle={post.createdAt} extraText="reply"></Avatar>
-        <p>{comment}</p>
-      </>
-    ))}
-  </>
+const Comments = () => {
+  return <> </>
 }
 
 const PostDetail = () => {
@@ -73,8 +58,6 @@ const PostDetail = () => {
   const classes = useStyles();
   const dispatch = useDispatch<AppDispatch>();
   const currentUser = useSelector<RootState, CurrentLoggedInUser>(state => state.user);
-  const users = useSelector<RootState, Dictionary<User>>(state => state.users.entities);
-  // const userLikedPostIDs = currentUser.likedPosts;
 
   const { post, author } = useSelector<RootState, { post: Post, author: User }>(state => {
     const postID = state.posts.slugToID[slug];
@@ -85,15 +68,7 @@ const PostDetail = () => {
     const author = state.users.entities[post.author];
     return { post, author };
   });
-  const { postIsLikedByUser, handleToggleLike } = useLikePost(post._id);
-  const [postIsSavedByUser, setPostIsSavedByUser] = useState(false);
 
-  const handleToggleSave = () => {
-    setPostIsSavedByUser((prev) => !prev);
-    dispatch(savePost({ postID: post._id }));
-  }
-
-  // const likedByUser = userLikedPostIDs.includes(post._id);
   const [error, setError] = useState(null);
 
   let featuredImg: string;
@@ -125,6 +100,9 @@ const PostDetail = () => {
     return <NotFoundError /> // TODO: add something for server error
   }
 
+  // post has item with content
+  // const likedByUser = isLoggedIn && post.likedByUser;
+
   return (
     <div className={classes.root}>
       <div className={classes.postDetail}>
@@ -134,33 +112,37 @@ const PostDetail = () => {
         />
         <h1>{post.title}</h1>
 
-        <Avatar pic={author.profilePic} title={author.userID} subtitle={post.createdAt} extraText="follow" isButton={true}></Avatar>
+        <Avatar pic={author.profilePic} title={author.userID} subtitle={post.createdAt} isPost={true} extraText="follow" isButton={true}></Avatar>
 
         <p>{post.content}</p>
 
-        <div style={{ marginTop: "3em" }}></div>
         <Interactions />
-        <div className={classes.interactionsIcons}>
+        {/* <div className={classes.interactionsIcons}>
           <span>
-            <img className={classes.heartIcon} src={postIsLikedByUser ? HeartIconRed : HeartIcon} alt=""
-              onClick={handleToggleLike} />
-            &nbsp;&nbsp;{post.likes}
+            <img className={classes.heartIcon} src={likedByUser ? HeartIconRed : HeartIcon} alt="" onClick={() => {
+              dispatch(likePost(post, !post.item.likedByUser));
+            }} />
+            &nbsp;&nbsp;{post.item.likesCount}
           </span>
           <span>
             <img className={classes.shareIcon} src={CommentIcon} alt="" />
-            &nbsp;&nbsp;{post.commentsCount}
+            &nbsp;&nbsp;{post.item.comments.length}
           </span>
           <span>
-            <img className={classes.shareIcon} src={postIsSavedByUser ? BookmarkBlack : BookmarkIcon} alt=""
-              onClick={handleToggleSave} />
-            &nbsp;&nbsp;{postIsSavedByUser ? "Saved!" : "Save"}
+            <img className={classes.shareIcon} src={ShareIcon} alt="" />
+            &nbsp;&nbsp;Share
           </span>
-        </div>
+        </div> */}
 
-        <hr ></hr>
         <NewComment></NewComment>
-        <Comments post={post} users={users}></Comments>
+        <Comments></Comments>
         <Link to={`/update-post/${slug}`}>Update</Link>
+        {/* {post.comments.map((comment) => (
+        <>
+          <Avatar post={comment} extraText="reply"></Avatar>
+          <p>{comment.comment}</p>
+        </>
+      ))} */}
 
       </div>
     </div>

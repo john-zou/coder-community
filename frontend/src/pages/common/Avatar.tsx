@@ -61,7 +61,7 @@ const Avatar = ({ pic, title, subtitle, extraText, isPost, isButton, isText }: {
           {isButton && <SideButton buttonIsClicked={buttonIsClicked} onClick={() => setButtonIsClicked((prevState) => !prevState)}>{extraText}</SideButton>}
           {/* {isButton && buttonIsClicked && <SideButtonClicked>{extraText}</SideButtonClicked>} */}
         </p>
-        <p style={{ marginTop: "-1.3em", fontSize: "medium" }}>{subtitle}</p>
+        <p style={{ marginTop: "-0.8em", fontSize: "14px" }}>{subtitle}</p>
       </div>
     </div>
   );

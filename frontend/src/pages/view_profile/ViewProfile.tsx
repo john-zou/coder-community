@@ -14,7 +14,7 @@ import { OtherProfile } from './OtherProfile';
 import styled from '@emotion/styled';
 
 const Container = styled.div`
-  margin-top: 10vh;
+  margin-top: 9.5vh;
 `
 
 const useStyles = makeStyles(() =>
