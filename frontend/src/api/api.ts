@@ -526,6 +526,79 @@ export interface LoginSuccess {
 /**
  * 
  * @export
+ * @interface Post
+ */
+export interface Post {
+    /**
+     * 
+     * @type {any}
+     * @memberof Post
+     */
+    author: any;
+    /**
+     * 
+     * @type {string}
+     * @memberof Post
+     */
+    title: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Post
+     */
+    slug: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Post
+     */
+    previewContent: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Post
+     */
+    content: string;
+    /**
+     * 
+     * @type {Array<any>}
+     * @memberof Post
+     */
+    tags: Array<any>;
+    /**
+     * 
+     * @type {string}
+     * @memberof Post
+     */
+    featuredImg: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof Post
+     */
+    likes: number;
+    /**
+     * 
+     * @type {Array<any>}
+     * @memberof Post
+     */
+    comments: Array<any>;
+    /**
+     * 
+     * @type {number}
+     * @memberof Post
+     */
+    views: number;
+    /**
+     * 
+     * @type {any}
+     * @memberof Post
+     */
+    group: any;
+}
+/**
+ * 
+ * @export
  * @interface PostDto
  */
 export interface PostDto {
@@ -710,6 +783,19 @@ export interface PostWithDetails {
      * @memberof PostWithDetails
      */
     group?: string;
+}
+/**
+ * 
+ * @export
+ * @interface SearchResultDto
+ */
+export interface SearchResultDto {
+    /**
+     * 
+     * @type {Array<Post>}
+     * @memberof SearchResultDto
+     */
+    posts: Array<Post>;
 }
 /**
  * 
@@ -2579,6 +2665,110 @@ export class PostsApi extends BaseAPI {
      */
     public tagsControllerGetPostsByTag(tagID: string, requestedCount?: number, startIdx?: number, excludePostIDs?: any, options?: any) {
         return PostsApiFp(this.configuration).tagsControllerGetPostsByTag(tagID, requestedCount, startIdx, excludePostIDs, options)(this.fetch, this.basePath);
+    }
+
+}
+/**
+ * SearchApi - fetch parameter creator
+ * @export
+ */
+export const SearchApiFetchParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * Finds posts containing any of the terms in the query string
+         * @param {string} q 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        searchControllerSearch(q: string, options: any = {}): FetchArgs {
+            // verify required parameter 'q' is not null or undefined
+            if (q === null || q === undefined) {
+                throw new RequiredError('q','Required parameter q was null or undefined when calling searchControllerSearch.');
+            }
+            const localVarPath = `/api/search`;
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (q !== undefined) {
+                localVarQueryParameter['q'] = q;
+            }
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * SearchApi - functional programming interface
+ * @export
+ */
+export const SearchApiFp = function(configuration?: Configuration) {
+    return {
+        /**
+         * Finds posts containing any of the terms in the query string
+         * @param {string} q 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        searchControllerSearch(q: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<SearchResultDto> {
+            const localVarFetchArgs = SearchApiFetchParamCreator(configuration).searchControllerSearch(q, options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+    }
+};
+
+/**
+ * SearchApi - factory interface
+ * @export
+ */
+export const SearchApiFactory = function (configuration?: Configuration, fetch?: FetchAPI, basePath?: string) {
+    return {
+        /**
+         * Finds posts containing any of the terms in the query string
+         * @param {string} q 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        searchControllerSearch(q: string, options?: any) {
+            return SearchApiFp(configuration).searchControllerSearch(q, options)(fetch, basePath);
+        },
+    };
+};
+
+/**
+ * SearchApi - object-oriented interface
+ * @export
+ * @class SearchApi
+ * @extends {BaseAPI}
+ */
+export class SearchApi extends BaseAPI {
+    /**
+     * Finds posts containing any of the terms in the query string
+     * @param {string} q 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SearchApi
+     */
+    public searchControllerSearch(q: string, options?: any) {
+        return SearchApiFp(this.configuration).searchControllerSearch(q, options)(this.fetch, this.basePath);
     }
 
 }
