@@ -60,6 +60,11 @@ export const fetchPostBySlug = createAsyncThunk(
   ({ slug, getAuthor }: { slug: string, getAuthor: boolean }) => new PostsApi().postsControllerGetPostBySlug(slug, getAuthor)
 )
 
+export const fetchPostByID = createAsyncThunk(
+    'fetchPostByID',
+    ({ id, getAuthor }: { id: string, getAuthor: boolean }) => new PostsApi().postsControllerGetPostByID(id, getAuthor)
+)
+
 //https://redux-toolkit.js.org/api/createSlice
 export const postsSlice = createSlice({
   name: "posts",
@@ -91,6 +96,12 @@ export const postsSlice = createSlice({
       state.hasMorePosts = false;
     },
     [fetchPostBySlug.fulfilled.type]: (state, action: PayloadAction<GetPostDetailsSuccessDto>) => {
+      const post = action.payload.post;
+      const _id = post._id;
+      state.slugToID[post.slug] = _id;
+      postsAdapter.upsertOne(state, post);
+    },
+    [fetchPostByID.fulfilled.type]: (state, action: PayloadAction<GetPostDetailsSuccessDto>) => {
       const post = action.payload.post;
       const _id = post._id;
       state.slugToID[post.slug] = _id;

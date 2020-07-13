@@ -110,11 +110,23 @@ export class PostsController {
         }
     }
 
-    @ApiBody({
-        type: UpdatePostBodyDto
-    })
-    @Put(':slug')
-    updatePostBySlug(@Body() update: UpdatePostBodyDto, @Param('slug') slug: string):Promise<UpdatePostSuccessDto> {
-        return this.postsService.updatePostBySlug(update, slug);
+  @Get('byID/:postID')
+  async getPostByID(@Param('postID') postID: string, getAuthor?: boolean): Promise<GetPostDetailsSuccessDto> {
+      const post = await this.postsService.getPostByID(postID);
+      if (getAuthor) {
+        const author = await this.userService.findUserById(post.author);
+        return { post, author };
+      } else {
+        return { post};
+      }
+  }
+
+  @ApiBody({
+    type: UpdatePostBodyDto
+  })
+  @Put(':slug')
+  updatePostBySlug(@Body() update: UpdatePostBodyDto, @Param('slug') slug: string):Promise<UpdatePostSuccessDto> {
+      return this.postsService.updatePostBySlug(update, slug);
+
     }
 }

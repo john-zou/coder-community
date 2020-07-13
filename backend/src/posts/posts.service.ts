@@ -2,7 +2,11 @@ import { PostModel, TagModel, UserModel } from '../mongoModels';
 import { HttpService, Injectable, NotFoundException } from '@nestjs/common';
 import { Ref } from '@typegoose/typegoose';
 import { ObjectID, ObjectId } from 'mongodb';
-import { convertPostDocumentToPostDto, convertToStrArr } from '../util/helperFunctions';
+import {
+  convertPostDocumentToPostDetailDto,
+  convertPostDocumentToPostDto,
+  convertToStrArr,
+} from '../util/helperFunctions';
 import * as urlSlug from 'url-slug';
 import { User } from '../user/user.schema';
 import {
@@ -64,29 +68,21 @@ const previewContentLength = 100;
 export class PostsService {
     constructor(private readonly httpService: HttpService) { }
 
-    async getPostBySlug(slug: string): Promise<PostWithDetails> {
-        const post = await PostModel.findOne({ slug });
-        if (post) {
-            return {
-                _id: post._id,
-                author: post.author.toString(),
-                comments: convertToStrArr(post.comments),
-                commentsCount: post.comments.length,
-                content: post.content,
-                createdAt: post.createdAt.toString(),
-                updatedAt: post.updatedAt.toString(),
-                featuredImg: post.featuredImg,
-                likes: post.likes,
-                previewContent: post.previewContent,
-                slug: post.slug,
-                tags: convertToStrArr(post.tags),
-                title: post.title,
-                views: post.views,
-                group: post.group?.toString(),
-            };
-        } else {
-            throw new NotFoundException();
-        }
+  async getPostByID(postID: string): Promise<PostWithDetails> {
+    const post = await PostModel.findById(postID);
+    if (post) {
+      return convertPostDocumentToPostDetailDto(post);
+    } else {
+      throw new NotFoundException();
+    }
+  }
+
+  async getPostBySlug(slug: string): Promise<PostWithDetails> {
+    const post = await PostModel.findOne({ slug });
+    if (post) {
+      return convertPostDocumentToPostDetailDto(post);
+    } else {
+      throw new NotFoundException();
     }
 
     async createPost(

@@ -6,27 +6,20 @@ import {UpdateImageModal} from "../common/UpdateImageModal";
 const useStyles = makeStyles(() =>
   createStyles({
     bannerImg: {
-      maxHeight: "300px",
-      width: "100%",
+      maxHeight: "284px",
+      marginLeft: "10%",
+      width: "80%",
       objectFit: "none",
     },
   })
 );
 
-export function ProfileBanner({ imgSrc, isUser }) {
+export function ProfileBanner({ imgSrc }) {
   const classes = useStyles();
 
-
-  function handleClick() {
-      if (isUser) {
-
-      }
-  }
-
   return (
-    <div style={{ height: "284px" }} onClick={handleClick}>
+    <div style={{ height: "284px" }}>
       <img className={classes.bannerImg} src={imgSrc} alt="banner"></img>
-      <UpdateImageModal type={ImageType.BannerPic} />
     </div>
   );
 }
