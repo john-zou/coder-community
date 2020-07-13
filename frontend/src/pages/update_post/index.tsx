@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import {Redirect, useParams} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {AppDispatch} from "../../store";
-import {RootState} from "../../reducers/rootReducer";
+simport {RootState} from "../../reducers/rootReducer";
 import {Post, Tag} from "../../store/types";
 import defaultPostFeaturedImage from "../../assets/defaultPostFeaturedImage.jpg";
 import {fetchPostBySlug} from "../../reducers/postsSlice";
@@ -38,13 +38,14 @@ export default function UpdatePost() {
     const allTags = useSelector<RootState, Dictionary<Tag>>(state => state.tags.entities);
     const allTagsArr = Object.values(allTags);
 
-    const { post } = useSelector<RootState, { post: Post }>(state => {
+
+    const post  = useSelector<RootState, { post: Post }>(state => {
         const postID = state.posts.slugToID[slug];
         if (!postID) {
             return { post: null };
         }
         const post = state.posts.entities[postID];
-        return { post };
+        return post;
     });
 
     const [title, setTitle] = useState(post?.title);
