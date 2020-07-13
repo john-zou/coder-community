@@ -1,21 +1,23 @@
 import { Dictionary } from "@reduxjs/toolkit";
 import React from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../reducers/rootReducer";
-import { Group, User } from "../../store/types";
+import { User } from "../../store/types";
 import Avatar from "../common/Avatar";
 import styled from '@emotion/styled';
 import { SearchBar } from "./SearchBar";
-
+import ComposeIcon from "../../icons/composeIcon.svg";
+import { CreateGroupChatModal, Groups } from "./CreateGroupChatModal";
+import { selectConversation } from "../../reducers/conversationsSlice";
 
 const SideBarContainer = styled.div`
   display: flex;
   flex-direction: column;
   width: 17%;
   height: 92vh;
-  background-color: white;
+  // background-color: white;
   cursor: pointer;
-  box-shadow: 0px 0px 20px #cccccc;
+  box-shadow: 2px 2px 3px #F5F5F5;
   z-index: 1;
 `;
 
@@ -25,52 +27,43 @@ export const HeadingText = styled.div`
   color: #707070;
 `;
 
-const DirectMessages = ({ users }: { users: User[] }) => {
+const DirectMessages = ({ users, setIsNewMessage }: { users: User[], setIsNewMessage: React.Dispatch<React.SetStateAction<boolean>> }) => {
+  const dispatch = useDispatch();
   return (
     <>
-      <HeadingText>DIRECT MESSAGES</HeadingText>
-      {users.map((user) => (
-        <div>
-          <Avatar pic={user.profilePic} title={user.name} />
-        </div>
-      ))}
+      <span><img src={ComposeIcon} alt="" style={{ float: "right" }} onClick={() => setIsNewMessage(true)} /></span>
+      <span><HeadingText>DIRECT MESSAGES</HeadingText></span>
+
+      <div style={{ overflowY: "scroll" }}>
+        {users.map((user) => (
+          <div onClick=(() => dispatch(selectConversation({ conversationID: user._id }))) >
+          <Avatar isText={true} pic={user.profilePic} title={user.name} />
+          </div>
+        ))}
+    </div>
     </>)
 }
 
-const Groups = ({ groups }) => {
-  return (<>
-    <div style={{ paddingTop: "20px" }}>
-      <HeadingText>GROUPS</HeadingText>
-      {groups.map((group) => {
-        return <p>#{group}</p>
-      })}
-    </div>
-  </>)
-}
-
-export const SideBar = () => {
+export const SideBar = ({ setIsNewMessage }) => {
   const users = useSelector<RootState, Dictionary<User>>(state => state.users.entities);
   const isGroupConversation = useSelector<RootState, boolean>(state => state.conversations.isGroupConversation);
   //replace these groups with group chat later
-  const groups = ["Coder Community", "CPSC 436i", "Project 5", "General"]
 
   const handleToggleDirectOrGroupChatMode = () => {
-    // dispatch
+    // dispatch(setConver)
   }
 
   return (
     <SideBarContainer>
-      <SearchBar></SearchBar>
+      {/* <SearchBar></SearchBar> */}
 
-      <div style={{ paddingLeft: "30px", marginTop: "35px" }}>
+      <div style={{ paddingLeft: "30px", paddingRight: "30px", marginTop: "20%" }}>
+
         <span onClick={handleToggleDirectOrGroupChatMode}>
-          <DirectMessages users={Object.values(users)}></DirectMessages>
+          <DirectMessages users={Object.values(users)} setIsNewMessage={setIsNewMessage}></DirectMessages>
         </span>
 
-
-        <div onClick={handleToggleDirectOrGroupChatMode}>
-          <Groups groups={Object.values(groups)}></Groups>
-        </div>
+        <CreateGroupChatModal></CreateGroupChatModal>
       </div>
 
     </SideBarContainer >

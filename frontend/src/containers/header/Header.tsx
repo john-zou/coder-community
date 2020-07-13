@@ -25,7 +25,7 @@ import { initializeGitHubOAuth } from '../../pages/login/login';
 import { Avatar } from '@material-ui/core';
 import { RootState } from '../../reducers/rootReducer';
 import { User } from '../../store/types';
-import {AppDispatch} from "../../store";
+import { AppDispatch } from "../../store";
 
 const drawerWidth = 240;
 const useStyles = makeStyles((theme) => ({
@@ -33,10 +33,12 @@ const useStyles = makeStyles((theme) => ({
     zIndex: theme.zIndex.drawer + 1,
     color: "black",
     backgroundColor: "white",
+
   },
   toolbar: theme.mixins.toolbar,
   drawerPaper: {
     width: drawerWidth,
+    boxShadow: "5px 2px 5px #cccccc",
   },
   menuButton: {
     // marginRight: theme.spacing(2),
@@ -50,6 +52,7 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.up("sm")]: {
       display: "block",
     },
+    boxShadow: "5px 2px 5px #cccccc",
   },
   search: {
     borderRadius: theme.shape.borderRadius,

@@ -6,27 +6,27 @@ import { Conversation, User } from "../../store/types";
 import Avatar from "../common/Avatar";
 import styled from '@emotion/styled';
 import { HeadingText } from "./SideBar";
+import { ChatHeader } from "./ChatArea";
 
 const ChatInfoContainer = styled.div`
   display: flex;
   flex-direction: column;
   width: 20%;
   height: 92vh;
-  background-color: #F5F5F5;
-  border-left: 1px solid #cccccc;
-  box-shadow: 5px 5px 5px 4px #cccccc;
+  box-shadow: 1px 1px 2px 4px #F5F5F5;
 `;
 
-const ChatInfoHeader = styled.div`
+export const H2 = styled.h2`
+  margin-bottom: -1px;
+  // margin-top: 25px;
+`;
+
+export const ChatInfoHeader = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   height: 15vh;
-  box-shadow: 1px 1px 1px 1px #cccccc;
 `;
-
-const H2 = styled.h2`
-  margin-bottom: -5px;
-  margin-top: 25px;
-`;
-
 export const ChatInfo = () => {
   const isGroupConversation = useSelector<RootState, boolean>(state => state.conversations.isGroupConversation);
   const conversations = useSelector<RootState, Dictionary<Conversation>>(state => state.conversations.entities);
@@ -37,18 +37,18 @@ export const ChatInfo = () => {
   return (
     <ChatInfoContainer>
       <ChatInfoHeader>
-        <div style={{ paddingLeft: "20px", paddingTop: "10px" }}>
+        <div style={{ paddingLeft: "30px" }}>
           {isGroupConversation ? <H2>Chat info</H2> : <H2>Group info</H2>}
           {/* <p>{currentConversation.createdAt}</p> */}
-          <p>Created Jul 17, 2020</p>
+          <span>Created Jul 17, 2020</span>
         </div>
       </ChatInfoHeader>
 
       {/* <hr></hr> */}
-      <div style={{ paddingLeft: "20px", paddingTop: "10px" }}>
+      <div style={{ paddingLeft: "30px", paddingTop: "10px" }}>
         <HeadingText>PEOPLE</HeadingText>
         {Object.values(users).map((user) => (
-          <Avatar pic={user.profilePic} title={user.name} />
+          <Avatar isText={true} pic={user.profilePic} title={user.name} />
         ))}
       </div>
     </ChatInfoContainer >

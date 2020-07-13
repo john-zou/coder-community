@@ -18,11 +18,12 @@ export const Messenger = () => {
   // useEffect(() => {
   //   dispatch(fetchConversations())
   // })
+  const [isNewMessage, setIsNewMessage] = useState(false);
 
   return (
     <ChatContainer>
-      <SideBar />
-      <ChatArea />
+      <SideBar setIsNewMessage={setIsNewMessage} />
+      <ChatArea isNewMessage={isNewMessage} />
       <ChatInfo />
     </ChatContainer>
   )
