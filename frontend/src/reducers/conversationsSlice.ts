@@ -1,14 +1,23 @@
-import { createEntityAdapter, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createEntityAdapter, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Conversation } from "../store/types";
 
 const conversationsAdapter = createEntityAdapter<Conversation>({
   selectId: item => item._id
 });
 
+
+export const fetchConversations = createAsyncThunk(
+  'fetchConversations',
+  async () => {
+    const conversations = null;
+    return conversations;
+  }
+)
+
 export const conversationSlice = createSlice({
   name: "posts",
   initialState: conversationsAdapter.getInitialState<{ currentConversationID: string, isGroupConversation: boolean, isDirectConversation: boolean }>({
-    currentConversationID: '',
+    currentConversationID: '5f0bc1e08743a61be4fd8e2e',
     isGroupConversation: false,
     isDirectConversation: true,
   }),//also has ids[] and entities{}
@@ -24,6 +33,11 @@ export const conversationSlice = createSlice({
         state.isGroupConversation = false;
       }
       state.currentConversationID = id;
+    }
+  },
+  extraReducers: {
+    'getConversationsAndUsers': (state, action: PayloadAction<any>) => {
+      conversationsAdapter.upsertMany(state, action.payload.conversations);
     }
   }
 })

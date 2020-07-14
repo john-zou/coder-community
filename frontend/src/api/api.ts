@@ -149,6 +149,74 @@ export interface CreateGroupSuccessDto {
 /**
  * 
  * @export
+ * @interface CreateMessageBodyDto
+ */
+export interface CreateMessageBodyDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateMessageBodyDto
+     */
+    userID: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateMessageBodyDto
+     */
+    conversationID: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateMessageBodyDto
+     */
+    text: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof CreateMessageBodyDto
+     */
+    createdAt: number;
+}
+/**
+ * 
+ * @export
+ * @interface CreateMessageSuccessDto
+ */
+export interface CreateMessageSuccessDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateMessageSuccessDto
+     */
+    _id: string; // modified by backend/scripts/generate-api.js
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateMessageSuccessDto
+     */
+    author: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateMessageSuccessDto
+     */
+    text: string;
+    /**
+     * 
+     * @type {any}
+     * @memberof CreateMessageSuccessDto
+     */
+    createdAt: any;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateMessageSuccessDto
+     */
+    updatedAt: string;
+}
+/**
+ * 
+ * @export
  * @interface CreatePostBodyDto
  */
 export interface CreatePostBodyDto {
@@ -2016,6 +2084,121 @@ export class GroupsApi extends BaseAPI {
      */
     public groupsControllerLeaveGroup(id: string, options?: any) {
         return GroupsApiFp(this.configuration).groupsControllerLeaveGroup(id, options)(this.fetch, this.basePath);
+    }
+
+}
+/**
+ * MessagesApi - fetch parameter creator
+ * @export
+ */
+export const MessagesApiFetchParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {CreateMessageBodyDto} body 
+         * @param {string} conversationID 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        messagesControllerCreateMessage(body: CreateMessageBodyDto, conversationID: string, options: any = {}): FetchArgs {
+            // verify required parameter 'body' is not null or undefined
+            if (body === null || body === undefined) {
+                throw new RequiredError('body','Required parameter body was null or undefined when calling messagesControllerCreateMessage.');
+            }
+            // verify required parameter 'conversationID' is not null or undefined
+            if (conversationID === null || conversationID === undefined) {
+                throw new RequiredError('conversationID','Required parameter conversationID was null or undefined when calling messagesControllerCreateMessage.');
+            }
+            const localVarPath = `/api/messages/{conversationID}`
+                .replace(`{${"conversationID"}}`, encodeURIComponent(String(conversationID)));
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'POST' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+            const needsSerialization = (<any>"CreateMessageBodyDto" !== "string") || localVarRequestOptions.headers['Content-Type'] === 'application/json';
+            localVarRequestOptions.body =  needsSerialization ? JSON.stringify(body || {}) : (body || "");
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * MessagesApi - functional programming interface
+ * @export
+ */
+export const MessagesApiFp = function(configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {CreateMessageBodyDto} body 
+         * @param {string} conversationID 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        messagesControllerCreateMessage(body: CreateMessageBodyDto, conversationID: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<CreateMessageSuccessDto> {
+            const localVarFetchArgs = MessagesApiFetchParamCreator(configuration).messagesControllerCreateMessage(body, conversationID, options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+    }
+};
+
+/**
+ * MessagesApi - factory interface
+ * @export
+ */
+export const MessagesApiFactory = function (configuration?: Configuration, fetch?: FetchAPI, basePath?: string) {
+    return {
+        /**
+         * 
+         * @param {CreateMessageBodyDto} body 
+         * @param {string} conversationID 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        messagesControllerCreateMessage(body: CreateMessageBodyDto, conversationID: string, options?: any) {
+            return MessagesApiFp(configuration).messagesControllerCreateMessage(body, conversationID, options)(fetch, basePath);
+        },
+    };
+};
+
+/**
+ * MessagesApi - object-oriented interface
+ * @export
+ * @class MessagesApi
+ * @extends {BaseAPI}
+ */
+export class MessagesApi extends BaseAPI {
+    /**
+     * 
+     * @param {CreateMessageBodyDto} body 
+     * @param {string} conversationID 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof MessagesApi
+     */
+    public messagesControllerCreateMessage(body: CreateMessageBodyDto, conversationID: string, options?: any) {
+        return MessagesApiFp(this.configuration).messagesControllerCreateMessage(body, conversationID, options)(this.fetch, this.basePath);
     }
 
 }

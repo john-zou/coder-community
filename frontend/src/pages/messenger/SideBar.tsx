@@ -29,6 +29,7 @@ export const HeadingText = styled.div`
 
 const DirectMessages = ({ users, setIsNewMessage }: { users: User[], setIsNewMessage: React.Dispatch<React.SetStateAction<boolean>> }) => {
   const dispatch = useDispatch();
+
   return (
     <>
       <span><img src={ComposeIcon} alt="" style={{ float: "right" }} onClick={() => setIsNewMessage(true)} /></span>
@@ -36,11 +37,11 @@ const DirectMessages = ({ users, setIsNewMessage }: { users: User[], setIsNewMes
 
       <div style={{ overflowY: "scroll" }}>
         {users.map((user) => (
-          <div onClick=(() => dispatch(selectConversation({ conversationID: user._id }))) >
+          // <div onClick=(() => dispatch(selectConversation({ conversationID: user._id }))) >
           <Avatar isText={true} pic={user.profilePic} title={user.name} />
-          </div>
+          // </div>
         ))}
-    </div>
+      </div>
     </>)
 }
 

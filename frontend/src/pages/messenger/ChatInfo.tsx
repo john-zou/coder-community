@@ -18,7 +18,6 @@ const ChatInfoContainer = styled.div`
 
 export const H2 = styled.h2`
   margin-bottom: -1px;
-  // margin-top: 25px;
 `;
 
 export const ChatInfoHeader = styled.div`

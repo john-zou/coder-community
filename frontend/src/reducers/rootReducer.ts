@@ -5,10 +5,10 @@ import tagsReducer from './tagsSlice';
 import userReducer from "./userSlice";
 import isLoggedInReducer from "./isLoggedInSlice";
 import groupsReducer from "./groupsSlice";
-import attachmentsReducer from "./attachmentsSlice";
 import commentsReducer from "./commentsSlice";
 import conversationsReducer from "./conversationsSlice";
 import videosReducer from "./videosSlice";
+import messagesReducer from "./messagesSlice";
 
 const rootReducer = combineReducers({
   isLoggedIn: isLoggedInReducer,
@@ -17,10 +17,10 @@ const rootReducer = combineReducers({
   posts: postsReducer,
   tags: tagsReducer,
   groups: groupsReducer,
-  attachments: attachmentsReducer,
   comments: commentsReducer,
   conversations: conversationsReducer,
   videos: videosReducer,
+  messages: messagesReducer,
 })
 
 export type RootState = ReturnType<typeof rootReducer>
