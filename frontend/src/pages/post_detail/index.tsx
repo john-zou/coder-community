@@ -13,6 +13,7 @@ import { fetchPostBySlug } from '../../reducers/postsSlice';
 import { Post, User, CurrentLoggedInUser } from '../../store/types';
 import { AppDispatch } from '../../store';
 import defaultPostFeaturedImage from "../../assets/defaultPostFeaturedImage.jpg";
+import {PostsApi} from "../../api";
 
 
 const useStyles = makeStyles({
@@ -84,7 +85,11 @@ const PostDetail = () => {
       return;
     }
     if (!post?.content) {
+      // automatically increments view count in PostService
       dispatch(fetchPostBySlug({ slug, getAuthor: !author })).catch(setError);
+    } else {
+      // increment view count if don't need to fetch the post
+      new PostsApi().postsControllerIncrementView(post._id).then(() => console.log("Already had post. Incremented view count.")).catch(console.log);
     }
   }, []);
 

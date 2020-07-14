@@ -19,8 +19,8 @@ import { TrendingModule } from './trending/trending.module';
 import { UploadModule } from './upload/upload.module';
 import { UserModule } from './user/user.module';
 import { VideoModule } from './video/video.module';
+import { SearchModule } from './search/search.module';
 import { EntityQueryModule } from './entity-query/entity-query.module';
-import { EntityQueryGateway } from './entity-query/entity-query.gateway';
 
 @Module({
   imports: [
@@ -36,28 +36,27 @@ import { EntityQueryGateway } from './entity-query/entity-query.gateway';
     MessagesModule,
     ConversationsModule,
     AttachmentsModule,
+    VideoModule,
 
     // Special modules
     AuthModule,
     StorageModule,
     UploadModule,
     TrendingModule,
+    SearchModule,
+    EntityQueryModule,
 
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname, "..", PublicUserContentDir),
+      rootPath: join(__dirname, '..', PublicUserContentDir),
       serveRoot: PublicUserContentServeRoot,
     }),
 
     // Module for dev convenience -- remove when deploying
     DevModule,
-    DevModule,
-
-     VideoModule,
-
-     EntityQueryModule
   ],
 
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule { }
+export class AppModule {
+}

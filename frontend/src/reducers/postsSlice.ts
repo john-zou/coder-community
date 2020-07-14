@@ -24,7 +24,7 @@ export const fetchTrendingPosts = createAsyncThunk(
     const api = new TrendingApi();
     let initialData: GetInitialDataLoggedInDto | GetInitialDataDto;
     const isLoggedIn = (getState() as RootState).isLoggedIn;
-    console.log(isLoggedIn);
+    console.log("fetchTrendingPosts... isLoggedIn:", isLoggedIn);
     try {
       if (isLoggedIn) {
         initialData = await api.trendingControllerGetTrendingLoggedIn(fetchCount);

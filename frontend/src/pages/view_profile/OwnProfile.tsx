@@ -12,8 +12,8 @@ const Container = styled.div`
   display: flex;
 `
 
-const FlexSpace = styled.div<{flex: number}>`
-  flex: ${props => props.flex};
+export const FlexSpace = styled.div<{flex?: number}>`
+  flex: ${props => props.flex || 1};
 `
 
 const WidthSpace = styled.div<{width: string}>`

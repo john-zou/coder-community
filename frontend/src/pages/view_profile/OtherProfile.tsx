@@ -12,6 +12,7 @@ import styled from "@emotion/styled";
 import {OtherPostsBoard} from "./OtherPostsBoard";
 import { Loading } from "../common/Loading";
 import DefaultImg from "../../assets/defaultUserProfileBannerImg.jpg";
+import {useFollow} from "../../hooks/useFollow";
 
 const Container = styled.div`
   display: flex;
@@ -33,11 +34,12 @@ export function OtherProfile({username}: {username: string}) {
     const userObjectID = useSelector<RootState, string>(state => state.users.usernameToID[username]);
     const user = useSelector<RootState, User>(state => state.users.entities[userObjectID]);
     const [notFound, setNotFound] = useState(false);
+    const followHook = useFollow(user?._id);
     const dispatch = useDispatch<AppDispatch>();
     const src = user.profileBanner || DefaultImg;
 
     useEffect(() => {
-        if (!user) {
+        if (!user?.followers) {
             dispatch(fetchUserByUsername(username))
                 .then(unwrapResult)
                 .catch(err => setNotFound(true));
@@ -48,7 +50,7 @@ export function OtherProfile({username}: {username: string}) {
         return <NotFoundError />
     }
 
-    if (!user) {
+    if (!user?.followers) {
         return <Loading />
     }
 
@@ -57,7 +59,7 @@ export function OtherProfile({username}: {username: string}) {
         <HeightSpace height="26px" />
         <Container>
             <FlexSpace flex={1} />
-            <TradingCard user={user} isCurrentUser={false}/>
+            <TradingCard user={user} isCurrentUser={false} followHook={followHook} />
             <WidthSpace width="47px"/>
             <OtherPostsBoard user={user}/>
             <FlexSpace flex={3} />

@@ -1,4 +1,4 @@
-import { prop, Ref } from '@typegoose/typegoose';
+import { index, prop, Ref } from '@typegoose/typegoose';
 import { TimeStamps } from '@typegoose/typegoose/lib/defaultClasses';
 
 import { Comment } from '../comments/comment.schema';
@@ -6,6 +6,9 @@ import { Group } from '../groups/group.schema';
 import { Tag } from '../tags/tag.schema';
 import { User } from '../user/user.schema';
 
+// https://docs.mongodb.com/manual/tutorial/control-results-of-text-search/
+// https://typegoose.github.io/typegoose/docs/decorators/indexes/
+@index({title: 'text', content: 'text'}, {weights: {title: 5, content: 1}})
 export class Post extends TimeStamps {//mapped to MongoDb collection 'posts"
   @prop({ ref: 'User' })
   author: Ref<User>;
