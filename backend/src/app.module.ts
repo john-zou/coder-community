@@ -19,6 +19,8 @@ import { TrendingModule } from './trending/trending.module';
 import { UploadModule } from './upload/upload.module';
 import { UserModule } from './user/user.module';
 import { VideoModule } from './video/video.module';
+import { EntityQueryModule } from './entity-query/entity-query.module';
+import { EntityQueryGateway } from './entity-query/entity-query.gateway';
 
 @Module({
   imports: [
@@ -50,7 +52,8 @@ import { VideoModule } from './video/video.module';
     DevModule,
     DevModule,
 
-     VideoModule
+     VideoModule,
+
   ],
 
   controllers: [AppController],
