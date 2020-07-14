@@ -42,7 +42,7 @@ const DirectChatHeader = ({ conversation }) => {
       <div style={{ paddingLeft: "30px", display: "flex", flexDirection: "row", alignItems: "center" }}>
         {/* <img src="https://picsum.photos/200/300" alt="" style={{ width: "5em", height: "5em", borderRadius: "50%" }} /> */}
         <div style={{ display: "flex", flexDirection: "column", marginLeft: "20px" }}>
-          <H2>John Zou</H2>
+          <H2>Luffy Monkey</H2>
           <p>ViewProfile</p>
         </div>
       </div>
