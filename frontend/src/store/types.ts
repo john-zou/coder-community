@@ -1,12 +1,3 @@
-export type Attachment = {
-  _id: string,
-  url: string,
-  fileType: string,
-  extension: string,
-  createdAt: string,
-  updatedAt: string,
-}
-
 export type Comment = {
   _id: string,
   author: string,
@@ -50,7 +41,6 @@ export type Message = {
   _id: string,
   author: string,
   text: string,
-  attachments: string[],
   createdAt: string,
   updatedAt: string,
 };
@@ -121,8 +111,8 @@ export interface CurrentLoggedInUser extends User {
 
 
 export type Video = {
-   _id: string,
-   name: string,
-   description: string,
-   createdAt: string,
- }
+  _id: string,
+  name: string,
+  description: string,
+  createdAt: string,
+}

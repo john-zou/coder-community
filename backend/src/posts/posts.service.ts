@@ -16,48 +16,49 @@ import {
   PostWithDetails, UpdatePostBodyDto,
   UpdatePostSuccessDto,
 } from './dto/posts.dto';
+import { TrendingGateway } from '../trending/trending.gateway';
 
 
 // Unused -- can use later for different feature
 type DevToArticle = {
-    type_of: 'article';
-    id: 194541;
-    title: "There's a new DEV theme in town for all you 10x hackers out there (plus one actually useful new feature)";
-    description: '';
-    cover_image: 'https://res.cloudinary.com/practicaldev/image/fetch/s--74Bl23tz--/c_imagga_scale,f_auto,fl_progressive,h_420,q_auto,w_1000/https://res.cloudinary.com/practicaldev/image/fetch/s--xU8cbIK4--/c_imagga_scale%2Cf_auto%2Cfl_progressive%2Ch_420%2Cq_auto%2Cw_1000/https://thepracticaldev.s3.amazonaws.com/i/8a39dzf3oovzc2snl7iv.png';
-    readable_publish_date: 'Oct 24';
-    social_image: 'https://res.cloudinary.com/practicaldev/image/fetch/s--SeMxdKIa--/c_imagga_scale,f_auto,fl_progressive,h_500,q_auto,w_1000/https://res.cloudinary.com/practicaldev/image/fetch/s--xU8cbIK4--/c_imagga_scale%2Cf_auto%2Cfl_progressive%2Ch_420%2Cq_auto%2Cw_1000/https://thepracticaldev.s3.amazonaws.com/i/8a39dzf3oovzc2snl7iv.png';
-    tag_list: ['meta', 'changelog', 'css', 'ux'];
-    tags: 'meta, changelog, css, ux';
-    slug: 'there-s-a-new-dev-theme-in-town-for-all-you-10x-hackers-out-there-plus-one-actually-useful-new-feature-2kgk';
-    path: '/devteam/there-s-a-new-dev-theme-in-town-for-all-you-10x-hackers-out-there-plus-one-actually-useful-new-feature-2kgk';
-    url: 'https://dev.to/devteam/there-s-a-new-dev-theme-in-town-for-all-you-10x-hackers-out-there-plus-one-actually-useful-new-feature-2kgk';
-    canonical_url: 'https://dev.to/devteam/there-s-a-new-dev-theme-in-town-for-all-you-10x-hackers-out-there-plus-one-actually-useful-new-feature-2kgk';
-    comments_count: 37;
-    public_reactions_count: 142;
-    collection_id: null;
-    created_at: '2019-10-24T13:41:29Z';
-    edited_at: '2019-10-24T13:56:35Z';
-    crossposted_at: null;
-    published_at: '2019-10-24T13:52:17Z';
-    last_comment_at: '2019-10-25T08:12:43Z';
-    published_timestamp: '2019-10-24T13:52:17Z';
-    user: {
-        name: 'Ben Halpern';
-        username: 'ben';
-        twitter_username: 'bendhalpern';
-        github_username: 'benhalpern';
-        website_url: 'http://benhalpern.com';
-        profile_image: 'https://res.cloudinary.com/practicaldev/image/fetch/s--Y1sq1tFG--/c_fill,f_auto,fl_progressive,h_640,q_auto,w_640/https://thepracticaldev.s3.amazonaws.com/uploads/user/profile_image/1/f451a206-11c8-4e3d-8936-143d0a7e65bb.png';
-        profile_image_90: 'https://res.cloudinary.com/practicaldev/image/fetch/s--DcW51A6v--/c_fill,f_auto,fl_progressive,h_90,q_auto,w_90/https://thepracticaldev.s3.amazonaws.com/uploads/user/profile_image/1/f451a206-11c8-4e3d-8936-143d0a7e65bb.png';
-    };
-    organization: {
-        name: 'The DEV Team';
-        username: 'devteam';
-        slug: 'devteam';
-        profile_image: 'https://res.cloudinary.com/practicaldev/image/fetch/s--0kDBq1Ne--/c_fill,f_auto,fl_progressive,h_640,q_auto,w_640/https://thepracticaldev.s3.amazonaws.com/uploads/organization/profile_image/1/0213bbaa-d5a1-4d25-9e7a-10c30b455af0.png';
-        profile_image_90: 'https://res.cloudinary.com/practicaldev/image/fetch/s--8tTU-XkZ--/c_fill,f_auto,fl_progressive,h_90,q_auto,w_90/https://thepracticaldev.s3.amazonaws.com/uploads/organization/profile_image/1/0213bbaa-d5a1-4d25-9e7a-10c30b455af0.png';
-    };
+  type_of: 'article';
+  id: 194541;
+  title: "There's a new DEV theme in town for all you 10x hackers out there (plus one actually useful new feature)";
+  description: '';
+  cover_image: 'https://res.cloudinary.com/practicaldev/image/fetch/s--74Bl23tz--/c_imagga_scale,f_auto,fl_progressive,h_420,q_auto,w_1000/https://res.cloudinary.com/practicaldev/image/fetch/s--xU8cbIK4--/c_imagga_scale%2Cf_auto%2Cfl_progressive%2Ch_420%2Cq_auto%2Cw_1000/https://thepracticaldev.s3.amazonaws.com/i/8a39dzf3oovzc2snl7iv.png';
+  readable_publish_date: 'Oct 24';
+  social_image: 'https://res.cloudinary.com/practicaldev/image/fetch/s--SeMxdKIa--/c_imagga_scale,f_auto,fl_progressive,h_500,q_auto,w_1000/https://res.cloudinary.com/practicaldev/image/fetch/s--xU8cbIK4--/c_imagga_scale%2Cf_auto%2Cfl_progressive%2Ch_420%2Cq_auto%2Cw_1000/https://thepracticaldev.s3.amazonaws.com/i/8a39dzf3oovzc2snl7iv.png';
+  tag_list: ['meta', 'changelog', 'css', 'ux'];
+  tags: 'meta, changelog, css, ux';
+  slug: 'there-s-a-new-dev-theme-in-town-for-all-you-10x-hackers-out-there-plus-one-actually-useful-new-feature-2kgk';
+  path: '/devteam/there-s-a-new-dev-theme-in-town-for-all-you-10x-hackers-out-there-plus-one-actually-useful-new-feature-2kgk';
+  url: 'https://dev.to/devteam/there-s-a-new-dev-theme-in-town-for-all-you-10x-hackers-out-there-plus-one-actually-useful-new-feature-2kgk';
+  canonical_url: 'https://dev.to/devteam/there-s-a-new-dev-theme-in-town-for-all-you-10x-hackers-out-there-plus-one-actually-useful-new-feature-2kgk';
+  comments_count: 37;
+  public_reactions_count: 142;
+  collection_id: null;
+  created_at: '2019-10-24T13:41:29Z';
+  edited_at: '2019-10-24T13:56:35Z';
+  crossposted_at: null;
+  published_at: '2019-10-24T13:52:17Z';
+  last_comment_at: '2019-10-25T08:12:43Z';
+  published_timestamp: '2019-10-24T13:52:17Z';
+  user: {
+    name: 'Ben Halpern';
+    username: 'ben';
+    twitter_username: 'bendhalpern';
+    github_username: 'benhalpern';
+    website_url: 'http://benhalpern.com';
+    profile_image: 'https://res.cloudinary.com/practicaldev/image/fetch/s--Y1sq1tFG--/c_fill,f_auto,fl_progressive,h_640,q_auto,w_640/https://thepracticaldev.s3.amazonaws.com/uploads/user/profile_image/1/f451a206-11c8-4e3d-8936-143d0a7e65bb.png';
+    profile_image_90: 'https://res.cloudinary.com/practicaldev/image/fetch/s--DcW51A6v--/c_fill,f_auto,fl_progressive,h_90,q_auto,w_90/https://thepracticaldev.s3.amazonaws.com/uploads/user/profile_image/1/f451a206-11c8-4e3d-8936-143d0a7e65bb.png';
+  };
+  organization: {
+    name: 'The DEV Team';
+    username: 'devteam';
+    slug: 'devteam';
+    profile_image: 'https://res.cloudinary.com/practicaldev/image/fetch/s--0kDBq1Ne--/c_fill,f_auto,fl_progressive,h_640,q_auto,w_640/https://thepracticaldev.s3.amazonaws.com/uploads/organization/profile_image/1/0213bbaa-d5a1-4d25-9e7a-10c30b455af0.png';
+    profile_image_90: 'https://res.cloudinary.com/practicaldev/image/fetch/s--8tTU-XkZ--/c_fill,f_auto,fl_progressive,h_90,q_auto,w_90/https://thepracticaldev.s3.amazonaws.com/uploads/organization/profile_image/1/0213bbaa-d5a1-4d25-9e7a-10c30b455af0.png';
+  };
 };
 const DevToApiKey = 'QG7J1McHHMV7UZ9jwDTeZFHf';
 const DevToApiUrlArticles = 'https://dev.to/api/articles/'; //retrieve a list of articles (with no content)
@@ -137,7 +138,10 @@ export class PostsService {
     }
 
     // TODO: Add post to group (if post created for group)
-
+    // this.trendingGateway.wss.emit('/newPost', {
+    //   _id: newPost._id,
+    //   slug,
+    // });
     return {
       _id: newPost._id,
       slug,
@@ -145,45 +149,45 @@ export class PostsService {
   }
 
 
-    async updatePostBySlug(update: UpdatePostBodyDto, slug: string): Promise<UpdatePostSuccessDto> {
-      // 1. Find post
-      const post = await PostModel.findOne({slug});
-      if (!post) {
-        throw new NotFoundException();
-      }
-
-      if (update.title) {
-        post.title = update.title;
-        let newSlug = urlSlug(update.title);
-        const existingPostWithSlug = await PostModel.findOne({newSlug});
-        if (existingPostWithSlug) {
-          newSlug = post._id;
-        }
-        post.slug = newSlug;
-      }
-
-      if (update.content) {
-        post.content = update.content;
-        post.previewContent = post.content.substring(0, previewContentLength);
-      }
-
-      if (update.featuredImg) {
-        post.featuredImg = update.featuredImg;
-      }
-
-      if (Array.isArray(update.tags)) {
-        post.tags = update.tags.map(tag => new ObjectId(tag));
-      }
-
-      await post.save();
-
-      return { _id: post._id, slug: post.slug };
+  async updatePostBySlug(update: UpdatePostBodyDto, slug: string): Promise<UpdatePostSuccessDto> {
+    // 1. Find post
+    const post = await PostModel.findOne({ slug });
+    if (!post) {
+      throw new NotFoundException();
     }
 
-    isLikedByUser(likes: Ref<User, ObjectID>[], userObjectID: string): boolean {
-        const found = likes.find(uid => uid.toString() === userObjectID);
-        return found !== null;
+    if (update.title) {
+      post.title = update.title;
+      let newSlug = urlSlug(update.title);
+      const existingPostWithSlug = await PostModel.findOne({ newSlug });
+      if (existingPostWithSlug) {
+        newSlug = post._id;
+      }
+      post.slug = newSlug;
     }
+
+    if (update.content) {
+      post.content = update.content;
+      post.previewContent = post.content.substring(0, previewContentLength);
+    }
+
+    if (update.featuredImg) {
+      post.featuredImg = update.featuredImg;
+    }
+
+    if (Array.isArray(update.tags)) {
+      post.tags = update.tags.map(tag => new ObjectId(tag));
+    }
+
+    await post.save();
+
+    return { _id: post._id, slug: post.slug };
+  }
+
+  isLikedByUser(likes: Ref<User, ObjectID>[], userObjectID: string): boolean {
+    const found = likes.find(uid => uid.toString() === userObjectID);
+    return found !== null;
+  }
 
   /**
   * Get the top 5 posts based on:

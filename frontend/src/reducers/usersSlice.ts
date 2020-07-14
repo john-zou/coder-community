@@ -29,8 +29,8 @@ export const fetchUserByUsername = createAsyncThunk('fetchUserByUsername', async
 //https://redux-toolkit.js.org/api/createSlice
 export const usersSlice = createSlice({
   name: "users",
-  initialState: usersAdapter.getInitialState<{usernameToID: Record<string, string>}>(
-      {usernameToID: {}}
+  initialState: usersAdapter.getInitialState<{ usernameToID: Record<string, string> }>(
+    { usernameToID: {} }
   ),
   reducers: {
 
@@ -65,9 +65,12 @@ export const usersSlice = createSlice({
       }
     },
     [joinGroup.fulfilled.type]: (state, action: PayloadAction<{ groupID: string, userID: string }>) => {
-      if (state.entities[action.payload.userID]) {
+      if (state.entities[action.payload.userID].groups) {
         state.entities[action.payload.userID].groups.push(action.payload.groupID)
       }
+    },
+    'getConversationsAndUsers': (state, action: PayloadAction<any>) => {
+      usersAdapter.upsertMany(state, action.payload.users);
     }
   }
 })
