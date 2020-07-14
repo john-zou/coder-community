@@ -54,6 +54,7 @@ import { EntityQueryGateway } from './entity-query/entity-query.gateway';
 
      VideoModule,
 
+     EntityQueryModule
   ],
 
   controllers: [AppController],
