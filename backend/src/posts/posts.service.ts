@@ -3,9 +3,9 @@ import { HttpService, Injectable, NotFoundException } from '@nestjs/common';
 import { Ref } from '@typegoose/typegoose';
 import { ObjectID, ObjectId } from 'mongodb';
 import {
-  convertPostDocumentToPostDetailDto,
-  convertPostDocumentToPostDto,
-  convertToStrArr,
+    convertPostDocumentToPostDetailDto,
+    convertPostDocumentToPostDto,
+    convertToStrArr,
 } from '../util/helperFunctions';
 import * as urlSlug from 'url-slug';
 import { User } from '../user/user.schema';
@@ -68,21 +68,24 @@ const previewContentLength = 100;
 export class PostsService {
     constructor(private readonly httpService: HttpService) { }
 
-  async getPostByID(postID: string): Promise<PostWithDetails> {
-    const post = await PostModel.findById(postID);
-    if (post) {
-      return convertPostDocumentToPostDetailDto(post);
-    } else {
-      throw new NotFoundException();
+    async getPostByID(postID: string): Promise<PostWithDetails> {
+        const post = await PostModel.findById(postID);
+        if (post) {
+            return convertPostDocumentToPostDetailDto(post);
+        } else {
+            throw new NotFoundException();
+        }
     }
-  }
 
-  async getPostBySlug(slug: string): Promise<PostWithDetails> {
-    const post = await PostModel.findOne({ slug });
-    if (post) {
-      return convertPostDocumentToPostDetailDto(post);
-    } else {
-      throw new NotFoundException();
+    async getPostBySlug(slug: string): Promise<PostWithDetails> {
+        const post = await PostModel.findOne({ slug });
+        if (post) {
+            ++post.views;
+            post.save(); // purposefully not awaiting
+            return convertPostDocumentToPostDetailDto(post);
+        } else {
+            throw new NotFoundException();
+        }
     }
 
     async createPost(
