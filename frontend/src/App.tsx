@@ -23,6 +23,7 @@ import { unwrapResult } from "@reduxjs/toolkit";
 import { Loading } from "./pages/common/Loading";
 import ErrorPage from "./pages/common/ErrorPage";
 import { RootState } from "./reducers/rootReducer";
+import {SearchPage} from "./pages/search/SearchPage";
 
 export type ViewProfileParams = {
   username: string;
@@ -82,7 +83,11 @@ export default function App() {
         <Route path="/messages">
           <Messenger />
         </Route>
+        <Route path={"/search"}>
+          <SearchPage />
+        </Route>
         <Route path="/result">
+          {/*Unused*/}
           <SearchResult />
         </Route>
         <Route path="/video_management">

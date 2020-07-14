@@ -1,6 +1,8 @@
 import React from "react";
 import styled from '@emotion/styled';
 import {User} from "../../store/types";
+import {useFollow, UseFollowHook} from "../../hooks/useFollow";
+import {Loading} from "../common/Loading";
 
 const Container = styled.div`
   height: 350px;
@@ -82,7 +84,7 @@ const SpaceAround = styled.div`
   flex: 1;
 `
 
-const EditProfileButton = styled.button`
+const Button = styled.button`
   margin-bottom: 23px;
   margin-left: 73px;
   margin-right: 73px;
@@ -101,7 +103,32 @@ const EditProfileButton = styled.button`
 
 // https://www.figma.com/file/ehowTfq9OAMUdMf3Qbngi0/Programmers-Social-Network?node-id=50%3A0
 // Can be adapted to work for groups as well, need to change props
-export function TradingCard({user, isCurrentUser}: {user: User, isCurrentUser?: boolean}) {
+export function TradingCard({user, isCurrentUser, followHook}: {user: User, isCurrentUser?: boolean, followHook?: UseFollowHook}) {
+
+    // TODO: Change follow button depending on follow relationship
+    function button() {
+        if (isCurrentUser) {
+            return (<Button onClick={() => console.log("edit profile button clicked!")}>Edit
+                profile</Button>)
+        }
+
+        if (followHook.followsOtherUser && followHook.isFollowedByOtherUser) {
+            return (<Button onClick={(e) => followHook.handleToggleFollow(e)}>Unfollow</Button>)
+        }
+
+        if (followHook.followsOtherUser) {
+            return (<Button onClick={(e) => followHook.handleToggleFollow(e)}>Unfollow</Button>)
+        }
+
+        if (!followHook.followsOtherUser && followHook.isFollowedByOtherUser) {
+            return (<Button onClick={(e) => followHook.handleToggleFollow(e)}>Follow</Button>)
+        }
+
+        // Neither is following each other
+        return (<Button onClick={(e) => followHook.handleToggleFollow(e)}>Follow</Button>);
+    }
+
+
     return (<Container>
         <AvatarPic src={user.profilePic} />
         <AllCapsName>{user.name.toUpperCase()}</AllCapsName>
@@ -110,21 +137,20 @@ export function TradingCard({user, isCurrentUser}: {user: User, isCurrentUser?: 
             <SpaceAround />
             <FollowersCountContainer>
                 <BigBoldNumber>
-                    {user.followers?.length || 'x'}
+                    {user.followers.length}
                 </BigBoldNumber>
                 followers
             </FollowersCountContainer>
             <SpaceBetweenFollowersAndPosts />
             <PostsCountContainer>
                 <BigBoldNumber>
-                    {user.posts?.length || 'x'}
+                    {user.posts.length}
                 </BigBoldNumber>
                 posts
             </PostsCountContainer>
             <SpaceAround />
         </FollowersAndPostsCountContainer>
         <SpaceAround/>
-        {isCurrentUser &&
-        <EditProfileButton onClick={() => console.log("edit profile button clicked!")}>Edit profile</EditProfileButton>}
+        {button()}
     </Container>)
 }

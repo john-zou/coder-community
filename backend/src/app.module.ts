@@ -19,6 +19,7 @@ import { TrendingModule } from './trending/trending.module';
 import { UploadModule } from './upload/upload.module';
 import { UserModule } from './user/user.module';
 import { VideoModule } from './video/video.module';
+import { SearchModule } from './search/search.module';
 
 @Module({
   imports: [
@@ -40,18 +41,19 @@ import { VideoModule } from './video/video.module';
     StorageModule,
     UploadModule,
     TrendingModule,
+    SearchModule,
 
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname, "..", PublicUserContentDir),
+      rootPath: join(__dirname, '..', PublicUserContentDir),
       serveRoot: PublicUserContentServeRoot,
     }),
 
     // Module for dev convenience -- remove when deploying
     DevModule,
-    VideoModule
   ],
 
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule { }
+export class AppModule {
+}

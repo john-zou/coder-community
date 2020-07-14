@@ -1,4 +1,4 @@
-import { Controller, Get, Query, HttpException, Param, Put, Body } from '@nestjs/common';
+import { Controller, Get, Query, HttpException, Param, Put, Body, Logger } from '@nestjs/common';
 import { ApiTags, ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
 
 import { UserService } from './user.service';
@@ -10,6 +10,7 @@ import { UserModel } from '../mongoModels';
 @ApiTags('User')
 @Controller('user')
 export class UserController {
+  private readonly logger = new Logger('UserController');
   constructor(private readonly userService: UserService) { }
 
   @Get('byUsername/:username')
@@ -49,16 +50,25 @@ export class UserController {
   @Personal()
   @Put('addFollowing/:id')
   //used to add to user's following
-  addFollowing(@UserObjectID() userObjectID: string, @Param('id') id: string): Promise<boolean> {
-    return this.userService.addFollowing(userObjectID, id);
+  async addFollowing(@UserObjectID() userObjectID: string, @Param('id') id: string): Promise<boolean> {
+    this.logger.log(`addFollowing/${id} ...`);
+    const addedFollowing = await this.userService.addFollowing(userObjectID, id);
+    const addedFollower = await this.userService.addFollower(userObjectID, id);
+    this.logger.log(`addFollowing/${id} Done!`);
+    return addedFollowing && addedFollower;
   }
 
   @ApiBearerAuth()
   @Personal()
-  @Put('addFollower/:id')
-  addFollower(@UserObjectID() userObjectID: string, @Param('id') id: string): Promise<boolean> {
-    return this.userService.addFollower(userObjectID, id);
+  @Put('removeFollowing/:id')
+  async removeFollowing(@UserObjectID() userObjectID: string, @Param('id') id: string): Promise<boolean> {
+    this.logger.log(`removeFollowing/${id} ...`);
+    const removedFollowing = await this.userService.removeFollowing(userObjectID, id);
+    const removedFollower = await this.userService.removeFollower(userObjectID, id);
+    this.logger.log(`removeFollowing/${id} Done!`)
+    return removedFollowing && removedFollower;
   }
+
 
   @ApiOperation({
     description: "For updating user's name, status and tags. To update profile image or banner image, use their upload endpoints instead."

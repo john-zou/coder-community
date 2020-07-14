@@ -121,6 +121,8 @@ export type User = {
 export interface CurrentLoggedInUser extends User {
   likedPostsSet: Record<string, boolean>;
   savedPostsSet: Record<string, boolean>;
+  followingSet: Record<string, boolean>;
+  followersSet: Record<string, boolean>;
 }
 
 

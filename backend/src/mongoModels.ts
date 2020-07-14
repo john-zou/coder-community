@@ -32,6 +32,7 @@ export const DefaultMongoOptions = {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   useFindAndModify: false,
+  useCreateIndex: true,
 };
 
 export async function initializeMongo(connectionString: string): Promise<void> {
