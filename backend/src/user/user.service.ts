@@ -22,10 +22,9 @@ type ExtraGitHubUserInfo = {
 @Injectable()
 export class UserService {
 
-  async addFollower(userObjectID: string, id: string): Promise<boolean> {
-    const foundUser = UserModel.findById(id);
-    console.log(foundUser);
-    await UserModel.updateOne({ _id: userObjectID }, {
+  async addFollower(requestUserObjectID: string, otherUserObjectID: string): Promise<boolean> {
+    const foundUser = UserModel.findById(otherUserObjectID);
+    await UserModel.updateOne({ _id: requestUserObjectID }, {
       $push: {
         followers: (await foundUser)._id,
       }
@@ -33,10 +32,30 @@ export class UserService {
     return true;
   }
 
-  async addFollowing(userObjectID: string, id: string): Promise<boolean> {
-    const foundUser = UserModel.findById(id);
-    await UserModel.updateOne({ _id: userObjectID }, {
+  async addFollowing(requestUserObjectID: string, otherUserObjectID: string): Promise<boolean> {
+    const foundUser = UserModel.findById(otherUserObjectID);
+    await UserModel.updateOne({ _id: requestUserObjectID }, {
       $push: {
+        following: (await foundUser)._id,
+      }
+    })
+    return true;
+  }
+
+  async removeFollower(requestUserObjectID: string, otherUserObjectID: string): Promise<boolean> {
+    const foundUser = UserModel.findById(otherUserObjectID);
+    await UserModel.updateOne({ _id: requestUserObjectID }, {
+      $pull: {
+        followers: (await foundUser)._id,
+      }
+    })
+    return true;
+  }
+
+  async removeFollowing(requestUserObjectID: string, otherUserObjectID: string): Promise<boolean> {
+    const foundUser = UserModel.findById(otherUserObjectID);
+    await UserModel.updateOne({ _id: requestUserObjectID }, {
+      $pull: {
         following: (await foundUser)._id,
       }
     })
