@@ -9,3 +9,24 @@ body {
   padding: 0;
   margin: 0;
 }
+
+
+/* https://www.w3schools.com/howto/tryit.asp?filename=tryhow_css_custom_scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  /* background: #f1f1f1;  */
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #C0C0C0; 
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #888; 
+}

@@ -29,7 +29,7 @@ export const tagsSlice = createSlice({
       // Update tags with trending posts
       action.payload.posts.forEach(post => {
         post.tags.forEach(id => {
-          // For each tag in each post, update the tag in Redux store
+          // For each tag in each post, add/update post to the tag in Redux store (idempotent)
           tagsAdapter.updateOne(state, { id, changes: { postsSet: { [post._id]: true } } });
         });
       });

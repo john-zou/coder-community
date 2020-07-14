@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 export const TextFields = ({ name, description, setName, setDescription }:
-  { name: string, description: string, setName: React.Dispatch<React.SetStateAction<string>>, setDescription: React.Dispatch<React.SetStateAction<string>> }) => {
+  { name: string, description?: string, setName: React.Dispatch<React.SetStateAction<string>>, setDescription?: React.Dispatch<React.SetStateAction<string>> }) => {
   const classes = useStyles();
 
   return (
@@ -42,7 +42,9 @@ export const TextFields = ({ name, description, setName, setDescription }:
       <CssTextField className={classes.margin} id="custom-css-standard-input" label={name} onChange={(e) => {
         setName(e.target.value);
       }} required={true} />
-      <CssTextField className={classes.margin} id="custom-css-standard-input" label={description} onChange={(e) => setDescription(e.target.value)} />
+      {description &&
+        <CssTextField className={classes.margin} id="custom-css-standard-input" label={description}
+          onChange={(e) => setDescription(e.target.value)} />}
     </>
   )
 }
