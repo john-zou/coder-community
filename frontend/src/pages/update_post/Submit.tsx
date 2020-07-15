@@ -60,11 +60,13 @@ export default function Submit(params) {
             );
         } else {
             // Create new post
-            dispatch(submitPost(newPost)).then(unwrapResult).then(
-                dto => {
+            dispatch(submitPost(newPost))
+                .then(unwrapResult)
+                .then(dto => {
+                    console.log("UPDATEPOST::SUBMIT::onSubmit");
+                    console.log(dto.slug);
                     history.push(`/post/${dto.slug}`)
-                }
-            );
+                });
         }
 
     }

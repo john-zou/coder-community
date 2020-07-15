@@ -5,3 +5,11 @@ h3 {
 .fileContainer {
   box-shadow: 2px 2px 3px 0 white !important;
 }
+
+.MuiToolbar-regular {
+  box-shadow: 5px 2px 5px #cccccc !important;
+}
+
+.ql-toolbar.ql-snow {
+  padding-left: 10px;
+}

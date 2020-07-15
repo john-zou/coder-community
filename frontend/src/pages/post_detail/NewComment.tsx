@@ -11,13 +11,13 @@ const useStyles = makeStyles({
     fontSize: "medium",
     border: "none",
     borderRadius: "5px",
-    width: "100%",
+    width: "60%",
     paddingLeft: "2em",
-    height: "4em",
+    height: "3em",
     marginBottom: "1em",
   },
   comment: {
-    height: "7em",
+    height: "5em",
   },
 });
 

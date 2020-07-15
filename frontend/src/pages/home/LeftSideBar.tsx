@@ -3,7 +3,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
 import { RootState } from '../../reducers/rootReducer';
-import {CurrentLoggedInUser, User} from '../../store/types';
+import { CurrentLoggedInUser, User } from '../../store/types';
 import { Loading } from '../common/Loading';
 import "../../App.css";
 

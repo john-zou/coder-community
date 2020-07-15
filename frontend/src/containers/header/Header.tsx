@@ -18,7 +18,6 @@ import SearchIcon from '@material-ui/icons/Search';
 import React from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import {Link, useHistory} from 'react-router-dom';
-
 import Logo from '../../assets/ccLogo.svg';
 import PurpleButton from '../../pages/common/PurpleButton';
 import {initializeGitHubOAuth} from '../../pages/login/login';
@@ -33,23 +32,24 @@ const useStyles = makeStyles((theme) => ({
         zIndex: theme.zIndex.drawer + 1,
         color: "black",
         backgroundColor: "white",
+
     },
     toolbar: theme.mixins.toolbar,
     drawerPaper: {
         width: drawerWidth,
+        boxShadow: "5px 2px 5px #cccccc",
     },
     menuButton: {
         // marginRight: theme.spacing(2),
         [theme.breakpoints.up("sm")]: {
             display: "none",
         },
-    },
-    title: {
-        // width: 400,
-        display: "none",
-        [theme.breakpoints.up("sm")]: {
-            display: "block",
+        toolbar: theme.mixins.toolbar,
+        drawerPaper: {
+            width: drawerWidth,
         },
+
+        boxShadow: "5px 2px 5px #cccccc",
     },
     search: {
         borderRadius: theme.shape.borderRadius,
