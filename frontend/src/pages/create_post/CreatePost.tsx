@@ -40,7 +40,7 @@ export default function CreatePost() {
   const classes = useStyles();
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
-  const [postTags, setPostTags] = useState([]);
+  const [postTags, setTags] = useState([]);
   const [featuredImg, setImg] = useState('');
   const allTags = useSelector<RootState, Dictionary<Tag>>(state => state.tags.entities);
   const allTagsArr = Object.values(allTags);
@@ -49,10 +49,10 @@ export default function CreatePost() {
     <div className={classes.createPost}>
       <ImgP setImg={setImg} />
       <TextP setTitle={setTitle} setContent={setContent} />
-      {/* <TagP setTags={setTags} /> */}
-      <TagsContainer>
+      <TagP setTags={setTags} />
+        { /*<TagsContainer>
         <AddMultiple label="Add Tags" options={allTagsArr} setItems={setPostTags} />
-      </TagsContainer>
+      </TagsContainer> */ }
       <Submit title={title} content={content} tags={postTags} img={featuredImg} />
     </div>
   );

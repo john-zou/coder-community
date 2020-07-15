@@ -33,28 +33,6 @@ const useStyles = makeStyles({
   }
 });
 
-const _onImgUpload = (event) => {
-	/*
-	event.preventDefault();
-	alert(this.url);
-	this.props.setImg(this.url);
-	*/
-}
-
-const _onChange = (event) => {
-	/*
-	this.url = event.target.value;
-	*/
-}
-
-const _omImgRm = (event) => {
-	/*
-	event.preventDefault();
-	this.url = '';
-	this.props.setImg('');
-	*/
-}
-
 export default function ImgPanel({ setImg }) {
   const classes = useStyles();
   // const [image, setImage] = useState<File>(null);
@@ -64,9 +42,8 @@ export default function ImgPanel({ setImg }) {
   }
   return (
     <div className={classes.root}>
-      <form onSubmit={_onImgUpload}>
+      <form>
         <ImageUploader
-          // {...props}
           buttonText='Upload Image'
           withPreview={true}
           withIcon={true}

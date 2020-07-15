@@ -1,8 +1,6 @@
 import React from "react";
-import { connect } from "react-redux";
 import Tag from "./Tag";
 import { makeStyles } from "@material-ui/core/styles";
-// import { setTag, delTag } from '../../actions';
 
 const useStyles = makeStyles({
   cptag: {
@@ -49,8 +47,6 @@ const _onChange = (event) => {
 
 const _onSubmit = (event) => {
   event.preventDefault();
-  // this.props.store('MESS_ADD', this.props.input);
-  // this.props.setTag(this.cur);
 };
 
 const _onDel = (event) => {
@@ -59,7 +55,7 @@ const _onDel = (event) => {
 
 export default function TagPanel(param) {
   const classes = useStyles();
-  const alltags = [];
+  const alltags = useState<RootState, >()
   return (
     <div className={classes.cptag}>
       <form id="tagform">
