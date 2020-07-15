@@ -81,6 +81,8 @@ export class PostsService {
   async getPostBySlug(slug: string): Promise<PostWithDetails> {
     const post = await PostModel.findOne({ slug });
     if (post) {
+      ++post.views;
+      post.save(); // purposefully not awaiting
       return convertPostDocumentToPostDetailDto(post);
     } else {
       throw new NotFoundException();

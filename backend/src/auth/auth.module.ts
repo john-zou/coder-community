@@ -1,4 +1,4 @@
-import { HttpModule, Module } from '@nestjs/common';
+import { Global, HttpModule, Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 
@@ -7,7 +7,9 @@ import { UserModule } from '../user/user.module';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { JwtStrategy } from './jwt.strategy';
+import { UserWsAuthGuard } from './guards/user-ws.guard';
 
+@Global()
 @Module({
   imports: [
     HttpModule, // For social OAuth
@@ -18,7 +20,7 @@ import { JwtStrategy } from './jwt.strategy';
     PassportModule, // For validating CoderCommunity jwt
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy],
-  exports: [AuthService]
+  providers: [AuthService, JwtStrategy, UserWsAuthGuard],
+  exports: [AuthService, UserWsAuthGuard]
 })
 export class AuthModule {}

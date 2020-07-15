@@ -64,7 +64,11 @@ export const Groups = ({ groups, setOpen }: { groups: Group[], setOpen: any }) =
     <div style={{ paddingTop: "20px" }}>
       <span><img src={PlusIcon} alt="" style={{ float: "right" }} onClick={setOpen} /></span>
 
+<<<<<<< HEAD
       <span><HeadingText>GROUP CONVERSATIONS</HeadingText></span>
+=======
+      <span><HeadingText>GROUPS</HeadingText></span>
+>>>>>>> master
 
       {groups.map((group) => {
         return <p style={{ fontWeight: "bold", color: "#333333" }} onClick={() => dispatch(selectConversation({ conversationID: group._id }))}>#{group}</p>

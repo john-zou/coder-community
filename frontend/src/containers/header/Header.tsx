@@ -125,6 +125,13 @@ export default function Header(props) {
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
+  const handleSearchKeyDown = (event) => {
+    if (event.keyCode === 13) { // https://stackoverflow.com/questions/43384039/how-to-get-input-textfield-values-when-enter-key-is-pressed-in-react-js
+      const query = event.target.value;
+      history.push(`/search?q=${query}`);
+    }
+  }
+
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -235,6 +242,7 @@ export default function Header(props) {
                   input: classes.inputInput,
                 }}
                 inputProps={{ "aria-label": "search" }}
+                onKeyDown={handleSearchKeyDown}
               />
             </Typography>
           </div>

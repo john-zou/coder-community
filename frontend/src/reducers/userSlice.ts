@@ -31,20 +31,19 @@ export const updateProfile = createAsyncThunk(
   }
 )
 
+/**
+ * @deprecated
+ * (Not implemented.) Use fetchUserByUsername from usersSlice instead.
+ */
 export const getUserForViewProfile = (userName) => createAsyncThunk(
   'getUserForViewProfile',
   async () => {
-    //TODO
-  }
-)
-
-export const addFollowing = (id: string) => createAsyncThunk(
-  'addFollowing', async () => {
-    //TODO
+    // Use fetchUserByUsername from usersSlice instead.
   }
 )
 
 export type PostIDPayload = { postID: string };
+export type UserIDPayload = { userID: string };
 export type LikePostPayload = { postID: string, increment: boolean };
 
 //https://redux-toolkit.js.org/api/createSlice
@@ -122,10 +121,44 @@ export const userSlice = createSlice({
         }
         return { payload: { postID, increment } };
       }
-    }
+    },
+    follow: {
+      reducer: (state, action: PayloadAction<UserIDPayload>) => {
+        // Optimistic update
+        const other = action.payload.userID;
+        if (!state.followingSet[other]) {
+          state.followingSet[other] = true;
+          state.following.push(other);
+        }
+      },
+      prepare: (payload: UserIDPayload ) => {
+        api.userControllerAddFollowing(payload.userID)
+            .then(_ => console.log("Optimistic update (FOLLOW) finished in back end"))
+            .catch(err => console.log("Optimistic update (FOLLOW) rejected! ", err));
+        return { payload };
+      }
+    },
+    unfollow: {
+      reducer: (state, action: PayloadAction<UserIDPayload>) => {
+        // Optimistic update
+        const other = action.payload.userID;
+        if (state.followingSet[other]) {
+          state.followingSet[other] = false;
+          _.pull(state.following, other);
+        }
+      },
+      prepare: (payload: UserIDPayload ) => {
+        api.userControllerRemoveFollowing(payload.userID)
+            .then(_ => console.log("Optimistic update (UNFOLLOW) finished in back end"))
+            .catch(err => console.log("Optimistic update (UNFOLLOW) rejected! ", err));
+        return { payload };
+      }
+    },
+
+
   },
   extraReducers: {
-    // fetchTrendingPosts may return a User
+    // fetchTrendingPosts will give the current logged in user as well
     [fetchTrendingPosts.fulfilled.type]: (state, action: PayloadAction<GetInitialDataDto | GetInitialDataLoggedInDto>) => {
       if (isGetInitialDataLoggedInDto(action.payload)) {
         const userDto = action.payload.user;
@@ -135,13 +168,17 @@ export const userSlice = createSlice({
           // Update likedPostsSet and savedPostsSet
           userDto.likedPosts?.forEach(postID => state.likedPostsSet[postID] = true);
           userDto.savedPosts?.forEach(postID => state.savedPostsSet[postID] = true);
+          userDto.followers?.forEach(userID => state.followersSet[userID] = true);
+          userDto.following?.forEach(userID => state.followingSet[userID] = true);
           return { ...state, ...userDto };
         }
 
         if (userDto) {
-          const freshlyLoggedInUser = { ...userDto, likedPostsSet: {}, savedPostsSet: {} } as CurrentLoggedInUser;
+          const freshlyLoggedInUser = { ...userDto, likedPostsSet: {}, savedPostsSet: {}, followersSet: {}, followingSet: {} } as CurrentLoggedInUser;
           userDto.likedPosts?.forEach(postID => freshlyLoggedInUser.likedPostsSet[postID] = true);
           userDto.savedPosts?.forEach(postID => freshlyLoggedInUser.savedPostsSet[postID] = true);
+          userDto.followers?.forEach(userID => freshlyLoggedInUser.followersSet[userID] = true);
+          userDto.following?.forEach(userID => freshlyLoggedInUser.followingSet[userID] = true);
           return freshlyLoggedInUser;
         }
       }
@@ -185,4 +222,4 @@ export const userSlice = createSlice({
 
 export default userSlice.reducer;
 
-export const { savePost, toggleLikePost, loginSuccess, logOut } = userSlice.actions;
+export const { savePost, toggleLikePost, follow, unfollow, loginSuccess, logOut } = userSlice.actions;
