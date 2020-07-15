@@ -127,9 +127,11 @@ export class PostsController {
         }
     }
 
+
     @ApiBody({
         type: UpdatePostBodyDto,
     })
+    @Personal()
     @Put(':slug')
     updatePostBySlug(@Body() update: UpdatePostBodyDto, @Param('slug') slug: string): Promise<UpdatePostSuccessDto> {
         return this.postsService.updatePostBySlug(update, slug);

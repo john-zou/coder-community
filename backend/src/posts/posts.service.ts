@@ -1,14 +1,14 @@
-import { PostModel, TagModel, UserModel } from '../mongoModels';
-import { HttpService, Injectable, NotFoundException } from '@nestjs/common';
-import { Ref } from '@typegoose/typegoose';
-import { ObjectID, ObjectId } from 'mongodb';
+import {PostModel, TagModel, UserModel} from '../mongoModels';
+import {HttpService, Injectable, NotFoundException} from '@nestjs/common';
+import {Ref} from '@typegoose/typegoose';
+import {ObjectID, ObjectId} from 'mongodb';
 import {
     convertPostDocumentToPostDetailDto,
     convertPostDocumentToPostDto,
     convertToStrArr,
 } from '../util/helperFunctions';
 import * as urlSlug from 'url-slug';
-import { User } from '../user/user.schema';
+import {User} from '../user/user.schema';
 import {
     CreatePostBodyDto,
     CreatePostSuccessDto,
@@ -66,7 +66,8 @@ const previewContentLength = 100;
 
 @Injectable()
 export class PostsService {
-    constructor(private readonly httpService: HttpService) { }
+    constructor(private readonly httpService: HttpService) {
+    }
 
     async getPostByID(postID: string): Promise<PostWithDetails> {
         const post = await PostModel.findById(postID);
@@ -77,16 +78,16 @@ export class PostsService {
         }
     }
 
-  async getPostBySlug(slug: string): Promise<PostWithDetails> {
-      const post = await PostModel.findOne({slug});
-      if (post) {
-          ++post.views;
-          post.save(); // purposefully not awaiting
-          return convertPostDocumentToPostDetailDto(post);
-      } else {
-          throw new NotFoundException();
-      }
-  }
+    async getPostBySlug(slug: string): Promise<PostWithDetails> {
+        const post = await PostModel.findOne({slug});
+        if (post) {
+            ++post.views;
+            post.save(); // purposefully not awaiting
+            return convertPostDocumentToPostDetailDto(post);
+        } else {
+            throw new NotFoundException();
+        }
+    }
 
     async createPost(
         authorObjectID: string,
@@ -96,7 +97,7 @@ export class PostsService {
         let slug = urlSlug(body.title);
 
         // TODO: optimize with model.collection.find() / limit() / size()
-        if (await PostModel.findOne({ slug })) {
+        if (await PostModel.findOne({slug})) {
             slug = undefined;
         }
 
@@ -132,8 +133,8 @@ export class PostsService {
         // Add post to tags
         const tags = newPost.tags;
         if (tags.length > 0) {
-            const expressions = tags.map(tagID => ({ _id: tagID }));
-            await TagModel.updateMany({ $or: expressions }, { $push: { posts: newPost._id } });
+            const expressions = tags.map(tagID => ({_id: tagID}));
+            await TagModel.updateMany({$or: expressions}, {$push: {posts: newPost._id}});
         }
 
         // TODO: Add post to group (if post created for group)
@@ -177,7 +178,7 @@ export class PostsService {
 
         await post.save();
 
-        return { _id: post._id, slug: post.slug };
+        return {_id: post._id, slug: post.slug};
     }
 
     isLikedByUser(likes: Ref<User, ObjectID>[], userObjectID: string): boolean {
@@ -208,7 +209,7 @@ export class PostsService {
             if (post.views > 0) {
                 likeToViewRatio = post.likes / post.views;
             }
-            likesToViewsRatios.push({ [post._id.toString()]: likeToViewRatio });
+            likesToViewsRatios.push({[post._id.toString()]: likeToViewRatio});
         })
         likesToViewsRatios.sort((ratio1, ratio2) => ratio2[Object.keys(ratio2)[0]] - ratio1[Object.keys(ratio1)[0]]);
 

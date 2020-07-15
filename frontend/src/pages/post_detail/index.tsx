@@ -2,12 +2,12 @@ import { makeStyles } from '@material-ui/core/styles';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams, Redirect } from 'react-router-dom';
-import { Link } from 'react-router-dom';
 import { PostDetailParams } from '../../App';
 import Avatar from '../common/Avatar';
 import { Loading } from '../common/Loading';
 import { NotFoundError } from '../common/NotFoundError';
 import NewComment from './NewComment';
+import UpdateButton from './UpdateButton';
 import { RootState } from '../../reducers/rootReducer';
 import { fetchPostBySlug } from '../../reducers/postsSlice';
 import { Post, User, CurrentLoggedInUser } from '../../store/types';
@@ -69,7 +69,11 @@ const PostDetail = () => {
     const author = state.users.entities[post.author];
     return { post, author };
   });
-
+  console.log("POSTDEATIL::INDEX");
+  console.log(currentUser);
+  console.log(post);
+  const canUpdate = currentUser !== null && currentUser._id === post.author;
+  console.log(canUpdate);
   const [error, setError] = useState(null);
 
   let featuredImg: string;
@@ -141,7 +145,7 @@ const PostDetail = () => {
 
         <NewComment></NewComment>
         <Comments></Comments>
-        <Link to={`/update-post/${slug}`}>Update</Link>
+        {canUpdate && <UpdateButton params={slug}/>}
         {/* {post.comments.map((comment) => (
         <>
           <Avatar post={comment} extraText="reply"></Avatar>

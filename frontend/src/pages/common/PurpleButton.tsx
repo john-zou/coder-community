@@ -15,8 +15,8 @@ const useStyles = makeStyles({
   },
 });
 
-const PurpleButton = ({ content }: { content: string }) => {
+const PurpleButton = ({ handleClick, params, content }: { handleClick?: (params) => any, params?: any, content: string }) => {
   const classes = useStyles();
-  return <button className={classes.root}>{content}</button>;
+  return <button onClick={handleClick} className={classes.root}>{content}</button>;
 };
 export default PurpleButton;
