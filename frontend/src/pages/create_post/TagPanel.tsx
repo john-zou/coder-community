@@ -55,7 +55,7 @@ const _onDel = (event) => {
 
 export default function TagPanel(param) {
   const classes = useStyles();
-  const alltags = useState<RootState, >()
+  const alltags = []; // useState<RootState, >()
   return (
     <div className={classes.cptag}>
       <form id="tagform">

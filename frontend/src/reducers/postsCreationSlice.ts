@@ -9,7 +9,7 @@ export const submitPost = createAsyncThunk(
         const createPostSuccessDto = await new PostsApi().postsControllerCreatePost(createdPost);
         const {_id, slug} = createPostSuccessDto;
         const post: Post = {
-            featuredImg: "",
+            featuredImg: createdPost.featuredImg,
             likes: 0,
             tags: createdPost.tags,
             title: createdPost.title,
