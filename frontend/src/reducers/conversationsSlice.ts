@@ -1,30 +1,24 @@
-import { createAsyncThunk, createEntityAdapter, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createEntityAdapter, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { CreateConversationBodyDto } from "../api";
 import { Conversation } from "../store/types";
+import { fetchMessagesInConversation } from "./messagesSlice";
 
 const conversationsAdapter = createEntityAdapter<Conversation>({
   selectId: item => item._id
 });
 
-
-export const fetchConversations = createAsyncThunk(
-  'fetchConversations',
-  async () => {
-    const conversations = null;
-    return conversations;
-  }
-)
-
 export const conversationSlice = createSlice({
-  name: "posts",
+  name: "conversations",
   initialState: conversationsAdapter.getInitialState<{ currentConversationID: string, isGroupConversation: boolean, isDirectConversation: boolean }>({
-    currentConversationID: '5f0bc1e08743a61be4fd8e2e',
+    currentConversationID: '', //the conversation shown in CHat Window
     isGroupConversation: false,
-    isDirectConversation: true,
+    isDirectConversation: true
   }),//also has ids[] and entities{}
   reducers: {
     selectConversation: (state, action: PayloadAction<{ conversationID: string }>) => {
       const id = action.payload.conversationID;
       const conversation = state.entities[id];
+      console.log(conversation);
       if (conversation.users.length > 2) {
         state.isDirectConversation = false;
         state.isGroupConversation = true;
@@ -32,8 +26,12 @@ export const conversationSlice = createSlice({
         state.isDirectConversation = true;
         state.isGroupConversation = false;
       }
+      // fetchMessagesInConversation({ conversationID: id });
       state.currentConversationID = id;
-    }
+    },
+    createConversationSucces: (state, action: PayloadAction<CreateConversationBodyDto>) => {
+
+    },
   },
   extraReducers: {
     'getConversationsAndUsers': (state, action: PayloadAction<any>) => {

@@ -2,12 +2,12 @@ import Quill from "quill";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import styled from '@emotion/styled';
 import SendIcon from "../../icons/sendIcon.svg";
-import "../../App.css";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../reducers/rootReducer";
 import { SocketContext } from ".";
 import { createMessagePending } from "../../reducers/messagesSlice";
 import { CreateMessageBodyDto } from "../../api";
+import "../../App.css";
 
 const Editor = styled.div`
   max-height: 50%;
@@ -31,13 +31,35 @@ const Toolbar = styled.div`
   padding-left: 30px;
 `;
 
-export const ChatInput = () => {
+export const ChatInput = ({ newMessageSelectedUserIDs }) => {
   const editor = useRef<Quill>(null);//handy for keeping any mutable value around similar to how you’d use instance fields in classes.
   const socket = useContext(SocketContext);
   const userID = useSelector<RootState, string>(state => state.user._id);
-
   const conversationID = useSelector<RootState, string>(state => state.conversations.currentConversationID);
   const dispatch = useDispatch();
+  // console.log("ChatInput render... conversationID, ", conversationID);
+
+  const handleSend = useRef(null);
+
+  useEffect(() => {
+    handleSend.current = () => {
+      if (conversationID === "") {
+        dispatch(createNewConversation({ selectedUsers: newMessageSelectedUserIDs, userID }));
+      }
+      // console.log(editor.current.root.innerHTML);
+      const createMessageBodyDto: CreateMessageBodyDto = {
+        userID,
+        conversationID,
+        // text: editor.current.getText(),
+        text: editor.current.root.innerHTML,
+        createdAt: Date.now(),
+      }
+      console.log(createMessageBodyDto);
+      socket.current.emit('newMessage', createMessageBodyDto);
+      dispatch(createMessagePending(createMessageBodyDto));
+      editor.current.setText('');
+    }
+  }, [conversationID]);
 
   useEffect(() => {
     editor.current = new Quill('#editor', {
@@ -47,7 +69,7 @@ export const ChatInput = () => {
           bindings: {
             enter: {
               key: 13,
-              handler: handleSend
+              handler: () => handleSend.current()
             }
           }
         }
@@ -56,20 +78,6 @@ export const ChatInput = () => {
       theme: 'snow'  // or 'bubble'
     });
   }, [])
-
-
-  const handleSend = () => {
-    console.log(editor.current.getContents());
-    const createMessageBodyDto: CreateMessageBodyDto = {
-      userID,
-      conversationID,
-      text: editor.current.getText(),
-      createdAt: Date.now(),
-    }
-    socket.current.emit('newMessage', createMessageBodyDto);
-    dispatch(createMessagePending(createMessageBodyDto));
-    editor.current.setText('');
-  }
 
   return (
     <>
@@ -96,7 +104,7 @@ export const ChatInput = () => {
           <strong>Shift</strong> + <strong>Enter</strong> to add a new line&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
 
         <div style={{ marginRight: "15px", marginTop: "10px" }}>
-          <img src={SendIcon} alt="send" onClick={handleSend} />
+          <img src={SendIcon} alt="send" onClick={handleSend.current} />
         </div>
       </Toolbar>
     </>

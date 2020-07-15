@@ -19,7 +19,7 @@ import PurpleButton from '../common/PurpleButton';
 import { createGroup } from '../../reducers/groupsSlice';
 import { UploadApi } from '../../api';
 import { JwtLocalStorageKey } from '../../constants';
-import {uploadPublicAsset} from "../../api-upload";
+import { uploadPublicAsset } from "../../api-upload";
 
 const TextWrapper = styled.div`
   margin-left: 10px;

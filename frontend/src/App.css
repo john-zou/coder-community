@@ -10,6 +10,17 @@ h3 {
   box-shadow: 5px 2px 5px #cccccc !important;
 }
 
-.ql-toolbar.ql-snow {
-  padding-left: 10px;
+.ql-snow .ql-editor pre.ql-syntax {
+  /* background-color: #cccccc; */
+  /* color: black; */
+}
+
+.ql-snow .ql-tooltip {
+  position: unset !important;
+  transform: none !important;
+}
+
+.textBlock:hover {
+  cursor: pointer;
+  background-color: #F7F7F7;
 }

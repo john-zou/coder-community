@@ -1,17 +1,25 @@
 import { Injectable } from '@nestjs/common';
 import { isDocument } from '@typegoose/typegoose';
-
+import { ObjectID } from 'mongodb';
 import { ConversationModel, MessageModel, UserModel } from '../mongoModels';
 import { convertToStrArr } from '../util/helperFunctions';
-import { MessageGateway } from './message.gateway';
-import { CreateMessageBodyDto, CreateMessageSuccessDto } from './messages.dto';
+import { CreateMessageBodyDto, CreateMessageSuccessDto, MessageDto } from './messages.dto';
 
 @Injectable()
 export class MessagesService {
 
+  async getMessagesInConversation(conversationID: string): Promise<MessageDto[]> {
+    const currentCoversation = await ConversationModel.findById(conversationID);
+    const messageIDs = currentCoversation.messages;
+    return MessageModel.find({
+      _id: messageIDs
+    }).lean();
+  }
+
   async createMessage(createMessageDto: CreateMessageBodyDto, userID: string, conversationID: string): Promise<CreateMessageSuccessDto> {
     console.log("convesation id: " + conversationID);
     const doc = {
+      author: new ObjectID(userID),
       text: createMessageDto.text
     }
     const newMessage = new MessageModel(doc);
