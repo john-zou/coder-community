@@ -8,6 +8,8 @@ import { SocketContext } from ".";
 import { createMessagePending } from "../../reducers/messagesSlice";
 import { CreateMessageBodyDto } from "../../api";
 import "../../App.css";
+import {useSetRecoilState} from "recoil";
+import {createConversationStatusAtom} from "./atoms";
 
 const Editor = styled.div`
   max-height: 50%;
@@ -37,21 +39,28 @@ export const ChatInput = ({ newMessageSelectedUserIDs }) => {
   const userID = useSelector<RootState, string>(state => state.user._id);
   const conversationID = useSelector<RootState, string>(state => state.conversations.currentConversationID);
   const dispatch = useDispatch();
-  // console.log("ChatInput render... conversationID, ", conversationID);
+  const setConversationStatus = useSetRecoilState(createConversationStatusAtom);
 
   const handleSend = useRef(null);
 
   useEffect(() => {
     handleSend.current = () => {
+      // get text from editor
+      const text = editor.current.root.innerHTML;
+
+      // if the conversationID is "", then the user is starting a new group chat with anonymous name
       if (conversationID === "") {
-        dispatch(createNewConversation({ selectedUsers: newMessageSelectedUserIDs, userID }));
+        socket.current.emit('newConversation', {otherUsers: newMessageSelectedUserIDs, initialMessage: text});
+        // status is pending, this is a special case
+        setConversationStatus("pending");
+        // when the back end responds, dispatch is called (in socket.on in messenger/index)
       }
-      // console.log(editor.current.root.innerHTML);
+
       const createMessageBodyDto: CreateMessageBodyDto = {
         userID,
         conversationID,
         // text: editor.current.getText(),
-        text: editor.current.root.innerHTML,
+        text,
         createdAt: Date.now(),
       }
       console.log(createMessageBodyDto);

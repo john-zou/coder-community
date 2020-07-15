@@ -9,6 +9,9 @@ import io from 'socket.io-client';
 import { Conversation, Message } from "../../store/types";
 import { Dictionary } from "@reduxjs/toolkit";
 import { createMessagePending, createMessageSuccess, receiveNewMessage } from "../../reducers/messagesSlice";
+import {BackEndBaseUriForWs} from "../../constants";
+import {useSetRecoilState} from "recoil";
+import {createConversationStatusAtom} from "./atoms";
 
 export const ChatContainer = styled.div`
   display: flex;
@@ -25,12 +28,13 @@ export const Messenger = () => {
 
   const dispatch = useDispatch();
   const socket = useRef<SocketIOClient.Socket>(null);
-  // console.log(socket.connected);
+  const setCreateConversationStatus = useSetRecoilState(createConversationStatusAtom);
+
+
   useEffect(() => {
-    // dispatch(fetchConversations())
-    socket.current = io('http://localhost:3001');
+    socket.current = io(BackEndBaseUriForWs);
     socket.current.on('connection', () => {
-      console.log("connected to localhost:3001" + socket.current.connected); // true
+      console.log(`connected to ${BackEndBaseUriForWs}` + socket.current.connected); // true
       socket.current.emit('getConversationsAndUsers', userID);
     });
 
@@ -48,6 +52,18 @@ export const Messenger = () => {
       }
       else {
         dispatch(receiveNewMessage(response));
+      }
+    });
+
+    socket.current.on('newConversation', data => {
+      // Client (user) created the new conversation
+      if (data.isCreator) {
+        // Unset 'pending' for create conversation status
+        setCreateConversationStatus("idle");
+
+      } else {
+        // Conversation was created elsewhere
+        dispatch({})
       }
     })
   }, [])

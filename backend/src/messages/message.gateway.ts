@@ -5,13 +5,17 @@ import { ConversationModel, MessageModel, UserModel } from "../mongoModels";
 import { convertToStrArr } from "../util/helperFunctions";
 import { CreateMessageBodyDto } from "./messages.dto";
 import { MessagesService } from "./messages.service";
+import { CreateConversationBodyDto } from '../conversations/conversation.dto';
+import { PersonalWs } from '../auth/guards/personal-ws.decorator';
+import { ConversationsService } from '../conversations/conversations.service';
+import { UserObjectID } from '../user/user-object-id.decorator';
 
 @WebSocketGateway() //by default server already serves at 3001
 export class MessageGateway implements OnGatewayConnection {//gateway===controller
   @WebSocketServer()
   wss: Server;
 
-  constructor(private readonly messagesService: MessagesService) { }
+  constructor(private readonly messagesService: MessagesService, private readonly conversationsService: ConversationsService) { }
   private logger = new Logger('MessageGateway');
 
   handleConnection(client: Socket): void {
@@ -71,6 +75,32 @@ export class MessageGateway implements OnGatewayConnection {//gateway===controll
         id: client.id,
         text: createMessageBodyDto.text,
         createdAt: createMessageBodyDto.createdAt, //this is the id of the pending message which then will be used by the sender to confirm the message has been succesfully sent
+      }
+    }
+  }
+
+  @PersonalWs()
+  @SubscribeMessage('newConversation')
+  async handleCreateNewConversation(@MessageBody() createConversationBodyDto: CreateConversationBodyDto, @UserObjectID() userID: string, @ConnectedSocket() client: Socket): Promise<any> {
+    const { _id } = await this.conversationsService.createConversation(createConversationBodyDto, userID);
+    client.broadcast.emit('newConversation', {
+      isCreator: false,
+      _id, // conversationID
+      author: createConversationBodyDto.userID,
+      users: createConversationBodyDto.users,
+      createdAt: createConversationBodyDto.createdAt, //this is the id of the pending message which then will be used by the sender to confirm the message has been succesfully sent
+      message: createConversationBodyDto.message,
+    });
+
+    return { //return sends back res to only user (not broadcast)
+      event: 'newConversation',
+      data: {
+        isCreator: true,
+        _id,
+        id: client.id,
+        users: createConversationBodyDto.users,
+        message: createConversationBodyDto.message,
+        createdAt: createConversationBodyDto.createdAt, //this is the id of the pending message which then will be used by the sender to confirm the message has been succesfully sent
       }
     }
   }

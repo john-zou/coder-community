@@ -29,9 +29,12 @@ export const conversationSlice = createSlice({
       // fetchMessagesInConversation({ conversationID: id });
       state.currentConversationID = id;
     },
-    createConversationSucces: (state, action: PayloadAction<CreateConversationBodyDto>) => {
-
+    createConversationSuccess: (state, action: PayloadAction<CreateConversationBodyDto>) => {
+      // TODO
     },
+    newConversationFromElsewhere: (state, action) => {
+      // TODO
+    }
   },
   extraReducers: {
     'getConversationsAndUsers': (state, action: PayloadAction<any>) => {
