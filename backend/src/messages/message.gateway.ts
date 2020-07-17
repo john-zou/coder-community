@@ -102,6 +102,7 @@ export class MessageGateway implements OnGatewayConnection {//gateway===controll
     this.logger.log(newConversationDto);
     const users = [userID, ...newConversationDto.otherUsers];
     const conversation = await this.conversationsService.createConversation({
+      name: newConversationDto.name,
       users,
       message: newConversationDto.initialMessage,
       userID,

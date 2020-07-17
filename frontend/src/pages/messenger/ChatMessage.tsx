@@ -2,10 +2,8 @@ import React, { useEffect, useRef } from "react";
 import styled from '@emotion/styled';
 
 export const ChatBubble = styled.div<{ isUser: boolean }>`
-  // background-color: ${({ isUser }) => isUser ? "#F2F2F2" : "#A9B0BD"};
-  // flexDirection: row-reverse;
-  margin-left: 3.5em;
-  margin-top: ${({ isUser }) => isUser ? "-0.8em" : "-0.5em"};
+  margin-left: 2.6em;
+  margin-top: ${({ isUser }) => isUser ? "-1em" : "-0.5em"};
   `
 
 export const ChatMessage = ({ content, isUser }) => {

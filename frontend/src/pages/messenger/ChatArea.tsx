@@ -27,14 +27,13 @@ export const ChatHeader = styled(ChatInfoHeader)`
   border-bottom: 1px solid #F2F2F2;
 `;
 
-const GroupChatHeader = ({ conversation }) => {
+const GroupChatHeader = ({ conversation }: {conversation: Conversation}) => {
   return (
     <ChatHeader>
       <div style={{ paddingLeft: "30px" }}>
-        <H2># Coder Community</H2>
-        <span>6 members&nbsp;&nbsp;&nbsp;&nbsp;</span>
+        <H2>{conversation.name}</H2>
+        <span>{conversation.users.length} members&nbsp;&nbsp;&nbsp;&nbsp;</span>
         <span>+ Add member</span>
-        {/* </div> */}
       </div>
     </ChatHeader >)
 }
@@ -49,7 +48,6 @@ const DirectChatHeader = ({ currentConversation }) => {
   return (
     <ChatHeader>
       <div style={{ paddingLeft: "30px", display: "flex", flexDirection: "row", alignItems: "center" }}>
-        {/* <img src="https://picsum.photos/200/300" alt="" style={{ width: "5em", height: "5em", borderRadius: "50%" }} /> */}
         <div style={{ display: "flex", flexDirection: "column", marginLeft: "20px" }}>
           <H2>{otherUser.name}</H2>
           <p>ViewProfile</p>
@@ -70,7 +68,11 @@ export const ChatArea = () => {
   const currentConversation = conversations[currentConversationID];
 
   const messages = useSelector<RootState, Dictionary<Message>>(state => state.messages.entities);
-  const messagesArr = Object.values(messages).filter((message) => { return currentConversation.messages.includes(message._id) });
+  const messagesArr = Object.values(messages).filter((message) => {
+    if (currentConversation) {
+      return currentConversation.messages.includes(message._id);
+    }
+  });
 
   const pendingMessages = useSelector<RootState, PendingMessage[]>(state => state.messages.pendingMessages);
   const pendingMessagesFromCurrConversation = pendingMessages.filter((msg) => msg.conversationID === currentConversationID);
@@ -87,15 +89,11 @@ export const ChatArea = () => {
   return (
     <ChatAreaContainer>
       {!currentConversation && <NewConversation setPeople={setPeople}></NewConversation>}
-
       {currentConversation && isGroupConversation && <GroupChatHeader conversation={currentConversation} />}
       {currentConversation && isDirectConversation && <DirectChatHeader currentConversation={currentConversation} />}
-      {/* {currentConversation && isDirectConversation && isNewMessage && <DirectNewMessageChatHeader />} */}
-
-      {/* {isNewMessage && <DirectNewMessage></DirectNewMessage>} */}
-      {/* {!isNewMessage && currentConversation.} */}
 
       {/* all messages sent by the server */}
+      { currentConversation &&
       <div style={{ paddingTop: "20px", overflowY: "scroll" }}>
         {messagesArr.map((msg) => {
           return (
@@ -116,6 +114,7 @@ export const ChatArea = () => {
                 </>}
             </div>)
         })}</div>
+      }
 
       {/* pending message from current user */}
       <div style={{ paddingTop: "20px", overflowY: "scroll" }}>

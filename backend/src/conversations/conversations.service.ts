@@ -16,7 +16,8 @@ export class ConversationsService {
 
     let name = createConversationBodyDto.name;
     if (!name) {
-      name = createConversationNameFromNamesOfUsers(createConversationBodyDto.users);
+      const namesOfUsers = await UserModel.find({_id: {$in: createConversationBodyDto.users}}, {name: 1}).lean();
+      name = namesOfUsers.map((nameObj) => {return nameObj.name}).join(", ");
     }
     let newConv;
     if (createConversationBodyDto.message) {

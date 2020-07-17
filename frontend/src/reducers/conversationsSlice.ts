@@ -25,10 +25,12 @@ export const conversationSlice = createSlice({
     addConversation: (state, action: PayloadAction<ConversationDto>) => {
       conversationsAdapter.addOne(state, action.payload);
     },
+    setNewConversation: (state) => {
+      state.currentConversationID = "";
+    },
     selectConversation: (state, action: PayloadAction<{ conversationID: string }>) => {
       const id = action.payload.conversationID;
       const conversation = state.entities[id];
-      console.log(conversation);
       if (conversation.users.length > 2) {
         state.isDirectConversation = false;
         state.isGroupConversation = true;
@@ -39,8 +41,15 @@ export const conversationSlice = createSlice({
       state.isLoading = true;
       state.currentConversationID = id;
     },
-    createConversationPending: (state) => {
+    createDirectConversationPending: (state) => {
       state.isLoading = true;
+      state.isDirectConversation = true;
+      state.isGroupConversation = false;
+    },
+    createGroupConversationPending: (state) => {
+      state.isLoading = true;
+      state.isGroupConversation = true;
+      state.isDirectConversation = false;
     },
     createConversationSuccess: (state, action: PayloadAction<ConversationDto>) => {
       conversationsAdapter.addOne(state, action.payload);
@@ -56,7 +65,14 @@ export const conversationSlice = createSlice({
       state.isLoading = false;
     }
   }
-})
 
+})
 export default conversationSlice.reducer;
-export const {addConversation, selectConversation, createConversationPending, createConversationSuccess} = conversationSlice.actions;
+export const {
+  addConversation,
+  selectConversation,
+  createDirectConversationPending,
+  createGroupConversationPending,
+  createConversationSuccess,
+  setNewConversation
+} = conversationSlice.actions;

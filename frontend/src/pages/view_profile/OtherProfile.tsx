@@ -36,7 +36,7 @@ export function OtherProfile({username}: {username: string}) {
     const [notFound, setNotFound] = useState(false);
     const followHook = useFollow(user?._id);
     const dispatch = useDispatch<AppDispatch>();
-    const src = user.profileBanner || DefaultImg;
+
 
     useEffect(() => {
         if (!user?.followers) {
@@ -53,7 +53,7 @@ export function OtherProfile({username}: {username: string}) {
     if (!user?.followers) {
         return <Loading />
     }
-
+    const src = user.profileBanner || DefaultImg;
     return <>
         <ProfileBanner imgSrc={src}/>
         <HeightSpace height="26px" />

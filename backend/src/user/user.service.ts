@@ -22,41 +22,37 @@ type ExtraGitHubUserInfo = {
 @Injectable()
 export class UserService {
 
-  async addFollower(requestUserObjectID: string, otherUserObjectID: string): Promise<boolean> {
-    const foundUser = UserModel.findById(otherUserObjectID);
-    await UserModel.updateOne({ _id: requestUserObjectID }, {
+  async addFollower(follower: string, personBeingFollowed: string): Promise<boolean> {
+    await UserModel.updateOne({ _id: personBeingFollowed }, {
       $push: {
-        followers: (await foundUser)._id,
+        followers: new ObjectId(follower),
       }
     })
     return true;
   }
 
-  async addFollowing(requestUserObjectID: string, otherUserObjectID: string): Promise<boolean> {
-    const foundUser = UserModel.findById(otherUserObjectID);
-    await UserModel.updateOne({ _id: requestUserObjectID }, {
+  async addFollowing(following: string, personFollowing: string): Promise<boolean> {
+    await UserModel.updateOne({ _id: personFollowing }, {
       $push: {
-        following: (await foundUser)._id,
+        following: new ObjectId(following),
       }
     })
     return true;
   }
 
-  async removeFollower(requestUserObjectID: string, otherUserObjectID: string): Promise<boolean> {
-    const foundUser = UserModel.findById(otherUserObjectID);
-    await UserModel.updateOne({ _id: requestUserObjectID }, {
+  async removeFollower(follower: string, personBeingFollowed: string): Promise<boolean> {
+    await UserModel.updateOne({ _id: personBeingFollowed }, {
       $pull: {
-        followers: (await foundUser)._id,
+        followers: new ObjectId(follower),
       }
     })
     return true;
   }
 
-  async removeFollowing(requestUserObjectID: string, otherUserObjectID: string): Promise<boolean> {
-    const foundUser = UserModel.findById(otherUserObjectID);
-    await UserModel.updateOne({ _id: requestUserObjectID }, {
+  async removeFollowing(following: string, personRemoving: string): Promise<boolean> {
+    await UserModel.updateOne({ _id: personRemoving }, {
       $pull: {
-        following: (await foundUser)._id,
+        following: new ObjectId(following),
       }
     })
     return true;

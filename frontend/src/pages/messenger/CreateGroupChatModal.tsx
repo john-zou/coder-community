@@ -15,7 +15,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { selectConversation } from "../../reducers/conversationsSlice";
 import { RootState } from '../../reducers/rootReducer';
 import { Dictionary } from '@reduxjs/toolkit';
-import { Group } from '../../store/types';
+import {Conversation, Group, User} from '../../store/types';
+import Avatar from "../common/Avatar";
+import {fetchMessagesInConversation} from "../../reducers/messagesSlice";
 
 export interface DialogTitleProps extends WithStyles<typeof styles> {
   id: string;
@@ -58,18 +60,32 @@ const DialogContent = withStyles((theme: Theme) => ({
 }))(MuiDialogContent);
 
 
-export const Groups = ({ groups, setOpen }: { groups: Group[], setOpen: any }) => {
+export const GroupConversations = ({ setOpen }: { setOpen: any }) => {
+  const conversations = useSelector<RootState, Dictionary<Conversation>>(state => state.conversations.entities);
+  const groupConv = Object.values(conversations).filter(c => {return c.users.length > 2});
+
   const dispatch = useDispatch();
+
+  const handleSelectConversation = (conversationID) => {
+    // console.log(conversationID);
+    dispatch(selectConversation({ conversationID }));
+
+    // console.log(conversationID);
+    //fetch messages in current conversation
+    dispatch(fetchMessagesInConversation({ conversationID }));
+  }
   return (<>
     <div style={{ paddingTop: "20px" }}>
       <span><img src={PlusIcon} alt="" style={{ float: "right" }} onClick={setOpen} /></span>
 
       <span><HeadingText>GROUP CONVERSATIONS</HeadingText></span>
 
-      {groups.map((group) => {
-        return <p style={{ fontWeight: "bold", color: "#333333" }} onClick={() => dispatch(selectConversation({ conversationID: group._id }))}>#{group}</p>
-      })}
+      {groupConv.length > 0 && groupConv.map((group) => {
+        return (
+          <p style={{ fontWeight: "bold", color: "#333333" }}
+                onClick={() => handleSelectConversation(group._id)}>#{group.name}</p>)
 
+      })}
     </div>
   </>)
 }
@@ -84,12 +100,13 @@ export const CreateGroupChatModal = () => {
   const handleClose = () => {
     setOpen(false);
   };
-  const groups = useSelector<RootState, Dictionary<Group>>(state => state.groups.entities);
+
+
 
   return (
     <div>
       {/* list of all group chats */}
-      <Groups groups={Object.values(groups)} setOpen={handleClickOpen}></Groups>
+      <GroupConversations setOpen={handleClickOpen}></GroupConversations>
 
       <Dialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={open}>
         <DialogTitle id="customized-dialog-title" onClose={handleClose}>

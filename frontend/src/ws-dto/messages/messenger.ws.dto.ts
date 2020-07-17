@@ -26,5 +26,6 @@ export class NewConversationServerToClientDto {
 
 export class NewConversationClientToServerDto {
   otherUsers: string[];
-  initialMessage: string;
+  initialMessage?: string;
+  name?: string;
 }

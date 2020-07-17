@@ -8,7 +8,7 @@ import {SocketContext} from ".";
 import {createMessagePending} from "../../reducers/messagesSlice";
 import {CreateMessageBodyDto} from "../../api";
 import "../../App.css";
-import {createConversationPending} from "../../reducers/conversationsSlice";
+import {createDirectConversationPending, createGroupConversationPending} from "../../reducers/conversationsSlice";
 import {NewConversationClientToServerDto} from "../../ws-dto/messages/messenger.ws.dto";
 
 const Editor = styled.div`
@@ -52,7 +52,11 @@ export const ChatInput = ({newMessageSelectedUserIDs}: { newMessageSelectedUserI
       if (conversationID === "") {
         const dto: NewConversationClientToServerDto = {otherUsers: newMessageSelectedUserIDs, initialMessage: text}
         socket.current.emit('newConversation', dto);
-        dispatch(createConversationPending());
+        if (newMessageSelectedUserIDs.length > 2) {
+          dispatch(createGroupConversationPending())
+        } else {
+          dispatch(createDirectConversationPending());
+        }
         return;
         // when the back end responds, dispatch is called (in socket.on in messenger/index)
       }
