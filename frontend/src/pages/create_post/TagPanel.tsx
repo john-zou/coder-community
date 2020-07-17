@@ -41,19 +41,6 @@ const useStyles = makeStyles({
   },
 });
 
-const _onChange = (event) => {
-  // this.cur = event.target.value;
-  // this.props.load(event.target.value);
-};
-
-const _onSubmit = (event) => {
-  event.preventDefault();
-};
-
-const _onDel = (event) => {
-  event.preventDefault();
-};
-
 export default function TagPanel(params) {
   const classes = useStyles();
   const alltags = []; // useState<RootState, >()
@@ -62,22 +49,22 @@ export default function TagPanel(params) {
   return (
     <div className={classes.cptag}>
       <form id="tagform">
-        <h4 className={classes.h4}>Add tags</h4>
+        {/*<h4 className={classes.h4}>Add tags</h4>
         <hr className={classes.display}></hr>
         <ul className={classes.tags}>
           <Tag />
-        </ul>
-        <AddMultiple label="Add Tags" options={params.allTagsArr} setItems={params.setPostTags} />
+        </ul>*/}
+        <AddMultiple label="Add Tags" options={params.allTagsArr} setItems={params.setPostTags} panelWidth={"40vw"} />
         {/*<input
           className={classes.input}
           onChange={_onChange}
           placeholder="Type here"
         ></input> */}
-        <br></br>
+        {/*<br></br>*/}
       </form>
-      <ul id="tags" onClick={_onDel}>
+      {/*<ul id="tags" onClick={_onDel}>
         {alltags}
-      </ul>
+      </ul>*/}
     </div>
   );
 }

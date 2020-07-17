@@ -43,10 +43,21 @@ export default function CreatePost() {
     const [featuredImg, setImg] = useState('');
     const allTags = useSelector<RootState, Dictionary<Tag>>(state => state.tags.entities);
     // const allTagsArr = Object.values(allTags);
-    const allTagsArr = ["CPP", "Java"];
+    const allTagsArr = [
+        {
+            _id: 0,
+            name: "CPP",
+            postsSet: false,
+        },
+        {
+            _id: 1,
+            name: "Java",
+            postsSet: false,
+        }];
     console.log("CREATEPOST::INDEX");
-    console.log(allTags);
-    console.log(allTagsArr);
+    // console.log(allTags);
+    // console.log(allTagsArr);
+    console.log(postTags);
 
     return (
         <div className={classes.createPost}>

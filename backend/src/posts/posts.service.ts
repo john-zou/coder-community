@@ -95,12 +95,13 @@ export class PostsService {
     ): Promise<CreatePostSuccessDto> {
         // Logger.log("PostsService::createPost")
         let slug = urlSlug(body.title);
-
+        console.log("POSTS::SERVICE");
         // TODO: optimize with model.collection.find() / limit() / size()
         if (await PostModel.findOne({ slug })) {
             slug = undefined;
         }
 
+        console.log(body);
         const doc = {
             author: authorObjectID,
             title: body.title,
@@ -116,8 +117,11 @@ export class PostsService {
         };
         // Logger.log(doc);
         // Logger.log("Done create");
+        // console.log("BEFORE CREATE");
         const newPost = new PostModel(doc);
+
         await newPost.save();
+        console.log("AFTER SAVE");
         if (!slug) {
             // set _id as slug (if slug is already taken)
             // TODO: create a better slug than just the id if taken
@@ -130,18 +134,23 @@ export class PostsService {
         author.posts.push(newPost._id);
         await author.save();
 
+        console.log("before add to tags");
         // Add post to tags
         const tags = newPost.tags;
         if (tags.length > 0) {
+            console.log("1st for loop");
             const expressions = tags.map(tagID => ({ _id: tagID }));
             await TagModel.updateMany({ $or: expressions }, { $push: { posts: newPost._id } });
+            console.log("done");
         }
 
+        console.log("after add to tags");
         // TODO: Add post to group (if post created for group)
         // this.trendingGateway.wss.emit('/newPost', {
         //   _id: newPost._id,
         //   slug,
         // });
+        console.log("finished");
         return {
             _id: newPost._id,
             slug,

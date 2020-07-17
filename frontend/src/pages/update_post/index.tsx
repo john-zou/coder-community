@@ -12,11 +12,11 @@ import {NoAccessibilityError} from "../common/NoAccessibilityError";
 import {NotLoggedInError} from "../common/NotLoggedInError";
 import ImgP from "../create_post/ImgPanel";
 import TextP from "../create_post/TextPanel";
-import AddMultiple from "../group/AddMuliple";
+import TagP from "./TagPanel";
 import Submit from "../create_post/Submit";
-import {TagsContainer} from "../create_post/CreatePost";
 import {makeStyles} from "@material-ui/core/styles";
 import {Dictionary, unwrapResult} from "@reduxjs/toolkit";
+
 
 const useStyles = makeStyles({
     createPost: {
@@ -103,9 +103,10 @@ export default function UpdatePost() {
         <div className={classes.createPost}>
             <ImgP setImg={setImg} />
             <TextP setTitle={setTitle} setContent={setContent} title={post?.title} content={post?.content} />
-            <TagsContainer>
+            <TagP setPostTags={setPostTags} allTagsArr={allTagsArr}/>
+            {/*<TagsContainer>
                 <AddMultiple label="Add Tags" options={allTagsArr} setItems={setPostTags} />
-            </TagsContainer>
+            </TagsContainer>*/}
             <Submit title={title} content={content} tags={postTags} img={featuredImg} isUpdate={post?.slug}/>
         </div>
     );

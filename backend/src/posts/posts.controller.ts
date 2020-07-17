@@ -98,9 +98,8 @@ export class PostsController {
     @Post()
     createPost(@Body() createPostDto: CreatePostBodyDto, @UserObjectID() author: string): Promise<CreatePostSuccessDto> {
         console.log('POSTS::CONTROLLER');
-        console.log(author);
-        console.log(createPostDto);
-        // let author = "5f07dd25be9a5c6510208dce";
+        // console.log(author);
+        // console.log(createPostDto);
         return this.postsService.createPost(author, createPostDto);
     }
 
