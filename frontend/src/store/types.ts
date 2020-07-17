@@ -18,8 +18,8 @@ export type Conversation = {
   name: string,
   users: string[],
   messages: string[],
-  createdAt: string,
-  updatedAt: string,
+  createdAt?: number,
+  updatedAt?: number,
 }
 
 export type Group = {
@@ -41,8 +41,8 @@ export type Message = {
   _id: string,
   author: string,
   text: string,
-  createdAt: string,
-  updatedAt: string,
+  createdAt: number,
+  updatedAt?: number,
 };
 
 export type Post = {

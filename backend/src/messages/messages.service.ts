@@ -38,8 +38,8 @@ export class MessagesService {
       _id: newMessage._id.toString(),
       author: userID.toString(),
       text: newMessage.text,
-      createdAt: newMessage.createdAt.toString(),
-      updatedAt: newMessage.updatedAt.toString(),
+      createdAt: newMessage.createdAt.valueOf(),
+      updatedAt: newMessage.updatedAt.valueOf(),
     }
   }
   // For testing

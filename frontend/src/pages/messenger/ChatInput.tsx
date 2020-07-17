@@ -1,15 +1,15 @@
 import Quill from "quill";
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, {useContext, useEffect, useRef} from "react";
 import styled from '@emotion/styled';
 import SendIcon from "../../icons/sendIcon.svg";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../reducers/rootReducer";
-import { SocketContext } from ".";
-import { createMessagePending } from "../../reducers/messagesSlice";
-import { CreateMessageBodyDto } from "../../api";
+import {useDispatch, useSelector} from "react-redux";
+import {RootState} from "../../reducers/rootReducer";
+import {SocketContext} from ".";
+import {createMessagePending} from "../../reducers/messagesSlice";
+import {CreateMessageBodyDto} from "../../api";
 import "../../App.css";
-import {useSetRecoilState} from "recoil";
-import {createConversationStatusAtom} from "./atoms";
+import {createConversationPending} from "../../reducers/conversationsSlice";
+import {NewConversationClientToServerDto} from "../../ws-dto/messages/messenger.ws.dto";
 
 const Editor = styled.div`
   max-height: 50%;
@@ -33,15 +33,15 @@ const Toolbar = styled.div`
   padding-left: 30px;
 `;
 
-export const ChatInput = ({ newMessageSelectedUserIDs }) => {
+export const ChatInput = ({newMessageSelectedUserIDs}: { newMessageSelectedUserIDs: string[] }) => {
   const editor = useRef<Quill>(null);//handy for keeping any mutable value around similar to how you’d use instance fields in classes.
   const socket = useContext(SocketContext);
   const userID = useSelector<RootState, string>(state => state.user._id);
   const conversationID = useSelector<RootState, string>(state => state.conversations.currentConversationID);
   const dispatch = useDispatch();
-  const setConversationStatus = useSetRecoilState(createConversationStatusAtom);
 
   const handleSend = useRef(null);
+  // console.log("ChatInput render... newMessageSelectedUserIDs", newMessageSelectedUserIDs);
 
   useEffect(() => {
     handleSend.current = () => {
@@ -50,12 +50,14 @@ export const ChatInput = ({ newMessageSelectedUserIDs }) => {
 
       // if the conversationID is "", then the user is starting a new group chat with anonymous name
       if (conversationID === "") {
-        socket.current.emit('newConversation', {otherUsers: newMessageSelectedUserIDs, initialMessage: text});
-        // status is pending, this is a special case
-        setConversationStatus("pending");
+        const dto: NewConversationClientToServerDto = {otherUsers: newMessageSelectedUserIDs, initialMessage: text}
+        socket.current.emit('newConversation', dto);
+        dispatch(createConversationPending());
+        return;
         // when the back end responds, dispatch is called (in socket.on in messenger/index)
       }
 
+      //general case, when sending a message
       const createMessageBodyDto: CreateMessageBodyDto = {
         userID,
         conversationID,
@@ -68,7 +70,7 @@ export const ChatInput = ({ newMessageSelectedUserIDs }) => {
       dispatch(createMessagePending(createMessageBodyDto));
       editor.current.setText('');
     }
-  }, [conversationID]);
+  }, [conversationID, newMessageSelectedUserIDs]);
 
   useEffect(() => {
     editor.current = new Quill('#editor', {
@@ -107,13 +109,13 @@ export const ChatInput = ({ newMessageSelectedUserIDs }) => {
         <button className="ql-list" value="ordered"></button>
         <button className="ql-list" value="bullet"></button>
 
-        <div style={{ flex: 1 }}></div>
-        <p style={{ fontSize: "small", fontStyle: "italic" }}>
+        <div style={{flex: 1}}></div>
+        <p style={{fontSize: "small", fontStyle: "italic"}}>
           <strong>Enter</strong> to send&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           <strong>Shift</strong> + <strong>Enter</strong> to add a new line&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
 
-        <div style={{ marginRight: "15px", marginTop: "10px" }}>
-          <img src={SendIcon} alt="send" onClick={handleSend.current} />
+        <div style={{marginRight: "15px", marginTop: "10px"}}>
+          <img src={SendIcon} alt="send" onClick={handleSend.current}/>
         </div>
       </Toolbar>
     </>

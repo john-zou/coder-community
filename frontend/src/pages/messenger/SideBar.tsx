@@ -47,20 +47,7 @@ const DirectMessages = () => {
 
     // console.log(conversationID);
     //fetch messages in current conversation
-    setLoading(true);
-    dispatch(fetchMessagesInConversation({ conversationID })).then(unwrapResult).then((res) => {
-      setLoading(false);
-    }).catch(error => {
-      setError(error);
-      setLoading(false);
-    })
-  }
-
-  if (loading) {
-    return <Loading />
-  }
-  if (error) {
-    return <ErrorPage error={error} />
+    dispatch(fetchMessagesInConversation({ conversationID }));
   }
 
   return (
@@ -85,7 +72,6 @@ const DirectMessages = () => {
 
 export const SideBar = () => {
   // const users = useSelector<RootState, Dictionary<User>>(state => state.users.entities);
-  const isGroupConversation = useSelector<RootState, boolean>(state => state.conversations.isGroupConversation);
   //replace these groups with group chat later
 
   const handleToggleDirectOrGroupChatMode = () => {

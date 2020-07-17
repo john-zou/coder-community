@@ -277,16 +277,16 @@ export interface CreateMessageSuccessDto {
     text: string;
     /**
      * 
-     * @type {any}
+     * @type {number}
      * @memberof CreateMessageSuccessDto
      */
-    createdAt: any;
+    createdAt: number;
     /**
      * 
-     * @type {string}
+     * @type {number}
      * @memberof CreateMessageSuccessDto
      */
-    updatedAt: string;
+    updatedAt?: number;
 }
 /**
  * 

@@ -1,22 +1,19 @@
-import React, { useEffect, useState } from "react";
+import React, {useState} from "react";
 import styled from '@emotion/styled';
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../reducers/rootReducer";
+import {useSelector} from "react-redux";
+import {RootState} from "../../reducers/rootReducer";
 import Avatar from "../common/Avatar";
-import { Dictionary } from "@reduxjs/toolkit";
-import { Conversation, CurrentLoggedInUser, Message, User } from "../../store/types";
-import { ChatInfoHeader, H2 } from "./ChatInfo";
-import { ChatInput } from "./ChatInput";
+import {Dictionary} from "@reduxjs/toolkit";
+import {Conversation, CurrentLoggedInUser, Message, User} from "../../store/types";
+import {ChatInfoHeader, H2} from "./ChatInfo";
+import {ChatInput} from "./ChatInput";
 
-import { PendingMessage } from "../../reducers/messagesSlice";
-import { ChatMessage } from "./ChatMessage";
+import {PendingMessage} from "../../reducers/messagesSlice";
+import {ChatMessage} from "./ChatMessage";
 import "../../App.css";
 import moment from "moment";
-import { NewConversation } from "./NewConversation";
-import { DirectNewMessage, DirectNewMessageChatHeader } from "./DirectNewMessage";
-import {useRecoilValue} from "recoil";
-import {createConversationStatusAtom} from "./atoms";
-import {Loading} from "../common/Loading";
+import {NewConversation} from "./NewConversation";
+import { Loading } from "../common/Loading";
 
 const ChatAreaContainer = styled.div`
   display: flex;
@@ -79,10 +76,12 @@ export const ChatArea = () => {
   const pendingMessagesFromCurrConversation = pendingMessages.filter((msg) => msg.conversationID === currentConversationID);
 
   const [people, setPeople] = useState<string[]>([]);
-  const createConversationStatus = useRecoilValue(createConversationStatusAtom);
 
-  if (createConversationStatus === 'pending') {
-    return <Loading />
+  const isLoading = useSelector<RootState, boolean>(state => state.conversations.isLoading);
+  if (isLoading) {
+    return (
+      <Loading></Loading>
+    )
   }
 
   return (

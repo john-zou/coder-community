@@ -57,7 +57,7 @@ export const messagesSlice = createSlice({
     }
   },
   extraReducers: {
-    [fetchMessagesInConversation.fulfilled.type]: (state, action: PayloadAction<MessageDto[]>) => {
+    [fetchMessagesInConversation.fulfilled.type]: (state, action: PayloadAction<CreateMessageSuccessDto[]>) => {
       messagesAdapter.upsertMany(state, action.payload);
     }
   }

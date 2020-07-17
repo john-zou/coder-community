@@ -77,3 +77,14 @@ export const convertPostDocumentToPostDetailDto = (post: DocumentType<Post>): Po
     group: post.group?.toString(),
   }
 }
+
+export const createConversationNameFromNamesOfUsers = (namesOfUsers: string[]): string => {
+  let name = "";
+  for (let i = 0; i < namesOfUsers.length; ++i) {
+    name += namesOfUsers[i];
+    if (i === namesOfUsers.length - 1) {
+      return name;
+    }
+    name += ", ";
+  }
+}

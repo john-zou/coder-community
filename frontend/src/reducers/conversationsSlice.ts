@@ -1,7 +1,8 @@
-import { createEntityAdapter, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { CreateConversationBodyDto } from "../api";
-import { Conversation } from "../store/types";
-import { fetchMessagesInConversation } from "./messagesSlice";
+import {createEntityAdapter, createSlice, PayloadAction} from "@reduxjs/toolkit";
+import {CreateConversationBodyDto} from "../api";
+import {Conversation} from "../store/types";
+import {ConversationDto} from "../ws-dto/messages/messenger.ws.dto";
+import {fetchMessagesInConversation} from "./messagesSlice";
 
 const conversationsAdapter = createEntityAdapter<Conversation>({
   selectId: item => item._id
@@ -9,12 +10,21 @@ const conversationsAdapter = createEntityAdapter<Conversation>({
 
 export const conversationSlice = createSlice({
   name: "conversations",
-  initialState: conversationsAdapter.getInitialState<{ currentConversationID: string, isGroupConversation: boolean, isDirectConversation: boolean }>({
+  initialState: conversationsAdapter.getInitialState<{
+    currentConversationID: string,
+    isGroupConversation: boolean,
+    isDirectConversation: boolean
+    isLoading: boolean,
+  }>({
     currentConversationID: '', //the conversation shown in CHat Window
     isGroupConversation: false,
-    isDirectConversation: true
+    isDirectConversation: true,
+    isLoading: false,
   }),//also has ids[] and entities{}
   reducers: {
+    addConversation: (state, action: PayloadAction<ConversationDto>) => {
+      conversationsAdapter.addOne(state, action.payload);
+    },
     selectConversation: (state, action: PayloadAction<{ conversationID: string }>) => {
       const id = action.payload.conversationID;
       const conversation = state.entities[id];
@@ -26,22 +36,27 @@ export const conversationSlice = createSlice({
         state.isDirectConversation = true;
         state.isGroupConversation = false;
       }
-      // fetchMessagesInConversation({ conversationID: id });
+      state.isLoading = true;
       state.currentConversationID = id;
     },
-    createConversationSuccess: (state, action: PayloadAction<CreateConversationBodyDto>) => {
-      // TODO
+    createConversationPending: (state) => {
+      state.isLoading = true;
     },
-    newConversationFromElsewhere: (state, action) => {
-      // TODO
+    createConversationSuccess: (state, action: PayloadAction<ConversationDto>) => {
+      conversationsAdapter.addOne(state, action.payload);
+      state.isLoading = true;
+      state.currentConversationID = action.payload._id;
     }
   },
   extraReducers: {
     'getConversationsAndUsers': (state, action: PayloadAction<any>) => {
       conversationsAdapter.upsertMany(state, action.payload.conversations);
+    },
+    [fetchMessagesInConversation.fulfilled.type]: (state) => {
+      state.isLoading = false;
     }
   }
 })
 
 export default conversationSlice.reducer;
-export const { selectConversation } = conversationSlice.actions;
+export const {addConversation, selectConversation, createConversationPending, createConversationSuccess} = conversationSlice.actions;

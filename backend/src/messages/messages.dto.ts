@@ -17,6 +17,6 @@ export class CreateMessageSuccessDto {
   _id: string;
   author: string;
   text: string;
-  createdAt: string | number;
-  updatedAt: string;
+  createdAt: number;
+  updatedAt?: number;
 }
