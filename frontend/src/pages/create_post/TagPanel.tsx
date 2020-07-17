@@ -1,6 +1,7 @@
 import React from "react";
 import Tag from "./Tag";
 import { makeStyles } from "@material-ui/core/styles";
+import AddMultiple from "../group/AddMuliple";
 
 const useStyles = makeStyles({
   cptag: {
@@ -53,9 +54,11 @@ const _onDel = (event) => {
   event.preventDefault();
 };
 
-export default function TagPanel(param) {
+export default function TagPanel(params) {
   const classes = useStyles();
-  const alltags = useState<RootState, >()
+  const alltags = []; // useState<RootState, >()
+  console.log("CREATEPOST::TAGPANEL");
+  console.log(params.allTagsArr);
   return (
     <div className={classes.cptag}>
       <form id="tagform">
@@ -64,15 +67,13 @@ export default function TagPanel(param) {
         <ul className={classes.tags}>
           <Tag />
         </ul>
-        <input
+        <AddMultiple label="Add Tags" options={params.allTagsArr} setItems={params.setPostTags} />
+        {/*<input
           className={classes.input}
           onChange={_onChange}
           placeholder="Type here"
-        ></input>
+        ></input> */}
         <br></br>
-        <button id="submit" onClick={_onSubmit}>
-          Submit
-        </button>
       </form>
       <ul id="tags" onClick={_onDel}>
         {alltags}

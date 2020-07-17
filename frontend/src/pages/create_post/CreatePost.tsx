@@ -1,15 +1,14 @@
-import React, { useState } from "react";
-import { makeStyles } from "@material-ui/core/styles";
+import React, {useState} from "react";
+import {makeStyles} from "@material-ui/core/styles";
 import ImgP from "./ImgPanel";
 import TextP from "./TextPanel";
 import TagP from "./TagPanel";
-import PeopleP from "./PeoplePanel";
 import Submit from "./Submit";
 import AddMultiple from "../group/AddMuliple";
-import { RootState } from "../../reducers/rootReducer";
-import { Dictionary } from "@reduxjs/toolkit";
-import { Tag } from "../../store/types";
-import { useSelector } from "react-redux";
+import {RootState} from "../../reducers/rootReducer";
+import {Dictionary} from "@reduxjs/toolkit";
+import {Tag} from "../../store/types";
+import {useSelector} from "react-redux";
 import styled from '@emotion/styled';
 
 const useStyles = makeStyles({
@@ -37,23 +36,24 @@ export const TagsContainer = styled.div`
   padding-top: 1em;
 `;
 export default function CreatePost() {
-  const classes = useStyles();
-  const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
-  const [postTags, setTags] = useState([]);
-  const [featuredImg, setImg] = useState('');
-  const allTags = useSelector<RootState, Dictionary<Tag>>(state => state.tags.entities);
-  const allTagsArr = Object.values(allTags);
+    const classes = useStyles();
+    const [title, setTitle] = useState('');
+    const [content, setContent] = useState('');
+    const [postTags, setPostTags] = useState([]);
+    const [featuredImg, setImg] = useState('');
+    const allTags = useSelector<RootState, Dictionary<Tag>>(state => state.tags.entities);
+    // const allTagsArr = Object.values(allTags);
+    const allTagsArr = ["CPP", "Java"];
+    console.log("CREATEPOST::INDEX");
+    console.log(allTags);
+    console.log(allTagsArr);
 
-  return (
-    <div className={classes.createPost}>
-      <ImgP setImg={setImg} />
-      <TextP setTitle={setTitle} setContent={setContent} />
-      <TagP setTags={setTags} />
-        { /*<TagsContainer>
-        <AddMultiple label="Add Tags" options={allTagsArr} setItems={setPostTags} />
-      </TagsContainer> */ }
-      <Submit title={title} content={content} tags={postTags} img={featuredImg} />
-    </div>
-  );
+    return (
+        <div className={classes.createPost}>
+            <ImgP setImg={setImg}/>
+            <TextP setTitle={setTitle} setContent={setContent}/>
+            <TagP setPostTags={setPostTags} allTagsArr={allTagsArr}/>
+            <Submit title={title} content={content} tags={postTags} img={featuredImg}/>
+        </div>
+    );
 }

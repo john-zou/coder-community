@@ -108,7 +108,7 @@ export const postsSlice = createSlice({
         [fetchPostsByTag.fulfilled.type]: (state, action: PayloadAction<GetPostsByTagDto>) => {
             postsAdapter.upsertMany(state, action.payload.posts);
         },
-        'user/toggleLikePost': (state, action: PayloadAction<PostIDPayload & { increment: boolean }>) => {
+        'user/toggleLikePost': (state, action: PayloadAction<PostIDPayload & {  increment: boolean }>) => {
             if (action.payload.increment) {
                 state.entities[action.payload.postID].likes++;
             } else {

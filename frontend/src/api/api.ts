@@ -234,10 +234,10 @@ export interface CreatePostBodyDto {
     content: string;
     /**
      * 
-     * @type {Array<any>}
+     * @type {Array<string>}
      * @memberof CreatePostBodyDto
      */
-    tags: Array<any>;
+    tags: Array<string>;
     /**
      * 
      * @type {string}
