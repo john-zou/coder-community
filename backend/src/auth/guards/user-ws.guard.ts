@@ -11,12 +11,13 @@ export class UserWsAuthGuard implements CanActivate {
 
   constructor(private readonly jwtService: JwtService) {}
 
-  private decodeJwtForWsClient(socketClientID, jwt) {
-    const payload = this.jwtService.decode(jwt) as unknown as CoderCommunityJwtPayload;
+  private decodeJwtForWsClient(socketClientID, data) {
+    const payload = this.jwtService.decode(data.jwt) as unknown as CoderCommunityJwtPayload;
     // Store the user's ObjectID from the JWT
     let passed = false;
     if (payload?._id) {
       this.logger.log(`Client JWT decoded. User ObjectID: ${payload._id}`);
+      data.userObjectID = payload._id;
       this.clientIDToVerifiedUserObjectID[socketClientID] = payload._id;
       passed = true;
     }
@@ -32,7 +33,7 @@ export class UserWsAuthGuard implements CanActivate {
 
     if (data.jwt) {
       // Client is providing JWT
-      return this.decodeJwtForWsClient(clientID, data.jwt);
+      return this.decodeJwtForWsClient(clientID, data);
     } else {
       const userObjectID = this.clientIDToVerifiedUserObjectID[clientID];
       if (!userObjectID) {

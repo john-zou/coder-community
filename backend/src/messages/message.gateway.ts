@@ -1,5 +1,14 @@
 import { Logger } from "@nestjs/common";
-import { ConnectedSocket, MessageBody, OnGatewayConnection, SubscribeMessage, WebSocketGateway, WebSocketServer, WsResponse } from "@nestjs/websockets";
+import {
+  ConnectedSocket,
+  MessageBody,
+  OnGatewayConnection,
+  OnGatewayDisconnect,
+  SubscribeMessage,
+  WebSocketGateway,
+  WebSocketServer,
+  WsResponse,
+} from '@nestjs/websockets';
 import { Client, Server, Socket } from 'socket.io';
 import { ConversationModel, MessageModel, UserModel } from "../mongoModels";
 import { convertToStrArr } from "../util/helperFunctions";
@@ -12,9 +21,12 @@ import { UserObjectID } from '../user/user-object-id.decorator';
 import { NewConversationClientToServerDto, NewConversationServerToClientDto } from './messenger.ws.dto';
 
 @WebSocketGateway() //by default server already serves at 3001
-export class MessageGateway implements OnGatewayConnection {//gateway===controller
+export class MessageGateway implements OnGatewayConnection, OnGatewayDisconnect {//gateway===controller
   @WebSocketServer()
-  wss: Server;getConversationsAndUsers
+  wss: Server;
+
+  private readonly mapUserIDToClientID: Record<string, Set<Socket>> = {};
+  private readonly mapClientIDToUserID: Record<string, string> = {};
 
   constructor(private readonly messagesService: MessagesService, private readonly conversationsService: ConversationsService) { }
   private logger = new Logger('MessageGateway');
@@ -24,9 +36,28 @@ export class MessageGateway implements OnGatewayConnection {//gateway===controll
     client.emit('connection', 'suscessfully connected to server');//send to the client
   }
 
+  handleDisconnect(client: Socket): any {
+    const userID = this.mapClientIDToUserID[client.id];
+    this.mapUserIDToClientID[userID].delete(client);
+  }
+
   @PersonalWs()
   @SubscribeMessage('authenticate')
-  acknowledgeAuthentication(): WsResponse<null> {
+  async acknowledgeAuthentication(@ConnectedSocket() socket: Socket, @UserObjectID() userID: string): Promise<WsResponse<null>> {
+    this.mapClientIDToUserID[socket.client.id] = userID;
+
+    const user = await UserModel.findById(userID);
+    const conversations = user.conversations;
+    for (const convID of conversations) {
+      socket.join(convID.toString());
+    }
+    if (!this.mapUserIDToClientID[userID]) {
+      this.mapUserIDToClientID[userID] = new Set<Socket>();
+      this.mapUserIDToClientID[userID].add(socket);
+    } else {
+      this.mapUserIDToClientID[userID].add(socket);
+    }
+
     return {
       event: 'authenticate',    // Front end waits for this event before requesting data
       data: null,
@@ -75,7 +106,7 @@ export class MessageGateway implements OnGatewayConnection {//gateway===controll
     console.log("convesation id in gateway: " + createMessageBodyDto.conversationID);
     const { _id } = await this.messagesService.createMessage(createMessageBodyDto, createMessageBodyDto.userID, createMessageBodyDto.conversationID);
     //broadcast to all clients except user
-    client.broadcast.emit('newMessage', {
+    client.to(createMessageBodyDto.conversationID).emit('newMessage', {
       author: createMessageBodyDto.userID,
       _id,
       text: createMessageBodyDto.text,
@@ -109,6 +140,14 @@ export class MessageGateway implements OnGatewayConnection {//gateway===controll
       createdAt: Date.now(),
     }, userID);
 
+    for (const user of conversation.users) {
+
+      if (this.mapUserIDToClientID[user]) {
+        for (const socket of this.mapUserIDToClientID[user]) {
+          socket.join(conversation._id);
+        }
+      }
+    }
 
     const dataForBroadcast: NewConversationServerToClientDto = {
       isCreator: false, conversation
@@ -126,4 +165,6 @@ export class MessageGateway implements OnGatewayConnection {//gateway===controll
       data: dataForClient,
     };
   }
+
+
 }
