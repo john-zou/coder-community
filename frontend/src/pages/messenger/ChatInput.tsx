@@ -1,15 +1,17 @@
 import Quill from "quill";
-import React, {useContext, useEffect, useRef} from "react";
+import React, { useContext, useEffect, useRef } from "react";
 import styled from '@emotion/styled';
 import SendIcon from "../../icons/sendIcon.svg";
-import {useDispatch, useSelector} from "react-redux";
-import {RootState} from "../../reducers/rootReducer";
-import {SocketContext} from ".";
-import {createMessagePending} from "../../reducers/messagesSlice";
-import {CreateMessageBodyDto} from "../../api";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../reducers/rootReducer";
+import { SocketContext } from ".";
+import { createMessagePending, fetchMessagesInConversation } from "../../reducers/messagesSlice";
+import { CreateMessageBodyDto } from "../../api";
 import "../../App.css";
-import {createDirectConversationPending, createGroupConversationPending} from "../../reducers/conversationsSlice";
-import {NewConversationClientToServerDto} from "../../ws-dto/messages/messenger.ws.dto";
+import { createDirectConversationPending, createGroupConversationPending, selectConversation } from "../../reducers/conversationsSlice";
+import { NewConversationClientToServerDto } from "../../ws-dto/messages/messenger.ws.dto";
+import { Dictionary } from "@reduxjs/toolkit";
+import { Conversation } from "../../store/types";
 
 const Editor = styled.div`
   max-height: 50%;
@@ -33,10 +35,12 @@ const Toolbar = styled.div`
   padding-left: 30px;
 `;
 
-export const ChatInput = ({newMessageSelectedUserIDs}: { newMessageSelectedUserIDs: string[] }) => {
+export const ChatInput = ({ newMessageSelectedUserIDs }: { newMessageSelectedUserIDs: string[] }) => {
   const editor = useRef<Quill>(null);//handy for keeping any mutable value around similar to how you’d use instance fields in classes.
   const socket = useContext(SocketContext);
   const userID = useSelector<RootState, string>(state => state.user._id);
+
+  const conversations = useSelector<RootState, Dictionary<Conversation>>(state => state.conversations.entities);
   const conversationID = useSelector<RootState, string>(state => state.conversations.currentConversationID);
   const dispatch = useDispatch();
 
@@ -50,12 +54,31 @@ export const ChatInput = ({newMessageSelectedUserIDs}: { newMessageSelectedUserI
 
       // if the conversationID is "", then the user is starting a new group chat with anonymous name
       if (conversationID === "") {
-        const dto: NewConversationClientToServerDto = {otherUsers: newMessageSelectedUserIDs, initialMessage: text}
-        socket.current.emit('newConversation', dto);
-        if (newMessageSelectedUserIDs.length > 2) {
+        const dto: NewConversationClientToServerDto = { otherUsers: newMessageSelectedUserIDs, initialMessage: text }
+
+        if (newMessageSelectedUserIDs.length > 1) {
+          socket.current.emit('newConversation', dto);
           dispatch(createGroupConversationPending())
         } else {
-          dispatch(createDirectConversationPending());
+          let foundExistingConversation = false;
+          for (const conv of Object.values(conversations)) {
+            if (conv.users.length !== 2) {
+              continue;
+            }
+            if (conv.users.includes(newMessageSelectedUserIDs[0])) {
+              // Select this conversation instead of making a new one
+              console.log("Found existing conversation!");
+              dispatch(selectConversation({ conversationID: conv._id }));
+              dispatch(fetchMessagesInConversation({ conversationID: conv._id }));
+              // dispatch(createMessagePending());
+              foundExistingConversation = true;
+              break;
+            }
+          }
+          if (!foundExistingConversation) {
+            socket.current.emit('newConversation', dto);
+            dispatch(createDirectConversationPending());
+          }
         }
         return;
         // when the back end responds, dispatch is called (in socket.on in messenger/index)
@@ -113,13 +136,13 @@ export const ChatInput = ({newMessageSelectedUserIDs}: { newMessageSelectedUserI
         <button className="ql-list" value="ordered"></button>
         <button className="ql-list" value="bullet"></button>
 
-        <div style={{flex: 1}}></div>
-        <p style={{fontSize: "small", fontStyle: "italic"}}>
+        <div style={{ flex: 1 }}></div>
+        <p style={{ fontSize: "small", fontStyle: "italic" }}>
           <strong>Enter</strong> to send&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           <strong>Shift</strong> + <strong>Enter</strong> to add a new line&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
 
-        <div style={{marginRight: "15px", marginTop: "10px"}}>
-          <img src={SendIcon} alt="send" onClick={handleSend.current}/>
+        <div style={{ marginRight: "15px", marginTop: "10px" }}>
+          <img src={SendIcon} alt="send" onClick={handleSend.current} />
         </div>
       </Toolbar>
     </>

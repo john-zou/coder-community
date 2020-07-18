@@ -15,9 +15,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { selectConversation } from "../../reducers/conversationsSlice";
 import { RootState } from '../../reducers/rootReducer';
 import { Dictionary } from '@reduxjs/toolkit';
-import {Conversation, Group, User} from '../../store/types';
+import { Conversation, Group, User } from '../../store/types';
 import Avatar from "../common/Avatar";
-import {fetchMessagesInConversation} from "../../reducers/messagesSlice";
+import { fetchMessagesInConversation } from "../../reducers/messagesSlice";
 
 export interface DialogTitleProps extends WithStyles<typeof styles> {
   id: string;
@@ -62,7 +62,7 @@ const DialogContent = withStyles((theme: Theme) => ({
 
 export const GroupConversations = ({ setOpen }: { setOpen: any }) => {
   const conversations = useSelector<RootState, Dictionary<Conversation>>(state => state.conversations.entities);
-  const groupConv = Object.values(conversations).filter(c => {return c.users.length > 2});
+  const groupConv = Object.values(conversations).filter(c => { return c.users.length > 2 });
 
   const dispatch = useDispatch();
 
@@ -83,7 +83,7 @@ export const GroupConversations = ({ setOpen }: { setOpen: any }) => {
       {groupConv.length > 0 && groupConv.map((group) => {
         return (
           <p style={{ fontWeight: "bold", color: "#333333" }}
-                onClick={() => handleSelectConversation(group._id)}>#{group.name}</p>)
+            onClick={() => handleSelectConversation(group._id)}>#{group.name}</p>)
 
       })}
     </div>
@@ -101,19 +101,17 @@ export const CreateGroupChatModal = () => {
     setOpen(false);
   };
 
-
-
   return (
     <div>
       {/* list of all group chats */}
       <GroupConversations setOpen={handleClickOpen}></GroupConversations>
 
-      <Dialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={open}>
+      <Dialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={open} disableBackdropClick={true}>
         <DialogTitle id="customized-dialog-title" onClose={handleClose}>
           Create a Group Chat
         </DialogTitle>
 
-        <DialogContent dividers>
+        <DialogContent dividers >
           <CreateGroupChatForm handleClose={handleClose} />
         </DialogContent>
 

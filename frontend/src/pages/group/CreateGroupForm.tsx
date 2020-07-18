@@ -9,7 +9,7 @@ import { AppDispatch } from '../../store';
 import { Loading } from '../common/Loading';
 import ErrorPage from '../common/ErrorPage';
 import { fetchUsersByIDs } from '../../reducers/usersSlice';
-import { convertArrToMap } from '../../util/helperFunctions';
+import { convertArrToMap, getFollowingFollowersOfUser } from '../../util/helperFunctions';
 import { TextFields } from './TextFields';
 import RadioButtons from './RadioButtons';
 import styled from '@emotion/styled';
@@ -41,15 +41,8 @@ export const CreateGroupForm = ({ handleClose }) => {
   const [_private, setPrivate] = useState(false);
 
   const usersMap = useSelector<RootState, Dictionary<User>>(state => state.users.entities);
-
   const user = useSelector<RootState, User>(state => state.user);
-  let followingFollowers: User[] = [];
-  user.followers.concat(user.following).forEach((_id) => {
-    if (usersMap[_id]) {
-      followingFollowers.push(usersMap[_id])
-    }
-  });
-  followingFollowers = Object.values(convertArrToMap(followingFollowers));
+  let followingFollowers: User[] = getFollowingFollowersOfUser(usersMap, user);
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);

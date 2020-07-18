@@ -1,15 +1,15 @@
-import React, {useEffect, useRef} from "react";
-import {SideBar} from "./SideBar";
+import React, { useEffect, useRef } from "react";
+import { SideBar } from "./SideBar";
 import styled from '@emotion/styled';
-import {ChatArea} from "./ChatArea";
-import {ChatInfo} from "./ChatInfo";
-import {useDispatch, useSelector} from "react-redux";
-import {RootState} from "../../reducers/rootReducer";
+import { ChatArea } from "./ChatArea";
+import { ChatInfo } from "./ChatInfo";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../reducers/rootReducer";
 import io from 'socket.io-client';
-import {createMessageSuccess, fetchMessagesInConversation, receiveNewMessage} from "../../reducers/messagesSlice";
-import {BackEndBaseUriForWs, JwtLocalStorageKey} from "../../constants";
-import {addConversation, createConversationSuccess} from "../../reducers/conversationsSlice";
-import {NewConversationServerToClientDto} from "../../ws-dto/messages/messenger.ws.dto";
+import { createMessageSuccess, fetchMessagesInConversation, receiveNewMessage } from "../../reducers/messagesSlice";
+import { BackEndBaseUriForWs, JwtLocalStorageKey } from "../../constants";
+import { addConversation, createConversationSuccess } from "../../reducers/conversationsSlice";
+import { NewConversationServerToClientDto } from "../../ws-dto/messages/messenger.ws.dto";
 
 export const ChatContainer = styled.div`
   display: flex;
@@ -30,7 +30,7 @@ export const Messenger = () => {
     socket.current.on('connection', () => {
       console.log(`connected to ${BackEndBaseUriForWs}` + socket.current.connected); // true
       // Send server the JWT so it can authenticate ther user
-      socket.current.emit('authenticate', {jwt: localStorage.getItem(JwtLocalStorageKey)});
+      socket.current.emit('authenticate', { jwt: localStorage.getItem(JwtLocalStorageKey) });
     });
 
     // The server responds with the same event
@@ -57,7 +57,7 @@ export const Messenger = () => {
       }
     });
 
-    socket.current.on('newConversation', (data: NewConversationServerToClientDto )=> {
+    socket.current.on('newConversation', (data: NewConversationServerToClientDto) => {
       // Client (user) created the new conversation
       if (data.isCreator) {
         dispatch(createConversationSuccess(data.conversation));
