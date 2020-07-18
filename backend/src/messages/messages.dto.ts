@@ -14,6 +14,7 @@ export class CreateMessageBodyDto {
 }
 
 export class CreateMessageSuccessDto {
+  conversationID: string;
   _id: string;
   author: string;
   text: string;

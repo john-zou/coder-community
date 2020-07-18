@@ -66,7 +66,7 @@ export class MessageGateway implements OnGatewayConnection, OnGatewayDisconnect 
 
   @PersonalWs()
   @SubscribeMessage('getConversationsAndUsers')
-  async sendConversationsAndUsers(client: Socket, @UserObjectID() userID: string): Promise<WsResponse<{ users, conversations }>> {
+  async sendConversationsAndUsers(@ConnectedSocket() client: Socket, @UserObjectID() userID: string): Promise<WsResponse<{ users, conversations }>> {
     const user = await UserModel.findById(userID).lean();
     const conversations = await ConversationModel.find({ _id: { $in: user.conversations } }).lean();
     const userIDs = [];
@@ -107,6 +107,7 @@ export class MessageGateway implements OnGatewayConnection, OnGatewayDisconnect 
     const { _id } = await this.messagesService.createMessage(createMessageBodyDto, createMessageBodyDto.userID, createMessageBodyDto.conversationID);
     //broadcast to all clients except user
     client.to(createMessageBodyDto.conversationID).emit('newMessage', {
+      conversationID: createMessageBodyDto.conversationID,
       author: createMessageBodyDto.userID,
       _id,
       text: createMessageBodyDto.text,

@@ -35,6 +35,7 @@ export class MessagesService {
     // this.messageGateway.wss.emit('newMessage', newMessage);
 
     return {
+      conversationID,
       _id: newMessage._id.toString(),
       author: userID.toString(),
       text: newMessage.text,

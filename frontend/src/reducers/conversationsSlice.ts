@@ -1,8 +1,8 @@
 import {createEntityAdapter, createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {CreateConversationBodyDto} from "../api";
+import {CreateConversationBodyDto, CreateMessageSuccessDto} from "../api";
 import {Conversation} from "../store/types";
 import {ConversationDto} from "../ws-dto/messages/messenger.ws.dto";
-import {fetchMessagesInConversation} from "./messagesSlice";
+import {fetchMessagesInConversation, createMessageSuccess, receiveNewMessage} from "./messagesSlice";
 
 const conversationsAdapter = createEntityAdapter<Conversation>({
   selectId: item => item._id
@@ -63,6 +63,12 @@ export const conversationSlice = createSlice({
     },
     [fetchMessagesInConversation.fulfilled.type]: (state) => {
       state.isLoading = false;
+    },
+    [createMessageSuccess.type]: (state, action: PayloadAction<CreateMessageSuccessDto>) => {
+      state.entities[state.currentConversationID].messages.push(action.payload._id);
+    },
+    [receiveNewMessage.type]: (state, action: PayloadAction<CreateMessageSuccessDto>) => {
+      state.entities[action.payload.conversationID].messages.push(action.payload._id);
     }
   }
 
