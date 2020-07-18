@@ -38,6 +38,8 @@ export default function ImgPanel({ setImg }) {
   // const [image, setImage] = useState<File>(null);
 
   const handleImageUpload = img => {
+    console.log("CREATEPOST::IMGPANEL");
+    console.log(img);
     setImg(img)
   }
   return (
