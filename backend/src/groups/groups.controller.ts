@@ -15,14 +15,14 @@ export class GroupsController {
     return this.groupsService.getGroups();
   }
 
-  @Get(':id')
+  @Get('/:id')
   getPublicGroup(@Param('id') groupID: string): Promise<GroupDto> {
     return this.groupsService.getGroupById(groupID);
   }
 
   @Personal()
-  @Get(':id')
-  getPrivateGroup(@UserObjectID() memberID: string, @Param('id') groupID: string): Promise<GroupDto> {
+  @Get(':privateId')
+  getPrivateGroup(@UserObjectID() memberID: string, @Param('privateId') groupID: string): Promise<GroupDto> {
     return this.groupsService.getGroupById(groupID, memberID);
   }
 

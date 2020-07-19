@@ -1,19 +1,34 @@
 import { Logger } from "@nestjs/common";
-import { ConnectedSocket, MessageBody, OnGatewayConnection, SubscribeMessage, WebSocketGateway, WebSocketServer, WsResponse } from "@nestjs/websockets";
-import { Server, Socket } from "socket.io";
-import { Personal } from "../auth/guards/personal.decorator";
+import {
+  ConnectedSocket,
+  MessageBody,
+  OnGatewayConnection,
+  OnGatewayDisconnect,
+  SubscribeMessage,
+  WebSocketGateway,
+  WebSocketServer,
+  WsResponse,
+} from '@nestjs/websockets';
+import { Client, Server, Socket } from 'socket.io';
 import { ConversationModel, MessageModel, UserModel } from "../mongoModels";
-import { UserDto } from "../user/dto/user.dto";
 import { convertToStrArr } from "../util/helperFunctions";
 import { CreateMessageBodyDto } from "./messages.dto";
 import { MessagesService } from "./messages.service";
+import { CreateConversationBodyDto } from '../conversations/conversation.dto';
+import { PersonalWs } from '../auth/guards/personal-ws.decorator';
+import { ConversationsService } from '../conversations/conversations.service';
+import { UserObjectID } from '../user/user-object-id.decorator';
+import { NewConversationClientToServerDto, NewConversationServerToClientDto } from './messenger.ws.dto';
 
 @WebSocketGateway() //by default server already serves at 3001
-export class MessageGateway implements OnGatewayConnection {//gateway===controller
+export class MessageGateway implements OnGatewayConnection, OnGatewayDisconnect {//gateway===controller
   @WebSocketServer()
   wss: Server;
 
-  constructor(private readonly messagesService: MessagesService) { }
+  private readonly mapUserIDToClientID: Record<string, Set<Socket>> = {};
+  private readonly mapClientIDToUserID: Record<string, string> = {};
+
+  constructor(private readonly messagesService: MessagesService, private readonly conversationsService: ConversationsService) { }
   private logger = new Logger('MessageGateway');
 
   handleConnection(client: Socket): void {
@@ -21,56 +36,136 @@ export class MessageGateway implements OnGatewayConnection {//gateway===controll
     client.emit('connection', 'suscessfully connected to server');//send to the client
   }
 
+  handleDisconnect(client: Socket): any {
+    const userID = this.mapClientIDToUserID[client.id];
+    this.mapUserIDToClientID[userID].delete(client);
+  }
+
+  @PersonalWs()
+  @SubscribeMessage('authenticate')
+  async acknowledgeAuthentication(@ConnectedSocket() socket: Socket, @UserObjectID() userID: string): Promise<WsResponse<null>> {
+    this.mapClientIDToUserID[socket.client.id] = userID;
+
+    const user = await UserModel.findById(userID);
+    const conversations = user.conversations;
+    for (const convID of conversations) {
+      socket.join(convID.toString());
+    }
+    if (!this.mapUserIDToClientID[userID]) {
+      this.mapUserIDToClientID[userID] = new Set<Socket>();
+      this.mapUserIDToClientID[userID].add(socket);
+    } else {
+      this.mapUserIDToClientID[userID].add(socket);
+    }
+
+    return {
+      event: 'authenticate',    // Front end waits for this event before requesting data
+      data: null,
+    };
+  }
+
+  @PersonalWs()
   @SubscribeMessage('getConversationsAndUsers')
-  async sendConversationsAndUsers(socket: Socket, userID: string): Promise<WsResponse<{ users, conversations }>> {
+  async sendConversationsAndUsers(@ConnectedSocket() client: Socket, @UserObjectID() userID: string): Promise<WsResponse<{ users, conversations }>> {
     const user = await UserModel.findById(userID).lean();
     const conversations = await ConversationModel.find({ _id: { $in: user.conversations } }).lean();
     const userIDs = [];
     conversations.forEach(conversation => {
-      conversation.users.forEach(user => userIDs.push(user))
+      conversation.users.forEach(user => userIDs.push(user));
       //@ts-ignore
       conversation.users = convertToStrArr(conversation.users);
       //@ts-ignore
       conversation.messages = convertToStrArr(conversation.messages);
     });
+    //get user's following and followers
+    userIDs.push(...user.followers);
+    userIDs.push(...user.following);
     const users = await UserModel.find({ _id: { $in: userIDs } }).lean();
     users.forEach(user => {
       //@ts-ignore
       user.conversations = convertToStrArr(user.conversations);
       //@ts-ignore
+      //fetch all following and followers as well since they have existing conversations with user
       user.followers = convertToStrArr(user.followers);
       //@ts-ignore
       user.following = convertToStrArr(user.following);
     });
-
-    return {
+    const ret =  {
       event: 'getConversationsAndUsers',
       data: {
         users, conversations
       }
-    }
+    };
+    this.logger.log(ret);
+    return ret;
   }
 
   @SubscribeMessage('newMessage')
-  async handleNewMessage(@MessageBody() createMessageBodyDto: CreateMessageBodyDto, @ConnectedSocket() client: Socket,): Promise<any> {//when event is received, 
+  async handleNewMessage(@MessageBody() createMessageBodyDto: CreateMessageBodyDto, @ConnectedSocket() client: Socket,): Promise<any> {//when event is received,
     // this.logger.log("received: " + createMessageBodyDto + "from " + client.id);
+    console.log("convesation id in gateway: " + createMessageBodyDto.conversationID);
     const { _id } = await this.messagesService.createMessage(createMessageBodyDto, createMessageBodyDto.userID, createMessageBodyDto.conversationID);
-    client.broadcast.emit('newMessage', {
+    //broadcast to all clients except user
+    client.to(createMessageBodyDto.conversationID).emit('newMessage', {
+      conversationID: createMessageBodyDto.conversationID,
       author: createMessageBodyDto.userID,
       _id,
       text: createMessageBodyDto.text,
       createdAt: createMessageBodyDto.createdAt, //this is the id of the pending message which then will be used by the sender to confirm the message has been succesfully sent
     });
 
-    return { //return sends back res to the sender (not broadcast)
+    return { //return sends back res to only user (not broadcast)
       event: 'newMessage',
       data: {
-        author: createMessageBodyDto.userID,
         _id,
+        author: createMessageBodyDto.userID,
         id: client.id,
         text: createMessageBodyDto.text,
         createdAt: createMessageBodyDto.createdAt, //this is the id of the pending message which then will be used by the sender to confirm the message has been succesfully sent
       }
     }
   }
+
+
+
+  @PersonalWs()
+  @SubscribeMessage('newConversation')
+  async handleCreateNewConversation(@MessageBody() newConversationDto: NewConversationClientToServerDto, @UserObjectID() userID: string, @ConnectedSocket() client: Socket): Promise<WsResponse<NewConversationServerToClientDto>> {
+    this.logger.log(newConversationDto);
+    const users = [userID, ...newConversationDto.otherUsers];
+    const conversation = await this.conversationsService.createConversation({
+      name: newConversationDto.name,
+      users,
+      message: newConversationDto.initialMessage,
+      userID,
+      createdAt: Date.now(),
+    }, userID);
+
+    for (const user of conversation.users) {
+
+      if (this.mapUserIDToClientID[user]) {
+        for (const socket of this.mapUserIDToClientID[user]) {
+          socket.join(conversation._id);
+        }
+      }
+    }
+
+    const dataForBroadcast: NewConversationServerToClientDto = {
+      isCreator: false, conversation
+    }
+
+    const dataForClient: NewConversationServerToClientDto = {
+      isCreator: true, conversation
+    }
+
+    // Modify this when we implement rooms
+    client.broadcast.emit('newConversation', dataForBroadcast);
+
+    return { //return sends back res to only user (not broadcast)
+      event: 'newConversation',
+      data: dataForClient,
+    };
+  }
+
+
 }

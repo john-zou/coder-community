@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import { SideBar } from "./SideBar";
 import styled from '@emotion/styled';
 import { ChatArea } from "./ChatArea";
@@ -6,9 +6,10 @@ import { ChatInfo } from "./ChatInfo";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../reducers/rootReducer";
 import io from 'socket.io-client';
-import { Message } from "../../store/types";
-import { Dictionary } from "@reduxjs/toolkit";
-import { createMessagePending, createMessageSuccess, receiveNewMessage } from "../../reducers/messagesSlice";
+import { createMessageSuccess, fetchMessagesInConversation, receiveNewMessage } from "../../reducers/messagesSlice";
+import { BackEndBaseUriForWs, JwtLocalStorageKey } from "../../constants";
+import { addConversation, createConversationSuccess } from "../../reducers/conversationsSlice";
+import { NewConversationServerToClientDto } from "../../ws-dto/messages/messenger.ws.dto";
 
 export const ChatContainer = styled.div`
   display: flex;
@@ -19,22 +20,25 @@ export const SocketContext = React.createContext<React.MutableRefObject<SocketIO
 
 export const Messenger = () => {
   const userID = useSelector<RootState, string>(state => state.user._id);
-  const currConvervationID = useSelector<RootState, string>(state => state.conversations.currentConversationID);
-  const isGroupConversation = useSelector<RootState, boolean>(state => state.conversations.isGroupConversation);
-
-  // const messages = useSelector<RootState, Dictionary<Message>>(state => state.messages.entities);
-  // const messagesArr = Object.values(messages);
 
   const dispatch = useDispatch();
   const socket = useRef<SocketIOClient.Socket>(null);
-  // console.log(socket.connected);
+  console.log("Messenger index.tsx render");
   useEffect(() => {
-    // dispatch(fetchConversations())
-    socket.current = io('http://localhost:3001');
+    console.log("Messenger index.tsx useEffect (creating new socket)");
+    socket.current = io(BackEndBaseUriForWs);
     socket.current.on('connection', () => {
-      console.log("connected to localhost:3001" + socket.current.connected); // true
-      socket.current.emit('getConversationsAndUsers', userID);
+      console.log(`connected to ${BackEndBaseUriForWs}` + socket.current.connected); // true
+      // Send server the JWT so it can authenticate ther user
+      socket.current.emit('authenticate', { jwt: localStorage.getItem(JwtLocalStorageKey) });
     });
+
+    // The server responds with the same event
+    socket.current.on('authenticate', () => {
+      console.log("Auth passed! emitting getcConversationsAndUsers...");
+      // Upon receiving this event, can now ask for everything else
+      socket.current.emit('getConversationsAndUsers', {}); // an empty object is required for auth
+    })
 
     socket.current.on('getConversationsAndUsers', (data: any) => {
       dispatch({
@@ -44,7 +48,6 @@ export const Messenger = () => {
     });
 
     socket.current.on('newMessage', (response: any) => {//listen for the incoming response(s) from 'newMessage' event
-      console.log("before if: " + response);
       // if message is sent by user
       if (socket.current.id === response.id) {
         dispatch(createMessageSuccess(response));
@@ -52,15 +55,25 @@ export const Messenger = () => {
       else {
         dispatch(receiveNewMessage(response));
       }
+    });
+
+    socket.current.on('newConversation', (data: NewConversationServerToClientDto) => {
+      // Client (user) created the new conversation
+      if (data.isCreator) {
+        dispatch(createConversationSuccess(data.conversation));
+        dispatch(fetchMessagesInConversation({ conversationID: data.conversation._id }));
+      } else {
+        // Conversation was created elsewhere
+        dispatch(addConversation(data.conversation))
+      }
     })
   }, [])
-  const [isNewMessage, setIsNewMessage] = useState(false);
 
   return (
     <SocketContext.Provider value={socket}>
       <ChatContainer>
-        <SideBar setIsNewMessage={setIsNewMessage} />
-        <ChatArea isNewMessage={isNewMessage} />
+        <SideBar />
+        <ChatArea />
         <ChatInfo />
       </ChatContainer>
     </SocketContext.Provider>
