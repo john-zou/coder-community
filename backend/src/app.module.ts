@@ -20,6 +20,7 @@ import { UploadModule } from './upload/upload.module';
 import { UserModule } from './user/user.module';
 import { VideoModule } from './video/video.module';
 import { SearchModule } from './search/search.module';
+import { CommentsGateway } from './comments/comments.gateway';
 
 @Module({
   imports: [
@@ -54,7 +55,7 @@ import { SearchModule } from './search/search.module';
   ],
 
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, CommentsGateway],
 })
 export class AppModule {
 }
