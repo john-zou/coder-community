@@ -25,6 +25,7 @@ import ErrorPage from "./pages/common/ErrorPage";
 import { RootState } from "./reducers/rootReducer";
 import { SearchPage } from "./pages/search/SearchPage";
 import { ViewGroupProfile } from "./pages/group_profile/ViewGroupProfile";
+import { DailyChallenge } from "./pages/daily_challenge";
 
 export type ViewProfileParams = {
   username: string;
@@ -66,6 +67,9 @@ export default function App() {
     <Router>
       <Header></Header>
       <Switch>
+        <Route path="/daily-challenge">
+          <DailyChallenge />
+        </Route>
         <Route path="/user/:username">
           <ViewProfile />
         </Route>

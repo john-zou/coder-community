@@ -41,7 +41,7 @@ export const SideButton = styled.span <{ buttonIsClicked: boolean }>`
   background-color: ${({ buttonIsClicked }) => buttonIsClicked ? "#5D67E9" : "white"};
   min-width: fit-content;
   padding: 5px 10px 5px 10px;
-  border: 1px solid #5D67E9; 
+  border: 1px solid #5D67E9;
   border-radius: 5px;
   cursor: pointer;
 `
