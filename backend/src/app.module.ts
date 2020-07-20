@@ -55,7 +55,7 @@ import { CommentsGateway } from './comments/comments.gateway';
   ],
 
   controllers: [AppController],
-  providers: [AppService, CommentsGateway],
+  providers: [AppService],
 })
 export class AppModule {
 }

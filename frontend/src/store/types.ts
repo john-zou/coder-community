@@ -3,14 +3,13 @@ export type Comment = {
   author: string,
   content: string,
   replies: string[], //list of comment ids
-  commentRoot: string,
-  likes: string[],
-  likesCount: number,
-  parentPost: string,
-  parentComment: string,
-  parentVideo: string,
-  createdAt: string,
-  updatedAt: string,
+  commentRoot?: string,
+  likes: number,
+  parentPost?: string,
+  parentComment?: string,
+  parentVideo?: string,
+  createdAt: number,
+  updatedAt?: number,
 }
 
 export type Conversation = {

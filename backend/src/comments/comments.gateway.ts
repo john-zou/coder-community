@@ -9,9 +9,38 @@ import {
 import { Logger } from '@nestjs/common';
 import { Server, Socket } from 'socket.io';
 import { PersonalWs } from '../auth/guards/personal-ws.decorator';
-import { GetCommentsClientToServerDto, GetCommentsServerToClientDto } from './comments.ws.dto';
-import { CreateMessageBodyDto } from '../messages/messages.dto';
-import { CommentModel, PostModel } from '../mongoModels';
+import {
+  GetCommentsByPostIDEvent,
+  GetCommentsClientToServerDto,
+  GetCommentsServerToClientDto,
+} from './dto/getCommentsByPostID.ws.dto';
+import { PostModel } from '../mongoModels';
+import { ObjectID } from 'mongodb';
+import {
+  commentIDsToCommentDtoArr,
+  createComment,
+  deleteComment,
+  fetchAuthorsForComments,
+  likeComment,
+  unlikeComment,
+} from './comments.helpers';
+import { UserObjectID } from '../user/user-object-id.decorator';
+import {
+  CreateCommentClientToServerDto,
+  CreateCommentEvent,
+  CreateCommentServerToClientDto,
+} from './dto/createComment.ws.dto';
+import {
+  DeleteCommentClientToServerDto,
+  DeleteCommentEvent,
+  DeleteCommentServerToClientDto,
+} from './dto/deleteComment.ws.dto';
+import {
+  UnlikeCommentClientToServerDto,
+  UnlikeCommentEvent,
+  UnlikeCommentServerToClientDto,
+} from './dto/unlikeComment.ws.dto';
+import { LikeCommentClientToServerDto, LikeCommentEvent, LikeCommentServerToClientDto } from './dto/likeComment.ws.dto';
 
 @WebSocketGateway()
 export class CommentsGateway implements OnGatewayConnection {
@@ -24,33 +53,63 @@ export class CommentsGateway implements OnGatewayConnection {
     this.logger.log(`Client connected: ID ${client.id}`);
   }
 
-  @SubscribeMessage('getCommentsByPostID')
-  async getCommentsByPostID(@MessageBody() dto: GetCommentsClientToServerDto): Promise<WsResponse<GetCommentsServerToClientDto>> {
-    const comments = (await PostModel.findById(dto.postID).populate('comments').lean()).comments;
-    // TODO
+  @SubscribeMessage(GetCommentsByPostIDEvent)
+  async getCommentsByPostID(@MessageBody() { postID }: GetCommentsClientToServerDto): Promise<WsResponse<GetCommentsServerToClientDto>> {
+    const post = await PostModel.findById(postID, {comments: 1}).lean() as {_id: ObjectID, comments: ObjectID[]};
+    const comments = await commentIDsToCommentDtoArr(post.comments);
+    const authorIDsToFetch: Record<string, boolean> = {};
+    comments.forEach(comment => {
+      authorIDsToFetch[comment.author] = true;
+    });
+    const authors = await fetchAuthorsForComments(authorIDsToFetch);
 
     return {
-      event: 'getCommentsByPostID',
+      event: GetCommentsByPostIDEvent,
       data: {
-        // TODO
+        comments,
+        authors
       }
     }
   }
 
   @SubscribeMessage('join-post-room')
   joinPostRoom() {
-
+    // TODO (for live updates)
   }
 
   @PersonalWs()
-  @SubscribeMessage('write-comment')
-  writeComment() {
-
+  @SubscribeMessage(CreateCommentEvent)
+  async writeComment(@UserObjectID() userID: string, @MessageBody() createCommentDto: CreateCommentClientToServerDto): Promise<WsResponse<CreateCommentServerToClientDto>> {
+    return {
+      event: CreateCommentEvent,
+      data: await createComment(userID, createCommentDto),
+    }
   }
 
   @PersonalWs()
-  @SubscribeMessage('delete-comment')
-  deleteComment() {
+  @SubscribeMessage(DeleteCommentEvent)
+  async deleteComment(@UserObjectID() userID: string, @MessageBody() deleteCommentDto: DeleteCommentClientToServerDto): Promise<WsResponse<DeleteCommentServerToClientDto>> {
+    return {
+      event: DeleteCommentEvent,
+      data: await deleteComment(userID, deleteCommentDto),
+    }
+  }
 
+  @PersonalWs()
+  @SubscribeMessage(LikeCommentEvent)
+  async likeComment(@UserObjectID() userID: string, @MessageBody() likeCommentDto: LikeCommentClientToServerDto): Promise<WsResponse<LikeCommentServerToClientDto>> {
+    return {
+      event: LikeCommentEvent,
+      data: await likeComment(userID, likeCommentDto),
+    }
+  }
+
+  @PersonalWs()
+  @SubscribeMessage(UnlikeCommentEvent)
+  async unlikeComment(@UserObjectID() userID: string, @MessageBody() unlikeCommentDto: UnlikeCommentClientToServerDto): Promise<WsResponse<UnlikeCommentServerToClientDto>> {
+    return {
+      event: LikeCommentEvent,
+      data: await unlikeComment(userID, unlikeCommentDto),
+    }
   }
 }
