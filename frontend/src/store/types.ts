@@ -60,7 +60,14 @@ export type Post = {
   // likedByUser: boolean, // Removed for simplicity. use state.user.likedPosts instead.
   slug: string,
   group?: string,
-}
+};
+
+export type PostsCreation = {
+  _id: string,
+  title: string,
+  content: string,
+  tags: any[] // [Record<string, Loadable<Tag>>]
+};
 
 export type Tag = {
   _id: string,
@@ -87,7 +94,6 @@ export type User = {
   createdAt?: string,
   updatedAt?: string,
 };
-
 
 // export type Video = {
 //   _id: string,

@@ -1,3 +1,4 @@
+import { Shop } from './shop/shop.schema';
 import { getModelForClass } from '@typegoose/typegoose';
 import * as mongoose from 'mongoose';
 
@@ -24,6 +25,7 @@ export const MessageModel = getModelForClass(Message);
 export const PostModel = getModelForClass(Post);
 export const TagModel = getModelForClass(Tag);
 export const UserModel = getModelForClass(User);
+export const ShopModel = getModelForClass(Shop); // Used to create a Mongoose Model with Typescript type more easily than with just Mongoose
 export const VideoModel = getModelForClass(Video);
 
 export const DefaultMongoOptions = {
