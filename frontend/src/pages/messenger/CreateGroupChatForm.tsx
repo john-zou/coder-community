@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { RootState } from '../../reducers/rootReducer';
 import { useSelector, useDispatch } from 'react-redux';
 import { User } from '../../store/types';
@@ -14,6 +14,10 @@ import MuiDialogActions from '@material-ui/core/DialogActions';
 import PurpleButton from '../common/PurpleButton';
 import { TextFields } from '../group/TextFields';
 import AddMultiple from '../group/AddMuliple';
+import { NewConversationClientToServerDto } from "../../ws-dto/messages/messenger.ws.dto";
+import { createDirectConversationPending, createGroupConversationPending } from "../../reducers/conversationsSlice";
+import { SocketContext } from "./index";
+
 
 const TextWrapper = styled.div`
   margin-left: 10px;
@@ -45,6 +49,8 @@ export const CreateGroupChatForm = ({ handleClose }) => {
   const [error, setError] = useState(null);
   const [creatingGroupLoading, setCreatingGroupLoading] = useState(false);
 
+  const socket = useContext(SocketContext);
+
   const dispatch = useDispatch<AppDispatch>();
   useEffect(() => {
     if (user.followers.length > 0 || user.following.length > 0) {
@@ -74,21 +80,11 @@ export const CreateGroupChatForm = ({ handleClose }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // const group = {
-    //   name,
-    //   description,
-    //   private: _private,
-    //   users: people,
-    //   profilePic,
-    //   profileBanner,
-    // };
-
-    // dispatch(createGroup(group)).then(unwrapResult).then(() => {
-    //   setCreatingGroupLoading(true);
-    // }).catch(err => {
-    //   setLoading(false);
-    //   setError(err);
-    // })
+    // if the conversationID is "", then the user is starting a new group chat with anonymous name
+    const dto: NewConversationClientToServerDto = { otherUsers: people, name }
+    socket.current.emit('newConversation', dto);
+    dispatch(createGroupConversationPending());
+    // when the back end responds, dispatch is called (in socket.on in messenger/index)
     handleClose();
   }
 

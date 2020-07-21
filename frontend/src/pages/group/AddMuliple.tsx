@@ -17,7 +17,7 @@ import {CssTextField} from './TextFields';
 //     }),
 // );
 
-export default function AddMultiple({label, options, imgKey, setItems, panelWidth}: { label: string, options: Array<{ name: string }>, imgKey?: string, setItems: Function, panelWidth?: any
+export default function AddMultiple({label, options, imgKey, setItems, limit, panelWidth}: { label: string, options: Array<{ name: string }>, imgKey?: string, setItems: Function, limit?: number, panelWidth?: any
 }) {
     const useStyles = makeStyles((theme: Theme) =>
         createStyles({

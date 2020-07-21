@@ -7,7 +7,6 @@ import { UserModule } from '../user/user.module';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { JwtStrategy } from './jwt.strategy';
-import { UserWsAuthGuard } from './guards/user-ws.guard';
 
 @Global()
 @Module({
@@ -20,7 +19,7 @@ import { UserWsAuthGuard } from './guards/user-ws.guard';
     PassportModule, // For validating CoderCommunity jwt
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy, UserWsAuthGuard],
-  exports: [AuthService, UserWsAuthGuard]
+  providers: [AuthService, JwtStrategy],
+  exports: [AuthService, JwtModule]
 })
 export class AuthModule {}
