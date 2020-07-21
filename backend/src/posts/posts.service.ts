@@ -102,12 +102,14 @@ export class PostsService {
         }
 
         console.log(body);
+
         const doc = {
             author: authorObjectID,
             title: body.title,
             slug,
             previewContent: body.content.substring(0, previewContentLength),
             content: body.content,
+            // tags: [ "5f13ababa9c77f3e5abb53f6" ],
             tags: body.tags,
             featuredImg: body.featuredImg,
             likes: 0,
@@ -119,6 +121,8 @@ export class PostsService {
         // Logger.log("Done create");
         // console.log("BEFORE CREATE");
         const newPost = new PostModel(doc);
+        console.log(body.group);
+        console.log(newPost);
 
         await newPost.save();
         console.log("AFTER SAVE");
@@ -134,11 +138,10 @@ export class PostsService {
         author.posts.push(newPost._id);
         await author.save();
 
-        console.log("before add to tags");
         // Add post to tags
+        console.log("before add to tags");
         const tags = newPost.tags;
         if (tags.length > 0) {
-            console.log("1st for loop");
             const expressions = tags.map(tagID => ({ _id: tagID }));
             await TagModel.updateMany({ $or: expressions }, { $push: { posts: newPost._id } });
             console.log("done");
@@ -185,7 +188,7 @@ export class PostsService {
         }
 
         if (Array.isArray(update.tags)) {
-            post.tags = update.tags.map(tag => new ObjectId(tag));
+            // post.tags = update.tags.map(tag => new ObjectId(tag));
         }
 
         await post.save();

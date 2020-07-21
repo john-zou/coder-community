@@ -24,7 +24,7 @@ export const tagsSlice = createSlice({
             // console.log(action.payload)
             // console.log(action.payload.tags)
             tagsAdapter.upsertMany(state, action.payload.tags.map(tag => {
-                // console.log("TAGSLICE::INFOR");
+                // console.log("TAGSLICE::INMAP");
                 const tagEntity = tag as unknown as Tag;
                 // console.log(tagEntity);
                 tagEntity.postsSet = {};
