@@ -33,12 +33,13 @@ export const ChatInfo = () => {
   const currentConversation = conversations[currentConversationID];
   //replace with people in the conversation
   const users = useSelector<RootState, Dictionary<User>>(state => state.users.entities);
-  return (
+
+  return (!currentConversation? <></> :
     <ChatInfoContainer>
       <ChatInfoHeader>
         <div style={{ paddingLeft: "30px" }}>
-          {isGroupConversation ? <H2>Chat info</H2> : <H2>Group info</H2>}
-          {/* <p>{currentConversation.createdAt}</p> */}
+          {isGroupConversation ? <H2>Group info</H2> : <H2>Chat info</H2>}
+           {/*<p>{currentConversation.createdAt}</p>*/}
           <span>Created Jul 17, 2020</span>
         </div>
       </ChatInfoHeader>
@@ -46,8 +47,8 @@ export const ChatInfo = () => {
       {/* <hr></hr> */}
       <div style={{ paddingLeft: "30px", paddingTop: "10px" }}>
         <HeadingText>PEOPLE</HeadingText>
-        {Object.values(users).map((user) => (
-          <Avatar isText={true} pic={user.profilePic} title={user.name} />
+        {currentConversation.users.map((uID) => (
+          <Avatar isText={true} pic={users[uID].profilePic} title={users[uID].name} />
         ))}
       </div>
     </ChatInfoContainer >

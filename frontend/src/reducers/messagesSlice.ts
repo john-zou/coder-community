@@ -1,12 +1,19 @@
-import { createEntityAdapter, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createEntityAdapter, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Socket } from "socket.io-client";
-import { CreateMessageBodyDto, CreateMessageSuccessDto } from "../api";
+import { CreateMessageBodyDto, CreateMessageSuccessDto, MessageDto, MessagesApi } from "../api";
 import { Message } from "../store/types";
 import _ from "lodash";
 
 const messagesAdapter = createEntityAdapter<Message>({
   selectId: item => item._id
 });
+
+export const fetchMessagesInConversation = createAsyncThunk(
+  'fetchMessagesInConversation',
+  async ({ conversationID }: { conversationID: string }) => {
+    return await new MessagesApi().messagesControllerGetMessagesInConversation(conversationID);
+  }
+)
 
 export type PendingMessage = {
   createdAt: number,
@@ -49,6 +56,11 @@ export const messagesSlice = createSlice({
       messagesAdapter.addOne(state, action.payload);
     }
   },
+  extraReducers: {
+    [fetchMessagesInConversation.fulfilled.type]: (state, action: PayloadAction<CreateMessageSuccessDto[]>) => {
+      messagesAdapter.upsertMany(state, action.payload);
+    }
+  }
 })
 
 export default messagesSlice.reducer;

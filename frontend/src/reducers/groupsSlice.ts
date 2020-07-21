@@ -1,8 +1,9 @@
 import { createEntityAdapter, createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { Group, CurrentLoggedInUser } from "../store/types";
-import { GroupsApi, GetGroupsSuccessDto, CreateGroupDto, CreateGroupSuccessDto } from "../api";
+import { GroupsApi, GetGroupsSuccessDto, CreateGroupDto, CreateGroupSuccessDto, GroupDto } from "../api";
 import { RootState } from "./rootReducer";
 import _ from "lodash";
+import { async } from "rxjs/internal/scheduler/async";
 
 const groupsAdapter = createEntityAdapter<Group>({
   selectId: item => item._id
@@ -19,6 +20,13 @@ export const fetchGroups = createAsyncThunk(
   }
 )
 
+export const fetchGroupById = createAsyncThunk(
+  'fetchGroupById',
+  async (groupID: string) => {
+    const foundGroup: GroupDto = await api.groupsControllerGetPrivateGroup(groupID);
+    return foundGroup;
+  }
+)
 export const createGroup = createAsyncThunk(
   'createGroup',
   async (newGroup: CreateGroupDto, { getState }) => {
@@ -49,13 +57,20 @@ export const joinGroup = createAsyncThunk(
 //https://redux-toolkit.js.org/api/createSlice
 export const groupsSlice = createSlice({
   name: "groups",
-  initialState: groupsAdapter.getInitialState(),
+  initialState: groupsAdapter.getInitialState<{ currentGroupID: string }>({
+    currentGroupID: '',
+  }),
   reducers: {
-
+    selectGroup: (state, action: PayloadAction<{ groupID: string }>) => {
+      state.currentGroupID = action.payload.groupID;
+    },
   },
   extraReducers: {
     [fetchGroups.fulfilled.type]: (state, action: PayloadAction<GetGroupsSuccessDto>) => {
       groupsAdapter.addMany(state, action.payload.groups) //add posts to ids and entities
+    },
+    [fetchGroupById.fulfilled.type]: (state, action: PayloadAction<GetGroupsSuccessDto>) => {
+      // groupsAdapter.addMany(state, action.payload.groups) //add posts to ids and entities
     },
     [createGroup.fulfilled.type]: (state, action: PayloadAction<CreateGroupSuccessDto & CreateGroupDto & { admins: string[] }>) => {
       const { _id, name, private: _private, description, profileBanner, profilePic, admins, users } = action.payload;
@@ -79,3 +94,4 @@ export const groupsSlice = createSlice({
 })
 
 export default groupsSlice.reducer;
+export const { selectGroup } = groupsSlice.actions;

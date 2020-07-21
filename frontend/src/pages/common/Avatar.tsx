@@ -30,7 +30,7 @@ const TitleText = styled.span<{ isPost: boolean, isText: boolean }>`
   color: ${({ isPost, isText }) => isPost ? "#5D67E9" : isText ? "black" : "#5DCBAF"}
 `;
 
-const ExtraText = styled.p`
+const ExtraText = styled.span`
   color: black;
   font-size: small;
 `;
@@ -46,7 +46,7 @@ export const SideButton = styled.span <{ buttonIsClicked: boolean }>`
   cursor: pointer;
 `
 
-const Avatar = ({ pic, title, subtitle, extraText, isPost, isButton, isText }: { pic: string, title: string, subtitle?: string, extraText?: string, isPost?: boolean, isButton?: boolean, isText?: boolean }) => {
+const Avatar = ({ pic, title, subtitle, extraText, isPost, isButton, isText }: { pic: string, title?: string, subtitle?: string, extraText?: string, isPost?: boolean, isButton?: boolean, isText?: boolean }) => {
   const classes = useStyles();
   const [buttonIsClicked, setButtonIsClicked] = useState(false);
   return (
@@ -61,7 +61,7 @@ const Avatar = ({ pic, title, subtitle, extraText, isPost, isButton, isText }: {
           {isButton && <SideButton buttonIsClicked={buttonIsClicked} onClick={() => setButtonIsClicked((prevState) => !prevState)}>{extraText}</SideButton>}
           {/* {isButton && buttonIsClicked && <SideButtonClicked>{extraText}</SideButtonClicked>} */}
         </p>
-        <p style={{ marginTop: "-1.5em", fontSize: "16px" }}>{subtitle}</p>
+        <p style={{ marginTop: "-0.8em", fontSize: "16px" }}>{subtitle}</p>
       </div>
     </div>
   );

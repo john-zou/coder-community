@@ -8,8 +8,8 @@ import { Loading } from '../common/Loading';
 import { NotFoundError } from '../common/NotFoundError';
 import { getLoggedInUser, getUserForViewProfile } from '../../reducers/userSlice';
 import { RootState } from '../../reducers/rootReducer';
-import {CurrentLoggedInUser, User} from '../../store/types';
-import {OwnProfile} from "./OwnProfile";
+import { CurrentLoggedInUser, User } from '../../store/types';
+import { OwnProfile } from "./OwnProfile";
 import { OtherProfile } from './OtherProfile';
 import styled from '@emotion/styled';
 
@@ -44,21 +44,21 @@ const useStyles = makeStyles(() =>
 );
 
 export function ViewProfile() {
-  const {username} = useParams<ViewProfileParams>();
+  const { username } = useParams<ViewProfileParams>();
   const loggedInUsername = useSelector<RootState, string>(state => state.user?.userID);
 
   function child() {
-      if (!username) {
-          return <Redirect to="/"/>
-      }
+    if (!username) {
+      return <Redirect to="/" />
+    }
 
-      if (username === loggedInUsername) {
-          return <OwnProfile/>
-      }
+    if (username === loggedInUsername) {
+      return <OwnProfile />
+    }
 
-      if (!loggedInUsername || loggedInUsername !== username) {
-          return <OtherProfile username={username}/>
-      }
+    if (!loggedInUsername || loggedInUsername !== username) {
+      return <OtherProfile username={username} />
+    }
   }
 
   return (<Container>{child()}</Container>);

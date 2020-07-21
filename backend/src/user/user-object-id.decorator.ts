@@ -1,10 +1,8 @@
 import {
   createParamDecorator,
-  ExecutionContext,
-  InternalServerErrorException,
+  ExecutionContext, Logger,
   NotImplementedException,
 } from '@nestjs/common';
-import { AuthorizedWsResponse } from '../auth/guards/user-ws.guard';
 
 /**
  * The MongoDB _id (ObjectID) for the User, globally unique and unchangeable
@@ -14,7 +12,11 @@ export const UserObjectID = createParamDecorator((_, ctx: ExecutionContext) => {
   if (type === 'http') {
     return ctx.switchToHttp().getRequest().user._id;
   } else if (type === 'ws') {
-    return ctx.switchToWs().getData<AuthorizedWsResponse>()._id;
+    const userObjectID = ctx.switchToWs().getData()?.userObjectID;
+    if (!userObjectID) {
+      Logger.log('userObjectID is missing -- did not get set by @PersonalWs()', '@UserObjectID param decorator');
+    }
+    return userObjectID;
   } else {
     throw new NotImplementedException("UserObjectID decorator only supports REST and WebSocket");
   }
