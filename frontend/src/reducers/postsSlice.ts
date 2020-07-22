@@ -11,8 +11,9 @@ import {RootState} from "./rootReducer";
 import {Post} from "../store/types";
 import {PostIDPayload, toggleLikePost} from './userSlice';
 import {submitPost, updatePost} from "./postsCreationSlice";
-import {getCommentsByPostIDSuccess} from "./commentsSlice";
+import {getCommentsByPostIDSuccess, createCommentSuccess} from "./commentsSlice";
 import {GetCommentsServerToClientDto} from "../ws-dto/comments/dto/getCommentsByPostID.ws.dto";
+import {CreateCommentServerToClientDto} from "../ws-dto/comments/dto/createComment.ws.dto";
 
 
 const postsAdapter = createEntityAdapter<Post>({
@@ -138,6 +139,11 @@ export const postsSlice = createSlice({
         },
       [getCommentsByPostIDSuccess.type]: (state, action: PayloadAction<GetCommentsServerToClientDto>) => {
         state.fetchedComments[action.payload.postID] = true;
+      },
+      [createCommentSuccess.type]:  (state, action: PayloadAction<CreateCommentServerToClientDto>) => {
+        if (action.payload.comment.commentRoot === 'post') {
+          state.entities[action.payload.comment.parentPost].comments.push(action.payload.comment._id);
+        }
       }
     }
 })

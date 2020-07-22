@@ -5,8 +5,10 @@ import PurpleButton from "../common/PurpleButton";
 import {createCommentPending} from "../../reducers/commentsSlice";
 
 import { CreateCommentClientToServerDto } from "../../ws-dto/comments/dto/createComment.ws.dto";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import { SocketContext } from "../../App";
+import {RootState} from "../../reducers/rootReducer";
+import {Loading} from "../common/Loading";
 
 const useStyles = makeStyles({
   root: {
@@ -32,6 +34,7 @@ const NewComment = ({postID}) => {
   const classes = useStyles();
   const inputRef = useRef(null);
   const dispatch = useDispatch();
+  const createPending = useSelector<RootState, boolean>(state => state.comments.isLoading);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -48,6 +51,10 @@ const NewComment = ({postID}) => {
     };
     socket.current.emit('createComment', newCommentDto);
     dispatch(createCommentPending());
+  }
+
+  if (createPending) {
+    return <Loading />
   }
 
   return (
