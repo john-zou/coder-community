@@ -4,7 +4,6 @@ import styled from '@emotion/styled';
 import SendIcon from "../../icons/sendIcon.svg";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../reducers/rootReducer";
-import { SocketContext } from ".";
 import { createMessagePending, fetchMessagesInConversation } from "../../reducers/messagesSlice";
 import { CreateMessageBodyDto } from "../../api";
 import "../../App.css";
@@ -12,6 +11,7 @@ import { createDirectConversationPending, createGroupConversationPending, select
 import { NewConversationClientToServerDto } from "../../ws-dto/messages/messenger.ws.dto";
 import { Dictionary } from "@reduxjs/toolkit";
 import { Conversation } from "../../store/types";
+import { SocketContext } from "../../App";
 
 const Editor = styled.div`
   max-height: 50%;
@@ -70,7 +70,10 @@ export const ChatInput = ({ newMessageSelectedUserIDs }: { newMessageSelectedUse
               console.log("Found existing conversation!");
               dispatch(selectConversation({ conversationID: conv._id }));
               dispatch(fetchMessagesInConversation({ conversationID: conv._id }));
-              // dispatch(createMessagePending());
+
+              const messageDto: CreateMessageBodyDto = { conversationID: conv._id, text, userID, createdAt: Date.now()};
+              socket.current.emit('newMessage', messageDto);
+              dispatch(createMessagePending(messageDto));
               foundExistingConversation = true;
               break;
             }

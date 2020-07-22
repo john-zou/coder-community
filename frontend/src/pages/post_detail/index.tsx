@@ -14,7 +14,13 @@ import {Post, User, CurrentLoggedInUser} from '../../store/types';
 import {AppDispatch} from '../../store';
 import defaultPostFeaturedImage from "../../assets/defaultPostFeaturedImage.jpg";
 import {PostsApi} from "../../api";
-
+import {useLikePost} from "../../hooks/useLikePost";
+import CommentIcon from "../../icons/commentIcon.svg";
+import HeartIcon from "../../icons/heartIcon.svg";
+import HeartIconRed from "../../icons/heartIconRed.svg";
+import BookmarkBlack from "../../icons/bookmarkBlack.svg";
+import BookmarkEmpty from "../../icons/bookmarkEmpty.svg";
+import {Comments} from "./Comments";
 
 const useStyles = makeStyles({
     root: {
@@ -23,7 +29,7 @@ const useStyles = makeStyles({
     },
     postDetail: {
         paddingTop: "10vh",
-        paddingBottom: "7vh",
+        // paddingBottom: "20vh",
         width: "60vw",
         margin: "0 auto",
     },
@@ -43,14 +49,11 @@ const useStyles = makeStyles({
         justifyContent: "flex-start",
         flexDirection: "row",
         alignContent: "center",
+        marginTop: "6vh",
     },
 });
 
 const Interactions = () => {
-    return <> </>
-}
-
-const Comments = () => {
     return <> </>
 }
 
@@ -59,6 +62,7 @@ const PostDetail = () => {
     const classes = useStyles();
     const dispatch = useDispatch<AppDispatch>();
     const currentUser = useSelector<RootState, CurrentLoggedInUser>(state => state.user);
+
     // const slugtoid = useSelector<RootState, Record<string, string>>(state => state.posts.slugToID);
     const {post, author} = useSelector<RootState, { post: Post, author: User }>(state => {
         const postID = state.posts.slugToID[slug];
@@ -69,9 +73,14 @@ const PostDetail = () => {
         const author = state.users.entities[post.author];
         return {post, author};
     });
-    let canUpdate = false;
-    if (author !== null)
-        canUpdate = currentUser !== null && currentUser._id === author._id;
+
+    const {postIsLikedByUser, handleToggleLike} = useLikePost(post._id);
+
+    let canUpdate = false; // if the current user is the author, show an 'update post' button
+    if (author !== null) {
+      canUpdate = currentUser !== null && currentUser._id === author._id;
+    }
+
     const [error, setError] = useState(null);
 
     let featuredImg: string;
@@ -124,32 +133,27 @@ const PostDetail = () => {
                 <p>{post.content}</p>
 
                 <Interactions/>
-                {/* <div className={classes.interactionsIcons}>
-          <span>
-            <img className={classes.heartIcon} src={likedByUser ? HeartIconRed : HeartIcon} alt="" onClick={() => {
-              dispatch(likePost(post, !post.item.likedByUser));
-            }} />
-            &nbsp;&nbsp;{post.item.likesCount}
-          </span>
-          <span>
-            <img className={classes.shareIcon} src={CommentIcon} alt="" />
-            &nbsp;&nbsp;{post.item.comments.length}
-          </span>
-          <span>
-            <img className={classes.shareIcon} src={ShareIcon} alt="" />
-            &nbsp;&nbsp;Share
-          </span>
-        </div> */}
+                 <div className={classes.interactionsIcons}>
+                      <span>
+                        <img className={classes.heartIcon} src={postIsLikedByUser ? HeartIconRed : HeartIcon} alt="" onClick={() => {
+                          handleToggleLike()
+;                        }} />
+                        &nbsp;&nbsp;{post.likes}
+                      </span>
+                      <span>
+                        <img className={classes.shareIcon} src={CommentIcon} alt="" />
+                        &nbsp;&nbsp;{post.commentsCount}
+                      </span>
+                      <span>
+                        <img className={classes.shareIcon} src={BookmarkEmpty} alt="" />
+                        &nbsp;&nbsp;Save
+                      </span>
+                    </div>
 
-                <NewComment></NewComment>
-                <Comments></Comments>
+                <hr></hr>
+                <Comments postID={post?._id}></Comments>
+                <NewComment postID={post._id}></NewComment>
                 {canUpdate && <UpdateButton params={slug}/>}
-                {/* {post.comments.map((comment) => (
-        <>
-          <Avatar post={comment} extraText="reply"></Avatar>
-          <p>{comment.comment}</p>
-        </>
-      ))} */}
 
             </div>
         </div>

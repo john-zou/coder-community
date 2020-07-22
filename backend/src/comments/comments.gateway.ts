@@ -6,7 +6,7 @@ import {
   WebSocketServer,
   WsResponse,
 } from '@nestjs/websockets';
-import { Logger } from '@nestjs/common';
+import { Logger, UseGuards } from '@nestjs/common';
 import { Server, Socket } from 'socket.io';
 import { PersonalWs } from '../auth/guards/personal-ws.decorator';
 import {
@@ -41,6 +41,7 @@ import {
   UnlikeCommentServerToClientDto,
 } from './dto/unlikeComment.ws.dto';
 import { LikeCommentClientToServerDto, LikeCommentEvent, LikeCommentServerToClientDto } from './dto/likeComment.ws.dto';
+import { UserWsAuthGuard } from '../auth/guards/user-ws.guard';
 
 @WebSocketGateway()
 export class CommentsGateway implements OnGatewayConnection {
@@ -55,6 +56,7 @@ export class CommentsGateway implements OnGatewayConnection {
 
   @SubscribeMessage(GetCommentsByPostIDEvent)
   async getCommentsByPostID(@MessageBody() { postID }: GetCommentsClientToServerDto): Promise<WsResponse<GetCommentsServerToClientDto>> {
+    this.logger.log(GetCommentsByPostIDEvent);
     const post = await PostModel.findById(postID, {comments: 1}).lean() as {_id: ObjectID, comments: ObjectID[]};
     const comments = await commentIDsToCommentDtoArr(post.comments);
     const authorIDsToFetch: Record<string, boolean> = {};
@@ -77,7 +79,7 @@ export class CommentsGateway implements OnGatewayConnection {
     // TODO (for live updates)
   }
 
-  @PersonalWs()
+  @UseGuards(UserWsAuthGuard)
   @SubscribeMessage(CreateCommentEvent)
   async writeComment(@UserObjectID() userID: string, @MessageBody() createCommentDto: CreateCommentClientToServerDto): Promise<WsResponse<CreateCommentServerToClientDto>> {
     return {
@@ -86,7 +88,7 @@ export class CommentsGateway implements OnGatewayConnection {
     }
   }
 
-  @PersonalWs()
+  @UseGuards(UserWsAuthGuard)
   @SubscribeMessage(DeleteCommentEvent)
   async deleteComment(@UserObjectID() userID: string, @MessageBody() deleteCommentDto: DeleteCommentClientToServerDto): Promise<WsResponse<DeleteCommentServerToClientDto>> {
     return {
@@ -95,7 +97,7 @@ export class CommentsGateway implements OnGatewayConnection {
     }
   }
 
-  @PersonalWs()
+  @UseGuards(UserWsAuthGuard)
   @SubscribeMessage(LikeCommentEvent)
   async likeComment(@UserObjectID() userID: string, @MessageBody() likeCommentDto: LikeCommentClientToServerDto): Promise<WsResponse<LikeCommentServerToClientDto>> {
     return {
@@ -104,7 +106,7 @@ export class CommentsGateway implements OnGatewayConnection {
     }
   }
 
-  @PersonalWs()
+  @UseGuards(UserWsAuthGuard)
   @SubscribeMessage(UnlikeCommentEvent)
   async unlikeComment(@UserObjectID() userID: string, @MessageBody() unlikeCommentDto: UnlikeCommentClientToServerDto): Promise<WsResponse<UnlikeCommentServerToClientDto>> {
     return {

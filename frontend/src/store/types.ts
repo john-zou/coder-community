@@ -2,7 +2,7 @@ export type Comment = {
   _id: string,
   author: string,
   content: string,
-  replies: string[], //list of comment ids
+  replies?: string[], //list of comment ids
   commentRoot?: string,
   likes: number,
   parentPost?: string,

@@ -12,8 +12,10 @@ type Props = {
 export function Comment(props: Props) {
   // TODO
 
-  return (<Container>
+  return (
+    <Container>
 
 
-  </Container>);
+    </Container>
+  );
 }
