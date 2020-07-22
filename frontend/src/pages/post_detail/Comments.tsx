@@ -50,6 +50,18 @@ export function Comments({postID}:{postID?:string}) {
     }
   }, [postID]);
 
+  const topLevelComments = useSelector<RootState, string[]>(state => {
+    const ret = [];
+    post?.comments?.forEach(commentID => {
+      const comment = state.comments.entities[commentID];
+      if (comment && !comment.parentComment) {
+        // top level comment if it has no parentComment
+        ret.push(commentID);
+      }
+    });
+    return ret;
+  });
+
   if (!post?.content) {
     console.log('post_detail/Comments.tsx render .. post is not loaded');
     return <Loading />
@@ -61,7 +73,7 @@ export function Comments({postID}:{postID?:string}) {
 
   return (
     <Container>
-      {post.comments.map(commentID => <CommentComponent commentID={commentID}/>)}
+      {topLevelComments.map(commentID => <CommentComponent commentID={commentID}/>)}
     </Container>
   )
 }
