@@ -102,14 +102,12 @@ export class PostsService {
         }
 
         console.log(body);
-
         const doc = {
             author: authorObjectID,
             title: body.title,
             slug,
             previewContent: body.content.substring(0, previewContentLength),
             content: body.content,
-            // tags: [ "5f13ababa9c77f3e5abb53f6" ],
             tags: body.tags,
             featuredImg: body.featuredImg,
             likes: 0,
@@ -119,13 +117,12 @@ export class PostsService {
         };
         // Logger.log(doc);
         // Logger.log("Done create");
-        // console.log("BEFORE CREATE");
         const newPost = new PostModel(doc);
-        console.log(body.group);
-        console.log(newPost);
+        // console.log(body.group);
+        // console.log(newPost);
 
         await newPost.save();
-        console.log("AFTER SAVE");
+        // console.log("AFTER SAVE");
         if (!slug) {
             // set _id as slug (if slug is already taken)
             // TODO: create a better slug than just the id if taken
@@ -139,21 +136,17 @@ export class PostsService {
         await author.save();
 
         // Add post to tags
-        console.log("before add to tags");
         const tags = newPost.tags;
         if (tags.length > 0) {
             const expressions = tags.map(tagID => ({ _id: tagID }));
             await TagModel.updateMany({ $or: expressions }, { $push: { posts: newPost._id } });
-            console.log("done");
         }
 
-        console.log("after add to tags");
         // TODO: Add post to group (if post created for group)
         // this.trendingGateway.wss.emit('/newPost', {
         //   _id: newPost._id,
         //   slug,
         // });
-        console.log("finished");
         return {
             _id: newPost._id,
             slug,

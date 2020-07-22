@@ -5,19 +5,8 @@ import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 import Avatar from '../common/Avatar';
 import {CssTextField} from './TextFields';
 
-// const useStyles = makeStyles((theme: Theme) =>
-//     createStyles({
-//         root: {
-//             // width: 500,
-//             width: "40vw",
-//             '& > * + *': {
-//                 marginTop: theme.spacing(3),
-//             },
-//         },
-//     }),
-// );
 
-export default function AddMultiple({label, options, imgKey, setItems, limit, panelWidth}: { label: string, options: Array<{ name: string }>, imgKey?: string, setItems: Function, limit?: number, panelWidth?: any
+export default function AddMultiple({label, options, defaultValID, imgKey, setItems, limit, panelWidth}: { label: string, options: Array<{ name: string }>, defaultValID?: [number], imgKey?: string, setItems: Function, limit?: number, panelWidth?: any
 }) {
     const useStyles = makeStyles((theme: Theme) =>
         createStyles({
@@ -44,11 +33,14 @@ export default function AddMultiple({label, options, imgKey, setItems, limit, pa
 
     // console.log("ADDMILTIPLE");
     // console.log(options);
+  let arr = [0,1];
     return (
         <div className={classes.root}>
             <Autocomplete
                 multiple
                 id="tags-standard"
+                // defaultValue={defaultVal}
+                defaultValue={defaultValID.map(id => options[id])}
                 options={options}
                 disableCloseOnSelect={true}
                 renderOption={imgKey && ((option) =>
