@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import styled from "@emotion/styled";
 import {useSelector} from "react-redux";
 import {RootState} from "../../reducers/rootReducer";
@@ -7,6 +7,12 @@ import {Comment, Post} from "../../store/types";
 import {Loading} from "../common/Loading";
 import WriteThefirstComment from "../../assets/write_the_first_comment.svg";
 import Avatar from "../common/Avatar";
+import {SocketContext} from "../../App";
+import {
+  GetCommentsByPostIDEvent,
+  GetCommentsClientToServerDto
+} from "../../ws-dto/comments/dto/getCommentsByPostID.ws.dto";
+import {CommentComponent} from "./CommentComponent";
 
 const Container = styled.div`
 
@@ -31,6 +37,18 @@ function postHasNoComments() {
 
 export function Comments({postID}:{postID?:string}) {
   const post = useSelector<RootState, Post>(state => state.posts.entities[postID]);
+  const fetchedComments = useSelector<RootState, boolean>(state => state.posts.fetchedComments[postID]);
+  const socket = useContext(SocketContext);
+
+  // Emit fetch comments WS event if needed
+  useEffect(() => {
+    console.log('post_detail/Comments.tsx useEffect, postID:', postID)
+    if (postID && !fetchedComments) {
+      const dto: GetCommentsClientToServerDto = {postID};
+      socket.current.emit(GetCommentsByPostIDEvent, dto);
+      console.log('post_detail/Comments.tsx useEffect -- emitting ', GetCommentsByPostIDEvent);
+    }
+  }, [postID]);
 
   if (!post?.content) {
     console.log('post_detail/Comments.tsx render .. post is not loaded');
@@ -41,11 +59,9 @@ export function Comments({postID}:{postID?:string}) {
     return postHasNoComments();
   }
 
-  // TODO: web socket interaction
-
   return (
     <Container>
-
+      {post.comments.map(commentID => <CommentComponent commentID={commentID}/>)}
     </Container>
   )
 }

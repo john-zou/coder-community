@@ -31,7 +31,8 @@ import {createMessageSuccess, fetchMessagesInConversation, receiveNewMessage} fr
 import {NewConversationServerToClientDto} from "./ws-dto/messages/messenger.ws.dto";
 import {addConversation, createConversationSuccess} from "./reducers/conversationsSlice";
 import {CreateCommentEvent} from "./ws-dto/comments/dto/createComment.ws.dto";
-import {createCommentSuccess} from "./reducers/commentsSlice";
+import {createCommentSuccess, getCommentsByPostIDSuccess} from "./reducers/commentsSlice";
+import {GetCommentsByPostIDEvent, GetCommentsServerToClientDto} from "./ws-dto/comments/dto/getCommentsByPostID.ws.dto";
 
 export type ViewProfileParams = {
   username: string;
@@ -94,10 +95,15 @@ export default function App() {
       }
     });
 
+    socket.current.on(GetCommentsByPostIDEvent, (response: GetCommentsServerToClientDto) => {
+      dispatch(getCommentsByPostIDSuccess(response)); // TODO
+    });
+
     socket.current.on(CreateCommentEvent, (response: any) => {//listen for the incoming response(s) from 'newMessage' event
       // if message is sent by user
       dispatch(createCommentSuccess(response));
     });
+
   }, [])
 
   useEffect(() => {

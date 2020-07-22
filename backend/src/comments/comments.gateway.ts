@@ -68,6 +68,7 @@ export class CommentsGateway implements OnGatewayConnection {
     return {
       event: GetCommentsByPostIDEvent,
       data: {
+        postID,
         comments,
         authors
       }

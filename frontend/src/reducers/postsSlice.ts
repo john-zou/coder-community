@@ -11,6 +11,8 @@ import {RootState} from "./rootReducer";
 import {Post} from "../store/types";
 import {PostIDPayload, toggleLikePost} from './userSlice';
 import {submitPost, updatePost} from "./postsCreationSlice";
+import {getCommentsByPostIDSuccess} from "./commentsSlice";
+import {GetCommentsServerToClientDto} from "../ws-dto/comments/dto/getCommentsByPostID.ws.dto";
 
 
 const postsAdapter = createEntityAdapter<Post>({
@@ -68,11 +70,17 @@ export const fetchPostByID = createAsyncThunk(
 //https://redux-toolkit.js.org/api/createSlice
 export const postsSlice = createSlice({
     name: "posts",
-    initialState: postsAdapter.getInitialState<{ trendingPosts: string[], trendingPostsSet: Record<string, boolean>, slugToID: Record<string, string>, trendingPostFetchCount: number, hasMorePosts: boolean }>({ //extends EntityState
+    initialState: postsAdapter.getInitialState<{ trendingPosts: string[],
+      trendingPostsSet: Record<string, boolean>,
+      slugToID: Record<string, string>,
+      trendingPostFetchCount: number,
+      fetchedComments: Record<string, boolean>,
+      hasMorePosts: boolean }>({ //extends EntityState
         trendingPosts: [],
         trendingPostsSet: {},
         slugToID: {},
         trendingPostFetchCount: 0,
+        fetchedComments: {},
         hasMorePosts: true,//only for trending posts (of all tags)
     }),//also has ids[] and entities{}
     reducers: {},
@@ -127,7 +135,10 @@ export const postsSlice = createSlice({
                 id: action.payload._id,
                 changes: action.payload,
             });
-        }
+        },
+      [getCommentsByPostIDSuccess.type]: (state, action: PayloadAction<GetCommentsServerToClientDto>) => {
+        state.fetchedComments[action.payload.postID] = true;
+      }
     }
 })
 

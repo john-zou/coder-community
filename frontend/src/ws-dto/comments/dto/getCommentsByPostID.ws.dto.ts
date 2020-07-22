@@ -1,6 +1,7 @@
 export const GetCommentsByPostIDEvent = "getCommentsByPostID";
 
 export class GetCommentsServerToClientDto {
+  postID: string;
   comments: CommentDto[];
   authors: CommentAuthorDto[];
 }

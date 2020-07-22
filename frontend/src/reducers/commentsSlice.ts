@@ -1,6 +1,7 @@
 import {createEntityAdapter, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import { Comment } from "../store/types";
 import {CreateCommentServerToClientDto} from "../ws-dto/comments/dto/createComment.ws.dto";
+import {GetCommentsServerToClientDto} from "../ws-dto/comments/dto/getCommentsByPostID.ws.dto";
 
 const commentsAdapter = createEntityAdapter<Comment>({
   selectId: item => item._id
@@ -12,7 +13,10 @@ export const commentsSlice = createSlice({
     isLoading: false,
   }),//also has ids[] and entities{}
   reducers: {
-    createCommentPending: (state) =>{state.isLoading = true},
+    getCommentsByPostIDSuccess: (state, action: PayloadAction<GetCommentsServerToClientDto>) => {
+      commentsAdapter.upsertMany(state, action.payload.comments);
+    },
+    createCommentPending: (state) => {state.isLoading = true},
     createCommentSuccess: (state, action: PayloadAction<CreateCommentServerToClientDto>) => {
       state.isLoading = false;
       commentsAdapter.addOne(state, action.payload.comment);
@@ -22,4 +26,4 @@ export const commentsSlice = createSlice({
 })
 
 export default commentsSlice.reducer;
-export const {createCommentPending, createCommentSuccess} = commentsSlice.actions;
+export const {createCommentPending, createCommentSuccess, getCommentsByPostIDSuccess} = commentsSlice.actions;

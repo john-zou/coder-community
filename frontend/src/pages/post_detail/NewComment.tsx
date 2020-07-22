@@ -1,4 +1,4 @@
-import React, {useContext} from "react";
+import React, {useContext, useRef} from "react";
 import { makeStyles } from "@material-ui/core/styles";
 
 import PurpleButton from "../common/PurpleButton";
@@ -30,12 +30,17 @@ const useStyles = makeStyles({
 const NewComment = ({postID}) => {
   const socket = useContext(SocketContext);
   const classes = useStyles();
+  const inputRef = useRef(null);
   const dispatch = useDispatch();
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (inputRef.current.value.trim() === '') {
+      return;
+    }
+    const content = inputRef.current.value.trim();
     const newCommentDto: CreateCommentClientToServerDto = {
-      content: e.target.value,
+      content,
       // parentComment?: string;
       parentPost: postID,
       // parentVideo?: string;
@@ -50,6 +55,7 @@ const NewComment = ({postID}) => {
       <input
         className={`${classes.name} ${classes.comment}`}
         placeholder="Type comment"
+        ref={inputRef}
       />
       {/*<input className={classes.name} placeholder="Type comment" />*/}
       <PurpleButton content="Post comment"></PurpleButton>

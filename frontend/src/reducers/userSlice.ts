@@ -7,6 +7,8 @@ import { isGetInitialDataLoggedInDto } from "../util/helperFunctions";
 import { JwtLocalStorageKey } from "../constants";
 import { isLoggedInSlice } from "./isLoggedInSlice";
 import { createGroup, leaveGroup, joinGroup } from "./groupsSlice";
+import {GetCommentsServerToClientDto} from "../ws-dto/comments/dto/getCommentsByPostID.ws.dto";
+import { getCommentsByPostIDSuccess } from "./commentsSlice";
 
 const api = new UserApi();
 export const getLoggedInUser = createAsyncThunk(
@@ -216,7 +218,9 @@ export const userSlice = createSlice({
       if (Array.isArray(action.payload.tags)) {
         state.tags = action.payload.tags;
       }
-    }
+    },
+
+
   }
 })
 
