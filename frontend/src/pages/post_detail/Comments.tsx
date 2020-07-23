@@ -12,7 +12,7 @@ import {
   GetCommentsByPostIDEvent,
   GetCommentsClientToServerDto
 } from "../../ws-dto/comments/dto/getCommentsByPostID.ws.dto";
-import {CommentComponent} from "./CommentComponent";
+import {TopLevelComment} from "./TopLevelComment";
 
 const Container = styled.div`
 
@@ -73,7 +73,7 @@ export function Comments({postID}:{postID?:string}) {
 
   return (
     <Container>
-      {topLevelComments.map(commentID => <CommentComponent commentID={commentID}/>)}
+      {topLevelComments.map(commentID => <TopLevelComment commentID={commentID}/>)}
     </Container>
   )
 }

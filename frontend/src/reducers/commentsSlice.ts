@@ -20,6 +20,11 @@ export const commentsSlice = createSlice({
     createCommentSuccess: (state, action: PayloadAction<CreateCommentServerToClientDto>) => {
       state.isLoading = false;
       commentsAdapter.addOne(state, action.payload.comment);
+      // if comment is a reply to the comment, then update the parent comment
+      const parentComment = action.payload.comment.parentComment;
+      if (parentComment) {
+        state.entities[parentComment].replies.push(action.payload.comment._id);
+      }
     }
   },
   extraReducers: {}

@@ -48,7 +48,7 @@ export const SideButton = styled.span <{ buttonIsClicked: boolean }>`
   cursor: pointer;
 `
 
-const Avatar = ({ pic, title, titleSrc,subtitle, extraText, isPost, isButton, isText, subtitleIsDate }: { pic: string, title?: string, subtitle?: string, subtitleIsDate?: boolean, extraText?: string, isPost?: boolean, isButton?: boolean, isText?: boolean, titleSrc?: string }) => {
+const Avatar = ({ pic, title, titleSrc, subtitle, extraText, extraTextOnClick, isPost, isButton, isText, subtitleIsDate }: { pic: string, title?: string, subtitle?: string, subtitleIsDate?: boolean, extraText?: string, isPost?: boolean, isButton?: boolean, isText?: boolean, titleSrc?: string, extraTextOnClick?: any }) => {
   const classes = useStyles();
   const [buttonIsClicked, setButtonIsClicked] = useState(false);
   const history = useHistory();
@@ -60,7 +60,7 @@ const Avatar = ({ pic, title, titleSrc,subtitle, extraText, isPost, isButton, is
           <TitleText isPost={isPost} isText={isText} onClick={titleSrc && (() => {history.push(titleSrc)})} titleSrc={titleSrc}>
             {title}&nbsp;&nbsp;&nbsp;
           </TitleText>
-          {!isButton && <ExtraText>{extraText}</ExtraText>}
+          {!isButton && <ExtraText onClick={extraTextOnClick}>{extraText}</ExtraText>}
           {isButton && <SideButton buttonIsClicked={buttonIsClicked} onClick={() => setButtonIsClicked((prevState) => !prevState)}>{extraText}</SideButton>}
           {/* {isButton && buttonIsClicked && <SideButtonClicked>{extraText}</SideButtonClicked>} */}
         </p>
