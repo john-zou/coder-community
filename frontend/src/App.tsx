@@ -11,7 +11,7 @@ import { DevLogin } from "./pages/login/DevLogin";
 import { Messenger } from "./pages/messenger";
 import PostDetail from "./pages/post_detail";
 import SearchResult from "./pages/search_result/SearchResult";
-import Upload from "./pages/video_management/Upload";
+import CreateVideoPost from "./pages/create_video_post";
 import { ViewProfile } from "./pages/view_profile/ViewProfile";
 import { LogOut } from "./pages/login/Logout";
 import { Experimental } from "./pages/experimental/Experimental";
@@ -90,8 +90,8 @@ export default function App() {
           {/*Unused*/}
           <SearchResult />
         </Route>
-        <Route path="/video_management">
-          <Upload />
+        <Route path="/video">
+          <CreateVideoPost />
         </Route>
         <Route path="/login/github">
           <LoginGitHub />

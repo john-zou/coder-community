@@ -16,7 +16,7 @@ export const tagsSlice = createSlice({
   reducers: {
 
   },
-  extraReducers: {
+  extraReducers: { //respond to any action
     // Initialize Tags slice when initial data is fetched
     [fetchTrendingPosts.fulfilled.type]: (state, action: PayloadAction<GetInitialDataDto | GetInitialDataLoggedInDto>) => {
       // Create tags

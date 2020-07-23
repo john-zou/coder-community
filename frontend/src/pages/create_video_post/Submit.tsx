@@ -39,21 +39,17 @@ export default function Submit(params) {
 
   const onSubmit = async (params, author, dispatch, history) => {
     // console.log(newPost);
-    let featuredImg: string;
-    if (params.img) {
-      featuredImg = await uploadPublicAsset(params.img);
-    }
 
       // let featuredVideo: string;  //Mina
       // if (params.video) {
       //     featuredVideo = await uploadPublicAsset(params.video);
       // }
 
-    const newPost = {
+      const newPost = {
       title: params.title,
       content: params.content,
       tags: params.tags,
-      featuredImg,
+      featuredImg: params.img,
       author: author,
     }
     // Handle update differently

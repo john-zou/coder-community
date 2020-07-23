@@ -1,6 +1,26 @@
-import { Injectable } from '@nestjs/common';
+import { HttpService, Injectable, NotFoundException } from '@nestjs/common';
 import { GetAllVideosDto, CreateVideoDto, VideoDto } from './video.dto';
-import { VideoModel } from '../mongoModels';
+import { VideoModel, PostModel, TagModel, UserModel } from '../mongoModels';
+import { Ref } from '@typegoose/typegoose';
+import { ObjectID, ObjectId } from 'mongodb';
+import {
+  convertPostDocumentToPostDetailDto,
+  convertPostDocumentToPostDto,
+  convertToStrArr,
+  convertUserToUserDto,
+} from '../util/helperFunctions';
+import { DocumentType } from '@typegoose/typegoose';
+import { UserService } from '../user/user.service';
+import * as urlSlug from 'url-slug';
+import { User } from '../user/user.schema';
+import {
+  CreatePostBodyDto,
+  CreatePostSuccessDto,
+  PostDto,
+  PostWithDetails, UpdatePostBodyDto,
+  UpdatePostSuccessDto,
+} from '../posts/dto/posts.dto';
+import { Model } from 'mongoose';
 
 @Injectable()
 

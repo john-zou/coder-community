@@ -36,7 +36,7 @@ export const TagsContainer = styled.div`
   padding-left: 2em;
   padding-top: 1em;
 `;
-export default function CreatePost() {
+export default function CreatePost() {  //hooks, access and modify the states
   const classes = useStyles();
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
