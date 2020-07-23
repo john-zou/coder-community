@@ -20,7 +20,7 @@ const CommentContent = styled.p`
   margin-top: -0.35em;
 `
 
-const Container = styled.div`
+const TopLevelCommentContainer = styled.div`
 
 `
 
@@ -67,7 +67,9 @@ export function TopLevelComment({commentID}: Props) {
     return <></>;
   }
 
-  function createCommentReply() {
+  function createCommentReply(event) {
+    event.preventDefault();
+
     if (replyInputRef.current.value.trim() === '') {
       return;
     }
@@ -84,7 +86,6 @@ export function TopLevelComment({commentID}: Props) {
   }
 
   function handleClickReply(event) {
-    event.preventDefault();
     if (!currentUser) {
       // Send user to login
       initializeGitHubOAuth();
@@ -94,8 +95,8 @@ export function TopLevelComment({commentID}: Props) {
   }
 
   return (
-    <>
-      <Container onClick={() => setExpanded(expanded => !expanded)}>
+    <div style={{backgroundColor: expanded ? "white" : "inherit", borderRadius: "20px", paddingLeft: "1em", paddingBottom: "1.5em", cursor: "pointer"}}>
+      <TopLevelCommentContainer onClick={() => setExpanded(expanded => !expanded)}>
         <Avatar pic={author.profilePic}
                 title={author.userID} titleSrc={`/user/${author.userID}`}
                 subtitle={moment(comment.createdAt).calendar()}
@@ -104,7 +105,7 @@ export function TopLevelComment({commentID}: Props) {
                 extraTextOnClick={handleClickReply}
         ></Avatar>
 
-      </Container>
+      </TopLevelCommentContainer>
       <CommentContent>{comment.content}</CommentContent>
       {expanded && (<ChildCommentsContainer>
         {comment.replies.map(reply => <ChildComment commentID={reply}></ChildComment>)}
@@ -122,6 +123,6 @@ export function TopLevelComment({commentID}: Props) {
           </CreateCommentReplyContainer>
         </Fade>
       </Modal>
-    </>
+    </div>
   );
 }

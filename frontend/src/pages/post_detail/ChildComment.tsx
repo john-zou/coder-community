@@ -21,6 +21,7 @@ export function ChildComment({commentID}: {commentID: string}) {
 
   return (<Container>
     <Avatar pic={author.profilePic}
+            small
             title={author.userID} titleSrc={`/user/${author.userID}`}
             subtitle={moment(comment.createdAt).calendar()}
             subtitleIsDate

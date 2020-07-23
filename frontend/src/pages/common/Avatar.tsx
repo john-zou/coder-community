@@ -15,6 +15,13 @@ const useStyles = makeStyles({
     borderRadius: "50%",
     marginTop: "0.5em",
   },
+  smallAccountImg: {
+    width: "2.2em",
+    height: "2.2em",
+    borderRadius: "50%",
+    marginTop: "1em",
+    marginRight: "0.3em",
+  },
   imgTitle: {
     display: "flex",
     flexDirection: "row",
@@ -48,13 +55,13 @@ export const SideButton = styled.span <{ buttonIsClicked: boolean }>`
   cursor: pointer;
 `
 
-const Avatar = ({ pic, title, titleSrc, subtitle, extraText, extraTextOnClick, isPost, isButton, isText, subtitleIsDate }: { pic: string, title?: string, subtitle?: string, subtitleIsDate?: boolean, extraText?: string, isPost?: boolean, isButton?: boolean, isText?: boolean, titleSrc?: string, extraTextOnClick?: any }) => {
+const Avatar = ({ small, pic, title, titleSrc, subtitle, extraText, extraTextOnClick, isPost, isButton, isText, subtitleIsDate }: { pic: string, title?: string, subtitle?: string, subtitleIsDate?: boolean, extraText?: string, isPost?: boolean, isButton?: boolean, isText?: boolean, titleSrc?: string, extraTextOnClick?: any, small?: boolean }) => {
   const classes = useStyles();
   const [buttonIsClicked, setButtonIsClicked] = useState(false);
   const history = useHistory();
   return (
     <div className={classes.account}>
-      <img className={classes.accountImg} src={pic} alt="" />
+      <img className={small ? classes.smallAccountImg : classes.accountImg} src={pic} alt="avatar" />
       <div className={classes.nameTime}>
         <p>
           <TitleText isPost={isPost} isText={isText} onClick={titleSrc && (() => {history.push(titleSrc)})} titleSrc={titleSrc}>
