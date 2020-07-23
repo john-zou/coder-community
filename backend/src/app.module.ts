@@ -35,6 +35,7 @@ import { SearchModule } from './search/search.module';
     MessagesModule,
     ConversationsModule,
     AttachmentsModule,
+    VideoModule,
 
     // Special modules
     AuthModule,

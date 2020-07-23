@@ -3,11 +3,13 @@ import {Redirect, useParams} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {AppDispatch} from "../../store";
 import {RootState} from "../../reducers/rootReducer";
-import {Post, Tag} from "../../store/types";
+import {Post, Tag, User} from "../../store/types";
 import defaultPostFeaturedImage from "../../assets/defaultPostFeaturedImage.jpg";
 import {fetchPostBySlug} from "../../reducers/postsSlice";
 import {Loading} from "../common/Loading";
 import {NotFoundError} from "../common/NotFoundError";
+import {NoAccessibilityError} from "../common/NoAccessibilityError";
+import {NotLoggedInError} from "../common/NotLoggedInError";
 import ImgP from "../create_post/ImgPanel";
 import TextP from "../create_post/TextPanel";
 import AddMultiple from "../group/AddMuliple";
@@ -38,14 +40,16 @@ export default function UpdatePost() {
     const allTags = useSelector<RootState, Dictionary<Tag>>(state => state.tags.entities);
     const allTagsArr = Object.values(allTags);
 
-    const { post } = useSelector<RootState, { post: Post }>(state => {
+
+    const {post}  = useSelector<RootState, { post: Post }>(state => {
         const postID = state.posts.slugToID[slug];
         if (!postID) {
             return { post: null };
         }
         const post = state.posts.entities[postID];
-        return { post };
+        return {post};
     });
+    const user = useSelector<RootState, User>(state => state.user);
 
     const [title, setTitle] = useState(post?.title);
     const [content, setContent] = useState(post?.content);
@@ -81,6 +85,18 @@ export default function UpdatePost() {
 
     if (error) {
         return <NotFoundError />
+    }
+
+    // console.log("UPDATEPOST::INDEX");
+    // console.log(post);
+    // console.log(post.author);
+    // console.log(user);
+    // console.log(user._id);
+    if (!user) {
+        return <NotLoggedInError />
+    }
+    if (user._id !== post.author) {
+        return <NoAccessibilityError />
     }
 
     return (

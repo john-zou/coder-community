@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-export default function AddMultiple({ label, options, imgKey, setItems }: { label: string, options: Array<{ name: string }>, imgKey?: string, setItems: Function }) {
+export default function AddMultiple({ label, options, imgKey, setItems, limit }: { label: string, options: Array<{ name: string }>, imgKey?: string, setItems: Function, limit?: number }) {
   const classes = useStyles();
 
   const handleChange = (e, values) => {
@@ -30,6 +30,7 @@ export default function AddMultiple({ label, options, imgKey, setItems }: { labe
       <Autocomplete
         multiple
         id="tags-standard"
+        // disabled={true}
         options={options}
         disableCloseOnSelect={true}
         renderOption={imgKey && ((option) =>

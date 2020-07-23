@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import {UserApi, GetInitialDataDto, GetInitialDataLoggedInDto, PostsApi, AuthApi, UpdateProfileReqDto, CreateGroupSuccessDto } from "../api";
+import { UserApi, GetInitialDataDto, GetInitialDataLoggedInDto, PostsApi, AuthApi, UpdateProfileReqDto, CreateGroupSuccessDto } from "../api";
 import { fetchTrendingPosts } from "./postsSlice";
 import { CurrentLoggedInUser } from "../store/types";
 import _ from "lodash";
@@ -17,18 +17,18 @@ export const getLoggedInUser = createAsyncThunk(
 )
 
 export const login = createAsyncThunk(
-    'loginStatus',
-    async ({ code, state }: { code: string, state: string }) => {
-      await new AuthApi().authControllerLoginGitHub({ code, state })
-    }
+  'loginStatus',
+  async ({ code, state }: { code: string, state: string }) => {
+    await new AuthApi().authControllerLoginGitHub({ code, state })
+  }
 );
 
 export const updateProfile = createAsyncThunk(
-    'updateProfile',
-    async (update: UpdateProfileReqDto) => {
-      await api.userControllerEditProfile(update);
-      return { update };
-    }
+  'updateProfile',
+  async (update: UpdateProfileReqDto) => {
+    await api.userControllerEditProfile(update);
+    return { update };
+  }
 )
 
 /**

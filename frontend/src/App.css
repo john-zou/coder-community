@@ -5,3 +5,22 @@ h3 {
 .fileContainer {
   box-shadow: 2px 2px 3px 0 white !important;
 }
+
+.MuiToolbar-regular {
+  box-shadow: 5px 2px 5px #cccccc !important;
+}
+
+.ql-snow .ql-editor pre.ql-syntax {
+  /* background-color: #cccccc; */
+  /* color: black; */
+}
+
+.ql-snow .ql-tooltip {
+  position: unset !important;
+  transform: none !important;
+}
+
+.textBlock:hover {
+  cursor: pointer;
+  background-color: #F7F7F7;
+}

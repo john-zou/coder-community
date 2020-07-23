@@ -3,7 +3,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
 import { RootState } from '../../reducers/rootReducer';
-import {CurrentLoggedInUser, User} from '../../store/types';
+import { CurrentLoggedInUser, User } from '../../store/types';
 import { Loading } from '../common/Loading';
 import "../../App.css";
 
@@ -61,33 +61,33 @@ const LeftSideBar = () => {
   }
 
   return (
-    <div className={classes.root}>
-      {isLoggedIn &&
+      <div className={classes.root}>
+        {isLoggedIn &&
         <div className={classes.diplayAccount}>
           <img className={classes.displayImg} src={user.profilePic} alt="" />
           <Link to={`/user/${user.userID}`} className={classes.link}>
             <h3 className={classes.displayName}>{user.name}</h3>
           </Link>
         </div>
-      }
-      <div className={classes.groupLinks}>
-        <h3>Daily Challenge</h3>
-        {isLoggedIn &&
+        }
+        <div className={classes.groupLinks}>
+          <h3>Daily Challenge</h3>
+          {isLoggedIn &&
           <Link to={`/messages`} className={classes.link}>
             <h3>Messages</h3>
           </Link>
-        }
-        <h3>Hacker News</h3>
-        <h3>Posts</h3>
-        <h3>Videos</h3>
+          }
+          <h3>Hacker News</h3>
+          <h3>Posts</h3>
+          <h3>Videos</h3>
 
-        <h3 onClick={() => {
-          history.push("/home/groups");
-        }}>Groups</h3>
+          <h3 onClick={() => {
+            history.push("/home/groups");
+          }}>Groups</h3>
 
-        {/* <FilterPost /> */}
+          {/* <FilterPost /> */}
+        </div>
       </div>
-    </div>
   );
 };
 

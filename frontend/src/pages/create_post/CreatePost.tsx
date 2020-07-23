@@ -13,17 +13,17 @@ import { useSelector } from "react-redux";
 import styled from '@emotion/styled';
 
 const useStyles = makeStyles({
-  createPost: {
-    paddingTop: "7vh",
-    paddingBottom: "7vh",
-    // paddingTop: "3em",
-    display: "flex",
-    flex: 1,
-    flexDirection: "column",
-    height: "110vh",
-    alignItems: "center",
-    // overflowY: "scroll",
-  }
+    createPost: {
+        paddingTop: "7vh",
+        paddingBottom: "7vh",
+        // paddingTop: "3em",
+        display: "flex",
+        flex: 1,
+        flexDirection: "column",
+        height: "110vh",
+        alignItems: "center",
+        // overflowY: "scroll",
+    }
 });
 
 export const TagsContainer = styled.div`
