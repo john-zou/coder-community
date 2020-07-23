@@ -49,21 +49,28 @@ export default function UpdatePost() {
     }
     const post = state.posts.entities[postID];
     return {post};
-  });
+  })
 
   // fetch tags
   const tags = useSelector<RootState, Dictionary<Tag>>(state => state.tags.entities);
+  const tagsArray = Object.values(tags);
   let oldTagsIDArr = []
-  for (let i = 0; i < tags.length; i++) {
-    
+  const oldTagsSet = new Set(post.tags);
+  console.log(oldTagsSet);
+  for (let i = 0; i < tagsArray.length; i++) {
+    console.log(tagsArray[i]._id);
+    if (oldTagsSet.has(tagsArray[i]._id))
+      oldTagsIDArr.push(i);
   }
+  console.log(oldTagsIDArr);
+
   // const oldTagsArr = post.tags.map(tag => {
   //   return {
   //     _id: tag,
   //     name: tags[tag].name,
   //   };
   // })
-  console.log(oldTagsArr);
+  console.log(oldTagsIDArr);
 
   const user = useSelector<RootState, User>(state => state.user);
   const [title, setTitle] = useState(post?.title);
