@@ -1,7 +1,7 @@
 import { UserService } from '../user/user.service';
 import {
     Body,
-    Controller,
+    Controller, Delete,
     Get,
     HttpException, Logger,
     NotFoundException,
@@ -153,5 +153,11 @@ export class PostsController {
         // console.log(slug);
         // console.log(update);
         return this.postsService.updatePostBySlug(update, slug);
+    }
+
+    @Personal()
+    @Delete(':postID')
+    async deletePostByPostID(@Param('postID') postID: string, @UserObjectID() userID: string): Promise<void> {
+        await this.postsService.deletePostByPostID(postID, userID);
     }
 }
