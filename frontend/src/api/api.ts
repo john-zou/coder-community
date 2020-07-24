@@ -314,10 +314,10 @@ export interface CreatePostBodyDto {
     content: string;
     /**
      * 
-     * @type {Array<any>}
+     * @type {Array<string>}
      * @memberof CreatePostBodyDto
      */
-    tags: Array<any>;
+    tags: Array<string>;
     /**
      * 
      * @type {string}
@@ -697,16 +697,16 @@ export interface MessageDto {
     text: string;
     /**
      * 
-     * @type {string}
+     * @type {any}
      * @memberof MessageDto
      */
-    createdAt: string;
+    createdAt: any;
     /**
      * 
-     * @type {string}
+     * @type {any}
      * @memberof MessageDto
      */
-    updatedAt: string;
+    updatedAt: any;
 }
 /**
  * 
@@ -1031,6 +1031,12 @@ export interface UpdatePostBodyDto {
      * @memberof UpdatePostBodyDto
      */
     tags?: Array<string>;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdatePostBodyDto
+     */
+    oldSlug?: string;
 }
 /**
  * 
@@ -1050,6 +1056,12 @@ export interface UpdatePostSuccessDto {
      * @memberof UpdatePostSuccessDto
      */
     slug: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdatePostSuccessDto
+     */
+    oldSlug?: string;
 }
 /**
  * 

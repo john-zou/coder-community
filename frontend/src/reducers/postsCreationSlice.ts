@@ -87,6 +87,6 @@ export const updatePost = createAsyncThunk(
         console.log(update);
         console.log(slug);
         const {_id, slug: newSlug} = await new PostsApi().postsControllerUpdatePostBySlug(update, slug);
-        return {update, _id, slug: newSlug};
+        return {update, _id, slug: newSlug, oldSlug: slug};
     }
 );

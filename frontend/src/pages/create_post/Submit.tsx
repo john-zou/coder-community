@@ -69,7 +69,8 @@ export default function Submit(params) {
             );
         }
     }
-
+    console.log("CREATEPOST::SUBMIT");
+    console.log(params.tags);
     return (
         <div className={classes.operation}>
             <div onClick={(event) => {
@@ -86,3 +87,4 @@ export default function Submit(params) {
         </div>
     );
 }
+

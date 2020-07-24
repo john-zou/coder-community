@@ -9,12 +9,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Tag() {
+export default function Tag(tag) {
   const classes = useStyles();
-
   return (
     <div>
-      <Button variant="contained" color="secondary" className={classes.button} endIcon={<CloseIcon/>}>Cpp
+      <Button variant="contained" color="secondary" className={classes.button} >
+        {tag.tag}
       </Button>
     </div>
   );

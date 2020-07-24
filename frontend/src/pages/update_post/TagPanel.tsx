@@ -1,8 +1,6 @@
 import React from "react";
-import { connect } from "react-redux";
-import Tag from "./Tag";
 import { makeStyles } from "@material-ui/core/styles";
-// import { setTag, delTag } from '../../actions';
+import AddMultiple from "../group/AddMuliple";
 
 const useStyles = makeStyles({
   cptag: {
@@ -42,45 +40,17 @@ const useStyles = makeStyles({
   },
 });
 
-const _onChange = (event) => {
-  // this.cur = event.target.value;
-  // this.props.load(event.target.value);
-};
-
-const _onSubmit = (event) => {
-  event.preventDefault();
-  // this.props.store('MESS_ADD', this.props.input);
-  // this.props.setTag(this.cur);
-};
-
-const _onDel = (event) => {
-  event.preventDefault();
-};
-
 export default function TagPanel(params) {
   const classes = useStyles();
-  const alltags = [];
+  const alltags = []; // useState<RootState, >()
+  // console.log("UPDATEPOST::TAGPANEL");
+  // console.log(params.allTagsArr);
+  // console.log(params.oldTagsID);
   return (
-    <div className={classes.cptag}>
-      <form id="tagform">
-        <h4 className={classes.h4}>Add tags</h4>
-        <hr className={classes.display}></hr>
-        <ul className={classes.tags}>
-          <Tag />
-        </ul>
-        <input
-          className={classes.input}
-          onChange={_onChange}
-          placeholder="Type here"
-        ></input>
-        <br></br>
-        <button id="submit" onClick={_onSubmit}>
-          Submit
-        </button>
-      </form>
-      <ul id="tags" onClick={_onDel}>
-        {alltags}
-      </ul>
-    </div>
+      <div className={classes.cptag}>
+        <form id="tagform">
+          <AddMultiple label="Add Tags" options={params.allTagsArr} defaultValID={params.oldTagsID} setItems={params.setPostTags} panelWidth={"40vw"} />
+        </form>
+      </div>
   );
 }

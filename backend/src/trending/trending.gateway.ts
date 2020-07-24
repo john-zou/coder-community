@@ -10,7 +10,6 @@ export class TrendingGateway implements OnGatewayConnection {
   private logger = new Logger('TrendingGateway');
 
   handleConnection(client: Socket): void {
-    this.logger.log('New client connected');
-    client.emit('connection', 'suscessfully connected to server');
+    this.logger.log(`Client connected: ID ${client.id}`);
   }
 }

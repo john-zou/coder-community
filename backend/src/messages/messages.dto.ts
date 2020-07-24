@@ -2,8 +2,8 @@ export class MessageDto {
   _id: string;
   author: string;
   text: string;
-  createdAt: string;
-  updatedAt: string;
+  createdAt: string | number;
+  updatedAt: string | number;
 }
 
 export class CreateMessageBodyDto {

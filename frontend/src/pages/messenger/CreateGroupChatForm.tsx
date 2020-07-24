@@ -16,8 +16,7 @@ import { TextFields } from '../group/TextFields';
 import AddMultiple from '../group/AddMuliple';
 import { NewConversationClientToServerDto } from "../../ws-dto/messages/messenger.ws.dto";
 import { createDirectConversationPending, createGroupConversationPending } from "../../reducers/conversationsSlice";
-import { SocketContext } from "./index";
-
+import { SocketContext } from '../../App';
 
 const TextWrapper = styled.div`
   margin-left: 10px;
