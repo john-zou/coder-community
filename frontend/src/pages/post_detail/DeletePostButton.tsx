@@ -9,6 +9,8 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import {Button} from "@material-ui/core";
 import {useDispatch} from "react-redux";
 import {Loading} from "../common/Loading";
+import { deletePost } from "../../reducers/postsSlice";
+import {PostsApi} from "../../api";
 
 function DeletePostButton({postID}: { postID: string }) {
   const history = useHistory();
@@ -25,8 +27,9 @@ function DeletePostButton({postID}: { postID: string }) {
 
   const handleClick = () => {
     handleClose();
-
-    dispatch(deletePost(postID));
+    new PostsApi().postsControllerDeletePostByPostID(postID).then(() => {console.log('Confirmed optimistic post deletion from backend!')})
+      .catch(console.log);
+    dispatch(deletePost({postID}));
     history.push('/');
   }
 
