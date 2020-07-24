@@ -2,30 +2,40 @@ import * as React from "react";
 import GroupList from "../create_post/GroupList";
 import VideoUpload from "./VideoUpload";
 import { fade, makeStyles } from "@material-ui/core/styles";
+import {useState} from "react";
+import {useDispatch, useSelector} from "react-redux";
+import {RootState} from "../../reducers/rootReducer";
+import {Dictionary, unwrapResult} from "@reduxjs/toolkit";
+import {User} from "../../store/types";
+import {convertArrToMap} from "../../util/helperFunctions";
+import {AppDispatch} from "../../store";
+import {useEffect} from "react";
+import {fetchUsersByIDs} from "../../reducers/usersSlice";
+import {Loading} from "../common/Loading";
+import ErrorPage from "../common/ErrorPage";
+import {uploadPublicAsset} from "../../api-upload";
+import {createGroup} from "../../reducers/groupsSlice";
 
 const _onVideoUpload = (event) => {
-	/*
-	event.preventDefault();
-	alert(this.url);
-	this.props.setVideo(this.url);
-	*/
+	// event.preventDefault();
+	// alert(this.url);
+	// this.props.setVideo(this.url);
 }
 
 const _onChange = (event) => {
-	/*
-	this.url = event.target.value;
-	*/
+	// this.url = event.target.value;
 }
 
 const _omVideoRm = (event) => {
-	/*
-	event.preventDefault();
-	this.url = '';
-	this.props.setVideo('');
-	*/
+	// event.preventDefault();
+	// this.url = '';
+	// this.props.setVideo('');
 }
 
-export interface IProps {}
+
+export interface IProps {
+    // setUrl: any;
+}
 
 export interface IState {
   overlayActive: any;
@@ -91,7 +101,8 @@ class VideoPanel extends React.Component<IProps, IState> {
             Upload Video
             </button>
           {this.state.overlayActive && (
-            <VideoUpload closeOverlay={this.closeOverlay} />
+            // <VideoUpload closeOverlay={this.closeOverlay} setUrl={this.props.setUrl}/>
+              <VideoUpload closeOverlay={this.closeOverlay} />
           )}
         </form>
       </div>

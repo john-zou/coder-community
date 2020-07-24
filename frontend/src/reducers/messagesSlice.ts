@@ -5,7 +5,7 @@ import { Message } from "../store/types";
 import _ from "lodash";
 
 const messagesAdapter = createEntityAdapter<Message>({
-  selectId: item => item._id
+  selectId: item => item._id,
 });
 
 export const fetchMessagesInConversation = createAsyncThunk(

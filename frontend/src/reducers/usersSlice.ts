@@ -11,6 +11,8 @@ import {
 } from "../api";
 import { leaveGroup, joinGroup } from "./groupsSlice";
 import _ from "lodash";
+import {getCommentsByPostIDSuccess} from "./commentsSlice";
+import {GetCommentsServerToClientDto} from "../ws-dto/comments/dto/getCommentsByPostID.ws.dto";
 
 const api = new UserApi();
 
@@ -71,6 +73,9 @@ export const usersSlice = createSlice({
     },
     'getConversationsAndUsers': (state, action: PayloadAction<any>) => {
       usersAdapter.upsertMany(state, action.payload.users);
+    },
+    [getCommentsByPostIDSuccess.type]: (state, action: PayloadAction<GetCommentsServerToClientDto>) => {
+      usersAdapter.upsertMany(state, action.payload.authors);
     }
   }
 })

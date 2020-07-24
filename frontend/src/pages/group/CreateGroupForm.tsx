@@ -155,7 +155,7 @@ export const CreateGroupForm = ({ handleClose }) => {
 
           {/* https://material-ui.com/components/autocomplete/#Tags.tsx */}
           <TextWrapper>
-            <AddMultiple label="Add People" options={followingFollowers} imgKey="profilePic" setItems={setPeople} />
+            <AddMultiple label="Add People" options={followingFollowers} imgKey="profilePic" setItems={setPeople} panelWidth={500} />
           </TextWrapper>
 
           <div style={{ height: "25px" }}></div>

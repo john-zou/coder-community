@@ -40,7 +40,7 @@ export const convertPostDocumentToPostDto = (post: DocumentType<Post>): PostDto 
   } else {
     createdAt = moment(dateCopy).fromNow(); //https://momentjs.com/docs/#/displaying/fromnow/
   }
-  Logger.log(createdAt, "convertPostDocumentToPostDto");
+  // Logger.log(createdAt, "convertPostDocumentToPostDto");
   return {
     _id: post._id.toString(),
     author: post.author.toString(),

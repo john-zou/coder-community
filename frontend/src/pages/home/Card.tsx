@@ -198,7 +198,7 @@ const Card = ({ postID }: Props) => {
       <div className={classes.interactions}>
         {post.tags.length > 0 && post.tags.map((_id) => (
           <p key={_id} className={classes.tagText}>
-            #{tags[_id].name}&nbsp;
+            {/*}#{tags[_id].name}&nbsp;*/}
           </p>
         ))}
         <div style={{ display: "flex", flex: 1 }}></div>
