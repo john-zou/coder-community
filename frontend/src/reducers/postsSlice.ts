@@ -11,8 +11,6 @@ import {
 } from "../api";
 import {RootState} from "./rootReducer";
 import {Post, User} from "../store/types";
-import {PostIDPayload} from './userSlice';
-import {submitPost, updatePost} from "./postsCreationSlice";
 import {createCommentSuccess, getCommentsByPostIDSuccess} from "./commentsSlice";
 import {GetCommentsServerToClientDto} from "../ws-dto/comments/dto/getCommentsByPostID.ws.dto";
 import {CreateCommentServerToClientDto} from "../ws-dto/comments/dto/createComment.ws.dto";;
