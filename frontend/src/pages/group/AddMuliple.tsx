@@ -40,7 +40,7 @@ export default function AddMultiple({label, options, defaultValID, imgKey, setIt
                 multiple
                 id="tags-standard"
                 // defaultValue={defaultVal}
-                defaultValue={defaultValID.map(id => options[id])}
+                defaultValue={defaultValID?.map(id => options[id])}
                 options={options}
                 disableCloseOnSelect={true}
                 renderOption={imgKey && ((option) =>
