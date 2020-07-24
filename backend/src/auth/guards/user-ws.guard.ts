@@ -1,15 +1,17 @@
-import { CanActivate, ExecutionContext, Global, Injectable, Logger } from '@nestjs/common';
+import { CanActivate, ExecutionContext, Injectable, Logger, Scope } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { Client } from 'socket.io';
 import { JwtService } from '@nestjs/jwt';
 import { CoderCommunityJwtPayload } from '../jwt.strategy';
 
-@Injectable() // Singleton by default
+@Injectable() // Singleton by default -- actually gets constructed 3x for some reason...
 export class UserWsAuthGuard implements CanActivate {
   private logger = new Logger('UserWsAuthGuard');
-  private readonly clientIDToVerifiedUserObjectID: Record<string, string> = {}
+  private static readonly clientIDToVerifiedUserObjectID: Record<string, string> = {}
 
-  constructor(private readonly jwtService: JwtService) {}
+  constructor(private readonly jwtService: JwtService) {
+    this.logger.log('constructor');
+  }
 
   private decodeJwtForWsClient(socketClientID, data) {
     const payload = this.jwtService.decode(data.jwt) as unknown as CoderCommunityJwtPayload;
@@ -18,7 +20,7 @@ export class UserWsAuthGuard implements CanActivate {
     if (payload?._id) {
       this.logger.log(`Client JWT decoded. User ObjectID: ${payload._id}`);
       data.userObjectID = payload._id;
-      this.clientIDToVerifiedUserObjectID[socketClientID] = payload._id;
+      UserWsAuthGuard.clientIDToVerifiedUserObjectID[socketClientID] = payload._id;
       passed = true;
     }
 
@@ -29,13 +31,14 @@ export class UserWsAuthGuard implements CanActivate {
   canActivate(context: ExecutionContext): boolean | Promise<boolean> | Observable<boolean> {
     const wsContext = context.switchToWs();
     const clientID = wsContext.getClient<Client>().id;
+    this.logger.log(`canActivate -- clientID ${clientID}`);
     const data = wsContext.getData();
 
     if (data.jwt) {
       // Client is providing JWT
       return this.decodeJwtForWsClient(clientID, data);
     } else {
-      const userObjectID = this.clientIDToVerifiedUserObjectID[clientID];
+      const userObjectID = UserWsAuthGuard.clientIDToVerifiedUserObjectID[clientID];
       if (!userObjectID) {
         this.logger.log(`Rejecting client because client is not authenticated and did not attach JWT.`);
         return false;

@@ -11,9 +11,14 @@ export class MessagesService {
   async getMessagesInConversation(conversationID: string): Promise<MessageDto[]> {
     const currentCoversation = await ConversationModel.findById(conversationID);
     const messageIDs = currentCoversation.messages;
-    return MessageModel.find({
+    //@ts-ignore
+    return (await MessageModel.find({
       _id: messageIDs
-    }).lean();
+    }).lean()).map(message => {
+      //@ts-ignore
+      message.createdAt = message.createdAt.valueOf();
+      return message;
+    });
   }
 
   async createMessage(createMessageDto: CreateMessageBodyDto, userID: string, conversationID: string): Promise<CreateMessageSuccessDto> {

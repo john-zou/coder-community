@@ -44,3 +44,13 @@ export async function MockMongo(): Promise<void> {
     }
   }
 }
+
+export async function drop(...models: any): Promise<void>{
+  for (const model of models) {
+    try {
+      await model.collection.drop();
+    } catch (err) {
+      // do nothing
+    }
+  }
+}

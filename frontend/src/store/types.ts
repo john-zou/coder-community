@@ -2,15 +2,14 @@ export type Comment = {
   _id: string,
   author: string,
   content: string,
-  replies: string[], //list of comment ids
-  commentRoot: string,
-  likes: string[],
-  likesCount: number,
-  parentPost: string,
-  parentComment: string,
-  parentVideo: string,
-  createdAt: string,
-  updatedAt: string,
+  replies?: string[], //list of comment ids
+  commentRoot?: string,
+  likes: number,
+  parentPost?: string,
+  parentComment?: string,
+  parentVideo?: string,
+  createdAt: number,
+  updatedAt?: number,
 }
 
 export type Conversation = {

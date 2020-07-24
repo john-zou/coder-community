@@ -697,16 +697,16 @@ export interface MessageDto {
     text: string;
     /**
      * 
-     * @type {string}
+     * @type {any}
      * @memberof MessageDto
      */
-    createdAt: string;
+    createdAt: any;
     /**
      * 
-     * @type {string}
+     * @type {any}
      * @memberof MessageDto
      */
-    updatedAt: string;
+    updatedAt: any;
 }
 /**
  * 
