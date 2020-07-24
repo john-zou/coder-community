@@ -1,4 +1,4 @@
-import {createAsyncThunk, createEntityAdapter, createSlice, PayloadAction} from "@reduxjs/toolkit";
+import { createAsyncThunk, createEntityAdapter, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
   GetInitialDataDto,
   GetInitialDataLoggedInDto,
@@ -9,16 +9,14 @@ import {
   UpdatePostBodyDto,
   UpdatePostSuccessDto
 } from "../api";
-import {RootState} from "./rootReducer";
-import {Post, User} from "../store/types";
-import {PostIDPayload} from './userSlice';
-import {submitPost, updatePost} from "./postsCreationSlice";
-import {createCommentSuccess, getCommentsByPostIDSuccess} from "./commentsSlice";
-import {GetCommentsServerToClientDto} from "../ws-dto/comments/dto/getCommentsByPostID.ws.dto";
-import {CreateCommentServerToClientDto} from "../ws-dto/comments/dto/createComment.ws.dto";
-import {PostIDPayload, toggleLikePost} from './userSlice';
-import {submitPost, updatePost} from "./postsCreationSlice";
-import {useSelector} from "react-redux";
+import { RootState } from "./rootReducer";
+import { Post, User } from "../store/types";
+import { submitPost, updatePost } from "./postsCreationSlice";
+import { createCommentSuccess, getCommentsByPostIDSuccess } from "./commentsSlice";
+import { GetCommentsServerToClientDto } from "../ws-dto/comments/dto/getCommentsByPostID.ws.dto";
+import { CreateCommentServerToClientDto } from "../ws-dto/comments/dto/createComment.ws.dto";
+import { PostIDPayload, toggleLikePost } from './userSlice';
+import { useSelector } from "react-redux";
 
 
 
@@ -29,7 +27,7 @@ const postsAdapter = createEntityAdapter<Post>({
 //https://redux-toolkit.js.org/api/createAsyncThunk
 export const fetchTrendingPosts = createAsyncThunk(
   'fetchTrendingPosts',
-  async ({fetchCount}: { fetchCount: number }, {getState, rejectWithValue}) => {
+  async ({ fetchCount }: { fetchCount: number }, { getState, rejectWithValue }) => {
     const api = new TrendingApi();
     let initialData: GetInitialDataLoggedInDto | GetInitialDataDto;
     const isLoggedIn = (getState() as RootState).isLoggedIn;
@@ -52,7 +50,7 @@ export const fetchTrendingPosts = createAsyncThunk(
 // The backend endpoint can also take optional parameters for excluded post IDs and startIdx
 export const fetchPostsByTag = createAsyncThunk(
   'fetchPostsByTag',
-  async ({tagID, startIdx}: { tagID: string, startIdx: number }, {rejectWithValue}) => {
+  async ({ tagID, startIdx }: { tagID: string, startIdx: number }, { rejectWithValue }) => {
     let payload: GetPostsByTagDto;
     try {
       payload = await new PostsApi().tagsControllerGetPostsByTag(tagID, undefined, startIdx);
@@ -66,12 +64,12 @@ export const fetchPostsByTag = createAsyncThunk(
 
 export const fetchPostBySlug = createAsyncThunk(
   'fetchPostBySlug',
-  ({slug, getAuthor}: { slug: string, getAuthor: boolean }) => new PostsApi().postsControllerGetPostBySlug(slug, getAuthor)
+  ({ slug, getAuthor }: { slug: string, getAuthor: boolean }) => new PostsApi().postsControllerGetPostBySlug(slug, getAuthor)
 )
 
 export const fetchPostByID = createAsyncThunk(
   'fetchPostByID',
-  ({id, getAuthor}: { id: string, getAuthor: boolean }) => new PostsApi().postsControllerGetPostByID(id, getAuthor)
+  ({ id, getAuthor }: { id: string, getAuthor: boolean }) => new PostsApi().postsControllerGetPostByID(id, getAuthor)
 )
 
 //https://redux-toolkit.js.org/api/createSlice
@@ -144,8 +142,8 @@ export const postsSlice = createSlice({
       console.log(action.payload);
       // state.slugToID.delete(action.payload.slug);
       postsAdapter.updateOne(state, {
-            id: action.payload._id,
-            changes: action.payload
+        id: action.payload._id,
+        changes: action.payload
       });
       console.log("** UPDATE DONE **");
     },
