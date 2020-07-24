@@ -3,6 +3,11 @@ import { prop, Ref, ReturnModelType } from "@typegoose/typegoose";
 import { User } from "../user/user.schema";
 import { Comment } from "../comments/comment.schema";
 
+import { Conversation } from '../conversations/conversation.schema';
+import { Group } from '../groups/group.schema';
+import { Post } from '../posts/post.schema';
+import { Tag } from '../tags/tag.schema';
+
 export class Video extends TimeStamps {
   @prop({ ref: 'User' })
   author: Ref<User>;

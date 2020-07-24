@@ -66,6 +66,7 @@ export class CreatePostSuccessDto {
 export class UpdatePostSuccessDto {
   _id: string;
   slug: string;
+  oldSlug?: string
 }
 
 // Response
@@ -89,4 +90,7 @@ export class UpdatePostBodyDto {
 
   @ApiPropertyOptional()
   tags?: string[];
+
+  @ApiPropertyOptional()
+  oldSlug?: string;
 }

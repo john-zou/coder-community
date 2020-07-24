@@ -1031,6 +1031,12 @@ export interface UpdatePostBodyDto {
      * @memberof UpdatePostBodyDto
      */
     tags?: Array<string>;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdatePostBodyDto
+     */
+    oldSlug?: string;
 }
 /**
  * 
@@ -1050,6 +1056,12 @@ export interface UpdatePostSuccessDto {
      * @memberof UpdatePostSuccessDto
      */
     slug: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdatePostSuccessDto
+     */
+    oldSlug?: string;
 }
 /**
  * 
