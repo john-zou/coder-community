@@ -32,7 +32,7 @@ const useStyles = makeStyles({
 });
 
 export default function UpdatePost() {
-  // console.log("UPDATEPOST::INDEX");
+  console.log("UPDATEPOST::INDEX");
   const {slug} = useParams<{ slug: string }>();
   const classes = useStyles();
   const dispatch = useDispatch<AppDispatch>();
@@ -48,6 +48,7 @@ export default function UpdatePost() {
     const post = state.posts.entities[postID];
     return {post};
   })
+  console.log(post);
 
   // fetch tags
   const tags = useSelector<RootState, Dictionary<Tag>>(state => state.tags.entities);

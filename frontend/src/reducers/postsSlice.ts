@@ -15,12 +15,7 @@ import {PostIDPayload} from './userSlice';
 import {submitPost, updatePost} from "./postsCreationSlice";
 import {createCommentSuccess, getCommentsByPostIDSuccess} from "./commentsSlice";
 import {GetCommentsServerToClientDto} from "../ws-dto/comments/dto/getCommentsByPostID.ws.dto";
-import {CreateCommentServerToClientDto} from "../ws-dto/comments/dto/createComment.ws.dto";
-import {PostIDPayload, toggleLikePost} from './userSlice';
-import {submitPost, updatePost} from "./postsCreationSlice";
-import {useSelector} from "react-redux";
-
-
+import {CreateCommentServerToClientDto} from "../ws-dto/comments/dto/createComment.ws.dto";;
 
 const postsAdapter = createEntityAdapter<Post>({
   selectId: item => item._id

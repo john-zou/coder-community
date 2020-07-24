@@ -10,7 +10,7 @@ import NewComment from './NewComment';
 import UpdateButton from './UpdateButton';
 import {RootState} from '../../reducers/rootReducer';
 import {fetchPostBySlug} from '../../reducers/postsSlice';
-import {CurrentLoggedInUser, Post, User} from '../../store/types';
+import {CurrentLoggedInUser, Post, Tag, User} from '../../store/types';
 import {AppDispatch} from '../../store';
 import defaultPostFeaturedImage from "../../assets/defaultPostFeaturedImage.jpg";
 import {PostsApi} from "../../api";
@@ -20,6 +20,8 @@ import HeartIcon from "../../icons/heartIcon.svg";
 import HeartIconRed from "../../icons/heartIconRed.svg";
 import BookmarkEmpty from "../../icons/bookmarkEmpty.svg";
 import {Comments} from "./Comments";
+import TagP from "./TagPanel";
+import {Dictionary} from "@reduxjs/toolkit";
 
 const useStyles = makeStyles({
   root: {
@@ -57,6 +59,7 @@ const Interactions = () => {
 }
 
 const PostDetail = () => {
+  console.log("POSTDETAIL::INDEX");
   const {slug} = useParams<PostDetailParams>(); //get the url param to render the appropriate post
   const classes = useStyles();
   const dispatch = useDispatch<AppDispatch>();
@@ -72,8 +75,13 @@ const PostDetail = () => {
     const author = state.users.entities[post.author];
     return {post, author};
   });
-
   const {postIsLikedByUser, handleToggleLike} = useLikePost(post._id);
+
+  // fetch tags
+  const tags = useSelector<RootState, Dictionary<Tag>>(state => state.tags.entities);
+  const tagsArr = post.tags.map(tag => {
+    return tags[tag].name;
+  })
 
   let canUpdate = false; // if the current user is the author, show an 'update post' button
   if (author !== null) {
@@ -129,6 +137,7 @@ const PostDetail = () => {
         <Avatar pic={author.profilePic} title={author.userID} subtitle={post.createdAt} isPost={true}
                 extraText="follow" isButton={true}></Avatar>
 
+        <TagP tags={tagsArr}/>
         <p>{post.content}</p>
 
         <Interactions/>
@@ -153,7 +162,7 @@ const PostDetail = () => {
         <hr></hr>
         <Comments postID={post._id}></Comments>
         <NewComment postID={post._id}></NewComment>
-        {canUpdate && <UpdateButton params={slug}/>}
+        {canUpdate && <UpdateButton slug={slug}/>}
       </div>
     </div>
   );
