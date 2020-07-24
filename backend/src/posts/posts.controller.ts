@@ -97,9 +97,9 @@ export class PostsController {
     @Personal() //provides @UserObjectID to get userid
     @Post()
     createPost(@Body() createPostDto: CreatePostBodyDto, @UserObjectID() author: string): Promise<CreatePostSuccessDto> {
-        console.log('POSTS::CONTROLLER');
-        console.log(author);
-        console.log(createPostDto);
+        // console.log('POSTS::CONTROLLER');
+        // console.log(author);
+        // console.log(createPostDto);
         return this.postsService.createPost(author, createPostDto);
     }
 
@@ -133,6 +133,9 @@ export class PostsController {
     @Personal()
     @Put(':slug')
     updatePostBySlug(@Body() update: UpdatePostBodyDto, @Param('slug') slug: string): Promise<UpdatePostSuccessDto> {
+        // console.log("POST::CONTROLLER::UPDATE");
+        // console.log(slug);
+        // console.log(update);
         return this.postsService.updatePostBySlug(update, slug);
     }
 }

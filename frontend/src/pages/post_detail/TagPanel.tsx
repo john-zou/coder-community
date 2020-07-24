@@ -25,9 +25,8 @@ const useStyles = makeStyles({
 
 export default function TagPanel(params) {
   const classes = useStyles();
-  console.log("POSTDETAIL::TAGPANEL");
+  // console.log("POSTDETAIL::TAGPANEL");
   const tags = params.tags;
-  console.log(tags)
   return (
     <div className={classes.cptag}>
       <ul className={classes.tags}>{

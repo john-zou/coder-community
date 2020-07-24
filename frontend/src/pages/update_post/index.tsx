@@ -13,10 +13,9 @@ import {NotLoggedInError} from "../common/NotLoggedInError";
 import ImgP from "../create_post/ImgPanel";
 import TextP from "../create_post/TextPanel";
 import TagP from "./TagPanel";
-import Submit from "../create_post/Submit";
+import Submit from "./Submit";
 import {makeStyles} from "@material-ui/core/styles";
 import {Dictionary, unwrapResult} from "@reduxjs/toolkit";
-
 
 const useStyles = makeStyles({
   createPost: {
@@ -33,14 +32,13 @@ const useStyles = makeStyles({
 });
 
 export default function UpdatePost() {
-  console.log("UPDATEPOST::INDEX");
+  // console.log("UPDATEPOST::INDEX");
   const {slug} = useParams<{ slug: string }>();
   const classes = useStyles();
   const dispatch = useDispatch<AppDispatch>();
 
   const allTags = useSelector<RootState, Dictionary<Tag>>(state => state.tags.entities);
   const allTagsArr = Object.values(allTags);
-
 
   const {post} = useSelector<RootState, { post: Post }>(state => {
     const postID = state.posts.slugToID[slug];
@@ -56,21 +54,10 @@ export default function UpdatePost() {
   const tagsArray = Object.values(tags);
   let oldTagsIDArr = []
   const oldTagsSet = new Set(post.tags);
-  console.log(oldTagsSet);
   for (let i = 0; i < tagsArray.length; i++) {
-    console.log(tagsArray[i]._id);
     if (oldTagsSet.has(tagsArray[i]._id))
       oldTagsIDArr.push(i);
   }
-  console.log(oldTagsIDArr);
-
-  // const oldTagsArr = post.tags.map(tag => {
-  //   return {
-  //     _id: tag,
-  //     name: tags[tag].name,
-  //   };
-  // })
-  console.log(oldTagsIDArr);
 
   const user = useSelector<RootState, User>(state => state.user);
   const [title, setTitle] = useState(post?.title);
@@ -78,7 +65,6 @@ export default function UpdatePost() {
   const [postTags, setPostTags] = useState(post?.tags);
   const [featuredImg, setImg] = useState(post?.featuredImg);
   const [error, setError] = useState(null);
-
 
   useEffect(() => {
     if (slug == null || slug === "") {

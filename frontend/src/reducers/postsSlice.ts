@@ -8,9 +8,10 @@ import {
     GetPostsByTagDto, UpdatePostBodyDto, UpdatePostSuccessDto
 } from "../api";
 import {RootState} from "./rootReducer";
-import {Post} from "../store/types";
+import {Post, User} from "../store/types";
 import {PostIDPayload, toggleLikePost} from './userSlice';
 import {submitPost, updatePost} from "./postsCreationSlice";
+import {useSelector} from "react-redux";
 
 
 const postsAdapter = createEntityAdapter<Post>({
@@ -123,10 +124,15 @@ export const postsSlice = createSlice({
         },
 
         [updatePost.fulfilled.type]: (state, action: PayloadAction<UpdatePostSuccessDto & UpdatePostBodyDto>) => {
-            postsAdapter.updateOne(state, {
+          state.slugToID[action.payload.slug] = state.slugToID[action.payload.oldSlug];
+          console.log("POSTSLICE::UPDATEPOST");
+          console.log(action.payload);
+          // state.slugToID.delete(action.payload.slug);
+          postsAdapter.updateOne(state, {
                 id: action.payload._id,
-                changes: action.payload,
-            });
+                changes: action.payload
+          });
+          console.log("** UPDATE DONE **");
         }
     }
 })

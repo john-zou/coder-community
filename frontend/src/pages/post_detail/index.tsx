@@ -57,7 +57,7 @@ const Comments = () => {
 }
 
 const PostDetail = () => {
-  console.log("POSTDETAIL::INDEX");
+  // console.log("POSTDETAIL::INDEX");
   const {slug} = useParams<PostDetailParams>(); //get the url param to render the appropriate post
   const classes = useStyles();
   const dispatch = useDispatch<AppDispatch>();
@@ -75,10 +75,8 @@ const PostDetail = () => {
   // fetch tags
   const tags = useSelector<RootState, Dictionary<Tag>>(state => state.tags.entities);
   const tagsArr = post.tags.map(tag => {
-    console.log(tags[tag].name);
     return tags[tag].name;
   })
-  console.log(tagsArr);
 
   // evaluate whether current user can update post
   let canUpdate = false;
@@ -122,7 +120,6 @@ const PostDetail = () => {
   // const likedByUser = isLoggedIn && post.likedByUser;
 
 
-
   return (
     <div className={classes.root}>
       <div className={classes.postDetail}>
@@ -159,7 +156,7 @@ const PostDetail = () => {
 
         <NewComment></NewComment>
         <Comments></Comments>
-        {canUpdate && <UpdateButton params={slug}/>}
+        {canUpdate && <UpdateButton slug={slug}/>}
         {/* {post.comments.map((comment) => (
         <>
           <Avatar post={comment} extraText="reply"></Avatar>

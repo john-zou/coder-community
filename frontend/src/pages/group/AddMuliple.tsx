@@ -24,10 +24,10 @@ export default function AddMultiple({label, options, defaultValID, imgKey, setIt
     const classes = useStyles();
 
     const handleChange = (e, values) => {
-        console.log("ADDMULTIPLE::ONCHANGE");
+        // console.log("ADDMULTIPLE::ONCHANGE");
         const ids = values.map(value => value._id);
-        console.log(ids);
-        console.log(values);
+        // console.log(ids);
+        // console.log(values);
         setItems(ids);
     }
 

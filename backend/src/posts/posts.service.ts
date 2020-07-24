@@ -93,15 +93,13 @@ export class PostsService {
         authorObjectID: string,
         body: CreatePostBodyDto,
     ): Promise<CreatePostSuccessDto> {
-        // Logger.log("PostsService::createPost")
         let slug = urlSlug(body.title);
-        console.log("POSTS::SERVICE");
+        // console.log("POSTS::SERVICE");
         // TODO: optimize with model.collection.find() / limit() / size()
         if (await PostModel.findOne({ slug })) {
             slug = undefined;
         }
 
-        console.log(body);
         const doc = {
             author: authorObjectID,
             title: body.title,
@@ -181,11 +179,12 @@ export class PostsService {
         }
 
         if (Array.isArray(update.tags)) {
-            // post.tags = update.tags.map(tag => new ObjectId(tag));
+            post.tags = update.tags.map(tag => new ObjectId(tag));
         }
 
         await post.save();
-
+        // console.log("POST::SERVICE");
+        // console.log(post.slug);
         return { _id: post._id, slug: post.slug };
     }
 
