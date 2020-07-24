@@ -64,10 +64,10 @@ export const submitPost = createAsyncThunk(
         const createPostSuccessDto = await new PostsApi().postsControllerCreatePost(createdPost);
         const {_id, slug} = createPostSuccessDto;
         const post: Post = {
-            featuredImg: "",
+            featuredImg: createdPost.featuredImg,
             likes: 0,
-            tags: [],
-            title: "",
+            tags: createdPost.tags,
+            title: createdPost.title,
             views: 0,
             _id: _id,
             slug: slug,
@@ -87,6 +87,6 @@ export const updatePost = createAsyncThunk(
         console.log(update);
         console.log(slug);
         const {_id, slug: newSlug} = await new PostsApi().postsControllerUpdatePostBySlug(update, slug);
-        return {update, _id, slug: newSlug};
+        return {update, _id, slug: newSlug, oldSlug: slug};
     }
 );
