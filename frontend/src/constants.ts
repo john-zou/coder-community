@@ -13,4 +13,5 @@ export enum ImageType {
 }
 
 export const BackEndBaseUri = "http://localhost:3001";
+// export const BackEndBaseUri = "/" || process.env.PORT || "http://localhost:3001";
 export const BackEndBaseUriForWs = BackEndBaseUri;
