@@ -36,7 +36,7 @@ export const submitPost = createdPost => {
         featuredImg: ''
     }
     return dispatch => {
-        return fetch(`http://localhost:3001/api/posts`, {
+        return fetch(`http://ec2-13-229-215-75.ap-southeast-1.compute.amazonaws.com/api/posts`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
