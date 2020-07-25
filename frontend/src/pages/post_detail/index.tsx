@@ -22,6 +22,7 @@ import BookmarkEmpty from "../../icons/bookmarkEmpty.svg";
 import {Comments} from "./Comments";
 import TagP from "./TagPanel";
 import {Dictionary} from "@reduxjs/toolkit";
+import DeletePostButton from "./DeletePostButton";
 
 const useStyles = makeStyles({
   root: {
@@ -75,7 +76,9 @@ const PostDetail = () => {
     const author = state.users.entities[post.author];
     return {post, author};
   });
-  const {postIsLikedByUser, handleToggleLike} = useLikePost(post._id);
+
+  const {postIsLikedByUser, handleToggleLike} = useLikePost(post?._id);
+
 
   // fetch tags
   const tags = useSelector<RootState, Dictionary<Tag>>(state => state.tags.entities);
@@ -162,7 +165,12 @@ const PostDetail = () => {
         <hr></hr>
         <Comments postID={post._id}></Comments>
         <NewComment postID={post._id}></NewComment>
-        {canUpdate && <UpdateButton slug={slug}/>}
+
+        <div style={{height: "20px"}}/>
+        {canUpdate && <UpdateButton params={slug}/>}
+        <div style={{height: "20px"}}/>
+        {canUpdate && <DeletePostButton postID={post?._id}/>}
+
       </div>
     </div>
   );
