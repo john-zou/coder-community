@@ -1,3 +1,43 @@
+# Coder Community
+
+### _Learn software development together at Coder Community, a social platform for software developers of all levels. On Coder Community, you can join and grow with a community by read and write articles, post and watch videos, join and create groups, live chat, and undertake coding challenges together._
+
+# Project Progress 5
+
+## Major accomplishment: real time messaging (using websockets)
+
+![image](https://user-images.githubusercontent.com/61474884/88451384-335e4680-ce0b-11ea-87dc-727b307c87f1.png)
+
+## Goals, Revisited:
+
+### **3-5 minimal requirements**
+
+- Login and authentication system (Done)
+- Allow users to upload videos, pics, create, delete, update posts (Done)
+- Create, join and leave groups (Done)
+- Like and unlike posts (Done)
+
+### **3-7 standard requirements**
+
+- View posts by popularity (trending) and by tag (Done)
+- Search system (Done)
+- Following/followers system (Mostly done)\*
+- Comment system (Done)
+- Let user have a "saved posts" reading list (Mostly done)\*
+
+| \*Only thing left is to finish front end components, will be done very soon
+
+### **2-3 stretch requirements**
+
+- Real time messaging (Done)
+- Interactive coding tutorial (Half done)
+
+---
+
+---
+
+---
+
 # Project Progress 4
 
 ### _Use collections to store your data in MongoDB._
