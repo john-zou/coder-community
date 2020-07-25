@@ -5,7 +5,7 @@ import { useFollow, UseFollowHook } from "../../hooks/useFollow";
 import { Loading } from "../common/Loading";
 
 export const TradingCardContainer = styled.div`
-  height: 350px;
+  height: 450px;
   width: 288px;
   background-color: white;
   border-radius: 20px;
@@ -139,7 +139,7 @@ export function TradingCard({ user, isCurrentUser, followHook }: { user: User, i
         <BigBoldNumber>
           {user.followers.length}
         </BigBoldNumber>
-                followers
+        {user.followers.length !== 1 ? "followers" : "follower"}
             </FollowersCountContainer>
       <SpaceBetweenFollowersAndPosts />
       <PostsCountContainer>

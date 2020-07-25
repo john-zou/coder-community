@@ -398,6 +398,31 @@ export interface GetAllVideosDto {
 /**
  * 
  * @export
+ * @interface GetGroupMembersAndPostsDto
+ */
+export interface GetGroupMembersAndPostsDto {
+    /**
+     * 
+     * @type {Array<UserDto>}
+     * @memberof GetGroupMembersAndPostsDto
+     */
+    admins: Array<UserDto>;
+    /**
+     * 
+     * @type {Array<UserDto>}
+     * @memberof GetGroupMembersAndPostsDto
+     */
+    users: Array<UserDto>;
+    /**
+     * 
+     * @type {Array<PostDto>}
+     * @memberof GetGroupMembersAndPostsDto
+     */
+    posts: Array<PostDto>;
+}
+/**
+ * 
+ * @export
  * @interface GetGroupsSuccessDto
  */
 export interface GetGroupsSuccessDto {
@@ -2110,6 +2135,34 @@ export const GroupsApiFetchParamCreator = function (configuration?: Configuratio
         },
         /**
          * 
+         * @param {string} groupID 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        groupsControllerGetMembersAndPosts(groupID: string, options: any = {}): FetchArgs {
+            // verify required parameter 'groupID' is not null or undefined
+            if (groupID === null || groupID === undefined) {
+                throw new RequiredError('groupID','Required parameter groupID was null or undefined when calling groupsControllerGetMembersAndPosts.');
+            }
+            const localVarPath = `/api/groups/membersAndPosts/{groupID}`
+                .replace(`{${"groupID"}}`, encodeURIComponent(String(groupID)));
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {string} privateId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -2266,6 +2319,24 @@ export const GroupsApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {string} groupID 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        groupsControllerGetMembersAndPosts(groupID: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<GetGroupMembersAndPostsDto> {
+            const localVarFetchArgs = GroupsApiFetchParamCreator(configuration).groupsControllerGetMembersAndPosts(groupID, options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * 
          * @param {string} privateId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -2364,6 +2435,15 @@ export const GroupsApiFactory = function (configuration?: Configuration, fetch?:
         },
         /**
          * 
+         * @param {string} groupID 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        groupsControllerGetMembersAndPosts(groupID: string, options?: any) {
+            return GroupsApiFp(configuration).groupsControllerGetMembersAndPosts(groupID, options)(fetch, basePath);
+        },
+        /**
+         * 
          * @param {string} privateId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -2427,6 +2507,17 @@ export class GroupsApi extends BaseAPI {
      */
     public groupsControllerGetGroups(options?: any) {
         return GroupsApiFp(this.configuration).groupsControllerGetGroups(options)(this.fetch, this.basePath);
+    }
+
+    /**
+     * 
+     * @param {string} groupID 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof GroupsApi
+     */
+    public groupsControllerGetMembersAndPosts(groupID: string, options?: any) {
+        return GroupsApiFp(this.configuration).groupsControllerGetMembersAndPosts(groupID, options)(this.fetch, this.basePath);
     }
 
     /**

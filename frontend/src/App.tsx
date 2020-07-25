@@ -40,6 +40,10 @@ export type ViewProfileParams = {
   username: string;
 };
 
+export type ViewGroupParams = {
+  groupID: string;
+}
+
 export type PostDetailParams = {
   slug: string;
 };
@@ -142,7 +146,7 @@ export default function App() {
           <Route path="/user/:username">
             <ViewProfile />
           </Route>
-          <Route path="/group/:groupname">
+          <Route path="/group/:groupID">
             <ViewGroupProfile />
           </Route>
           <Route path="/create-post">
