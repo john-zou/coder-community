@@ -38,7 +38,7 @@ export class User extends TimeStamps {//mapped to MongoDb collection 'users"
   @prop({ ref: 'Post' })
   posts: Ref<Post>[];
 
-  @prop({ref: 'Comment'})
+  @prop({ ref: 'Comment' })
   comments: Ref<Comment>[];
 
   @prop({ ref: 'Post' })

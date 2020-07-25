@@ -13,6 +13,7 @@ import { User } from './user/user.schema';
 import { Video } from './video/video.schema';
 import * as chalk from 'chalk';
 import { Logger } from '@nestjs/common';
+import { Discussion } from './discussions/discussion.schema';
 
 let mongooseInstance: typeof mongoose;
 
@@ -20,6 +21,7 @@ let mongooseInstance: typeof mongoose;
 export const AttachmentModel = getModelForClass(Attachment);
 export const CommentModel = getModelForClass(Comment);
 export const ConversationModel = getModelForClass(Conversation);
+export const DiscussionModel = getModelForClass(Discussion);
 export const GroupModel = getModelForClass(Group);
 export const MessageModel = getModelForClass(Message);
 export const PostModel = getModelForClass(Post);

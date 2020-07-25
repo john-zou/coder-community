@@ -21,6 +21,8 @@ import { UserModule } from './user/user.module';
 import { VideoModule } from './video/video.module';
 import { SearchModule } from './search/search.module';
 import { CommentsGateway } from './comments/comments.gateway';
+import { DiscussionsController } from './discussions/discussions.controller';
+import { DiscussionsModule } from './discussions/discussions.module';
 
 @Module({
   imports: [
@@ -52,9 +54,11 @@ import { CommentsGateway } from './comments/comments.gateway';
 
     // Module for dev convenience -- remove when deploying
     DevModule,
+
+    DiscussionsModule,
   ],
 
-  controllers: [AppController],
+  controllers: [AppController, DiscussionsController],
   providers: [AppService],
 })
 export class AppModule {

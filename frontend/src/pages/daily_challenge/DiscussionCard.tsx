@@ -17,8 +17,6 @@ export const DiscussionCard = () => {
     <DiscussionCardContainer>
       <Avatar pic="https://picsum.photos/200" title="John Zou" subtitle="Java Solution"></Avatar>
 
-      <h4>Upvote</h4>
-      <h4>Views</h4>
     </DiscussionCardContainer>
   )
 }
