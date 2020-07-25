@@ -3,7 +3,6 @@ import { Group, CurrentLoggedInUser } from "../store/types";
 import { GroupsApi, GetGroupsSuccessDto, CreateGroupDto, CreateGroupSuccessDto, GroupDto } from "../api";
 import { RootState } from "./rootReducer";
 import _ from "lodash";
-import { async } from "rxjs/internal/scheduler/async";
 
 const groupsAdapter = createEntityAdapter<Group>({
   selectId: item => item._id
@@ -69,8 +68,8 @@ export const groupsSlice = createSlice({
     [fetchGroups.fulfilled.type]: (state, action: PayloadAction<GetGroupsSuccessDto>) => {
       groupsAdapter.addMany(state, action.payload.groups) //add posts to ids and entities
     },
-    [fetchGroupById.fulfilled.type]: (state, action: PayloadAction<GetGroupsSuccessDto>) => {
-      // groupsAdapter.addMany(state, action.payload.groups) //add posts to ids and entities
+    [fetchGroupById.fulfilled.type]: (state, action: PayloadAction<GroupDto>) => {
+      groupsAdapter.upsertOne(state, action.payload) //add posts to ids and entities
     },
     [createGroup.fulfilled.type]: (state, action: PayloadAction<CreateGroupSuccessDto & CreateGroupDto & { admins: string[] }>) => {
       const { _id, name, private: _private, description, profileBanner, profilePic, admins, users } = action.payload;

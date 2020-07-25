@@ -58,8 +58,8 @@ export class GroupDto {
   users: string[];
   posts: string[];
   videos: string[];
-  createdAt: string;
-  updatedAt: string;
+  createdAt: string | number;
+  updatedAt: string | number;
 }
 
 export class GetGroupsSuccessDto {
