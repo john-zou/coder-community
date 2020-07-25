@@ -1,5 +1,5 @@
 import { PostModel, TagModel, UserModel } from '../mongoModels';
-import { HttpService, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, HttpService, Injectable, NotFoundException } from '@nestjs/common';
 import { Ref } from '@typegoose/typegoose';
 import { ObjectID, ObjectId } from 'mongodb';
 import {
@@ -275,5 +275,15 @@ export class PostsService {
             // comments,
             likedByUser: false,
         };
+    }
+
+    async deletePostByPostID(postID: string, userID: string): Promise<void> {
+        const postExists = await PostModel.exists({_id: postID, author: new ObjectID(userID)});
+        if (!postExists) {
+            throw new BadRequestException("Post not found");
+        }
+
+        await PostModel.deleteOne({_id: postID});
+        await UserModel.updateOne({_id: userID}, {$pull: {posts: new ObjectID(postID)}});
     }
 }

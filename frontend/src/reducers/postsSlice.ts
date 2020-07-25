@@ -14,9 +14,11 @@ import { Post, User } from "../store/types";
 import { createCommentSuccess, getCommentsByPostIDSuccess } from "./commentsSlice";
 import { GetCommentsServerToClientDto } from "../ws-dto/comments/dto/getCommentsByPostID.ws.dto";
 import { CreateCommentServerToClientDto } from "../ws-dto/comments/dto/createComment.ws.dto";
-import { PostIDPayload, toggleLikePost } from './userSlice';
+import { PostIDPayload, toggleLikePost, userSlice } from './userSlice';
 import { submitPost, updatePost } from "./postsCreationSlice";
+import _ from "lodash";
 import { useSelector } from "react-redux";
+
 
 
 
@@ -90,7 +92,13 @@ export const postsSlice = createSlice({
     fetchedComments: {},
     hasMorePosts: true,//only for trending posts (of all tags)
   }),//also has ids[] and entities{}
-  reducers: {},
+  reducers: {
+    deletePost: (state, action) => {
+      postsAdapter.removeOne(state, action.payload.postID);
+      delete state.trendingPostsSet[action.payload.postID];
+      _.pull(state.trendingPosts, action.payload.postID);
+    }
+  },
   extraReducers: {
     [fetchTrendingPosts.pending.type]: (state, action: PayloadAction<GetInitialDataDto | GetInitialDataLoggedInDto>) => {
       state.trendingPostFetchCount++;
@@ -159,3 +167,4 @@ export const postsSlice = createSlice({
 })
 
 export default postsSlice.reducer;
+export const { deletePost } = postsSlice.actions;
