@@ -22,12 +22,8 @@
     "@types/uuid": "^8.0.0",
     "axios": "^0.19.2",
     "bootstrap": "^4.5.0",
-<<<<<<< HEAD
-    "lodash": "^4.17.19",
-=======
     "immer": "^7.0.5",
     "lodash": "^4.17.15",
->>>>>>> 648763122a361ae8fd54120d8bdde9b690ce4f5d
     "material-ui-dropzone": "^3.2.1",
     "moment": "^2.27.0",
     "portable-fetch": "^3.0.0",
@@ -54,12 +50,9 @@
     "redux-thunk": "^2.3.0",
     "rxjs": "^6.5.5",
     "slick-carousel": "^1.8.1",
-<<<<<<< HEAD
     "styled-components": "^5.1.1",
-=======
     "socket.io": "^2.3.0",
     "socket.io-client": "^2.3.0",
->>>>>>> 648763122a361ae8fd54120d8bdde9b690ce4f5d
     "typescript": "^3.9.5",
     "url-slug": "^2.3.1",
     "uuid": "^8.2.0"
