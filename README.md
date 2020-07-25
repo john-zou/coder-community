@@ -1,3 +1,52 @@
+# Coder Community
+
+### _Coder Community is a social platform for software developers of all levels. On Coder Community, you can join and grow with a community and read and write articles, post and watch videos, join and create groups, live chat, and undertake coding challenges together._
+
+# Project Progress 5
+
+## Major accomplishment: real time messaging (using websockets)
+
+![image](https://user-images.githubusercontent.com/61474884/88451384-335e4680-ce0b-11ea-87dc-727b307c87f1.png)
+
+## Daily Code Challenge (half done)
+
+![image](https://user-images.githubusercontent.com/20777446/88452036-5c350a80-ce10-11ea-814f-c20a7629ceaa.png)
+
+## Goals, Revisited:
+
+### **3-5 minimal requirements**
+
+- Login and authentication system (Done)
+- Allow users to upload videos, pics, create, delete, update posts (Done)
+- Create, join and leave groups (Done)
+- Like and unlike posts (Done)
+
+### **3-7 standard requirements**
+
+- View posts by popularity (trending) and by tag (Done)
+- Search system (Done)
+- Following/followers system (Mostly done)\*
+- Comment system (Done)
+- Let user have a "saved posts" reading list (Mostly done)\*
+
+| \*Only thing left is to finish front end components, will be done very soon
+
+### **2-3 stretch requirements**
+
+- Real time messaging (Done)
+- Interactive coding tutorial (Half done)
+
+## Deployed:
+http://ec2-13-229-215-75.ap-southeast-1.compute.amazonaws.com/
+AWS EC2 running Docker
+Minor changes (Such as Dockerfile, made before 10:00AM deadline, on branch project_5_deploy)
+
+---
+
+---
+
+---
+
 # Project Progress 4
 
 ### _Use collections to store your data in MongoDB._
