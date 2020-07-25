@@ -3,7 +3,6 @@ import { Group, CurrentLoggedInUser } from "../store/types";
 import { GroupsApi, GetGroupsSuccessDto, CreateGroupDto, CreateGroupSuccessDto, GroupDto } from "../api";
 import { RootState } from "./rootReducer";
 import _ from "lodash";
-import { async } from "rxjs/internal/scheduler/async";
 
 const groupsAdapter = createEntityAdapter<Group>({
   selectId: item => item._id
@@ -23,10 +22,20 @@ export const fetchGroups = createAsyncThunk(
 export const fetchGroupById = createAsyncThunk(
   'fetchGroupById',
   async (groupID: string) => {
-    const foundGroup: GroupDto = await api.groupsControllerGetPrivateGroup(groupID);
+    const foundGroup: GroupDto = await api.groupsControllerGetPrivateGroup(groupID); // shouldn't this not be private only?
     return foundGroup;
   }
+);
+
+export const fetchGroupMembersAndPosts = createAsyncThunk(
+  'fetchGroupMembersAndPosts',
+  async (groupID: string) => {
+    const dto = await api.groupsControllerGetMembersAndPosts(groupID);
+    console.log(dto);
+    return dto;
+  }
 )
+
 export const createGroup = createAsyncThunk(
   'createGroup',
   async (newGroup: CreateGroupDto, { getState }) => {
@@ -69,8 +78,8 @@ export const groupsSlice = createSlice({
     [fetchGroups.fulfilled.type]: (state, action: PayloadAction<GetGroupsSuccessDto>) => {
       groupsAdapter.addMany(state, action.payload.groups) //add posts to ids and entities
     },
-    [fetchGroupById.fulfilled.type]: (state, action: PayloadAction<GetGroupsSuccessDto>) => {
-      // groupsAdapter.addMany(state, action.payload.groups) //add posts to ids and entities
+    [fetchGroupById.fulfilled.type]: (state, action: PayloadAction<GroupDto>) => {
+      groupsAdapter.upsertOne(state, action.payload) //add posts to ids and entities
     },
     [createGroup.fulfilled.type]: (state, action: PayloadAction<CreateGroupSuccessDto & CreateGroupDto & { admins: string[] }>) => {
       const { _id, name, private: _private, description, profileBanner, profilePic, admins, users } = action.payload;

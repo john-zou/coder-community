@@ -5,7 +5,7 @@ import { useFollow, UseFollowHook } from "../../hooks/useFollow";
 import { Loading } from "../common/Loading";
 
 export const TradingCardContainer = styled.div`
-  height: 350px;
+  height: 450px;
   width: 288px;
   background-color: white;
   border-radius: 20px;

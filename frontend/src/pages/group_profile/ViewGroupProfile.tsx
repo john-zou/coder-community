@@ -1,119 +1,61 @@
-import { createStyles, makeStyles } from '@material-ui/core/styles';
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import React, {useEffect, useState} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
+import {useParams} from 'react-router-dom';
 
-import { ViewProfileParams } from '../../App';
-import { Loading } from '../common/Loading';
-import { NotFoundError } from '../common/NotFoundError';
-import {
-  getLoggedInUser
-} from '../../reducers/userSlice';
-import { RootState } from '../../reducers/rootReducer';
-import { Group, User } from '../../store/types';
-import { Dictionary } from '@reduxjs/toolkit';
-import { ProfileBanner } from '../view_profile/ProfileBanner';
-import { Container, FlexSpace, HeightSpace, WidthSpace } from '../view_profile/OwnProfile';
+import {ViewGroupParams} from '../../App';
+import {Loading} from '../common/Loading';
+import {NotFoundError} from '../common/NotFoundError';
+import {RootState} from '../../reducers/rootReducer';
+import {CurrentLoggedInUser, Group} from '../../store/types';
+import {ProfileBanner} from '../view_profile/ProfileBanner';
+import {Container, FlexSpace, HeightSpace, WidthSpace} from '../view_profile/OwnProfile';
 import DefaultImg from "../../assets/defaultUserProfileBannerImg.jpg";
-import { TradingGroupCard } from './TradingGroupCard';
-import { GroupPostsBoard } from './GroupPostsBoard';
-
-
-const useStyles = makeStyles(() =>
-  createStyles({
-    container: {
-      display: "g rid",
-      gridTemplateAreas: `
-        "banner banner banner"
-        "card board space"
-      `,
-      gridTemplateColumns: "1fr 1.5fr 1fr",
-      gridTemplateRows: "min-content auto",
-      backgroundColor: "#E5E5E5",
-      height: "100%",
-    },
-    banner: {
-      gridArea: "banner",
-      marginBottom: "1rem",
-    },
-    card: {
-      gridArea: "card",
-    },
-    board: {
-      gridArea: "board",
-    },
-  })
-);
+import {GroupTradingCard} from './GroupTradingCard';
+import {GroupProfileTabs} from './GroupProfileTabs';
+import {fetchGroupById} from "../../reducers/groupsSlice";
+import {AppDispatch} from "../../store";
+import {unwrapResult} from "@reduxjs/toolkit";
 
 export function ViewGroupProfile() {
-  const classes = useStyles();
+  const {groupID} = useParams<ViewGroupParams>();
+  const user = useSelector<RootState, CurrentLoggedInUser>(state => state.user);
+  const group = useSelector<RootState, Group>(state => state.groups.entities[groupID]);
+  const dispatch = useDispatch<AppDispatch>();
+  const [error, setError] = useState(false);
 
-  const { username } = useParams<ViewProfileParams>();
-  const isLoggedIn = useSelector<RootState, boolean>(state => state.isLoggedIn);
-  const dispatch = useDispatch();
-
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-
-  const groups = useSelector<RootState, Dictionary<Group>>(state => state.groups.entities);
-  const currentGroupID = useSelector<RootState, string>(
-    (state) => state.groups.currentGroupID)
-  const currentGroup = groups[currentGroupID];
-
-  // let viewedGroup = useSelector<RootState, Group>(
-  //   (state) => {
-  //     const groupObjectID = state.group._id;
-  //     return state.groups[groupObjectID];
-  //   }
-  // )
-
-  // Get user if user hasn't loaded yet
   useEffect(() => {
-    // check redux cache for user(s)
-    if (isLoggedIn) {
-      // check current user
-      if (!currentGroup && !loading && !error) {
-        dispatch(getLoggedInUser());
-      }
+    if (!group) {
+      dispatch(fetchGroupById(groupID))
+        .then(unwrapResult)
+        .catch(() => {
+          setError(true);
+        })
     }
-    if (currentGroup && currentGroup._id === username) {
-      // Current user is looking at own profile, so there is no other user info to get
-      return;
-    }
-    // if (!viewedGroup) {
-    //   dispatch(getUserForViewProfile(username));
-    //   return;
-    // }
-    // if (viewedGroup && !loading && !error && !viewedGroup.posts) {
-    //   dispatch(getUserForViewProfile(username));
-    // }
-  }, []);
+  }, [groupID]);
 
-  if (!currentGroup || loading) {
+  if (error) {
+    return <NotFoundError/>
+  }
+
+  if (!group) {
     return <Loading />
   }
 
-  if (error) {
-    return <NotFoundError />
-  }
+  const src = group.profileBanner || DefaultImg;
 
-  const userIsLookingAtOwnProfile = isLoggedIn && currentGroup?._id === username;
-  if (userIsLookingAtOwnProfile) {
-    // viewedGroup = currentGroup;
-  }
-  const src = currentGroup.profileBanner || DefaultImg;
   return (
-    <div className={classes.container}>
-      <ProfileBanner imgSrc={src} />
-      <HeightSpace height="26px" />
+    <>
+      <ProfileBanner imgSrc={src}/>
+      <HeightSpace height="26px"/>
       <Container>
-        <FlexSpace flex={1} />
-        <TradingGroupCard group={currentGroup} isCurrentUser />
-        <WidthSpace width="47px" />
-        <GroupPostsBoard group={currentGroup} />
-        <FlexSpace flex={3} />
+        <FlexSpace flex={1}/>
+        <div>
+          <GroupTradingCard group={group}/>
+        </div>
+        <WidthSpace width="47px"/>
+        <GroupProfileTabs group={group}/>
+        <FlexSpace flex={3}/>
       </Container>
-
-    </div>
+    </>
   );
 }
