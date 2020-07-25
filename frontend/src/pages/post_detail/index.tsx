@@ -20,6 +20,7 @@ import HeartIcon from "../../icons/heartIcon.svg";
 import HeartIconRed from "../../icons/heartIconRed.svg";
 import BookmarkEmpty from "../../icons/bookmarkEmpty.svg";
 import {Comments} from "./Comments";
+import DeletePostButton from "./DeletePostButton";
 
 const useStyles = makeStyles({
   root: {
@@ -73,7 +74,7 @@ const PostDetail = () => {
     return {post, author};
   });
 
-  const {postIsLikedByUser, handleToggleLike} = useLikePost(post._id);
+  const {postIsLikedByUser, handleToggleLike} = useLikePost(post?._id);
 
   let canUpdate = false; // if the current user is the author, show an 'update post' button
   if (author !== null) {
@@ -153,7 +154,10 @@ const PostDetail = () => {
         <hr></hr>
         <Comments postID={post._id}></Comments>
         <NewComment postID={post._id}></NewComment>
+        <div style={{height: "20px"}}/>
         {canUpdate && <UpdateButton params={slug}/>}
+        <div style={{height: "20px"}}/>
+        {canUpdate && <DeletePostButton postID={post?._id}/>}
       </div>
     </div>
   );

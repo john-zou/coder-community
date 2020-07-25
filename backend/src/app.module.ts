@@ -50,6 +50,11 @@ import { CommentsGateway } from './comments/comments.gateway';
       serveRoot: PublicUserContentServeRoot,
     }),
 
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, "..", "build"), // for react
+      serveRoot: "/",
+    }),
+
     // Module for dev convenience -- remove when deploying
     DevModule,
   ],
