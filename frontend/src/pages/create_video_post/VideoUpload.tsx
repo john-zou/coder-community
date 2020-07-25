@@ -160,7 +160,7 @@ class VideoUpload extends React.Component<IProps, IState> {
       }
       let { src, preview } = file;
       src = URL.createObjectURL(file);
-      preview = <video src={src} height={450} width={800} autoPlay controls />;
+      preview = <video src={src} height={250} width={500} autoPlay controls />;
       this.setState({
         path: file.name,
         data: file,

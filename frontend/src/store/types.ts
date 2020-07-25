@@ -52,6 +52,7 @@ export type Post = {
   content?: string,
   tags: string[],
   featuredImg: string,
+  // featuredVideo: string,
   likes: number, // Renamed from likesCount to match updated MongoDB schema
   comments: string[],
   commentsCount: number,

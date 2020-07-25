@@ -15,9 +15,13 @@ import Submit from "../create_post/Submit";
 import {TagsContainer} from "../create_post/CreatePost";
 import {makeStyles} from "@material-ui/core/styles";
 import {Dictionary, unwrapResult} from "@reduxjs/toolkit";
-
+import VideoRecorder from 'react-video-recorder'
 import styled from "@emotion/styled";
 import ImgP from "../create_post/ImgPanel";
+import {ScreenRecorder} from "./ScreenRecorder";
+import VideoUpload from "./VideoUpload";
+import {uploadPublicAsset} from "../../api-upload";
+import RecordUpload from './RecordUpload';
 
 const useStyles = makeStyles({
     createPost: {
@@ -49,10 +53,71 @@ export default function CreateVideoPost() {
     return (
         <div className={classes.createPost}>
             {/*<VideoP setUrl={setUrl}/>*/}
-            <VideoP />
-            <TextP setTitle={setTitle} setContent={setContent} />
-            {/* <TagP setTags={setTags} /> */}
-            <TagsContainer>
+            <div
+                className={"root"}
+                style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    marginTop: "3em",
+                    height: "33vh",
+                    width: "42vw",
+                    backgroundColor: "white",
+                    // boxShadow: "3px 3px #F2F2F2",
+                    // marginBottom: "1em",
+                    borderRadius: "5px",
+                    paddingLeft: "1.5em",
+                    paddingRight: "1.5em",
+                }}
+            >
+            <TextP
+                setTitle={setTitle}
+                setContent={setContent}
+            />
+            </div>
+
+            <div
+                // className={"root"}
+                style={{
+                    marginTop: "1em",
+                    display: "flex",
+                    flexDirection: "column",
+                    // height: "10",
+                    width: "40vw",
+                    backgroundColor: "white",
+                    boxShadow: "3px 3px #F2F2F2",
+                    marginBottom: "1em",
+                    borderRadius: "5px",
+                    paddingLeft: "1.5em",
+                    paddingRight: "1.5em",
+                    paddingBottom: "1.5em",
+                }}
+            >
+                <RecordUpload/>
+            </div>
+            <div
+                className={"root"}
+                style={{
+                    // display: "flex",
+                    // flexDirection: "column",
+                    marginTop: "2em",
+                    // marginBottom: "5em",
+                    height: "90vh",
+                    // width: "42vw",
+                    // backgroundColor: "white",
+                    // // boxShadow: "3px 3px #F2F2F2",
+                    // // marginBottom: "1em",
+                    // borderRadius: "5px",
+                    // paddingLeft: "1.5em",
+                    // paddingRight: "1.5em",
+                }}
+            >
+                <VideoP />
+            </div>
+            <TagsContainer
+                style={{
+                    marginTop: "3em",
+                }}
+            >
                 <AddMultiple label="Add Tags" options={allTagsArr} setItems={setPostTags} />
             </TagsContainer>
             {/*<button onClick={submitVideo}/>*/}

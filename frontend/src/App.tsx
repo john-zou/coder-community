@@ -11,7 +11,7 @@ import {DevLogin} from "./pages/login/DevLogin";
 import {Messenger} from "./pages/messenger";
 import PostDetail from "./pages/post_detail";
 import SearchResult from "./pages/search_result/SearchResult";
-import Upload from "./pages/create_video_post";
+import CreateVideoPost from "./pages/create_video_post";
 import {ViewProfile} from "./pages/view_profile/ViewProfile";
 import {LogOut} from "./pages/login/Logout";
 import {Experimental} from "./pages/experimental/Experimental";
@@ -33,6 +33,7 @@ import {addConversation, createConversationSuccess} from "./reducers/conversatio
 import {CreateCommentEvent} from "./ws-dto/comments/dto/createComment.ws.dto";
 import {createCommentSuccess, getCommentsByPostIDSuccess} from "./reducers/commentsSlice";
 import {GetCommentsByPostIDEvent, GetCommentsServerToClientDto} from "./ws-dto/comments/dto/getCommentsByPostID.ws.dto";
+
 
 export type ViewProfileParams = {
   username: string;
@@ -152,6 +153,9 @@ export default function App() {
           <Route path="/post/:slug">
             <PostDetail/>
           </Route>
+          <Route path="/video">
+          <CreateVideoPost />
+        </Route>
           <Route path="/messages">
             <Messenger/>
           </Route>
