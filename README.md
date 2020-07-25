@@ -8,6 +8,10 @@
 
 ![image](https://user-images.githubusercontent.com/61474884/88451384-335e4680-ce0b-11ea-87dc-727b307c87f1.png)
 
+## Daily Code Challenge (half done)
+
+![image](https://user-images.githubusercontent.com/20777446/88452036-5c350a80-ce10-11ea-814f-c20a7629ceaa.png)
+
 ## Goals, Revisited:
 
 ### **3-5 minimal requirements**
