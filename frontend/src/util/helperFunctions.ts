@@ -4,6 +4,12 @@ import { GetInitialDataDto, GetInitialDataLoggedInDto } from "../api";
 import { RootState } from "../reducers/rootReducer";
 import { User } from "../store/types";
 
+export const getRandomInt = (len) => {
+  // get a random number from 200-350
+  const randomNumber = Math.floor(Math.random() * len);
+  return randomNumber;
+};
+
 export const randomImage = () => {
   // get a random number from 200-350
   const randomNumber = Math.floor(Math.random() * 150 + 200);

@@ -121,3 +121,18 @@ export type Video = {
   description: string,
   createdAt: string,
 }
+
+export type Question = {
+  _id: string,
+  title: string,
+  content: string,
+  solution: string,
+}
+
+export type Discussion = {
+  _id: string,
+  author: string,
+  question: string,
+  title: string,
+  content: string,
+}

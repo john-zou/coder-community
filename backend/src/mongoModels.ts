@@ -13,6 +13,8 @@ import { User } from './user/user.schema';
 import { Video } from './video/video.schema';
 import * as chalk from 'chalk';
 import { Logger } from '@nestjs/common';
+import { Discussion } from './discussions/discussion.schema';
+import { Question } from './questions/question.schema';
 
 let mongooseInstance: typeof mongoose;
 
@@ -27,6 +29,7 @@ export const TagModel = getModelForClass(Tag);
 export const UserModel = getModelForClass(User);
 export const ShopModel = getModelForClass(Shop); // Used to create a Mongoose Model with Typescript type more easily than with just Mongoose
 export const VideoModel = getModelForClass(Video);
+export const QuestionModel = getModelForClass(Question);
 
 export const DefaultMongoOptions = {
   useNewUrlParser: true,
