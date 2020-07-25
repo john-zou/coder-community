@@ -27,8 +27,7 @@ const Header = styled.div`
   flex-direction: row;
   padding-left: 30px;
   padding-right: 30px;
-  padding-top: 10
-  px;
+  padding-top: 10px;
   border-bottom: solid 1px lightgray;
 `;
 
@@ -57,7 +56,7 @@ const GroupCard = ({ currentGroup, isUserAMember }: { currentGroup: Group, isUse
   return <div>
     <div style={{ display: "flex", flexDirection: "row" }}>
 
-      <Link to={`/group/${currentGroup._id}`} style={{ textDecoration: "none" }} onClick={() => dispatch(selectGroup({ groupID: currentGroup._id }))}>
+      <Link to={`/group/${currentGroup._id}`} style={{ textDecoration: "none" }}>
         <Avatar pic={currentGroup.profilePic} title={currentGroup.name} subtitle={currentGroup.description} extraText="" />
       </Link>
 
