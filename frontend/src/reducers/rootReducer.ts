@@ -9,6 +9,8 @@ import commentsReducer from "./commentsSlice";
 import conversationsReducer from "./conversationsSlice";
 import videosReducer from "./videosSlice";
 import messagesReducer from "./messagesSlice";
+import questionsReducer from "./questionsSlice";
+import discussionsReducer from "./discussionsSlice";
 
 const rootReducer = combineReducers({
   isLoggedIn: isLoggedInReducer,
@@ -21,6 +23,8 @@ const rootReducer = combineReducers({
   conversations: conversationsReducer,
   videos: videosReducer,
   messages: messagesReducer,
+  questions: questionsReducer,
+  discussions: discussionsReducer,
 })
 
 export type RootState = ReturnType<typeof rootReducer>

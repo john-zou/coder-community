@@ -71,7 +71,9 @@ const LeftSideBar = () => {
         </div>
         }
         <div className={classes.groupLinks}>
-          <h3>Daily Challenge</h3>
+          <Link to={`/daily-challenge`} className={classes.link}>
+            <h3>Daily Challenge</h3>
+          </Link>
           {isLoggedIn &&
           <Link to={`/messages`} className={classes.link}>
             <h3>Messages</h3>
