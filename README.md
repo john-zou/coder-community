@@ -1,6 +1,6 @@
 # Coder Community
 
-### _Learn software development together at Coder Community, a social platform for software developers of all levels. On Coder Community, you can join and grow with a community by read and write articles, post and watch videos, join and create groups, live chat, and undertake coding challenges together._
+### _Coder Community is a social platform for software developers of all levels. On Coder Community, you can join and grow with a community and read and write articles, post and watch videos, join and create groups, live chat, and undertake coding challenges together._
 
 # Project Progress 5
 
