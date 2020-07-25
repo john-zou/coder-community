@@ -22,6 +22,7 @@ let mongooseInstance: typeof mongoose;
 export const AttachmentModel = getModelForClass(Attachment);
 export const CommentModel = getModelForClass(Comment);
 export const ConversationModel = getModelForClass(Conversation);
+export const DiscussionModel = getModelForClass(Discussion);
 export const GroupModel = getModelForClass(Group);
 export const MessageModel = getModelForClass(Message);
 export const PostModel = getModelForClass(Post);

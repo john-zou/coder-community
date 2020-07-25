@@ -33,6 +33,7 @@ import {addConversation, createConversationSuccess} from "./reducers/conversatio
 import {CreateCommentEvent} from "./ws-dto/comments/dto/createComment.ws.dto";
 import {createCommentSuccess, getCommentsByPostIDSuccess} from "./reducers/commentsSlice";
 import {GetCommentsByPostIDEvent, GetCommentsServerToClientDto} from "./ws-dto/comments/dto/getCommentsByPostID.ws.dto";
+import {DailyChallenge} from "./pages/daily_challenge";
 
 export type ViewProfileParams = {
   username: string;
@@ -138,6 +139,9 @@ export default function App() {
       <Router>
         <Header></Header>
         <Switch>
+          <Route path="/daily-challenge">
+            <DailyChallenge />
+          </Route>
           <Route path="/user/:username">
             <ViewProfile/>
           </Route>
