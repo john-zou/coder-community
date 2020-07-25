@@ -11,7 +11,7 @@ import {ProfileBanner} from '../view_profile/ProfileBanner';
 import {Container, FlexSpace, HeightSpace, WidthSpace} from '../view_profile/OwnProfile';
 import DefaultImg from "../../assets/defaultUserProfileBannerImg.jpg";
 import {GroupTradingCard} from './GroupTradingCard';
-import {GroupPostsBoard} from './GroupPostsBoard';
+import {GroupProfileTabs} from './GroupProfileTabs';
 import {fetchGroupById} from "../../reducers/groupsSlice";
 import {AppDispatch} from "../../store";
 import {unwrapResult} from "@reduxjs/toolkit";
@@ -53,7 +53,7 @@ export function ViewGroupProfile() {
           <GroupTradingCard group={group}/>
         </div>
         <WidthSpace width="47px"/>
-        <GroupPostsBoard group={group}/>
+        <GroupProfileTabs group={group}/>
         <FlexSpace flex={3}/>
       </Container>
     </>

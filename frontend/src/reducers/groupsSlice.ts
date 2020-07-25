@@ -22,10 +22,20 @@ export const fetchGroups = createAsyncThunk(
 export const fetchGroupById = createAsyncThunk(
   'fetchGroupById',
   async (groupID: string) => {
-    const foundGroup: GroupDto = await api.groupsControllerGetPrivateGroup(groupID);
+    const foundGroup: GroupDto = await api.groupsControllerGetPrivateGroup(groupID); // shouldn't this not be private only?
     return foundGroup;
   }
+);
+
+export const fetchGroupMembersAndPosts = createAsyncThunk(
+  'fetchGroupMembersAndPosts',
+  async (groupID: string) => {
+    const dto = await api.groupsControllerGetMembersAndPosts(groupID);
+    console.log(dto);
+    return dto;
+  }
 )
+
 export const createGroup = createAsyncThunk(
   'createGroup',
   async (newGroup: CreateGroupDto, { getState }) => {
