@@ -25,6 +25,7 @@ import ErrorPage from "./pages/common/ErrorPage";
 import { RootState } from "./reducers/rootReducer";
 import {SearchPage} from "./pages/search/SearchPage";
 
+
 export type ViewProfileParams = {
   username: string;
 };
