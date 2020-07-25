@@ -11,3 +11,6 @@ export enum ImageType {
     ProfilePic = "ProfilePic",
     BannerPic = "BannerPic",
 }
+
+export const BackEndBaseUri = "http://localhost:3001";
+export const BackEndBaseUriForWs = BackEndBaseUri;

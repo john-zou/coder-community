@@ -1,12 +1,3 @@
-export type Attachment = {
-  _id: string,
-  url: string,
-  fileType: string,
-  extension: string,
-  createdAt: string,
-  updatedAt: string,
-}
-
 export type Comment = {
   _id: string,
   author: string,
@@ -27,8 +18,8 @@ export type Conversation = {
   name: string,
   users: string[],
   messages: string[],
-  createdAt: string,
-  updatedAt: string,
+  createdAt?: number,
+  updatedAt?: number,
 }
 
 export type Group = {
@@ -50,9 +41,8 @@ export type Message = {
   _id: string,
   author: string,
   text: string,
-  attachments: string[],
-  createdAt: string,
-  updatedAt: string,
+  createdAt: number,
+  updatedAt?: number,
 };
 
 export type Post = {
@@ -72,7 +62,14 @@ export type Post = {
   // likedByUser: boolean, // Removed for simplicity. use state.user.likedPosts instead.
   slug: string,
   group?: string,
-}
+};
+
+export type PostsCreation = {
+  _id: string,
+  title: string,
+  content: string,
+  tags: any[] // [Record<string, Loadable<Tag>>]
+};
 
 export type Tag = {
   _id: string,
@@ -100,7 +97,6 @@ export type User = {
   updatedAt?: string,
 };
 
-
 // export type Video = {
 //   _id: string,
 //   author: string,
@@ -122,8 +118,8 @@ export interface CurrentLoggedInUser extends User {
 
 
 export type Video = {
-   _id: string,
-   name: string,
-   description: string,
-   createdAt: string,
- }
+  _id: string,
+  name: string,
+  description: string,
+  createdAt: string,
+}

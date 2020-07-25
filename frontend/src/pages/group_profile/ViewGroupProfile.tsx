@@ -6,9 +6,18 @@ import { useParams } from 'react-router-dom';
 import { ViewProfileParams } from '../../App';
 import { Loading } from '../common/Loading';
 import { NotFoundError } from '../common/NotFoundError';
-import { getLoggedInUser, getUserForViewProfile } from '../../reducers/userSlice';
+import {
+  getLoggedInUser
+} from '../../reducers/userSlice';
 import { RootState } from '../../reducers/rootReducer';
-import { User } from '../../store/types';
+import { Group, User } from '../../store/types';
+import { Dictionary } from '@reduxjs/toolkit';
+import { ProfileBanner } from '../view_profile/ProfileBanner';
+import { Container, FlexSpace, HeightSpace, WidthSpace } from '../view_profile/OwnProfile';
+import DefaultImg from "../../assets/defaultUserProfileBannerImg.jpg";
+import { TradingGroupCard } from './TradingGroupCard';
+import { GroupPostsBoard } from './GroupPostsBoard';
+
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -46,41 +55,41 @@ export function ViewGroupProfile() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  // The one doing the viewing
-  const currentUser = useSelector<RootState, User>(
-    (state) => state.user
-  );
+  const groups = useSelector<RootState, Dictionary<Group>>(state => state.groups.entities);
+  const currentGroupID = useSelector<RootState, string>(
+    (state) => state.groups.currentGroupID)
+  const currentGroup = groups[currentGroupID];
 
-  let viewedUser = useSelector<RootState, User>(
-    (state) => {
-      const userObjectID = state.user._id;
-      return state.users[userObjectID];
-    }
-  )
+  // let viewedGroup = useSelector<RootState, Group>(
+  //   (state) => {
+  //     const groupObjectID = state.group._id;
+  //     return state.groups[groupObjectID];
+  //   }
+  // )
 
   // Get user if user hasn't loaded yet
   useEffect(() => {
     // check redux cache for user(s)
     if (isLoggedIn) {
       // check current user
-      if (!currentUser && !loading && !error) {
+      if (!currentGroup && !loading && !error) {
         dispatch(getLoggedInUser());
       }
     }
-    if (currentUser && currentUser.userID === username) {
+    if (currentGroup && currentGroup._id === username) {
       // Current user is looking at own profile, so there is no other user info to get
       return;
     }
-    if (!viewedUser) {
-      dispatch(getUserForViewProfile(username));
-      return;
-    }
-    if (viewedUser && !loading && !error && !viewedUser.posts) {
-      dispatch(getUserForViewProfile(username));
-    }
+    // if (!viewedGroup) {
+    //   dispatch(getUserForViewProfile(username));
+    //   return;
+    // }
+    // if (viewedGroup && !loading && !error && !viewedGroup.posts) {
+    //   dispatch(getUserForViewProfile(username));
+    // }
   }, []);
 
-  if (!currentUser || loading || !viewedUser) {
+  if (!currentGroup || loading) {
     return <Loading />
   }
 
@@ -88,30 +97,23 @@ export function ViewGroupProfile() {
     return <NotFoundError />
   }
 
-  const userIsLookingAtOwnProfile = isLoggedIn && currentUser?.userID === username;
+  const userIsLookingAtOwnProfile = isLoggedIn && currentGroup?._id === username;
   if (userIsLookingAtOwnProfile) {
-    viewedUser = currentUser;
+    // viewedGroup = currentGroup;
   }
-
+  const src = currentGroup.profileBanner || DefaultImg;
   return (
     <div className={classes.container}>
-      {/* <div className={classes.banner}>
-        <ProfileBanner imgSrc={viewedUser.item.profileBanner} isUser={userIsLookingAtOwnProfile}></ProfileBanner>
-      </div>
-      <div className={classes.card}>
-        <ProfileCard profile={profile} isUser={userIsLookingAtOwnProfile}></ProfileCard>
-      </div>
-      <div className={classes.board}>
-        {userIsLookingAtOwnProfile ? (
-          <ProfileBoard
-            isUser={userIsLookingAtOwnProfile}
-            user={viewedUser}
-            savedPosts={savedPosts}
-          ></ProfileBoard>
-        ) : (
-            <ProfileBoard isUser={false} posts={posts}></ProfileBoard>
-          )}
-      </div> */}
+      <ProfileBanner imgSrc={src} />
+      <HeightSpace height="26px" />
+      <Container>
+        <FlexSpace flex={1} />
+        <TradingGroupCard group={currentGroup} isCurrentUser />
+        <WidthSpace width="47px" />
+        <GroupPostsBoard group={currentGroup} />
+        <FlexSpace flex={3} />
+      </Container>
+
     </div>
   );
 }

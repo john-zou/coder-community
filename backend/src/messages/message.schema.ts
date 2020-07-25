@@ -10,7 +10,4 @@ export class Message extends TimeStamps {
 
   @prop()
   text: string;
-
-  @prop({ ref: 'Attachment' })
-  attachments: Ref<Attachment>[];
 }

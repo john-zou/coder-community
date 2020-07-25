@@ -10,8 +10,6 @@ import Typography from '@material-ui/core/Typography';
 import styled from '@emotion/styled';
 import PurpleButton from '../common/PurpleButton';
 import { CreateGroupForm } from './CreateGroupForm';
-import { useDispatch } from 'react-redux';
-import { createGroup } from '../../reducers/groupsSlice';
 
 const CreateGroupButton = styled.p`
   margin-top: 10px;

@@ -23,7 +23,8 @@ import { unwrapResult } from "@reduxjs/toolkit";
 import { Loading } from "./pages/common/Loading";
 import ErrorPage from "./pages/common/ErrorPage";
 import { RootState } from "./reducers/rootReducer";
-import {SearchPage} from "./pages/search/SearchPage";
+import { SearchPage } from "./pages/search/SearchPage";
+import { ViewGroupProfile } from "./pages/group_profile/ViewGroupProfile";
 
 
 export type ViewProfileParams = {
@@ -68,6 +69,9 @@ export default function App() {
       <Switch>
         <Route path="/user/:username">
           <ViewProfile />
+        </Route>
+        <Route path="/group/:groupname">
+          <ViewGroupProfile />
         </Route>
         <Route path="/create-post">
           <CreatePost />

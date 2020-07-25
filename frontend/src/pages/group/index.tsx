@@ -8,9 +8,10 @@ import { Dictionary, unwrapResult } from "@reduxjs/toolkit";
 import { AppDispatch } from "../../store";
 import { Loading } from "../common/Loading";
 import ErrorPage from "../common/ErrorPage";
-import { fetchGroups, leaveGroup, joinGroup } from "../../reducers/groupsSlice";
+import { fetchGroups, leaveGroup, joinGroup, selectGroup } from "../../reducers/groupsSlice";
 import PurpleButton from "../common/PurpleButton";
 import { CreateGroupModal } from "./CreateGroupModal";
+import { Link } from "react-router-dom";
 
 const GroupContainer = styled.div`
   width: 40%;
@@ -19,7 +20,7 @@ const GroupContainer = styled.div`
   flex-direction: column;
   justify-content: flex-start;
   background-color: white;
- 
+
 `;
 const Header = styled.div`
   display: flex;
@@ -49,9 +50,17 @@ const GroupCard = ({ currentGroup, isUserAMember }: { currentGroup: Group, isUse
   const handleLeaveGroup = () => {
     dispatch(leaveGroup(currentGroup._id));
   }
+
+  if (!currentGroup)
+    return <div><h1>NULL GROUP</h1></div>
+
   return <div>
     <div style={{ display: "flex", flexDirection: "row" }}>
-      <Avatar pic={currentGroup.profilePic} title={currentGroup.name} subtitle={currentGroup.description} extraText=""></Avatar>
+
+      <Link to={`/group/${currentGroup._id}`} style={{ textDecoration: "none" }} onClick={() => dispatch(selectGroup({ groupID: currentGroup._id }))}>
+        <Avatar pic={currentGroup.profilePic} title={currentGroup.name} subtitle={currentGroup.description} extraText="" />
+      </Link>
+
       <div style={{ flex: 1 }}></div>
       <div style={{ marginTop: "30px" }}>
         {!isUserAMember && <div onClick={handleJoinGroup}>

@@ -28,6 +28,9 @@ export class Post extends TimeStamps {//mapped to MongoDb collection 'posts"
   @prop({ ref: 'Tag' })
   tags: Ref<Tag>[]; // This is automatically initialized as empty array
 
+  // @prop()
+  // tags: string[];
+
   @prop()
   featuredImg: string;
 

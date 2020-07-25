@@ -1,4 +1,8 @@
+import { Dictionary } from "@reduxjs/toolkit";
+import { useSelector } from "react-redux";
 import { GetInitialDataDto, GetInitialDataLoggedInDto } from "../api";
+import { RootState } from "../reducers/rootReducer";
+import { User } from "../store/types";
 
 export const randomImage = () => {
   // get a random number from 200-350
@@ -67,7 +71,7 @@ export const howLongAgo = (unixTime) => {
 };
 
 /**
- * 
+ *
  * @param arr backend response eg: posts[], users[]
  * convert to maps from _id to Post, User etc.
  */
@@ -81,3 +85,14 @@ export const convertArrToMap = (arr): Record<string, any> => {
 // Type check
 export const isGetInitialDataLoggedInDto
   = (dto: GetInitialDataDto | GetInitialDataLoggedInDto): dto is GetInitialDataLoggedInDto => !!(dto as any).user
+
+
+export const getFollowingFollowersOfUser = (users: Dictionary<User>, user: User): User[] => {
+  let followingFollowers: User[] = [];
+  user.followers.concat(user.following).forEach((_id) => {
+    if (users[_id]) {
+      followingFollowers.push(users[_id])
+    }
+  });
+  return Object.values(convertArrToMap(followingFollowers));
+}

@@ -9,7 +9,7 @@ import { AppDispatch } from '../../store';
 import { Loading } from '../common/Loading';
 import ErrorPage from '../common/ErrorPage';
 import { fetchUsersByIDs } from '../../reducers/usersSlice';
-import { convertArrToMap } from '../../util/helperFunctions';
+import { convertArrToMap, getFollowingFollowersOfUser } from '../../util/helperFunctions';
 import { TextFields } from './TextFields';
 import RadioButtons from './RadioButtons';
 import styled from '@emotion/styled';
@@ -19,7 +19,7 @@ import PurpleButton from '../common/PurpleButton';
 import { createGroup } from '../../reducers/groupsSlice';
 import { UploadApi } from '../../api';
 import { JwtLocalStorageKey } from '../../constants';
-import {uploadPublicAsset} from "../../api-upload";
+import { uploadPublicAsset } from "../../api-upload";
 
 const TextWrapper = styled.div`
   margin-left: 10px;
@@ -41,15 +41,8 @@ export const CreateGroupForm = ({ handleClose }) => {
   const [_private, setPrivate] = useState(false);
 
   const usersMap = useSelector<RootState, Dictionary<User>>(state => state.users.entities);
-
   const user = useSelector<RootState, User>(state => state.user);
-  let followingFollowers: User[] = [];
-  user.followers.concat(user.following).forEach((_id) => {
-    if (usersMap[_id]) {
-      followingFollowers.push(usersMap[_id])
-    }
-  });
-  followingFollowers = Object.values(convertArrToMap(followingFollowers));
+  let followingFollowers: User[] = getFollowingFollowersOfUser(usersMap, user);
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -162,7 +155,7 @@ export const CreateGroupForm = ({ handleClose }) => {
 
           {/* https://material-ui.com/components/autocomplete/#Tags.tsx */}
           <TextWrapper>
-            <AddMultiple label="Add People" options={followingFollowers} imgKey="profilePic" setItems={setPeople} />
+            <AddMultiple label="Add People" options={followingFollowers} imgKey="profilePic" setItems={setPeople} panelWidth={500} />
           </TextWrapper>
 
           <div style={{ height: "25px" }}></div>

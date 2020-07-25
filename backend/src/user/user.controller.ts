@@ -52,7 +52,7 @@ export class UserController {
   //used to add to user's following
   async addFollowing(@UserObjectID() userObjectID: string, @Param('id') id: string): Promise<boolean> {
     this.logger.log(`addFollowing/${id} ...`);
-    const addedFollowing = await this.userService.addFollowing(userObjectID, id);
+    const addedFollowing = await this.userService.addFollowing(id, userObjectID);
     const addedFollower = await this.userService.addFollower(userObjectID, id);
     this.logger.log(`addFollowing/${id} Done!`);
     return addedFollowing && addedFollower;
@@ -63,7 +63,7 @@ export class UserController {
   @Put('removeFollowing/:id')
   async removeFollowing(@UserObjectID() userObjectID: string, @Param('id') id: string): Promise<boolean> {
     this.logger.log(`removeFollowing/${id} ...`);
-    const removedFollowing = await this.userService.removeFollowing(userObjectID, id);
+    const removedFollowing = await this.userService.removeFollowing(id, userObjectID);
     const removedFollower = await this.userService.removeFollower(userObjectID, id);
     this.logger.log(`removeFollowing/${id} Done!`)
     return removedFollowing && removedFollower;
