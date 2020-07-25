@@ -1,7 +1,7 @@
 import {makeStyles} from '@material-ui/core/styles';
-import React, {Ref, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {useParams, Redirect} from 'react-router-dom';
+import {Redirect, useParams} from 'react-router-dom';
 import {PostDetailParams} from '../../App';
 import Avatar from '../common/Avatar';
 import {Loading} from '../common/Loading';
@@ -10,13 +10,17 @@ import NewComment from './NewComment';
 import UpdateButton from './UpdateButton';
 import {RootState} from '../../reducers/rootReducer';
 import {fetchPostBySlug} from '../../reducers/postsSlice';
-import {Post, User, CurrentLoggedInUser, Tag} from '../../store/types';
+import {CurrentLoggedInUser, Post, User} from '../../store/types';
 import {AppDispatch} from '../../store';
 import defaultPostFeaturedImage from "../../assets/defaultPostFeaturedImage.jpg";
 import {PostsApi} from "../../api";
-import TagP from "./TagPanel";
-import {Dictionary, EntityState} from "@reduxjs/toolkit";
-
+import {useLikePost} from "../../hooks/useLikePost";
+import CommentIcon from "../../icons/commentIcon.svg";
+import HeartIcon from "../../icons/heartIcon.svg";
+import HeartIconRed from "../../icons/heartIconRed.svg";
+import BookmarkEmpty from "../../icons/bookmarkEmpty.svg";
+import {Comments} from "./Comments";
+import DeletePostButton from "./DeletePostButton";
 
 const useStyles = makeStyles({
   root: {
@@ -25,7 +29,7 @@ const useStyles = makeStyles({
   },
   postDetail: {
     paddingTop: "10vh",
-    paddingBottom: "7vh",
+    // paddingBottom: "20vh",
     width: "60vw",
     margin: "0 auto",
   },
@@ -45,6 +49,7 @@ const useStyles = makeStyles({
     justifyContent: "flex-start",
     flexDirection: "row",
     alignContent: "center",
+    marginTop: "6vh",
   },
 });
 
@@ -52,16 +57,13 @@ const Interactions = () => {
   return <> </>
 }
 
-const Comments = () => {
-  return <> </>
-}
-
 const PostDetail = () => {
-  // console.log("POSTDETAIL::INDEX");
   const {slug} = useParams<PostDetailParams>(); //get the url param to render the appropriate post
   const classes = useStyles();
   const dispatch = useDispatch<AppDispatch>();
   const currentUser = useSelector<RootState, CurrentLoggedInUser>(state => state.user);
+
+  // const slugtoid = useSelector<RootState, Record<string, string>>(state => state.posts.slugToID);
   const {post, author} = useSelector<RootState, { post: Post, author: User }>(state => {
     const postID = state.posts.slugToID[slug];
     if (!postID) {
@@ -72,16 +74,13 @@ const PostDetail = () => {
     return {post, author};
   });
 
-  // fetch tags
-  const tags = useSelector<RootState, Dictionary<Tag>>(state => state.tags.entities);
-  const tagsArr = post.tags.map(tag => {
-    return tags[tag].name;
-  })
+  const {postIsLikedByUser, handleToggleLike} = useLikePost(post?._id);
 
-  // evaluate whether current user can update post
-  let canUpdate = false;
-  if (author !== null)
+  let canUpdate = false; // if the current user is the author, show an 'update post' button
+  if (author !== null) {
     canUpdate = currentUser !== null && currentUser._id === author._id;
+  }
+
   const [error, setError] = useState(null);
 
   let featuredImg: string;
@@ -119,7 +118,6 @@ const PostDetail = () => {
   // post has item with content
   // const likedByUser = isLoggedIn && post.likedByUser;
 
-
   return (
     <div className={classes.root}>
       <div className={classes.postDetail}>
@@ -132,38 +130,34 @@ const PostDetail = () => {
         <Avatar pic={author.profilePic} title={author.userID} subtitle={post.createdAt} isPost={true}
                 extraText="follow" isButton={true}></Avatar>
 
-        <TagP tags={tagsArr}/>
         <p>{post.content}</p>
 
-
         <Interactions/>
-        {/* <div className={classes.interactionsIcons}>
+        <div className={classes.interactionsIcons}>
           <span>
-            <img className={classes.heartIcon} src={likedByUser ? HeartIconRed : HeartIcon} alt="" onClick={() => {
-              dispatch(likePost(post, !post.item.likedByUser));
-            }} />
-            &nbsp;&nbsp;{post.item.likesCount}
+            <img className={classes.heartIcon} src={postIsLikedByUser ? HeartIconRed : HeartIcon} alt=""
+                 onClick={() => {
+                   handleToggleLike()
+                   ;
+                 }}/>&nbsp;&nbsp;{post.likes}
           </span>
           <span>
-            <img className={classes.shareIcon} src={CommentIcon} alt="" />
-            &nbsp;&nbsp;{post.item.comments.length}
+            <img className={classes.shareIcon} src={CommentIcon} alt=""/>
+            &nbsp;&nbsp;{post.commentsCount}
           </span>
           <span>
-            <img className={classes.shareIcon} src={ShareIcon} alt="" />
-            &nbsp;&nbsp;Share
+            <img className={classes.shareIcon} src={BookmarkEmpty} alt=""/>
+            &nbsp;&nbsp;Save
           </span>
-        </div> */}
+        </div>
 
-        <NewComment></NewComment>
-        <Comments></Comments>
-        {canUpdate && <UpdateButton slug={slug}/>}
-        {/* {post.comments.map((comment) => (
-        <>
-          <Avatar post={comment} extraText="reply"></Avatar>
-          <p>{comment.comment}</p>
-        </>
-      ))} */}
-
+        <hr></hr>
+        <Comments postID={post._id}></Comments>
+        <NewComment postID={post._id}></NewComment>
+        <div style={{height: "20px"}}/>
+        {canUpdate && <UpdateButton params={slug}/>}
+        <div style={{height: "20px"}}/>
+        {canUpdate && <DeletePostButton postID={post?._id}/>}
       </div>
     </div>
   );

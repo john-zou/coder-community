@@ -1,12 +1,14 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { UserApi, GetInitialDataDto, GetInitialDataLoggedInDto, PostsApi, AuthApi, UpdateProfileReqDto, CreateGroupSuccessDto } from "../api";
-import { fetchTrendingPosts } from "./postsSlice";
+import { fetchTrendingPosts, deletePost } from "./postsSlice";
 import { CurrentLoggedInUser } from "../store/types";
 import _ from "lodash";
 import { isGetInitialDataLoggedInDto } from "../util/helperFunctions";
 import { JwtLocalStorageKey } from "../constants";
 import { isLoggedInSlice } from "./isLoggedInSlice";
 import { createGroup, leaveGroup, joinGroup } from "./groupsSlice";
+import {GetCommentsServerToClientDto} from "../ws-dto/comments/dto/getCommentsByPostID.ws.dto";
+import { getCommentsByPostIDSuccess } from "./commentsSlice";
 
 const api = new UserApi();
 export const getLoggedInUser = createAsyncThunk(
@@ -216,7 +218,12 @@ export const userSlice = createSlice({
       if (Array.isArray(action.payload.tags)) {
         state.tags = action.payload.tags;
       }
-    }
+    },
+
+    [deletePost.type]: (state, action) => {
+      _.pull(state.posts, action.payload.postID);
+    },
+
   }
 })
 

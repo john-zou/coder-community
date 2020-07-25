@@ -697,16 +697,16 @@ export interface MessageDto {
     text: string;
     /**
      * 
-     * @type {string}
+     * @type {any}
      * @memberof MessageDto
      */
-    createdAt: string;
+    createdAt: any;
     /**
      * 
-     * @type {string}
+     * @type {any}
      * @memberof MessageDto
      */
-    updatedAt: string;
+    updatedAt: any;
 }
 /**
  * 
@@ -2700,6 +2700,34 @@ export const PostsApiFetchParamCreator = function (configuration?: Configuration
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
+        postsControllerDeletePostByPostID(postID: string, options: any = {}): FetchArgs {
+            // verify required parameter 'postID' is not null or undefined
+            if (postID === null || postID === undefined) {
+                throw new RequiredError('postID','Required parameter postID was null or undefined when calling postsControllerDeletePostByPostID.');
+            }
+            const localVarPath = `/api/posts/{postID}`
+                .replace(`{${"postID"}}`, encodeURIComponent(String(postID)));
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'DELETE' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} postID 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
         postsControllerGetPostByID(postID: string, options: any = {}): FetchArgs {
             // verify required parameter 'postID' is not null or undefined
             if (postID === null || postID === undefined) {
@@ -2969,6 +2997,24 @@ export const PostsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
+        postsControllerDeletePostByPostID(postID: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Response> {
+            const localVarFetchArgs = PostsApiFetchParamCreator(configuration).postsControllerDeletePostByPostID(postID, options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response;
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * 
+         * @param {string} postID 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
         postsControllerGetPostByID(postID: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<GetPostDetailsSuccessDto> {
             const localVarFetchArgs = PostsApiFetchParamCreator(configuration).postsControllerGetPostByID(postID, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
@@ -3118,6 +3164,15 @@ export const PostsApiFactory = function (configuration?: Configuration, fetch?: 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
+        postsControllerDeletePostByPostID(postID: string, options?: any) {
+            return PostsApiFp(configuration).postsControllerDeletePostByPostID(postID, options)(fetch, basePath);
+        },
+        /**
+         * 
+         * @param {string} postID 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
         postsControllerGetPostByID(postID: string, options?: any) {
             return PostsApiFp(configuration).postsControllerGetPostByID(postID, options)(fetch, basePath);
         },
@@ -3199,6 +3254,17 @@ export class PostsApi extends BaseAPI {
      */
     public postsControllerCreatePost(body: CreatePostBodyDto, options?: any) {
         return PostsApiFp(this.configuration).postsControllerCreatePost(body, options)(this.fetch, this.basePath);
+    }
+
+    /**
+     * 
+     * @param {string} postID 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof PostsApi
+     */
+    public postsControllerDeletePostByPostID(postID: string, options?: any) {
+        return PostsApiFp(this.configuration).postsControllerDeletePostByPostID(postID, options)(this.fetch, this.basePath);
     }
 
     /**

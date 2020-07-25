@@ -1,4 +1,4 @@
-import { Logger } from "@nestjs/common";
+import { Logger, UseGuards } from '@nestjs/common';
 import {
   ConnectedSocket,
   MessageBody,
@@ -19,6 +19,7 @@ import { PersonalWs } from '../auth/guards/personal-ws.decorator';
 import { ConversationsService } from '../conversations/conversations.service';
 import { UserObjectID } from '../user/user-object-id.decorator';
 import { NewConversationClientToServerDto, NewConversationServerToClientDto } from './messenger.ws.dto';
+import { UserWsAuthGuard } from '../auth/guards/user-ws.guard';
 
 @WebSocketGateway() //by default server already serves at 3001
 export class MessageGateway implements OnGatewayConnection, OnGatewayDisconnect {//gateway===controller
@@ -31,17 +32,20 @@ export class MessageGateway implements OnGatewayConnection, OnGatewayDisconnect 
   constructor(private readonly messagesService: MessagesService, private readonly conversationsService: ConversationsService) { }
   private logger = new Logger('MessageGateway');
 
+
   handleConnection(client: Socket): void {
-    this.logger.log('New client connected');
+    this.logger.log(`Client connected: ID ${client.id}`);
     client.emit('connection', 'suscessfully connected to server');//send to the client
   }
 
   handleDisconnect(client: Socket): any {
     const userID = this.mapClientIDToUserID[client.id];
-    this.mapUserIDToClientID[userID].delete(client);
+    if (this.mapClientIDToUserID[userID]) {
+      this.mapUserIDToClientID[userID].delete(client);
+    }
   }
 
-  @PersonalWs()
+  @UseGuards(UserWsAuthGuard)
   @SubscribeMessage('authenticate')
   async acknowledgeAuthentication(@ConnectedSocket() socket: Socket, @UserObjectID() userID: string): Promise<WsResponse<null>> {
     this.mapClientIDToUserID[socket.client.id] = userID;
@@ -64,7 +68,7 @@ export class MessageGateway implements OnGatewayConnection, OnGatewayDisconnect 
     };
   }
 
-  @PersonalWs()
+  @UseGuards(UserWsAuthGuard)
   @SubscribeMessage('getConversationsAndUsers')
   async sendConversationsAndUsers(@ConnectedSocket() client: Socket, @UserObjectID() userID: string): Promise<WsResponse<{ users, conversations }>> {
     const user = await UserModel.findById(userID).lean();
@@ -117,6 +121,7 @@ export class MessageGateway implements OnGatewayConnection, OnGatewayDisconnect 
     return { //return sends back res to only user (not broadcast)
       event: 'newMessage',
       data: {
+        conversationID: createMessageBodyDto.conversationID,
         _id,
         author: createMessageBodyDto.userID,
         id: client.id,
@@ -126,9 +131,7 @@ export class MessageGateway implements OnGatewayConnection, OnGatewayDisconnect 
     }
   }
 
-
-
-  @PersonalWs()
+  @UseGuards(UserWsAuthGuard)
   @SubscribeMessage('newConversation')
   async handleCreateNewConversation(@MessageBody() newConversationDto: NewConversationClientToServerDto, @UserObjectID() userID: string, @ConnectedSocket() client: Socket): Promise<WsResponse<NewConversationServerToClientDto>> {
     this.logger.log(newConversationDto);

@@ -37,17 +37,6 @@ const useStyles = makeStyles({
     }
 });
 
-// function upload(event) {
-//     event.preventDefault();  // let the website wont refresh after click upload
-//     const data = this.state.data;
-//     const url = "";
-//     // uploadPublicAsset(data).then(res => {this.props.setUrl(res)});  //uploadPublicAsset return promise
-//     uploadPublicAsset(data).then(res => {console.log(res)}); // res(url), after upload a file, click the link on console and will show the uploaded fil
-//
-//     //show file uploaded
-//     alert(this.state.path.toString() + " is successfully uploaded!");
-// }
-
 export default function CreateVideoPost() {
     const classes = useStyles();
     const [title, setTitle] = useState('');
