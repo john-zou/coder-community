@@ -39,6 +39,7 @@
 ## Deployed:
 http://ec2-13-229-215-75.ap-southeast-1.compute.amazonaws.com/
 AWS EC2 running Docker
+Minor changes (Such as Dockerfile, made before 10:00AM deadline, on branch project_5_deploy)
 
 ---
 
