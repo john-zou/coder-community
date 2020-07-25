@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { UserApi, GetInitialDataDto, GetInitialDataLoggedInDto, PostsApi, AuthApi, UpdateProfileReqDto, CreateGroupSuccessDto } from "../api";
-import { fetchTrendingPosts } from "./postsSlice";
+import { fetchTrendingPosts, deletePost } from "./postsSlice";
 import { CurrentLoggedInUser } from "../store/types";
 import _ from "lodash";
 import { isGetInitialDataLoggedInDto } from "../util/helperFunctions";
@@ -220,6 +220,9 @@ export const userSlice = createSlice({
       }
     },
 
+    [deletePost.type]: (state, action) => {
+      _.pull(state.posts, action.payload.postID);
+    },
 
   }
 })

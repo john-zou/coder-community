@@ -139,7 +139,7 @@ export function TradingCard({ user, isCurrentUser, followHook }: { user: User, i
         <BigBoldNumber>
           {user.followers.length}
         </BigBoldNumber>
-                followers
+        {user.followers.length !== 1 ? "followers" : "follower"}
             </FollowersCountContainer>
       <SpaceBetweenFollowersAndPosts />
       <PostsCountContainer>
