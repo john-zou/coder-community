@@ -1,18 +1,18 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import styled from '@emotion/styled';
-import {useSelector} from "react-redux";
-import {RootState} from "../../reducers/rootReducer";
+import { useSelector } from "react-redux";
+import { RootState } from "../../reducers/rootReducer";
 import Avatar from "../common/Avatar";
-import {Dictionary} from "@reduxjs/toolkit";
-import {Conversation, CurrentLoggedInUser, Message, User} from "../../store/types";
-import {ChatInfoHeader, H2} from "./ChatInfo";
-import {ChatInput} from "./ChatInput";
+import { Dictionary } from "@reduxjs/toolkit";
+import { Conversation, CurrentLoggedInUser, Message, User } from "../../store/types";
+import { ChatInfoHeader, H2 } from "./ChatInfo";
+import { ChatInput } from "./ChatInput";
 
-import {PendingMessage} from "../../reducers/messagesSlice";
-import {ChatMessage} from "./ChatMessage";
+import { PendingMessage } from "../../reducers/messagesSlice";
+import { ChatMessage } from "./ChatMessage";
 import "../../App.css";
 import moment from "moment";
-import {NewConversation} from "./NewConversation";
+import { NewConversation } from "./NewConversation";
 import { Loading } from "../common/Loading";
 
 const ChatAreaContainer = styled.div`
@@ -21,13 +21,15 @@ const ChatAreaContainer = styled.div`
   width: 63%;
   height: 80vh;
   background-color: white;
+  box-shadow:  -12px -12px 28px #d5d5d5,
+             12px 12px 28px #ffffff;
 `;
 
 export const ChatHeader = styled(ChatInfoHeader)`
   border-bottom: 1px solid #F2F2F2;
 `;
 
-const GroupChatHeader = ({ conversation }: {conversation: Conversation}) => {
+const GroupChatHeader = ({ conversation }: { conversation: Conversation }) => {
   return (
     <ChatHeader>
       <div style={{ paddingLeft: "30px" }}>
@@ -93,27 +95,27 @@ export const ChatArea = () => {
       {currentConversation && isDirectConversation && <DirectChatHeader currentConversation={currentConversation} />}
 
       {/* all messages sent by the server */}
-      { currentConversation &&
-      <div style={{ paddingTop: "20px", overflowY: "scroll" }}>
-        {messagesArr.map((msg) => {
-          return (
-            <div style={{ margin: "10px 40px 10px 40px" }}>
-              {msg.author === user._id ? (
-                <>
-                  <div className="textBlock" style={{ display: "flex", flexDirection: "column" }}>
-                    <Avatar pic={user.profilePic} title={user.name} isText={true} extraText={moment(msg.createdAt).calendar()}></Avatar>
-                    <ChatMessage content={msg.text} isUser={true} />
-                  </div>
-                </>
-              ) :
-                <>
-                  <div className="textBlock" style={{ display: "flex", flexDirection: "column" }}>
-                    <Avatar pic={users[msg.author].profilePic} title={users[msg.author].name} isText={true} extraText={moment(msg.createdAt).calendar()}></Avatar>
-                    <ChatMessage content={msg.text} isUser={false}></ChatMessage>
-                  </div>
-                </>}
-            </div>)
-        })}</div>
+      {currentConversation &&
+        <div style={{ paddingTop: "20px", overflowY: "scroll" }}>
+          {messagesArr.map((msg) => {
+            return (
+              <div style={{ margin: "10px 40px 10px 40px" }}>
+                {msg.author === user._id ? (
+                  <>
+                    <div className="textBlock" style={{ display: "flex", flexDirection: "column" }}>
+                      <Avatar pic={user.profilePic} title={user.name} isText={true} extraText={moment(msg.createdAt).calendar()}></Avatar>
+                      <ChatMessage content={msg.text} isUser={true} />
+                    </div>
+                  </>
+                ) :
+                  <>
+                    <div className="textBlock" style={{ display: "flex", flexDirection: "column" }}>
+                      <Avatar pic={users[msg.author].profilePic} title={users[msg.author].name} isText={true} extraText={moment(msg.createdAt).calendar()}></Avatar>
+                      <ChatMessage content={msg.text} isUser={false}></ChatMessage>
+                    </div>
+                  </>}
+              </div>)
+          })}</div>
       }
 
       {/* pending message from current user */}

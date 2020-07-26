@@ -20,7 +20,9 @@ const GroupContainer = styled.div`
   flex-direction: column;
   justify-content: flex-start;
   background-color: white;
-
+  border-radius: 5px;
+  box-shadow: 8px 8px 16px #d4d4d4,
+              -8px -8px 16px #ffffff;
 `;
 const Header = styled.div`
   display: flex;
