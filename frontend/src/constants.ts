@@ -8,9 +8,10 @@ export const GoogleOAuthClientID =
 export const JwtLocalStorageKey = "jwt";
 
 export enum ImageType {
-    ProfilePic = "ProfilePic",
-    BannerPic = "BannerPic",
+  ProfilePic = "ProfilePic",
+  BannerPic = "BannerPic",
 }
 
-export const BackEndBaseUri = process.env.PUBLIC_URL;
+// export const BackEndBaseUri = process.env.PUBLIC_URL; // 3000-- FOR AWS ONLY
+export const BackEndBaseUri = "http://localhost:3001/";
 export const BackEndBaseUriForWs = BackEndBaseUri;

@@ -14,9 +14,10 @@
 
 import * as url from "url";
 import portableFetch from "../api-auth/fetch-container"; // modified by backend/scripts/generate-api.js
+import { BackEndBaseUri } from "../constants";
 import { Configuration } from "./configuration";
 
-const BASE_PATH = "http://ec2-13-229-215-75.ap-southeast-1.compute.amazonaws.com".replace(/\/+$/, "");
+const BASE_PATH = BackEndBaseUri.replace(/\/+$/, "");
 
 /**
  *

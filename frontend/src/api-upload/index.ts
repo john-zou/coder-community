@@ -1,5 +1,5 @@
-import {UploadSuccess} from "../api";
-import {JwtLocalStorageKey} from "../constants";
+import { UploadSuccess } from "../api";
+import { BackEndBaseUri, JwtLocalStorageKey } from "../constants";
 
 // These functions are manually written because the generated version in `frontend/src/api` don't work for file upload
 // For example usage, see `frontend/src/pages/group/CreateGroupForm.tsx` around line 100
@@ -12,7 +12,7 @@ import {JwtLocalStorageKey} from "../constants";
  * first file in the array, if it's an array
  */
 export function uploadUserProfilePic(file: File | File[]): Promise<string> {
-    return uploadHelper(file, "profile-pic");
+  return uploadHelper(file, "profile-pic");
 }
 
 /**
@@ -23,7 +23,7 @@ export function uploadUserProfilePic(file: File | File[]): Promise<string> {
  * first file in the array, if it's an array
  */
 export function uploadUserBannerPic(file: File | File[]): Promise<string> {
-    return uploadHelper(file, "profile-banner-pic");
+  return uploadHelper(file, "profile-banner-pic");
 }
 
 /**
@@ -36,7 +36,7 @@ export function uploadUserBannerPic(file: File | File[]): Promise<string> {
  * first file in the array, if it's an array
  */
 export function uploadPublicVideo(file: File | File[]): Promise<string> {
-    return uploadPublicAsset(file);
+  return uploadPublicAsset(file);
 }
 
 /**
@@ -49,22 +49,22 @@ export function uploadPublicVideo(file: File | File[]): Promise<string> {
  * first file in the array, if it's an array
  */
 export function uploadPublicAsset(file: File | File[]): Promise<string> {
-    return uploadHelper(file, "public/asset");
+  return uploadHelper(file, "public/asset");
 }
 
 
 async function uploadHelper(file: File | File[], endpoint: string): Promise<string> {
-    if (Array.isArray(file)) {
-        file = file[0];
-    }
-    const data = new FormData();
-    data.append('file', file);
-    const result: UploadSuccess = await fetch(`http://ec2-13-229-215-75.ap-southeast-1.compute.amazonaws.com/api/upload/${endpoint}`, {
-        headers: {
-            'Authorization': 'Bearer ' + localStorage.getItem(JwtLocalStorageKey),
-        },
-        method: 'POST',
-        body: data
-    }).then(res => res.json());
-    return result.url;
+  if (Array.isArray(file)) {
+    file = file[0];
+  }
+  const data = new FormData();
+  data.append('file', file);
+  const result: UploadSuccess = await fetch(BackEndBaseUri + `/api/upload/${endpoint}`, {
+    headers: {
+      'Authorization': 'Bearer ' + localStorage.getItem(JwtLocalStorageKey),
+    },
+    method: 'POST',
+    body: data
+  }).then(res => res.json());
+  return result.url;
 }

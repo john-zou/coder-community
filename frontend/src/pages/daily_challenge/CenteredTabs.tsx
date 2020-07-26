@@ -6,10 +6,11 @@ import Tab from '@material-ui/core/Tab';
 import { QuestionTab } from './QuestionTab';
 import { DiscussionTab } from './DiscussionTab';
 import styled from '@emotion/styled';
+import "../../App.css"
 
 const useStyles = makeStyles({
   root: {
-    width: "80%",
+    width: "80%"
   },
 });
 
@@ -23,18 +24,19 @@ export default function CenteredTabs() {
 
   return (
     <>
-      <Paper className={classes.root}>
-        <Tabs
-          value={value}
-          onChange={handleChange}
-          indicatorColor="primary"
-          textColor="primary"
-          centered
-        >
-          <Tab label="Question" />
-          <Tab label="Discussion" />
-        </Tabs>
-      </Paper>
+      {/* <Paper className={classes.root}> */}
+      <Tabs
+        value={value}
+        onChange={handleChange}
+        // indicatorColor="primary"
+        textColor="primary"
+        centered
+        style={{ marginTop: "-8px" }}
+      >
+        <Tab label="Problem" />
+        <Tab label="Discussions" />
+      </Tabs>
+      {/* </Paper> */}
 
       {!value && <QuestionTab />}
       {!!value && <DiscussionTab />}

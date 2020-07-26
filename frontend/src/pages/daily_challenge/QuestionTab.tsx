@@ -9,9 +9,15 @@ const QuestionCard = styled.div`
   margin-top: 20px;
   background-color: white;
   height: 100%;
-  width: 90%;
-  padding-left: 20px;
-  padding-right: 20px;
+  width: 40vw;
+  border-radius: 5px;
+  margin-left: 20px;
+  margin-right: 20px;
+  // padding-top: 1em;
+  padding-left: 2em;
+  padding-right: 2em;
+  box-shadow: 8px 8px 16px #d4d4d4,
+            -8px -8px 16px #ffffff;
 `;
 
 export const QuestionTab = () => {
@@ -20,7 +26,7 @@ export const QuestionTab = () => {
   const currentQuestion = questions[currQuestionID];
   return (
     <QuestionCard>
-      <h2>{currentQuestion.title}</h2>
+      <h3>{currentQuestion.title}</h3>
       <p>{currentQuestion.content}</p>
     </QuestionCard>
   )

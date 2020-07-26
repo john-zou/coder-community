@@ -8,6 +8,7 @@ import { AppDispatch } from "../../store";
 import ErrorPage from "../common/ErrorPage";
 import { Loading } from "../common/Loading";
 import CenteredTabs from "./CenteredTabs";
+import moment from "moment";
 
 export const LeftSideContainer = styled.div`
   padding-top: 9vh;
@@ -26,61 +27,6 @@ export const DailyChallenge = () => {
   const [error, setError] = useState(null);
 
   const dispatch = useDispatch<AppDispatch>();
-  const options = {
-    acceptSuggestionOnCommitCharacter: true,
-    acceptSuggestionOnEnter: "on",
-    accessibilitySupport: "auto",
-    autoIndent: false,
-    automaticLayout: true,
-    codeLens: true,
-    colorDecorators: true,
-    contextmenu: true,
-    cursorSmoothCaretAnimation: false,
-    disableLayerHinting: false,
-    disableMonospaceOptimizations: false,
-    dragAndDrop: false,
-    fixedOverflowWidgets: false,
-    folding: true,
-    foldingStrategy: "auto",
-    fontLigatures: false,
-    formatOnPaste: false,
-    formatOnType: false,
-    hideCursorInOverviewRuler: false,
-    highlightActiveIndentGuide: true,
-    links: true,
-    mouseWheelZoom: false,
-    multiCursorMergeOverlapping: true,
-    multiCursorModifier: "alt",
-    overviewRulerBorder: true,
-    overviewRulerLanes: 2,
-    quickSuggestions: true,
-    quickSuggestionsDelay: 100,
-    readOnly: false,
-    renderControlCharacters: false,
-    renderFinalNewline: true,
-    renderIndentGuides: true,
-    renderLineHighlight: "all",
-    renderWhitespace: "none",
-    revealHorizontalRightPadding: 30,
-    roundedSelection: true,
-    rulers: [],
-    scrollBeyondLastColumn: 5,
-    scrollBeyondLastLine: true,
-    selectOnLineNumbers: true,
-    selectionClipboard: true,
-    selectionHighlight: true,
-    showFoldingControls: "mouseover",
-    smoothScrolling: false,
-    suggestOnTriggerCharacters: true,
-    wordBasedSuggestions: true,
-    wordSeparators: "~!@#$%^&*()-=+[{]}|;:'\",.<>/?",
-    wordWrapBreakAfterCharacters: "\t})]?|&,;",
-    wordWrapBreakBeforeCharacters: "{([+",
-    wordWrapBreakObtrusiveCharacters: ".",
-    wordWrapColumn: 80,
-    wordWrapMinified: true,
-    wrappingIndent: "none"
-  } as const;
 
   const handleChange = (newValue, e) => {
     console.log('onChange', newValue, e);
@@ -121,7 +67,7 @@ export const DailyChallenge = () => {
             value={code}
             options={
               {
-                fontFamily: "Courier New"
+                fontFamily: "Roboto"
               }
             }
             editorDidMount={editorDidMount}
@@ -129,7 +75,7 @@ export const DailyChallenge = () => {
         </LeftSideContainer>
 
         <RightSideContainer>
-          <h1>Daily Coding Challenge July 28</h1>
+          <h2>Daily Coding Challenge {moment().format("MMM Do")}</h2>
           <CenteredTabs />
         </RightSideContainer>
 

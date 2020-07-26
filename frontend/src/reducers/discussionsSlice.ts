@@ -24,8 +24,8 @@ export const discussionsSlice = createSlice({
     }
   ),
   reducers: {
-    showDiscussion: (state, action: PayloadAction<string>) => {
-      state.currentDiscussionID = action.payload
+    showDiscussion: (state, action: PayloadAction<{ discussionID: string }>) => {
+      state.currentDiscussionID = action.payload.discussionID;
     }
   },
   extraReducers: {

@@ -1,5 +1,5 @@
 import { makeStyles } from "@material-ui/core/styles";
-import React, {useEffect} from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
@@ -16,7 +16,7 @@ import { Dictionary } from "@reduxjs/toolkit";
 import { savePost } from "../../reducers/userSlice";
 import { useLikePost } from "../../hooks/useLikePost";
 import { Loading } from "../common/Loading";
-import {fetchPostByID} from "../../reducers/postsSlice";
+import { fetchPostByID } from "../../reducers/postsSlice";
 
 const useStyles = makeStyles({
   root: {
@@ -25,11 +25,18 @@ const useStyles = makeStyles({
     flexDirection: "column",
     width: "40vw",
     backgroundColor: "white",
-    boxShadow: "3px 3px #F2F2F2",
+    // boxShadow: "3px 3px #F2F2F2",
     marginBottom: "1em",
+    marginTop: "3em",
+    marginLeft: "3em",
+    marginRight: "3em",
     borderRadius: "5px",
     paddingLeft: "1.5em",
     paddingRight: "1.5em",
+    boxShadow: "8px 8px 16px #d4d4d4, -8px -8px 16px #ffffff",
+    "&:hover": {
+      boxShadow: "8px 8px 16px #dcdcdc, -8px -8px 16px #dcdcdc",
+    },
   },
   account: {
     display: "flex",
@@ -111,7 +118,7 @@ const Card = ({ postID }: Props) => {
 
   useEffect(() => {
     if (!post) {
-      dispatch(fetchPostByID({id: postID, getAuthor: !author}));
+      dispatch(fetchPostByID({ id: postID, getAuthor: !author }));
     }
   }, [])
 
