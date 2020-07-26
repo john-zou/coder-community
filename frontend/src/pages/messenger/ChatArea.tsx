@@ -108,7 +108,7 @@ export const ChatArea = () => {
               ) :
                 <>
                   <div className="textBlock" style={{ display: "flex", flexDirection: "column" }}>
-                    <Avatar pic={users[msg.author].name} title={users[msg.author].name} isText={true} extraText={moment(msg.createdAt).calendar()}></Avatar>
+                    <Avatar pic={users[msg.author].profilePic} title={users[msg.author].name} isText={true} extraText={moment(msg.createdAt).calendar()}></Avatar>
                     <ChatMessage content={msg.text} isUser={false}></ChatMessage>
                   </div>
                 </>}

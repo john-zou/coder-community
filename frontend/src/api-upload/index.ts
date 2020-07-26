@@ -59,7 +59,7 @@ async function uploadHelper(file: File | File[], endpoint: string): Promise<stri
     }
     const data = new FormData();
     data.append('file', file);
-    const result: UploadSuccess = await fetch(`http://ec2-13-229-215-75.ap-southeast-1.compute.amazonaws.com/${endpoint}`, {
+    const result: UploadSuccess = await fetch(`http://ec2-13-229-215-75.ap-southeast-1.compute.amazonaws.com/api/upload/${endpoint}`, {
         headers: {
             'Authorization': 'Bearer ' + localStorage.getItem(JwtLocalStorageKey),
         },
