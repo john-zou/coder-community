@@ -26,7 +26,6 @@ const onCancel = (params, dispatch) => {
         tags: params.tags,
         featuredImg: params.img,
     }
-    console.log("SUBMIT" + newPost);
 }
 
 
@@ -41,6 +40,9 @@ export default function Submit(params) {
         // console.log(newPost);
         let featuredImg: string;
         if (params.img) {
+          // console.log("CREATEPOST::SUBMIT");
+          // console.log(params.img);
+          // console.log(author);
             featuredImg = await uploadPublicAsset(params.img);
         }
 
@@ -62,18 +64,14 @@ export default function Submit(params) {
             // Create new post
             dispatch(submitPost(newPost)).then(unwrapResult).then(
                 dto => {
-                    console.log("CREATEPOST::SUBMIT");
-                    console.log(dto);
+                    // console.log("CREATEPOST::SUBMIT");
+                    // console.log(dto);
                     history.push(`/post/${dto.slug}`)
                 }
             );
         }
     }
-
-
-    console.log("CREATEPOST::SUBMIT");
-    console.log(params.tags);
-
+    // console.log("CREATEPOST::SUBMIT");
     return (
         <div className={classes.operation}>
             <div onClick={(event) => {
@@ -83,7 +81,7 @@ export default function Submit(params) {
             </div>
             <div style={{width: "15px"}}></div>
             <div onClick={(event) => {
-                onSubmit(params, curUser, dispatch, history);
+                onSubmit(params, curUser._id, dispatch, history);
             }}>
                 <PurpleButton content="Submit"/>
             </div>

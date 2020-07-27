@@ -1062,6 +1062,12 @@ export interface UpdatePostSuccessDto {
      * @memberof UpdatePostSuccessDto
      */
     oldSlug?: string;
+    /**
+     * 
+     * @type {any}
+     * @memberof UpdatePostSuccessDto
+     */
+    updated?: any;
 }
 /**
  * 

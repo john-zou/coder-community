@@ -162,9 +162,9 @@ export default function App() {
             {/*Unused*/}
             <SearchResult/>
           </Route>
-          <Route path="/video_management">
+          {/*<Route path="/video_management">
             <Upload/>
-          </Route>
+          </Route>*/}
           <Route path="/login/github">
             <LoginGitHub/>
           </Route>
