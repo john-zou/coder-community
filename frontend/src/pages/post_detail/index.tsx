@@ -66,13 +66,15 @@ const PostDetail = () => {
   const dispatch = useDispatch<AppDispatch>();
   const currentUser = useSelector<RootState, CurrentLoggedInUser>(state => state.user);
 
-  // const slugtoid = useSelector<RootState, Record<string, string>>(state => state.posts.slugToID);
   const {post, author} = useSelector<RootState, { post: Post, author: User }>(state => {
     const postID = state.posts.slugToID[slug];
     if (!postID) {
       return {post: null, author: null};
     }
+
     const post = state.posts.entities[postID];
+    // console.log(state.posts.entities);
+    // console.log(post);
     const author = state.users.entities[post.author];
     return {post, author};
   });
@@ -94,12 +96,9 @@ const PostDetail = () => {
   const [error, setError] = useState(null);
 
   let featuredImg: string;
-  console.log(post);
   if (!post?.featuredImg) {
     featuredImg = defaultPostFeaturedImage;
-    console.log(featuredImg);
   } else {
-    console.log(post.featuredImg);
     featuredImg = post.featuredImg;
   }
 
@@ -115,7 +114,6 @@ const PostDetail = () => {
       new PostsApi().postsControllerIncrementView(post._id).then(() => console.log("Already had post. Incremented view count.")).catch(console.log);
     }
   }, []);
-
   if (slug == null || slug === "") {
     return <Redirect to="/"/>
   }
@@ -127,7 +125,6 @@ const PostDetail = () => {
   if (error) {
     return <NotFoundError/> // TODO: add something for server error
   }
-
   // post has item with content
   // const likedByUser = isLoggedIn && post.likedByUser;
 

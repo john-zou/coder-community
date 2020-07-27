@@ -92,11 +92,15 @@ type Props = {
 
 //parent: Main
 const Card = ({ postID }: Props) => {
+  // console.log("HOME::CARD");
   const classes = useStyles();
   const dispatch = useDispatch();
 
   const post = useSelector<RootState, Post>(
-    (state) => state.posts.entities[postID]
+    (state) => {
+      // console.log(state.posts.entities);
+      return state.posts.entities[postID];
+    }
   );
 
   const { postIsLikedByUser, handleToggleLike } = useLikePost(post?._id);

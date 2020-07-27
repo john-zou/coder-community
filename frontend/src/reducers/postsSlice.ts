@@ -142,17 +142,22 @@ export const postsSlice = createSlice({
 
     // Create and update post:
     [submitPost.fulfilled.type]: (state, action: PayloadAction<Post>) => {
+      console.log("POSTSLICE::CREATEPOST");
       const newPost = action.payload;
+      state.slugToID[action.payload.slug] = newPost._id;
       postsAdapter.addOne(state, newPost);
+      console.log(newPost);
+      console.log(state);
+      console.log(state.slugToID);
     },
     [updatePost.fulfilled.type]: (state, action: PayloadAction<UpdatePostSuccessDto & UpdatePostBodyDto>) => {
       state.slugToID[action.payload.slug] = state.slugToID[action.payload.oldSlug];
       console.log("POSTSLICE::UPDATEPOST");
-      console.log(action.payload);
+      console.log(action.payload.updated);
       // state.slugToID.delete(action.payload.slug);
       postsAdapter.updateOne(state, {
             id: action.payload._id,
-            changes: action.payload
+            changes: action.payload.updated
       });
       console.log("** UPDATE DONE **");
     },

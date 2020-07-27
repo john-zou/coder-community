@@ -35,6 +35,7 @@ export default function Submit(params) {
   const classes = useStyles();
   const dispatch = useDispatch<AppDispatch>();
   const history = useHistory();
+  const previewContentLength = 100;
   // const createdPost = useSelector<RootState, PostsCreation>(state => state.postsCreation);
   const curUser = useSelector<RootState, User>(state => state.user);
 
@@ -51,8 +52,9 @@ export default function Submit(params) {
       title: params.title,
       content: params.content,
       tags: params.tags,
-      featuredImg,
+      featuredImg: featuredImg,
       author: curUser._id,
+      previewContent: params.content.substring(0, previewContentLength),
     }
     // Handle update differently
     if (params.isUpdate) {
