@@ -36,7 +36,10 @@ export const fetchTrendingPosts = createAsyncThunk(
       if (isLoggedIn) {
         initialData = await api.trendingControllerGetTrendingLoggedIn(fetchCount);
       } else {
+        console.log("REDUCER::POSTSLICE");
+        console.log(fetchCount);
         initialData = await api.trendingControllerGetTrending(fetchCount);
+        console.log(initialData);
       }
     } catch (err) {
       console.log("Got err from fetchTrendingPosts api call", err);

@@ -17,8 +17,6 @@ import portableFetch from "../api-auth/fetch-container"; // modified by backend/
 import { Configuration } from "./configuration";
 
 const BASE_PATH = "http://localhost:3001".replace(/\/+$/, "");
-// const BASE_PATH = "/" || process.env.PORT || "http://localhost:3001".replace(/\/+$/, "");
-
 /**
  *
  * @export
@@ -3541,10 +3539,17 @@ export const TrendingApiFp = function(configuration?: Configuration) {
         trendingControllerGetTrending(fetchCount: number, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<GetInitialDataDto> {
             const localVarFetchArgs = TrendingApiFetchParamCreator(configuration).trendingControllerGetTrending(fetchCount, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+              console.log("TRENDING CONTROLLER GET TRENDING");
+              console.log(basePath);
+              console.log(localVarFetchArgs.url);
+              console.log(basePath + localVarFetchArgs.url, localVarFetchArgs.options);
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                  console.log(response);
                     if (response.status >= 200 && response.status < 300) {
+                      console.log("RIGHT");
                         return response.json();
                     } else {
+                      console.log("ERROR");
                         throw response;
                     }
                 });

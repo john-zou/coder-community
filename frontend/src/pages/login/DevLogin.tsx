@@ -8,7 +8,8 @@ export function DevLogin() {
   const history = useHistory();
   const dispatch = useDispatch();
   useEffect(() => {
-    fetch("http://localhost:3001/api/dev/login").then(res => res.json()).then(
+    // fetch("http://localhost:3001/api/dev/login").then(res => res.json()).then(
+    fetch("/api/dev/login").then(res => res.json()).then(
       (res) => {
         const jwt: string = res.jwt;
         dispatch(loginSuccess({jwt}));

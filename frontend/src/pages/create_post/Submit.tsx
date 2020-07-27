@@ -41,6 +41,8 @@ export default function Submit(params) {
         // console.log(newPost);
         let featuredImg: string;
         if (params.img) {
+          console.log("CREATEPOST::SUBMIT");
+          console.log(params.img);
             featuredImg = await uploadPublicAsset(params.img);
         }
 

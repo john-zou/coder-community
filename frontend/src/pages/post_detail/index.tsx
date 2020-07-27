@@ -76,7 +76,7 @@ const PostDetail = () => {
     const author = state.users.entities[post.author];
     return {post, author};
   });
-
+  console.log(post);
   const {postIsLikedByUser, handleToggleLike} = useLikePost(post?._id);
 
 
@@ -94,9 +94,12 @@ const PostDetail = () => {
   const [error, setError] = useState(null);
 
   let featuredImg: string;
+  console.log(post);
   if (!post?.featuredImg) {
     featuredImg = defaultPostFeaturedImage;
+    console.log(featuredImg);
   } else {
+    console.log(post.featuredImg);
     featuredImg = post.featuredImg;
   }
 
@@ -167,7 +170,7 @@ const PostDetail = () => {
         <NewComment postID={post._id}></NewComment>
 
         <div style={{height: "20px"}}/>
-        {canUpdate && <UpdateButton params={slug}/>}
+        {canUpdate && <UpdateButton slug={slug}/>}
         <div style={{height: "20px"}}/>
         {canUpdate && <DeletePostButton postID={post?._id}/>}
 
