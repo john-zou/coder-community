@@ -60,7 +60,7 @@ const Interactions = () => {
 }
 
 const PostDetail = () => {
-  console.log("POSTDETAIL::INDEX");
+  // console.log("POSTDETAIL::INDEX");
   const {slug} = useParams<PostDetailParams>(); //get the url param to render the appropriate post
   const classes = useStyles();
   const dispatch = useDispatch<AppDispatch>();
@@ -78,7 +78,7 @@ const PostDetail = () => {
     const author = state.users.entities[post.author];
     return {post, author};
   });
-  console.log(post);
+  // console.log(post);
   const {postIsLikedByUser, handleToggleLike} = useLikePost(post?._id);
 
 
