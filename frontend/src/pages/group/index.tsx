@@ -22,7 +22,7 @@ const GroupContainer = styled.div`
   background-color: white;
   border-radius: 5px;
   box-shadow: 8px 8px 16px #d4d4d4,
-              -8px -8px 16px #ffffff;
+              -8px -8px 16px #f5f5f5;
 `;
 const Header = styled.div`
   display: flex;

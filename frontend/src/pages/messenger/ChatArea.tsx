@@ -21,8 +21,8 @@ const ChatAreaContainer = styled.div`
   width: 63%;
   height: 80vh;
   background-color: white;
-  box-shadow:  -12px -12px 28px #d5d5d5,
-             12px 12px 28px #ffffff;
+  box-shadow:  -12px -12px 20px #d5d5d5,
+             12px 12px 20px #d5d5d5;
 `;
 
 export const ChatHeader = styled(ChatInfoHeader)`

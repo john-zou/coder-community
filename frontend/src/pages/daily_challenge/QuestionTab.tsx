@@ -17,7 +17,7 @@ const QuestionCard = styled.div`
   padding-left: 2em;
   padding-right: 2em;
   box-shadow: 8px 8px 16px #d4d4d4,
-            -8px -8px 16px #ffffff;
+            -8px -8px 16px #f5f5f5;
 `;
 
 export const QuestionTab = () => {

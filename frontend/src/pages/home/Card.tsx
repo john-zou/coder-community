@@ -33,7 +33,7 @@ const useStyles = makeStyles({
     borderRadius: "5px",
     paddingLeft: "1.5em",
     paddingRight: "1.5em",
-    boxShadow: "8px 8px 16px #d4d4d4, -8px -8px 16px #ffffff",
+    boxShadow: "8px 8px 16px #d4d4d4, -8px -8px 16px #f5f5f5",
     "&:hover": {
       boxShadow: "8px 8px 16px #dcdcdc, -8px -8px 16px #dcdcdc",
     },
@@ -172,13 +172,7 @@ const Card = ({ postID }: Props) => {
         <div>
           <p style={{ marginLeft: "2em" }}>{post.previewContent}</p>
           <div className={classes.readSave}>
-            <Link
-              to={`/post/${post._id}`}
-              className={classes.link}
-              onClick={() => {
-                handleViewPost(post, dispatch);
-              }}
-            >
+            <Link to={`/post/${post.slug}`} className={classes.link}>
               <h4
                 style={{
                   marginRight: "2em",

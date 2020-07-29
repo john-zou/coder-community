@@ -72,18 +72,14 @@ export default function RightSideBar() {
         <div className={classes.savePostSection}>
           {trendingPosts.map((_id, idx) => (
             <div key={idx}>
-              <Avatar pic={users[posts[_id].author].profilePic} title={posts[_id].title} subtitle={posts[_id].content.substr(0, 60).concat("...")} isButton={false} isPost={true} extraText={posts[_id].createdAt}></Avatar>
-              {/* <Link
-                to={`/post/${post.postID}`}
-                className={classes.link}
-                onClick={() => {
-                  handleViewPost(currViewedPost, post);
-                }}
-              > */}
-              {/* <p style={{ marginTop: "-0.5em", fontWeight: "bold" }}>
-                {post.title}
-              </p> */}
-              {/* </Link> */}
+              <Avatar pic={users[posts[_id].author].profilePic}
+                title={posts[_id].title}
+                subtitle={posts[_id].content.substr(0, 60).concat("...")}
+                isButton={false} isPost={true}
+                extraText={posts[_id].createdAt}
+                titleSrc={`/post/${posts[_id].slug}`}
+              ></Avatar>
+
             </div>
           ))}
         </div>
