@@ -56,7 +56,10 @@ export const fetchPostsByTag = createAsyncThunk(
   async ({tagID, startIdx}: { tagID: string, startIdx: number }, {rejectWithValue}) => {
     let payload: GetPostsByTagDto;
     try {
+      console.log("REDUCER::POSTSLICE::FETCHPOSTBYTAG");
+      console.log(tagID);
       payload = await new PostsApi().tagsControllerGetPostsByTag(tagID, undefined, startIdx);
+      console.log(payload);
     } catch (err) {
       return rejectWithValue(tagID);
     }
@@ -152,6 +155,7 @@ export const postsSlice = createSlice({
     },
     [updatePost.fulfilled.type]: (state, action: PayloadAction<UpdatePostSuccessDto & UpdatePostBodyDto>) => {
       state.slugToID[action.payload.slug] = state.slugToID[action.payload.oldSlug];
+
       console.log("POSTSLICE::UPDATEPOST");
       console.log(action.payload.updated);
       // state.slugToID.delete(action.payload.slug);

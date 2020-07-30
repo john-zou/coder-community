@@ -10,7 +10,9 @@ import { convertPostDocumentToPostDto } from '../util/helperFunctions';
 @Injectable()
 export class TagsService {
   async getPostsByTag(tagID: string, requestedCount = 5, startIdx = 0, excludePostIDs?: Record<string, boolean>): Promise<GetPostsByTagDto> {
+    console.log("TAGS::SERVICE");
     const tag = await TagModel.findById(tagID);
+    console.log(tag);
     if (!tag) {
       throw new NotFoundException();
     }
@@ -22,13 +24,12 @@ export class TagsService {
         postIDs[destIdx++] = postID;
       }
     }
-
+    console.log(postIDs);
     const postDocuments = await PostModel.find({ _id: { $in: postIDs}});
-
-    console.log(postDocuments.length);
     console.log(postDocuments);
 
     const postDtos = postDocuments.map(convertPostDocumentToPostDto);
+    console.log(postDtos);
 
     return {
       cursor: startIdx,

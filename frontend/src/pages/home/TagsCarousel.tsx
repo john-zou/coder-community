@@ -54,6 +54,9 @@ export const TagsCarousel = ({ value, setValue }) => {
           aria-label="scrollable auto tabs example"
         >
           {tagsArr.map((tag, idx) => {
+            // console.log("TAGCAROUSEL");
+            // console.log(idx);
+            // console.log(tag)
             if (idx === 0) {
               return <Tab label="all" {...a11yProps({ idx })} key={idx} />;
             }
