@@ -1,5 +1,5 @@
 import { makeStyles } from "@material-ui/core/styles";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
@@ -17,6 +17,7 @@ import { savePost } from "../../reducers/userSlice";
 import { useLikePost } from "../../hooks/useLikePost";
 import { Loading } from "../common/Loading";
 import { fetchPostByID } from "../../reducers/postsSlice";
+import SnackBarMessage from "../common/SnackBarMessage";
 
 const useStyles = makeStyles({
   root: {
@@ -101,6 +102,7 @@ type Props = {
 const Card = ({ postID }: Props) => {
   const classes = useStyles();
   const dispatch = useDispatch();
+  const [snackBarOpen, setSnackBarOpen] = useState(false);
 
   const post = useSelector<RootState, Post>(
     (state) => state.posts.entities[postID]
@@ -188,9 +190,11 @@ const Card = ({ postID }: Props) => {
               style={{ color: "#5D67E9", cursor: "pointer" }}
               onClick={() => {
                 dispatch(savePost({ postID: post._id }));
+                setSnackBarOpen(true);
               }}
             >
               Save for later
+               {snackBarOpen && <SnackBarMessage message={"Post has been saved!"} />}
             </h4>
           </div>
         </div>
