@@ -29,8 +29,8 @@ const Main = () => {
   const tags = useSelector<RootState, Dictionary<Tag>>(state => state.tags.entities);
   const hasMorePostsInTags = useSelector<RootState, Record<string, boolean>>(state => state.tags.hasMorePostsInTags);
   const tagsArr = Object.values(tags);
-  // console.log(tags);
-  // console.log(tagsArr);
+  console.log(tags);
+  console.log(tagsArr);
   // console.log(tabIndex);
   const currentTag = tagsArr[tabIndex - 1];
   // const currentTag = tagsArr[tabIndex];

@@ -18,7 +18,6 @@ import {
 } from './dto/posts.dto';
 import { TrendingGateway } from '../trending/trending.gateway';
 
-
 // Unused -- can use later for different feature
 type DevToArticle = {
     type_of: 'article';
@@ -151,6 +150,19 @@ export class PostsService {
         };
     }
 
+    async updateTagPosts(newTags: Set<string>, postID: string) {
+        console.log("POSTSERVICE::UPDATETAGPOST");
+        const tags = await TagModel.find();
+        console.log(newTags);
+        console.log(tags);
+        tags.forEach(tag => {
+            console.log(tag);
+            if (!newTags.has(tag._id)) {
+                // if (tag.posts.find(postID))
+                console.log(tag.posts);
+            }
+        });
+    }
 
     async updatePostBySlug(update: UpdatePostBodyDto, slug: string): Promise<UpdatePostSuccessDto> {
         // 1. Find post
@@ -180,6 +192,8 @@ export class PostsService {
 
         if (Array.isArray(update.tags)) {
             post.tags = update.tags.map(tag => new ObjectId(tag));
+            const tagSet = new Set(update.tags);
+            this.updateTagPosts(tagSet, post._id);
         }
 
         await post.save();

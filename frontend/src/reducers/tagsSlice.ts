@@ -6,7 +6,7 @@ import {
   GetInitialDataDto,
   GetInitialDataLoggedInDto,
   GetPostDetailsSuccessDto,
-  GetPostsByTagDto, UpdatePostBodyDto,
+  GetPostsByTagDto, PostDto, UpdatePostBodyDto,
   UpdatePostSuccessDto
 } from "../api";
 
@@ -25,7 +25,7 @@ export const tagsSlice = createSlice({
     // Initialize Tags slice when initial data is fetched
     [fetchTrendingPosts.fulfilled.type]: (state, action: PayloadAction<GetInitialDataDto | GetInitialDataLoggedInDto>) => {
       // Create tags
-      // console.log("TAGSLICE::START")
+      // console.log("TAGSLICE::FETCHING TRENDING");
       tagsAdapter.upsertMany(state, action.payload.tags.map(tag => {
         const tagEntity = tag as unknown as Tag;
         tagEntity.postsSet = {};
@@ -39,6 +39,9 @@ export const tagsSlice = createSlice({
           tagsAdapter.updateOne(state, {id, changes: {postsSet: {[post._id]: true}}});
         });
       });
+      console.log(action.payload.posts);
+      console.log(tagsAdapter);
+      console.log(action.payload.tags);
 
       // Initialize hasMorePostsInTags
       action.payload.tags.forEach(tag => {
@@ -68,14 +71,24 @@ export const tagsSlice = createSlice({
     },
 
     // TODO: add post to tags upon post creation
-    [submitPost.fulfilled.type]: (state, action) => {
-
+    [submitPost.fulfilled.type]: (state, action: PayloadAction<PostDto>) => {
+      console.log(action.payload);
+      const post = action.payload;
+        post.tags.forEach(tag => {
+          tagsAdapter.updateOne(state, {id: tag, changes: {postsSet: {[post._id]: true}}});
+       });
     },
     // TODO: potentially update tags upon post update
-    [updatePost.fulfilled.type]: (state, action: PayloadAction<UpdatePostSuccessDto & UpdatePostBodyDto>) => {
-      console.log("STAGSLICE::UPDATEPOST");
-      console.log(state.entities);
-      // tagsAdapter.upda
+    [updatePost.fulfilled.type]: (state, action) => {
+      // console.log("STAGSLICE::UPDATEPOST");
+      // console.log(action.payload);
+      // console.log(action.payload.post);
+      // action.payload.updated.tags.forEach(tag => {
+      //   console.log(tag);
+      // });
+      // console.log(state.entities);
+      // console.log(state.entities.postSets);
+      // // tagsAdapter.upda
     },
   }
 });

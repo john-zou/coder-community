@@ -2938,6 +2938,7 @@ export const PostsApiFetchParamCreator = function (configuration?: Configuration
      * @throws {RequiredError}
      */
     postsControllerUpdatePostBySlug(body: UpdatePostBodyDto, slug: string, options: any = {}): FetchArgs {
+      console.log("3");
       // verify required parameter 'body' is not null or undefined
       if (body === null || body === undefined) {
         throw new RequiredError('body', 'Required parameter body was null or undefined when calling postsControllerUpdatePostBySlug.');
@@ -2953,6 +2954,7 @@ export const PostsApiFetchParamCreator = function (configuration?: Configuration
       const localVarHeaderParameter = {} as any;
       const localVarQueryParameter = {} as any;
 
+      console.log(localVarPath);
       localVarHeaderParameter['Content-Type'] = 'application/json';
 
       localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
@@ -2961,7 +2963,7 @@ export const PostsApiFetchParamCreator = function (configuration?: Configuration
       localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
       const needsSerialization = (<any>"UpdatePostBodyDto" !== "string") || localVarRequestOptions.headers['Content-Type'] === 'application/json';
       localVarRequestOptions.body = needsSerialization ? JSON.stringify(body || {}) : (body || "");
-
+      console.log();
       return {
         url: url.format(localVarUrlObj),
         options: localVarRequestOptions,
@@ -3162,12 +3164,16 @@ export const PostsApiFp = function (configuration?: Configuration) {
      * @throws {RequiredError}
      */
     postsControllerUpdatePostBySlug(body: UpdatePostBodyDto, slug: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<UpdatePostSuccessDto> {
+      console.log("2");
       const localVarFetchArgs = PostsApiFetchParamCreator(configuration).postsControllerUpdatePostBySlug(body, slug, options);
+      console.log(localVarFetchArgs);
       return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
         return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
           if (response.status >= 200 && response.status < 300) {
+            console.log(response);
             return response.json();
           } else {
+            console.log("ERR");
             throw response;
           }
         });
