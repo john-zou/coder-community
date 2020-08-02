@@ -12,6 +12,7 @@ import { RootState } from "../../reducers/rootReducer";
 import { Dictionary, unwrapResult } from "@reduxjs/toolkit";
 import { Loading } from "../common/Loading";
 import { SmallCardContainer } from "../daily_challenge/DiscussionTab";
+import { Link } from "react-router-dom";
 
 const Container = styled.div`
   width: 816px; // to match the Card.tsx width
@@ -74,7 +75,9 @@ export function GroupProfileTabs({ group }: { group: Group }) {
         <>
           {adminsToRender?.map(user => <>
             <SmallCardContainer>
-              <MemberCard user={user} isAdmin titleSrc={user.userID} />
+              <Link to={`/user/${user.userID}`} style={{ textDecoration: "none", cursor: "pointer" }}>
+                <MemberCard user={user} isAdmin />
+              </Link>
             </SmallCardContainer> </>)}
           {usersToRender?.filter(user => !adminsToRender.includes(user)).map(user => <>
             <SmallCardContainer>

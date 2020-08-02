@@ -11,6 +11,7 @@ import PurpleButton from "../common/PurpleButton";
 import { uploadPublicAsset } from "../../api-upload";
 import { Loading } from "../common/Loading";
 import ErrorPage from "../common/ErrorPage";
+import { SubmitButton } from "./SubmitButton";
 
 const useStyles = makeStyles({
   operation: {
@@ -21,17 +22,6 @@ const useStyles = makeStyles({
   }
 });
 
-const onCancel = (params, dispatch) => {
-  const newPost = {
-    title: params.title,
-    content: params.content,
-    tags: params.tags,
-    featuredImg: params.img,
-  }
-  console.log("SUBMIT" + newPost);
-}
-
-
 export default function Submit(params) {
   const classes = useStyles();
   const dispatch = useDispatch<AppDispatch>();
@@ -40,6 +30,10 @@ export default function Submit(params) {
   const curUser = useSelector<RootState, User>(state => state.user);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  const onCancel = () => {
+    history.push("/home")
+  }
 
   const onSubmit = async (params, author, dispatch, history) => {
     // console.log(newPost);
@@ -89,16 +83,14 @@ export default function Submit(params) {
   }
   return (
     <div className={classes.operation}>
-      <div onClick={(event) => {
-        onCancel(params, dispatch);
-      }}>
+      <div onClick={onCancel}>
         <PurpleButton content="Cancel" />
       </div>
       <div style={{ width: "15px" }}></div>
       <div onClick={(event) => {
         onSubmit(params, curUser, dispatch, history);
       }}>
-        <PurpleButton content="Submit" />
+        <SubmitButton />
       </div>
     </div>
   );

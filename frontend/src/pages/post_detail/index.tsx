@@ -1,7 +1,7 @@
 import { makeStyles } from '@material-ui/core/styles';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Redirect, useParams } from 'react-router-dom';
+import { Link, Redirect, useParams } from 'react-router-dom';
 import { PostDetailParams } from '../../App';
 import Avatar from '../common/Avatar';
 import { Loading } from '../common/Loading';
@@ -128,8 +128,9 @@ const PostDetail = () => {
         />
         <h1>{post.title}</h1>
 
-        <Avatar pic={author.profilePic} title={author.userID} subtitle={post.createdAt} isPost={true}
-          extraText="follow" isButton={true}></Avatar>
+        <Link to={`/user/${author.userID}`} style={{ textDecoration: "none" }}>
+          <Avatar pic={author.profilePic} title={author.userID} subtitle={post.createdAt} isPost={true}></Avatar>
+        </Link>
 
         <p>{post.content}</p>
 
