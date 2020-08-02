@@ -7,9 +7,9 @@ import {
   GetPostDetailsSuccessDto,
   UserApi,
   GetUsersSuccessDto,
-  UserDto
+  UserDto, GetGroupMembersAndPostsDto
 } from "../api";
-import { leaveGroup, joinGroup } from "./groupsSlice";
+import { leaveGroup, joinGroup, fetchGroupMembersAndPosts } from "./groupsSlice";
 import _ from "lodash";
 import { getCommentsByPostIDSuccess } from "./commentsSlice";
 import { GetCommentsServerToClientDto } from "../ws-dto/comments/dto/getCommentsByPostID.ws.dto";
@@ -95,6 +95,10 @@ export const usersSlice = createSlice({
     [unfollow.type]: (state, action: PayloadAction<UserIDPayload>) => {
       const otherID = action.payload.otherUserID;
       _.pull(state.entities[otherID].followers, action.payload.currentUserID)
+    },
+    [fetchGroupMembersAndPosts.fulfilled.type]: (state, action: PayloadAction<GetGroupMembersAndPostsDto>) => {
+      usersAdapter.upsertMany(state, action.payload.admins)
+      usersAdapter.upsertMany(state, action.payload.users)
     }
   }
 })

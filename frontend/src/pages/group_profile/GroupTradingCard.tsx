@@ -1,10 +1,10 @@
 import React from "react";
 import styled from '@emotion/styled';
-import {CurrentLoggedInUser, Group} from "../../store/types";
+import { CurrentLoggedInUser, Group } from "../../store/types";
 import { AllCapsName, AvatarPic, BigBoldNumber, FollowersAndPostsCountContainer, FollowersCountContainer, PostsCountContainer, SpaceAround, SpaceBetweenFollowersAndPosts, TradingCardButton, TradingCardContainer } from "../view_profile/TradingCard";
-import {RootState} from "../../reducers/rootReducer";
-import {useSelector} from "react-redux";
-import {initializeGitHubOAuth} from "../login/login";
+import { RootState } from "../../reducers/rootReducer";
+import { useSelector } from "react-redux";
+import { initializeGitHubOAuth } from "../login/login";
 
 const AdminsContainer = styled.div`
   text-align: center;
@@ -24,7 +24,7 @@ const Subtitle = styled.h4`
 
 // https://www.figma.com/file/ehowTfq9OAMUdMf3Qbngi0/Programmers-Social-Network?node-id=50%3A0
 export function GroupTradingCard({ group }: { group: Group }) {
-  const membersCount = group.admins.length + group.users.length;
+  const membersCount = group.admins.length + group.users.filter(user => !group.admins.includes(user)).length;
   const user = useSelector<RootState, CurrentLoggedInUser>(state => state.user);
 
   function bottom() {
@@ -35,42 +35,42 @@ export function GroupTradingCard({ group }: { group: Group }) {
     }
 
     if (user && group.admins.includes(user._id)) {
-      return <div style={{textAlign: "center"}}>
+      return <div style={{ textAlign: "center" }}>
         <h3>You are Admin <span role='img' aria-label='crown'>👑</span></h3>
-        <TradingCardButton onClick={()=>{console.log('admin button clicked!')}}>
+        <TradingCardButton onClick={() => { console.log('admin button clicked!') }}>
           Settings
         </TradingCardButton>
       </div>
     }
 
     if (user && group.users.includes(user._id)) {
-      return <div style={{textAlign: "center"}}><h3>You're a Member <span role='img' aria-label='sunglasses'>😎</span></h3></div>
+      return <div style={{ textAlign: "center" }}><h3>You're a Member <span role='img' aria-label='sunglasses'>😎</span></h3></div>
     }
   }
 
   return (<TradingCardContainer>
     <AvatarPic src={group.profilePic} />
     <AllCapsName>{group.name.toUpperCase()}</AllCapsName>
-     <Subtitle>{group.description || `<Coder Community Group/>`}</Subtitle>
+    <Subtitle>{group.description || `<Coder Community Group/>`}</Subtitle>
     <FollowersAndPostsCountContainer>
       <SpaceAround />
       <FollowersCountContainer>
         <BigBoldNumber>
-           {membersCount}
+          {membersCount}
         </BigBoldNumber>
         {membersCount === 1 ? "member" : "members"}
-            </FollowersCountContainer>
+      </FollowersCountContainer>
       <SpaceBetweenFollowersAndPosts />
       <PostsCountContainer>
         <BigBoldNumber>
           {group.posts.length}
         </BigBoldNumber>
         {group.posts.length === 1 ? "post" : "posts"}
-        </PostsCountContainer>
+      </PostsCountContainer>
       <SpaceAround />
     </FollowersAndPostsCountContainer>
     <SpaceAround />
-    <hr style={{marginTop: "20px",  width: "60%"}} />
+    <hr style={{ marginTop: "20px", width: "60%" }} />
     {bottom()}
   </TradingCardContainer>)
 }

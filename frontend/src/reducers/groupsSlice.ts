@@ -1,6 +1,6 @@
 import { createEntityAdapter, createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { Group, CurrentLoggedInUser } from "../store/types";
-import { GroupsApi, GetGroupsSuccessDto, CreateGroupDto, CreateGroupSuccessDto, GroupDto } from "../api";
+import { GroupsApi, GetGroupsSuccessDto, CreateGroupDto, CreateGroupSuccessDto, GroupDto, GetGroupMembersAndPostsDto } from "../api";
 import { RootState } from "./rootReducer";
 import _ from "lodash";
 
@@ -98,6 +98,11 @@ export const groupsSlice = createSlice({
     },
     [joinGroup.fulfilled.type]: (state, action: PayloadAction<{ groupID: string, userID: string }>) => {
       state.entities[action.payload.groupID].users.push(action.payload.userID)
+    },
+    [fetchGroupMembersAndPosts.fulfilled.type]: (state, action: PayloadAction<GetGroupMembersAndPostsDto>) => {
+      state.entities[action.payload.groupID].admins = action.payload.admins.map(user => user._id)
+      state.entities[action.payload.groupID].users = action.payload.users.map(user => user._id)
+      state.entities[action.payload.groupID].posts = action.payload.posts.map(post => post._id)
     }
   }
 })

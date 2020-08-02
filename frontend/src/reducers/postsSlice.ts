@@ -1,5 +1,6 @@
 import { createAsyncThunk, createEntityAdapter, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
+  GetGroupMembersAndPostsDto,
   GetInitialDataDto,
   GetInitialDataLoggedInDto,
   GetPostDetailsSuccessDto,
@@ -18,6 +19,7 @@ import { CreateCommentServerToClientDto } from "../ws-dto/comments/dto/createCom
 import { PostIDPayload, toggleLikePost, userSlice } from './userSlice';
 import { submitPost, updatePost } from "./postsCreationSlice";
 import _ from "lodash";
+import { fetchGroupMembersAndPosts } from "./groupsSlice";
 
 
 
@@ -175,6 +177,9 @@ export const postsSlice = createSlice({
     },
     [fetchPostsByUserID.fulfilled.type]: (state, action: PayloadAction<GetPostsSuccessDto>) => {
       postsAdapter.addMany(state, action.payload.posts)
+    },
+    [fetchGroupMembersAndPosts.fulfilled.type]: (state, action: PayloadAction<GetGroupMembersAndPostsDto>) => {
+      postsAdapter.upsertMany(state, action.payload.posts)
     }
   }
 })

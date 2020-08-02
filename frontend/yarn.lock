@@ -11626,7 +11626,7 @@ url-parse@^1.4.3:
     querystringify "^2.1.1"
     requires-port "^1.0.0"
 
-url-slug@^2.3.1:
+url-slug@^2.3.2:
   version "2.3.2"
   resolved "https://registry.yarnpkg.com/url-slug/-/url-slug-2.3.2.tgz#eab21da0e227deba10610c7b01ec4af20babea21"
   integrity sha512-M3aqTb+ur72tp9Sx4P4Teye0uBjk0fFDgZm1mFdnhiFRra1ScQF9xupChhUBxdffxAb2ZXSl5Jnfc/4A8nUmBA==

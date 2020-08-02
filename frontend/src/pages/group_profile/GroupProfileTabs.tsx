@@ -1,16 +1,17 @@
-import React, {useEffect, useMemo, useState} from "react";
-import {CurrentLoggedInUser, Group, Post, User} from "../../store/types";
+import React, { useEffect, useMemo, useState } from "react";
+import { CurrentLoggedInUser, Group, Post, User } from "../../store/types";
 import styled from '@emotion/styled';
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import Card from "../home/Card";
-import {AppDispatch} from "../../store";
-import {useDispatch, useSelector} from "react-redux";
-import {MemberCard} from "./MemberCard";
-import {fetchGroupMembersAndPosts} from "../../reducers/groupsSlice";
-import {RootState} from "../../reducers/rootReducer";
-import {Dictionary, unwrapResult} from "@reduxjs/toolkit";
-import {Loading} from "../common/Loading";
+import { AppDispatch } from "../../store";
+import { useDispatch, useSelector } from "react-redux";
+import { MemberCard } from "./MemberCard";
+import { fetchGroupMembersAndPosts } from "../../reducers/groupsSlice";
+import { RootState } from "../../reducers/rootReducer";
+import { Dictionary, unwrapResult } from "@reduxjs/toolkit";
+import { Loading } from "../common/Loading";
+import { SmallCardContainer } from "../daily_challenge/DiscussionTab";
 
 const Container = styled.div`
   width: 816px; // to match the Card.tsx width
@@ -25,6 +26,7 @@ const PostsContainer = MembersContainer;
 
 
 export function GroupProfileTabs({ group }: { group: Group }) {
+  console.log("group being rendered: ", group._id)
   const [loading, setLoading] = useState(true);
   const [tabIdx, setTabIdx] = useState(0);
   const dispatch = useDispatch<AppDispatch>();
@@ -34,7 +36,7 @@ export function GroupProfileTabs({ group }: { group: Group }) {
   useEffect(() => {
     dispatch(fetchGroupMembersAndPosts(group._id))
       .then(unwrapResult)
-      .then(() => {setLoading(false)})
+      .then(() => { setLoading(false) })
       .catch(console.log);
   }, [group._id]);
 
@@ -42,6 +44,7 @@ export function GroupProfileTabs({ group }: { group: Group }) {
     if (!loading) {
       const ret = [];
       group.admins.forEach(userID => {
+        console.log("admin: ", users[userID])
         ret.push(users[userID]);
       });
       return ret;
@@ -68,15 +71,22 @@ export function GroupProfileTabs({ group }: { group: Group }) {
   function child() {
     if (tabIdx === 0) {
       return (
-        <MembersContainer>
-          {adminsToRender.map(user => <MemberCard user={user} isAdmin/>)}
-          {usersToRender.map(user => <MemberCard user={user} />)}
-        </MembersContainer>
+        <>
+          {adminsToRender?.map(user => <>
+            <SmallCardContainer>
+              <MemberCard user={user} isAdmin titleSrc={user.userID} />
+            </SmallCardContainer> </>)}
+          {usersToRender?.filter(user => !adminsToRender.includes(user)).map(user => <>
+            <SmallCardContainer>
+              <MemberCard user={user} titleSrc={user.userID} />
+            </SmallCardContainer>
+          </>)}
+        </>
       );
     } else if (tabIdx === 1) {
       return (
         <PostsContainer>
-          {group.posts.map(postID => <Card postID={postID}/>)}
+          {group.posts.map(postID => <Card postID={postID} />)}
         </PostsContainer>
       )
     }

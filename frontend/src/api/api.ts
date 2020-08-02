@@ -491,6 +491,12 @@ export interface GetDiscussionsDto {
 export interface GetGroupMembersAndPostsDto {
     /**
      * 
+     * @type {string}
+     * @memberof GetGroupMembersAndPostsDto
+     */
+    groupID: string;
+    /**
+     * 
      * @type {Array<UserDto>}
      * @memberof GetGroupMembersAndPostsDto
      */

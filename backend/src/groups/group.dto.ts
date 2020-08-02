@@ -69,6 +69,7 @@ export class GetGroupsSuccessDto {
 }
 
 export class GetGroupMembersAndPostsDto {
+  groupID: string;
   admins: UserDto[];
   users: UserDto[];
   posts: PostDto[];

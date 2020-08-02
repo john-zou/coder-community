@@ -12,6 +12,7 @@ import { fetchGroups, leaveGroup, joinGroup, selectGroup } from "../../reducers/
 import PurpleButton from "../common/PurpleButton";
 import { CreateGroupModal } from "./CreateGroupModal";
 import { Link } from "react-router-dom";
+import * as urlSlug from 'url-slug';
 
 const GroupContainer = styled.div`
   width: 40%;

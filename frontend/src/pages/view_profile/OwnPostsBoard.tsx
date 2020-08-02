@@ -40,7 +40,7 @@ export function OwnPostsBoard({ user, followingFollowerView }: { user: CurrentLo
             )).map((user, index) =>
               <>
                 <SmallCardContainer>
-                  <Avatar key={index} pic={user.profilePic} title={user.userID} subtitle={user.status} titleSrc={user.userID}></Avatar>
+                  <Avatar key={index} pic={user.profilePic} title={user.name} extraText={user.userID} subtitle={user.status} titleSrc={user.userID}></Avatar>
                 </SmallCardContainer>
               </>
             )}
@@ -54,7 +54,7 @@ export function OwnPostsBoard({ user, followingFollowerView }: { user: CurrentLo
             )).map((user, index) =>
               <>
                 <SmallCardContainer>
-                  <Avatar key={index} pic={user.profilePic} title={user.userID} subtitle={user.status} titleSrc={user.userID}></Avatar>
+                  <Avatar key={index} pic={user.profilePic} title={user.name} extraText={user.userID} subtitle={user.status} titleSrc={user.userID}></Avatar>
                 </SmallCardContainer>
               </>
             )}

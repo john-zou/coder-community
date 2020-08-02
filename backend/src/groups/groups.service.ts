@@ -140,6 +140,7 @@ export class GroupsService {
     const admins = group.admins.map(convertUserToUserDto);
     const users = group.users.map(convertUserToUserDto);
     const posts = group.posts.map(convertPostDocumentToPostDto);
-    return { admins, users, posts }
+    // console.log({ admins, users, posts })
+    return { groupID, admins, users, posts }
   }
 }
