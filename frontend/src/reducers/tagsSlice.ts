@@ -25,7 +25,7 @@ export const tagsSlice = createSlice({
     // Initialize Tags slice when initial data is fetched
     [fetchTrendingPosts.fulfilled.type]: (state, action: PayloadAction<GetInitialDataDto | GetInitialDataLoggedInDto>) => {
       // Create tags
-      // console.log("TAGSLICE::FETCHING TRENDING");
+      console.log("TAGSLICE::FETCHING TRENDING");
       tagsAdapter.upsertMany(state, action.payload.tags.map(tag => {
         const tagEntity = tag as unknown as Tag;
         tagEntity.postsSet = {};
@@ -34,7 +34,9 @@ export const tagsSlice = createSlice({
 
       // Update tags with trending posts
       action.payload.posts.forEach(post => {
+        console.log(post);
         post.tags.forEach(id => {
+          console.log(id);
           // For each tag in each post, add/update post to the tag in Redux store (idempotent)
           tagsAdapter.updateOne(state, {id, changes: {postsSet: {[post._id]: true}}});
         });

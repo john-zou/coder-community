@@ -12,25 +12,24 @@ export class TagsService {
   async getPostsByTag(tagID: string, requestedCount = 5, startIdx = 0, excludePostIDs?: Record<string, boolean>): Promise<GetPostsByTagDto> {
     console.log("TAGS::SERVICE");
     const tag = await TagModel.findById(tagID);
-    console.log(tag);
     if (!tag) {
       throw new NotFoundException();
     }
+    console.log(tag);
 
     const postIDs = new Array<string>(requestedCount);
-    for (let i = startIdx, destIdx = 0; i < tag.posts.length && destIdx < requestedCount; ++i, ++startIdx) {
+    console.log(tag.posts);
+    console.log(startIdx, tag.posts.length, requestedCount);
+    // for (let i = startIdx, destIdx = 0; i < tag.posts.length && destIdx < requestedCount; ++i, ++startIdx) {
+    for (let i = 0, destIdx = 0; i < tag.posts.length && destIdx < requestedCount; ++i, ++startIdx) {
+      console.log(i);
       const postID = tag.posts[i].toString();
       if (!(excludePostIDs && excludePostIDs[postID])) {
         postIDs[destIdx++] = postID;
       }
     }
-    console.log(postIDs);
     const postDocuments = await PostModel.find({ _id: { $in: postIDs}});
-    console.log(postDocuments);
-
     const postDtos = postDocuments.map(convertPostDocumentToPostDto);
-    console.log(postDtos);
-
     return {
       cursor: startIdx,
       tagID,

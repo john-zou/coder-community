@@ -9,6 +9,7 @@ import {
 } from '../util/helperFunctions';
 import * as urlSlug from 'url-slug';
 import { User } from '../user/user.schema';
+import { Post } from '../posts/post.schema';
 import {
     CreatePostBodyDto,
     CreatePostSuccessDto,
@@ -150,19 +151,39 @@ export class PostsService {
         };
     }
 
-    async updateTagPosts(newTags: Set<string>, postID: string) {
-        console.log("POSTSERVICE::UPDATETAGPOST");
+    // add post to posts array of tag in newTags
+    // remove post from posts array of all other tags
+    async updateTagPosts(newTags: Set<string>, postID: string, post: Ref<Post>) {
+        // console.log("POSTSERVICE::UPDATETAGPOST");
         const tags = await TagModel.find();
-        console.log(newTags);
-        console.log(tags);
-        tags.forEach(tag => {
-            console.log(tag);
-            if (!newTags.has(tag._id)) {
-                // if (tag.posts.find(postID))
-                console.log(tag.posts);
+        // console.log(newTags);
+        // console.log(tags);
+        for (const tag of tags) {
+            if (!newTags.has(tag._id.toString())) {
+                // find index of current post in posts array of current tag
+                // if present, remove post from posts array
+                tag.posts.push(post);
+                const index = tag.posts.indexOf(tag.posts[tag.posts.length - 1], 0);
+                if (index != tag.posts.length - 1 && index != -1)
+                    tag.posts.splice(index, 1);
+                tag.posts.splice(tag.posts.length - 1, 1);
+                // const index = tag.posts.indexOf(post, 0);
+                // const index = tag.posts.findIndex((cpost) => {
+                //     console.log(cpost);
+                //     console.log(post);
+                //     return cpost == post;
+                // });
+                // console.log(index);
+                // if (index > -1) {
+                //     tag.posts.splice(index, 1);
+                // }
+            } else {
+                tag.posts.push(post);
             }
-        });
+            tag.save();
+        }
     }
+
 
     async updatePostBySlug(update: UpdatePostBodyDto, slug: string): Promise<UpdatePostSuccessDto> {
         // 1. Find post
@@ -193,12 +214,10 @@ export class PostsService {
         if (Array.isArray(update.tags)) {
             post.tags = update.tags.map(tag => new ObjectId(tag));
             const tagSet = new Set(update.tags);
-            this.updateTagPosts(tagSet, post._id);
+            this.updateTagPosts(tagSet, post._id, post);
         }
 
         await post.save();
-        // console.log("POST::SERVICE");
-        // console.log(post.slug);
         return { _id: post._id, slug: post.slug };
     }
 

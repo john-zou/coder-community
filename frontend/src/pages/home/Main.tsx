@@ -21,7 +21,7 @@ const Main = () => {
     }
   );
   const dispatch: AppDispatch = useDispatch();
-  const [items, setItems] = useState(trendingPosts);//has 5 things initially
+  const [items, setItems] = useState(trendingPosts); // has 5 things initially
   const currFetchCount: number = useSelector<RootState, number>(state => state.posts.trendingPostFetchCount);
   const hasMoreTrendingPosts: boolean = useSelector<RootState, boolean>(state => state.posts.hasMorePosts);
   // console.log(items);
@@ -29,14 +29,10 @@ const Main = () => {
   const tags = useSelector<RootState, Dictionary<Tag>>(state => state.tags.entities);
   const hasMorePostsInTags = useSelector<RootState, Record<string, boolean>>(state => state.tags.hasMorePostsInTags);
   const tagsArr = Object.values(tags);
-  console.log(tags);
-  console.log(tagsArr);
-  // console.log(tabIndex);
+  // console.log(tags);
+  // console.log(tagsArr);
   const currentTag = tagsArr[tabIndex - 1];
-  // const currentTag = tagsArr[tabIndex];
   const currentTagID = currentTag?._id;
-  // console.log(currentTag);
-  // console.log(currentTagID);
 
   let hasMore: boolean;
   if (tabIndex === 0) {
@@ -59,10 +55,11 @@ const Main = () => {
 
     // switch to a tag
     setItems(Object.keys(currentTag.postsSet));
-    console.log(currentTag.postsSet);
+    // console.log(currentTag.postsSet);
     const startIdx = items.length; // communicate to back end which ones to skip
-    const tagID = currentTagID;
-    console.log(startIdx, tagID);
+    const tagID = currentTag._id;
+    // const tagID = currentTagID;
+    // console.log(startIdx, tagID);
     dispatch(fetchPostsByTag({tagID, startIdx})).then(unwrapResult).then(res => {
       setItems(prev => prev.concat(res.posts.map(post => post._id)))
     }).catch(err => console.log(err));
