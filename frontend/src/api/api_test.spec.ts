@@ -181,6 +181,10 @@ describe("PostsApi", () => {
     const getAuthor: boolean = true
     return expect(instance.postsControllerGetPostBySlug(slug, getAuthor, {})).resolves.toBe(null)
   })
+  test("postsControllerGetPostsByUserID", () => {
+    const userID: string = "userID_example"
+    return expect(instance.postsControllerGetPostsByUserID(userID, {})).resolves.toBe(null)
+  })
   test("postsControllerIncrementView", () => {
     const postID: string = "postID_example"
     return expect(instance.postsControllerIncrementView(postID, {})).resolves.toBe(null)

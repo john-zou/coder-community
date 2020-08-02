@@ -33,8 +33,8 @@ export const convertUserToUserDto = (user: DocumentType<User>): UserDto => {
 export const convertPostDocumentToPostDto = (post: DocumentType<Post>): PostDto => {
   let createdAt: string;
   const dateCopy = new Date(post.createdAt.getTime());
-  const nowHours = Date.now() / (1000*60*60);
-  const postCreateAtHours = post.createdAt.getTime() / (1000*60*60);
+  const nowHours = Date.now() / (1000 * 60 * 60);
+  const postCreateAtHours = post.createdAt.getTime() / (1000 * 60 * 60);
   if (nowHours - postCreateAtHours > 24) {
     createdAt = moment(dateCopy).format('lll'); //https://momentjs.com/
   } else {
@@ -77,6 +77,7 @@ export const convertPostDocumentToPostDetailDto = (post: DocumentType<Post>): Po
     group: post.group?.toString(),
   }
 }
+
 
 export const createConversationNameFromNamesOfUsers = (namesOfUsers: string[]): string => {
   let name = "";

@@ -4,6 +4,7 @@ import {
   GetInitialDataLoggedInDto,
   GetPostDetailsSuccessDto,
   GetPostsByTagDto,
+  GetPostsSuccessDto,
   PostsApi,
   TrendingApi,
   UpdatePostBodyDto,
@@ -70,6 +71,11 @@ export const fetchPostBySlug = createAsyncThunk(
 export const fetchPostByID = createAsyncThunk(
   'fetchPostByID',
   ({ id, getAuthor }: { id: string, getAuthor: boolean }) => new PostsApi().postsControllerGetPostByID(id, getAuthor)
+)
+
+export const fetchPostsByUserID = createAsyncThunk(
+  'fetchPostsByUserID',
+  ({ userID }: { userID: string }) => new PostsApi().postsControllerGetPostsByUserID(userID)
 )
 
 //https://redux-toolkit.js.org/api/createSlice
@@ -166,6 +172,9 @@ export const postsSlice = createSlice({
       if (action.payload.comment.commentRoot === 'post') {
         state.entities[action.payload.comment.parentPost].comments.push(action.payload.comment._id);
       }
+    },
+    [fetchPostsByUserID.fulfilled.type]: (state, action: PayloadAction<GetPostsSuccessDto>) => {
+      postsAdapter.addMany(state, action.payload.posts)
     }
   }
 })
