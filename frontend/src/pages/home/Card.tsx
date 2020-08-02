@@ -13,11 +13,13 @@ import { Post } from "../../store/types";
 import { User } from "../../store/types";
 import { Tag } from "../../store/types";
 import { Dictionary } from "@reduxjs/toolkit";
-import { savePost } from "../../reducers/userSlice";
+import { toggleSavePost } from "../../reducers/userSlice";
 import { useLikePost } from "../../hooks/useLikePost";
 import { Loading } from "../common/Loading";
 import { fetchPostByID } from "../../reducers/postsSlice";
-import SnackBarMessage from "../common/SnackBarMessage";
+import { Snackbar } from "@material-ui/core";
+import IconButton from "@material-ui/core/IconButton/IconButton";
+import CloseIcon from '@material-ui/icons/Close';
 
 const useStyles = makeStyles({
   root: {
@@ -117,15 +119,39 @@ const Card = ({ postID }: Props) => {
   const tags = useSelector<RootState, Dictionary<Tag>>(
     (state) => state.tags.entities
   );
+  const user = useSelector<RootState, User>(state => state.user)
+
+  const checkSavedPost = () => {
+    return user.savedPosts.includes(postID)
+  }
+  const [postAlreadySaved, setPostAlreadySaved] = useState(checkSavedPost());
+
+  const toggleSave = () => {
+    setSnackBarOpen(true);
+    setPostAlreadySaved(prev => {
+      return !prev
+    })
+  }
 
   useEffect(() => {
     if (!post) {
       dispatch(fetchPostByID({ id: postID, getAuthor: !author }));
     }
-  }, [])
+    // checkPostHasBeenSaved(postID)
+  }, [postID])
 
   if (!post) {
     return <Loading />
+  }
+
+  console.log("Card.tsx Render ", post.title);
+  console.log("Card.tsx Render ", post.title, ". snackbar: ", snackBarOpen);
+
+  const handleSavePostToggle = () => {
+    console.log("onClick save post", post.title);
+    dispatch(toggleSavePost({ postID: post._id }));
+    console.log("setting snackbar open to true");
+    toggleSave()
   }
 
   return (
@@ -188,13 +214,10 @@ const Card = ({ postID }: Props) => {
 
             <h4
               style={{ color: "#5D67E9", cursor: "pointer" }}
-              onClick={() => {
-                dispatch(savePost({ postID: post._id }));
-                setSnackBarOpen(true);
-              }}
+              onClick={handleSavePostToggle}
             >
-              Save for later
-               {snackBarOpen && <SnackBarMessage message={"Post has been saved!"} />}
+              {postAlreadySaved ? `Unsave post` : `Save for later`}
+
             </h4>
           </div>
         </div>
@@ -221,6 +244,30 @@ const Card = ({ postID }: Props) => {
           <p>&nbsp;{post.commentsCount}</p>
         </div>
       </div>
+
+      <Snackbar
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left',
+        }}
+        open={snackBarOpen}
+        autoHideDuration={3000}
+        onClose={() => {
+          console.log("onCloseSnackbar ", post.title);
+          setSnackBarOpen(false)
+        }}
+        message={postAlreadySaved ? "Post has been saved!" : "Post has been unsaved"}
+        action={
+          <>
+            <IconButton size="small" aria-label="close" color="inherit" onClick={() => {
+              console.log("onCloseSnackbar IconButton ", post.title);
+              setSnackBarOpen(false)
+            }}>
+              <CloseIcon fontSize="small" />
+            </IconButton>
+          </>
+        }
+      />
     </div>
   );
 };

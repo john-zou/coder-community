@@ -7,7 +7,7 @@ import { isGetInitialDataLoggedInDto } from "../util/helperFunctions";
 import { JwtLocalStorageKey } from "../constants";
 import { isLoggedInSlice } from "./isLoggedInSlice";
 import { createGroup, leaveGroup, joinGroup } from "./groupsSlice";
-import {GetCommentsServerToClientDto} from "../ws-dto/comments/dto/getCommentsByPostID.ws.dto";
+import { GetCommentsServerToClientDto } from "../ws-dto/comments/dto/getCommentsByPostID.ws.dto";
 import { getCommentsByPostIDSuccess } from "./commentsSlice";
 
 const api = new UserApi();
@@ -45,7 +45,7 @@ export const getUserForViewProfile = (userName) => createAsyncThunk(
 )
 
 export type PostIDPayload = { postID: string };
-export type UserIDPayload = { userID: string };
+export type UserIDPayload = { currentUserID?: string, otherUserID: string };
 export type LikePostPayload = { postID: string, increment: boolean };
 
 //https://redux-toolkit.js.org/api/createSlice
@@ -74,12 +74,15 @@ export const userSlice = createSlice({
         return { payload: null };
       }
     },
-    savePost: {
+    toggleSavePost: {
       reducer: (user, action: PayloadAction<PostIDPayload>) => {
         // optimistic update
-        if (user) {
+        if (user && !user.savedPosts.includes(action.payload.postID)) {
           user.savedPosts.push(action.payload.postID);
           user.savedPostsSet[action.payload.postID] = true;
+        } else if (user && user.savedPosts.includes(action.payload.postID)) {
+          user.savedPostsSet[action.payload.postID] = false;
+          _.pull(user.savedPosts, action.payload.postID);
         }
 
         return user;
@@ -127,37 +130,38 @@ export const userSlice = createSlice({
     follow: {
       reducer: (state, action: PayloadAction<UserIDPayload>) => {
         // Optimistic update
-        const other = action.payload.userID;
+        const other = action.payload.otherUserID;
         if (!state.followingSet[other]) {
           state.followingSet[other] = true;
           state.following.push(other);
         }
       },
-      prepare: (payload: UserIDPayload ) => {
-        api.userControllerAddFollowing(payload.userID)
-            .then(_ => console.log("Optimistic update (FOLLOW) finished in back end"))
-            .catch(err => console.log("Optimistic update (FOLLOW) rejected! ", err));
+      prepare: (payload: UserIDPayload) => {
+        api.userControllerAddFollowing(payload.otherUserID)
+          .then(_ => console.log("Optimistic update (FOLLOW) finished in back end"))
+          .catch(err => console.log("Optimistic update (FOLLOW) rejected! ", err));
         return { payload };
       }
     },
     unfollow: {
       reducer: (state, action: PayloadAction<UserIDPayload>) => {
         // Optimistic update
-        const other = action.payload.userID;
+        const other = action.payload.otherUserID;
         if (state.followingSet[other]) {
           state.followingSet[other] = false;
           _.pull(state.following, other);
         }
       },
-      prepare: (payload: UserIDPayload ) => {
-        api.userControllerRemoveFollowing(payload.userID)
-            .then(_ => console.log("Optimistic update (UNFOLLOW) finished in back end"))
-            .catch(err => console.log("Optimistic update (UNFOLLOW) rejected! ", err));
-        return { payload };
+      prepare: (payload: UserIDPayload) => {
+        //to perform side effect (since reducer must be pure), not using createAsyncThunk bc of optimistic update
+        api.userControllerRemoveFollowing(payload.otherUserID)
+          .then(_ => console.log("Optimistic update (UNFOLLOW) finished in back end"))
+          .catch(err => console.log("Optimistic update (UNFOLLOW) rejected! ", err));
+        return {
+          payload
+        };
       }
     },
-
-
   },
   extraReducers: {
     // fetchTrendingPosts will give the current logged in user as well
@@ -229,4 +233,4 @@ export const userSlice = createSlice({
 
 export default userSlice.reducer;
 
-export const { savePost, toggleLikePost, follow, unfollow, loginSuccess, logOut } = userSlice.actions;
+export const { toggleSavePost, toggleLikePost, follow, unfollow, loginSuccess, logOut } = userSlice.actions;

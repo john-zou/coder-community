@@ -9,6 +9,8 @@ import { unwrapResult } from "@reduxjs/toolkit";
 import { useHistory } from "react-router-dom";
 import PurpleButton from "../common/PurpleButton";
 import { uploadPublicAsset } from "../../api-upload";
+import { Loading } from "../common/Loading";
+import ErrorPage from "../common/ErrorPage";
 
 const useStyles = makeStyles({
   operation: {
@@ -79,10 +81,12 @@ export default function Submit(params) {
     }
   }
 
-
-  console.log("CREATEPOST::SUBMIT");
-  console.log(params.tags);
-
+  if (loading) {
+    return <Loading></Loading>
+  }
+  if (error) {
+    return <ErrorPage error={error}></ErrorPage>
+  }
   return (
     <div className={classes.operation}>
       <div onClick={(event) => {

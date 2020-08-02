@@ -11,8 +11,9 @@ import {
 } from "../api";
 import { leaveGroup, joinGroup } from "./groupsSlice";
 import _ from "lodash";
-import {getCommentsByPostIDSuccess} from "./commentsSlice";
-import {GetCommentsServerToClientDto} from "../ws-dto/comments/dto/getCommentsByPostID.ws.dto";
+import { getCommentsByPostIDSuccess } from "./commentsSlice";
+import { GetCommentsServerToClientDto } from "../ws-dto/comments/dto/getCommentsByPostID.ws.dto";
+import { follow, unfollow, UserIDPayload } from "./userSlice";
 
 const api = new UserApi();
 
@@ -27,6 +28,13 @@ export const fetchUsersByIDs = createAsyncThunk('fetchUsersByIDs', async (IDs: s
 export const fetchUserByUsername = createAsyncThunk('fetchUserByUsername', async (username: string) => {
   return await api.userControllerGetUserByUsername(username);
 })
+
+export const getFollowingFollowersOfUser = createAsyncThunk(
+  'getFollowingFollowersOfUser',
+  async () => {
+    return await api.userControllerGetFollowingFollowersOfUser()
+  }
+)
 
 //https://redux-toolkit.js.org/api/createSlice
 export const usersSlice = createSlice({
@@ -76,6 +84,17 @@ export const usersSlice = createSlice({
     },
     [getCommentsByPostIDSuccess.type]: (state, action: PayloadAction<GetCommentsServerToClientDto>) => {
       usersAdapter.upsertMany(state, action.payload.authors);
+    },
+    [getFollowingFollowersOfUser.fulfilled.type]: (state, action: PayloadAction<GetUsersSuccessDto>) => {
+      usersAdapter.upsertMany(state, action.payload.users);
+    },
+    [follow.type]: (state, action: PayloadAction<UserIDPayload>) => {
+      const otherID = action.payload.otherUserID;
+      state.entities[otherID].followers.push(action.payload.currentUserID);
+    },
+    [unfollow.type]: (state, action: PayloadAction<UserIDPayload>) => {
+      const otherID = action.payload.otherUserID;
+      _.pull(state.entities[otherID].followers, action.payload.currentUserID)
     }
   }
 })

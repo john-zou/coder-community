@@ -9,11 +9,10 @@ import { Discussion, User } from "../../store/types";
 import Avatar from "../common/Avatar";
 import ErrorPage from "../common/ErrorPage";
 import { Loading } from "../common/Loading";
-import { SearchBar } from "../messenger/SearchBar";
 import styled from "@emotion/styled";
 // import "../../App.css";
 
-export const DiscussionCardContainer = styled.div`
+export const SmallCardContainer = styled.div`
   display: flex;
   flex-direction: column;
   width: 40vw;
@@ -78,12 +77,12 @@ export const DiscussionTab = () => {
       {/* <SearchBar /> */}
       {Object.values(discussions).map((discussion) => (
         <>
-          <DiscussionCardContainer onClick={() => handleExpand(discussion._id)}>
+          <SmallCardContainer onClick={() => handleExpand(discussion._id)}>
 
             <Avatar pic={users[discussion.author].profilePic} title={users[discussion.author].name} subtitle={discussion.title} boldSub={true} />
             {(!selectedDiscussion || selectedDiscussion !== discussion._id) ? <></> : <p style={{ marginTop: "-1px" }}>{discussion.content}</p>}
 
-          </DiscussionCardContainer>
+          </SmallCardContainer>
         </>
       )
       )}

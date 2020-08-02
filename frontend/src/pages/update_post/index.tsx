@@ -1,21 +1,21 @@
-import React, {useEffect, useState} from "react";
-import {Redirect, useParams} from "react-router-dom";
-import {useDispatch, useSelector} from "react-redux";
-import {AppDispatch} from "../../store";
-import {RootState} from "../../reducers/rootReducer";
-import {Post, Tag, User} from "../../store/types";
+import React, { useEffect, useState } from "react";
+import { Redirect, useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch } from "../../store";
+import { RootState } from "../../reducers/rootReducer";
+import { Post, Tag, User } from "../../store/types";
 import defaultPostFeaturedImage from "../../assets/defaultPostFeaturedImage.jpg";
-import {fetchPostBySlug} from "../../reducers/postsSlice";
-import {Loading} from "../common/Loading";
-import {NotFoundError} from "../common/NotFoundError";
-import {NoAccessibilityError} from "../common/NoAccessibilityError";
-import {NotLoggedInError} from "../common/NotLoggedInError";
+import { fetchPostBySlug } from "../../reducers/postsSlice";
+import { Loading } from "../common/Loading";
+import { NotFoundError } from "../common/NotFoundError";
+import { NoAccessibilityError } from "../common/NoAccessibilityError";
+import { NotLoggedInError } from "../common/NotLoggedInError";
 import ImgP from "../create_post/ImgPanel";
 import TextP from "../create_post/TextPanel";
 import TagP from "./TagPanel";
 import Submit from "./Submit";
-import {makeStyles} from "@material-ui/core/styles";
-import {Dictionary, unwrapResult} from "@reduxjs/toolkit";
+import { makeStyles } from "@material-ui/core/styles";
+import { Dictionary, unwrapResult } from "@reduxjs/toolkit";
 
 const useStyles = makeStyles({
   createPost: {
@@ -33,32 +33,35 @@ const useStyles = makeStyles({
 
 export default function UpdatePost() {
   // console.log("UPDATEPOST::INDEX");
-  const {slug} = useParams<{ slug: string }>();
+  const { slug } = useParams<{ slug: string }>();
+  // console.log("slug: ", slug)
   const classes = useStyles();
   const dispatch = useDispatch<AppDispatch>();
 
   const allTags = useSelector<RootState, Dictionary<Tag>>(state => state.tags.entities);
   const allTagsArr = Object.values(allTags);
 
-  const {post} = useSelector<RootState, { post: Post }>(state => {
+  const { post } = useSelector<RootState, { post: Post }>(state => {
     const postID = state.posts.slugToID[slug];
     if (!postID) {
-      return {post: null};
+      return { post: null };
     }
     const post = state.posts.entities[postID];
-    return {post};
+    return { post };
   })
 
+  console.log(post._id, "post called: ", post.title);
   // fetch tags
   const tags = useSelector<RootState, Dictionary<Tag>>(state => state.tags.entities);
   const tagsArray = Object.values(tags);
   let oldTagsIDArr = []
-  const oldTagsSet = new Set(post.tags);
-  for (let i = 0; i < tagsArray.length; i++) {
-    if (oldTagsSet.has(tagsArray[i]._id))
-      oldTagsIDArr.push(i);
+  if (post.tags && post.tags.length > 0) {
+    const oldTagsSet = new Set(post.tags);
+    for (let i = 0; i < tagsArray.length; i++) {
+      if (oldTagsSet.has(tagsArray[i]._id))
+        oldTagsIDArr.push(i);
+    }
   }
-
   const user = useSelector<RootState, User>(state => state.user);
   const [title, setTitle] = useState(post?.title);
   const [content, setContent] = useState(post?.content);
@@ -71,7 +74,7 @@ export default function UpdatePost() {
       return;
     }
     if (!post?.content) {
-      dispatch(fetchPostBySlug({slug, getAuthor: false}))
+      dispatch(fetchPostBySlug({ slug, getAuthor: false }))
         .then(unwrapResult)
         .then(dto => {
           setTitle(dto.post.title);
@@ -83,31 +86,31 @@ export default function UpdatePost() {
   }, []);
 
   if (slug == null || slug === "") {
-    return <Redirect to="/"/>
+    return <Redirect to="/" />
   }
 
   if (!post?.content) {
-    return <Loading/>
+    return <Loading />
   }
 
   if (error) {
-    return <NotFoundError/>
+    return <NotFoundError />
   }
 
   // console.log("UPDATEPOST::INDEX");
   if (!user) {
-    return <NotLoggedInError/>
+    return <NotLoggedInError />
   }
   if (user._id !== post.author) {
-    return <NoAccessibilityError/>
+    return <NoAccessibilityError />
   }
 
   return (
     <div className={classes.createPost}>
-      <ImgP setImg={setImg}/>
-      <TextP setTitle={setTitle} setContent={setContent} title={post?.title} content={post?.content}/>
-      <TagP setPostTags={setPostTags} allTagsArr={allTagsArr} oldTagsID={oldTagsIDArr}/>
-      <Submit title={title} content={content} tags={postTags} img={featuredImg} isUpdate={post?.slug}/>
+      <ImgP setImg={setImg} />
+      <TextP setTitle={setTitle} setContent={setContent} title={post?.title} content={post?.content} />
+      <TagP setPostTags={setPostTags} allTagsArr={allTagsArr} oldTagsID={oldTagsIDArr} />
+      <Submit title={title} content={content} tags={postTags} img={featuredImg} isUpdate={post?.slug} />
     </div>
   );
 }

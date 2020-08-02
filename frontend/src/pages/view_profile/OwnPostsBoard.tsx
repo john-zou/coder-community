@@ -1,9 +1,16 @@
 import React, { useState } from "react";
-import { CurrentLoggedInUser } from "../../store/types";
+import { CurrentLoggedInUser, User } from "../../store/types";
 import styled from '@emotion/styled';
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import Card from "../home/Card";
+import { getFollowingFollowersOfUser } from "../../util/helperFunctions";
+import { useSelector } from "react-redux";
+import { RootState } from "../../reducers/rootReducer";
+import { Dictionary } from "@reduxjs/toolkit";
+import Avatar from "../common/Avatar";
+import { SmallCardContainer } from "../daily_challenge/DiscussionTab";
+import { TinyButton as ScrollUpButton } from "react-scroll-up-button"; //https://www.npmjs.com/package/react-scroll-up-button
 
 const Container = styled.div`
   width: 816px; // to match the Card.tsx width
@@ -18,23 +25,39 @@ const PostsContainer = styled.div`
 const SavedPostsContainer = PostsContainer;
 
 
-export function OwnPostsBoard({ user }: { user: CurrentLoggedInUser }) {
+export function OwnPostsBoard({ user, followingFollowerView }: { user: CurrentLoggedInUser, followingFollowerView?: boolean }) {
   const [tabIdx, setTabIdx] = useState(0);
-  const [followingFollwerView, setFollowingFollowerView] = useState(false);
 
+  const users = useSelector<RootState, Dictionary<User>>(state => state.users.entities)
 
   function child() {
-    if (!followingFollwerView) {
+    if (followingFollowerView) {
       if (tabIdx === 0) {
         return (
           <PostsContainer>
-            {user.posts.map(postID => <Card postID={postID} />)}
+            {getFollowingFollowersOfUser(users, user).filter(u => (
+              user.followers.includes(u._id)
+            )).map((user, index) =>
+              <>
+                <SmallCardContainer>
+                  <Avatar key={index} pic={user.profilePic} title={user.userID} subtitle={user.status} titleSrc={user.userID}></Avatar>
+                </SmallCardContainer>
+              </>
+            )}
           </PostsContainer>
         );
       } else {
         return (
           <SavedPostsContainer>
-            {user.savedPosts.map(postID => <Card postID={postID} />)}
+            {getFollowingFollowersOfUser(users, user).filter(u => (
+              user.following.includes(u._id)
+            )).map((user, index) =>
+              <>
+                <SmallCardContainer>
+                  <Avatar key={index} pic={user.profilePic} title={user.userID} subtitle={user.status} titleSrc={user.userID}></Avatar>
+                </SmallCardContainer>
+              </>
+            )}
           </SavedPostsContainer>
         );
       }
@@ -44,13 +67,16 @@ export function OwnPostsBoard({ user }: { user: CurrentLoggedInUser }) {
       if (tabIdx === 0) {
         return (
           <PostsContainer>
-            {user.posts.map(postID => <Card postID={postID} />)}
+            {user.posts.length > 0 ? user.posts.map(postID => <Card key={postID} postID={postID} />) :
+              <h2>You don't have any post yet</h2>
+            }
           </PostsContainer>
         );
       } else {
         return (
           <SavedPostsContainer>
-            {user.savedPosts.map(postID => <Card postID={postID} />)}
+            {user.savedPosts.length > 0 ? user.savedPosts.map(postID => <Card key={postID} postID={postID} />) :
+              <h2>You have no saved post</h2>}
           </SavedPostsContainer>
         );
       }
@@ -59,7 +85,7 @@ export function OwnPostsBoard({ user }: { user: CurrentLoggedInUser }) {
 
   return (
     <Container>
-      {!followingFollwerView && <Tabs
+      {!followingFollowerView && <Tabs
         value={tabIdx}
         onChange={(_, newValue) => { setTabIdx(newValue) }}
         indicatorColor="primary"
@@ -86,7 +112,7 @@ export function OwnPostsBoard({ user }: { user: CurrentLoggedInUser }) {
         />
       </Tabs>}
 
-      {!!followingFollwerView && <Tabs
+      {!!followingFollowerView && <Tabs
         value={tabIdx}
         onChange={(_, newValue) => { setTabIdx(newValue) }}
         indicatorColor="primary"
@@ -94,7 +120,7 @@ export function OwnPostsBoard({ user }: { user: CurrentLoggedInUser }) {
         variant="fullWidth"
       >
         <Tab
-          label="Following"
+          label="Followers"
           style={{
             fontFamily: "Roboto",
             textTransform: "none",
@@ -103,7 +129,7 @@ export function OwnPostsBoard({ user }: { user: CurrentLoggedInUser }) {
           }}
         />
         <Tab
-          label="Follower"
+          label="Following"
           style={{
             fontFamily: "Roboto",
             textTransform: "none",
@@ -113,6 +139,8 @@ export function OwnPostsBoard({ user }: { user: CurrentLoggedInUser }) {
         />
       </Tabs>}
       {child()}
+
+      <ScrollUpButton />
     </Container>
   );
 }
