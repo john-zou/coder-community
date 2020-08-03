@@ -143,14 +143,14 @@ const Card = ({ postID }: Props) => {
     // checkPostHasBeenSaved(postID)
   }, [postID])
 
-  console.log("Card.tsx Render. author:  ", author);
-  console.log("Card.tsx Render ", post?.title);
-  console.log("Card.tsx Render ", post?.title, ". snackbar: ", snackBarOpen);
+  // console.log("Card.tsx Render. author:  ", author);
+  // console.log("Card.tsx Render ", post?.title);
+  // console.log("Card.tsx Render ", post?.title, ". snackbar: ", snackBarOpen);
 
   useEffect(() => {
     if (post) {
       setChangeCount(prev => prev += 1)
-      console.log("Setting previewContent innerHTML: ", post.previewContent)
+      // console.log("Setting previewContent innerHTML: ", post.previewContent)
       if (changeCount === 0) {
         previewContent.current.innerHTML += post.previewContent
       }

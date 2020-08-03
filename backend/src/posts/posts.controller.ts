@@ -111,6 +111,7 @@ export class PostsController {
   @ApiBody({
     type: CreatePostBodyDto,
   })
+
   @Personal() //provides @UserObjectID to get userid
   @Post()
   createPost(@Body() createPostDto: CreatePostBodyDto, @UserObjectID() author: string): Promise<CreatePostSuccessDto> {
@@ -119,6 +120,7 @@ export class PostsController {
     // console.log(createPostDto);
     return this.postsService.createPost(author, createPostDto);
   }
+
 
   @Get(':slug')
   @UsePipes(new ValidationPipe({ transform: true }))

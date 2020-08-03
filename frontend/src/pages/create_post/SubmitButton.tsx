@@ -60,7 +60,7 @@ export const SubmitButton = () => {
             <em>None</em>
           </MenuItem> */}
           <MenuItem value={10}>Post to my profile</MenuItem>
-          <MenuItem value={20}>Post to my group</MenuItem>
+          <p style={{ textAlign: "center" }}>Post to my group</p>
           {userGroups.map(group => (
             <MenuItem value={group.name}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{group.name}</MenuItem>
           ))}

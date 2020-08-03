@@ -1,4 +1,4 @@
-import { PostModel, TagModel, UserModel } from '../mongoModels';
+import { GroupModel, PostModel, TagModel, UserModel } from '../mongoModels';
 import { BadRequestException, HttpService, Injectable, NotFoundException, Post } from '@nestjs/common';
 import { Ref } from '@typegoose/typegoose';
 import { ObjectID, ObjectId } from 'mongodb';
@@ -142,16 +142,17 @@ export class PostsService {
     }
 
     // TODO: Add post to group (if post created for group)
-    // this.trendingGateway.wss.emit('/newPost', {
-    //   _id: newPost._id,
-    //   slug,
-    // });
+    if (body.group) {
+      const foundGroup = await GroupModel.findById(body.group)
+      await GroupModel.updateOne(foundGroup, {
+        $push: { posts: newPost._id }
+      })
+    }
     return {
       _id: newPost._id,
       slug,
     };
   }
-
 
   async updatePostBySlug(update: UpdatePostBodyDto, slug: string): Promise<UpdatePostSuccessDto> {
     // 1. Find post
@@ -301,4 +302,6 @@ export class PostsService {
     console.log(postIDs)
     return this.findPostsByIDs(postIDs)
   }
+
+
 }
