@@ -13,7 +13,7 @@ import { Dictionary } from "@reduxjs/toolkit";
 import { Conversation } from "../../store/types";
 import { SocketContext } from "../../App";
 
-const Editor = styled.div`
+export const Editor = styled.div`
   max-height: 50%;
   height: fit-content;
   width: 63%;
@@ -24,7 +24,7 @@ const Editor = styled.div`
   font-size: medium;
 `;
 
-const Toolbar = styled.div`
+export const Toolbar = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -71,7 +71,7 @@ export const ChatInput = ({ newMessageSelectedUserIDs }: { newMessageSelectedUse
               dispatch(selectConversation({ conversationID: conv._id }));
               dispatch(fetchMessagesInConversation({ conversationID: conv._id }));
 
-              const messageDto: CreateMessageBodyDto = { conversationID: conv._id, text, userID, createdAt: Date.now()};
+              const messageDto: CreateMessageBodyDto = { conversationID: conv._id, text, userID, createdAt: Date.now() };
               socket.current.emit('newMessage', messageDto);
               dispatch(createMessagePending(messageDto));
               foundExistingConversation = true;

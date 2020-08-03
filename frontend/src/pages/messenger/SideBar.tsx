@@ -17,7 +17,8 @@ const SideBarContainer = styled.div`
   width: 17%;
   height: 92vh;
   cursor: pointer;
-  box-shadow: 2px 2px 3px #F5F5F5;
+  // box-shadow: 2px 2px 3px #F5F5F5;
+  // background-color: white;
   z-index: 1;
 `;
 
@@ -30,7 +31,7 @@ export const HeadingText = styled.div`
 const DirectMessages = () => {
   const dispatch: AppDispatch = useDispatch();
   const conversations = useSelector<RootState, Dictionary<Conversation>>(state => state.conversations.entities);
-  const directConv = Object.values(conversations).filter(c => {return c.users.length === 2});
+  const directConv = Object.values(conversations).filter(c => { return c.users.length === 2 });
 
   const userID = useSelector<RootState, string>(state => state.user._id);
   //these are only the users who have posts
@@ -49,7 +50,7 @@ const DirectMessages = () => {
     <>
       <span><img src={ComposeIcon} alt="" style={{ float: "right" }} onClick={() => {
         dispatch(setNewConversation());
-      }}/></span>
+      }} /></span>
 
       <span><HeadingText>DIRECT MESSAGES</HeadingText></span>
 

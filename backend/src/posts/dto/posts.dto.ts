@@ -1,5 +1,5 @@
 import { Tag } from '../../tags/tag.schema';
-import {Ref} from "@typegoose/typegoose";
+import { Ref } from "@typegoose/typegoose";
 // import { ObjectID } from "mongodb";
 //GET POST DTO
 
@@ -22,6 +22,10 @@ export class PostDto {
   createdAt: string;
   slug: string;
   group?: string;
+}
+
+export class GetPostsSuccessDto {
+  posts: PostDto[]
 }
 
 export class PostWithDetails {

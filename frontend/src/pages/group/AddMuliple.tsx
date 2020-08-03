@@ -12,7 +12,7 @@ export default function AddMultiple({label, options, defaultValID, imgKey, setIt
         createStyles({
             root: {
                 // width: 500,
-                // width: "40vw",
+                minWidth: "30vw",
                 width: panelWidth,
                 '& > * + *': {
                     marginTop: theme.spacing(3),

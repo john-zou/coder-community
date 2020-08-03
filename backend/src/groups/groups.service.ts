@@ -1,8 +1,14 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { CreateGroupDto, GroupDto, CreateGroupSuccessDto, GetGroupsSuccessDto } from './group.dto';
+import {
+  CreateGroupDto,
+  GroupDto,
+  CreateGroupSuccessDto,
+  GetGroupsSuccessDto,
+  GetGroupMembersAndPostsDto,
+} from './group.dto';
 import { UserModel, GroupModel } from '../mongoModels';
 import { Group } from './group.schema';
-import { convertToStrArr } from '../util/helperFunctions';
+import { convertPostDocumentToPostDto, convertToStrArr, convertUserToUserDto } from '../util/helperFunctions';
 import { DocumentType } from '@typegoose/typegoose';
 import { UserService } from '../user/user.service';
 import { ObjectId } from 'mongodb';
@@ -123,5 +129,18 @@ export class GroupsService {
         users: new ObjectId(userID)
       }
     })
+  }
+
+  async getMembersAndPosts(groupID: string): Promise<GetGroupMembersAndPostsDto> {
+    const group = await GroupModel.findById(groupID)
+      .populate('admins')
+      .populate('users')
+      .populate('posts');
+
+    const admins = group.admins.map(convertUserToUserDto);
+    const users = group.users.map(convertUserToUserDto);
+    const posts = group.posts.map(convertPostDocumentToPostDto);
+    // console.log({ admins, users, posts })
+    return { groupID, admins, users, posts }
   }
 }
