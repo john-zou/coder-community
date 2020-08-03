@@ -125,6 +125,7 @@ export class PostsService {
     if (!slug) {
       // set _id as slug (if slug is already taken)
       // TODO: create a better slug than just the id if taken
+      slug = newPost._id;
       newPost.slug = newPost._id;
       await newPost.save();
     }
@@ -144,8 +145,9 @@ export class PostsService {
     // TODO: Add post to group (if post created for group)
     if (body.group) {
       const foundGroup = await GroupModel.findById(body.group)
-      await GroupModel.updateOne(foundGroup, {
-        $push: { posts: newPost._id }
+      console.log("CREATING POST FOR GROUP ", foundGroup._id)
+      await GroupModel.updateOne({ _id: foundGroup._id }, {
+        $push: { posts: new newPost._id }
       })
     }
     return {

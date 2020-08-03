@@ -22,6 +22,7 @@ import BookmarkEmpty from "../../icons/bookmarkEmpty.svg";
 import { Comments } from "./Comments";
 import DeletePostButton from "./DeletePostButton";
 import moment from 'moment';
+import { fetchGroups } from '../../reducers/groupsSlice';
 
 const useStyles = makeStyles({
   root: {
@@ -93,6 +94,9 @@ const PostDetail = () => {
     featuredImg = post.featuredImg;
   }
 
+  useEffect(() => {
+    dispatch(fetchGroups())
+  })
 
   useEffect(() => {
     if (slug == null || slug === "") {

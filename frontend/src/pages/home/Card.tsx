@@ -9,7 +9,7 @@ import CommentIcon from "../../icons/commentIcon.svg";
 import HeartIcon from "../../icons/heartIcon.svg";
 import HeartIconRed from "../../icons/heartIconRed.svg";
 import { RootState } from "../../reducers/rootReducer";
-import { Post } from "../../store/types";
+import { Group, Post } from "../../store/types";
 import { User } from "../../store/types";
 import { Tag } from "../../store/types";
 import { Dictionary } from "@reduxjs/toolkit";
@@ -21,6 +21,7 @@ import { Snackbar } from "@material-ui/core";
 import IconButton from "@material-ui/core/IconButton/IconButton";
 import CloseIcon from '@material-ui/icons/Close';
 import moment from "moment";
+import { fetchGroups } from "../../reducers/groupsSlice";
 
 const useStyles = makeStyles({
   root: {
@@ -113,6 +114,7 @@ const Card = ({ postID }: Props) => {
     (state) => state.posts.entities[postID]
   );
 
+
   const { postIsLikedByUser, handleToggleLike } = useLikePost(post?._id);
 
   const authorID = post?.author;
@@ -122,6 +124,15 @@ const Card = ({ postID }: Props) => {
   const tags = useSelector<RootState, Dictionary<Tag>>(
     (state) => state.tags.entities
   );
+
+  useEffect(() => {
+    dispatch(fetchGroups())
+  }, [])
+
+  const groups = useSelector<RootState, Dictionary<Group>>(
+    (state) => state.groups.entities
+  );
+
   const user = useSelector<RootState, User>(state => state.user)
 
   const checkSavedPost = () => {
@@ -157,7 +168,7 @@ const Card = ({ postID }: Props) => {
     }
   }, [post])
 
-  if (!post || !author) {
+  if (!post || !author || !groups) {
     return <Loading />
   }
 
@@ -202,6 +213,8 @@ const Card = ({ postID }: Props) => {
                 {post.title}
               </Link>
             </span>
+
+            {post.group && <Link to={`/group/${groups[post.group]._id}`} style={{ textDecoration: "none" }}>&nbsp;to&nbsp;{groups[post.group].name}</Link>}
           </p>
           <p style={{ marginTop: "-0.8em" }}>{moment(post.createdAt).format("lll")}</p>
         </div>
@@ -290,7 +303,7 @@ const Card = ({ postID }: Props) => {
           </>
         }
       />
-    </div>
+    </div >
   );
 };
 

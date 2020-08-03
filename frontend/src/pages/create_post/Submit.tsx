@@ -27,7 +27,7 @@ const useStyles = makeStyles({
     marginTop: "20px",
   },
   selectEmpty: {
-    marginTop: "2em",
+    marginTop: "1em",
   },
   formControl: {
     margin: "1em",
@@ -101,10 +101,10 @@ export default function Submit(params: { editorRef, tags, img, title }) {
     }
   }
 
-  const handleSubmitSelect = (e) => {
-    console.log("handle select", e.target.value)
+  const handleSubmitSelect = async (groupID) => {
+    console.log("handle select", groupID)
     // setSubmitDest(e.target.value)
-    onSubmit(params, curUser, dispatch, history)
+    await onSubmit(params, curUser, dispatch, history, groupID)
   }
 
   if (loading) {
@@ -131,14 +131,17 @@ export default function Submit(params: { editorRef, tags, img, title }) {
           // labelId="demo-simple-select-outlined-label"
           // id="demo-simple-select-outlined"
           value={submitDest}
-          onChange={(e) => handleSubmitSelect(e)}
+
           label="Post to"
         >
 
-          <MenuItem value={10}>Post to my profile</MenuItem>
+          <MenuItem value={10} onClick={(event) => {
+            onSubmit(params, curUser, dispatch, history)
+          }}>Post to my profile</MenuItem>
+
           <p style={{ textAlign: "center" }}>Post to my group</p>
           {userGroups.map(group => (
-            <MenuItem value={group.name}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{group.name}</MenuItem>
+            <MenuItem value={group.name} onClick={() => handleSubmitSelect(group._id)}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{group.name}</MenuItem>
           ))}
         </Select>
       </FormControl>
