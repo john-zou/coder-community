@@ -19,7 +19,8 @@ const Main = () => {
     }
   );
   const dispatch: AppDispatch = useDispatch();
-  let items = trendingPosts;
+  const [items, setItems] = useState(trendingPosts);
+  // let items = trendingPosts;
   const currFetchCount: number = useSelector<RootState, number>(state => state.posts.trendingPostFetchCount);
   const hasMoreTrendingPosts: boolean = useSelector<RootState, boolean>(state => state.posts.hasMorePosts);
 
@@ -30,6 +31,7 @@ const Main = () => {
   const currentTag = tagsArr[tabIndex - 1];
   const currentTagID = currentTag?._id;
 
+  console.log(tabIndex);
   console.log(hasMorePostsInTags);
 
   let hasMore: boolean;
@@ -39,7 +41,6 @@ const Main = () => {
     hasMore = hasMorePostsInTags[currentTagID];
   }
 
-  console.log(2);
   const handleTabChange = (newIdx: number) => {
     console.log("HANDLE::TABCHANGE");
     console.log(tabIndex);
@@ -48,34 +49,34 @@ const Main = () => {
     console.log(tabIndex);
     // if new index is 0 (All - trending posts)
     if (newIdx === 0) {
-      // setItems(trendingPosts);
-      items = trendingPosts;
+      setItems(trendingPosts);
+      // items = trendingPosts;
       return;
     }
     const currentTag = tagsArr[newIdx - 1];
 
     // switch to a tag
     console.log(items);
-    // setItems(Object.keys(currentTag.postsSet));
-    items = Object.keys(currentTag.postsSet);
+    setItems(Object.keys(currentTag.postsSet));
+    // items = Object.keys(currentTag.postsSet);
     console.log(tagsArr);
     console.log(currentTag.postsSet);
     console.log(items);
 
-    const startIdx = items.length; // communicate to back end which ones to skip
+    // const startIdx = items.length; // communicate to back end which ones to skip
+    const startIdx = Object.keys(currentTag.postsSet).length;
     console.log(startIdx);
     const tagID = currentTag._id;
     // console.log(tagID, currentTag);
     dispatch(fetchPostsByTag({tagID, startIdx})).then(unwrapResult).then(res => {
       console.log(res);
       console.log(items);
-      // setItems(prev => prev.concat(res.posts.map(post => post._id)))
-      items.concat(res.posts.map(post => post._id));
+      setItems(prev => prev.concat(res.posts.map(post => post._id)))
+      // items.concat(res.posts.map(post => post._id));
       console.log(items);
     }).catch(err => console.log(err));
   }
 
-  console.log(3);
   const fetchMoreData = () => {
     console.log("FETCH MORE DATA");
     console.log(tabIndex);
@@ -84,8 +85,8 @@ const Main = () => {
       if (hasMoreTrendingPosts) {
         // !!!BUG When fetchCount = 1, get 404 error!!!
         dispatch(fetchTrendingPosts({fetchCount: currFetchCount})).then(unwrapResult).then(res => {
-          // setItems(prev => prev.concat(res.posts.map(post => post._id)))
-          items.concat(res.posts.map(post => post._id));
+          setItems(prev => prev.concat(res.posts.map(post => post._id)))
+          // items.concat(res.posts.map(post => post._id));
         }).catch(err => console.log(err));
       } else {
         return;
@@ -96,14 +97,12 @@ const Main = () => {
     const tagID = currentTagID;
     if (hasMorePostsInTags[tagID]) {
       dispatch(fetchPostsByTag({tagID, startIdx})).then(unwrapResult).then(res => {
-        // setItems(prev => prev.concat(res.posts.map(post => post._id)))
-        items.concat(res.posts.map(post => post._id));
+        setItems(prev => prev.concat(res.posts.map(post => post._id)))
+        // items.concat(res.posts.map(post => post._id));
       }).catch(err => console.log(err));
     }
   }
 
-  console.log(4);
-  console.log(items);
   return (
     <>
       <div style={{

@@ -103,8 +103,6 @@ type Props = {
 
 //parent: Main
 const Card = ({ postID }: Props) => {
-  console.log("HOME::CARD");
-  console.log(postID);
   const classes = useStyles();
   const dispatch = useDispatch();
   const [snackBarOpen, setSnackBarOpen] = useState(false);
