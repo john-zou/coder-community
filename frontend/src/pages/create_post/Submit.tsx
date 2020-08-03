@@ -12,6 +12,7 @@ import { uploadPublicAsset } from "../../api-upload";
 import { Loading } from "../common/Loading";
 import ErrorPage from "../common/ErrorPage";
 import { SubmitButton } from "./SubmitButton";
+import Quill from "quill";
 
 const useStyles = makeStyles({
   operation: {
@@ -22,7 +23,7 @@ const useStyles = makeStyles({
   }
 });
 
-export default function Submit(params) {
+export default function Submit(params: { editorRef, tags, img, title }) {
   const classes = useStyles();
   const dispatch = useDispatch<AppDispatch>();
   const history = useHistory();
@@ -42,9 +43,11 @@ export default function Submit(params) {
       featuredImg = await uploadPublicAsset(params.img);
     }
 
+    const editor: Quill = params.editorRef.current;
+
     const newPost = {
       title: params.title,
-      content: params.content,
+      content: editor.root.innerHTML,
       tags: params.tags,
       featuredImg,
       author: author,

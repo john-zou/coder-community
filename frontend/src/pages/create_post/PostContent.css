@@ -1,0 +1,12 @@
+.ql-editor.ql-blank::before {
+  font-style: unset !important;
+}
+
+.ql-container.ql-snow {
+  max-height: 50%;
+  /* height: 50vh; */
+  border: none !important;
+}
+.postcontent .ql-editor {
+  height: 30vh;
+}

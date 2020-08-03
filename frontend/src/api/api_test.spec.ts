@@ -174,7 +174,8 @@ describe("PostsApi", () => {
   })
   test("postsControllerGetPostByID", () => {
     const postID: string = "postID_example"
-    return expect(instance.postsControllerGetPostByID(postID, {})).resolves.toBe(null)
+    const getAuthor: boolean = true
+    return expect(instance.postsControllerGetPostByID(postID, getAuthor, {})).resolves.toBe(null)
   })
   test("postsControllerGetPostBySlug", () => {
     const slug: string = "slug_example"

@@ -1,5 +1,5 @@
 import { makeStyles } from '@material-ui/core/styles';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, Redirect, useParams } from 'react-router-dom';
 import { PostDetailParams } from '../../App';
@@ -21,6 +21,7 @@ import HeartIconRed from "../../icons/heartIconRed.svg";
 import BookmarkEmpty from "../../icons/bookmarkEmpty.svg";
 import { Comments } from "./Comments";
 import DeletePostButton from "./DeletePostButton";
+import moment from 'moment';
 
 const useStyles = makeStyles({
   root: {
@@ -62,6 +63,7 @@ const PostDetail = () => {
   const classes = useStyles();
   const dispatch = useDispatch<AppDispatch>();
   const currentUser = useSelector<RootState, CurrentLoggedInUser>(state => state.user);
+  const postContent = useRef(null);
   // const postID = useSelector<RootState, string>(state => state.posts.currentPost)
   // const slugtoid = useSelector<RootState, Record<string, string>>(state => state.posts.slugToID);
   const { post, author } = useSelector<RootState, { post: Post, author: User }>(state => {
@@ -75,6 +77,7 @@ const PostDetail = () => {
   });
 
   const { postIsLikedByUser, handleToggleLike } = useLikePost(post?._id);
+  const [changeCount, setChangeCount] = useState(0)
 
   let canUpdate = false; // if the current user is the author, show an 'update post' button
   if (author !== null) {
@@ -102,7 +105,14 @@ const PostDetail = () => {
       // increment view count if don't need to fetch the post
       new PostsApi().postsControllerIncrementView(post._id).then(() => console.log("Already had post. Incremented view count.")).catch(console.log);
     }
+
   }, []);
+
+  useEffect(() => {
+    if (post) {
+      postContent.current.innerHTML += post.content
+    }
+  }, [post?.content])
 
   if (slug == null || slug === "") {
     return <Redirect to="/" />
@@ -126,13 +136,20 @@ const PostDetail = () => {
           src={featuredImg}
           style={{ height: "20em", objectFit: "cover", width: "100%" }} alt="featured"
         />
+
+        {/* POST TITLE */}
         <h1>{post.title}</h1>
 
         <Link to={`/user/${author.userID}`} style={{ textDecoration: "none" }}>
-          <Avatar pic={author.profilePic} title={author.userID} subtitle={post.createdAt} isPost={true}></Avatar>
+          <Avatar pic={author.profilePic} title={author.userID} subtitle={moment(post.createdAt).format('lll')} isPost={true}></Avatar>
         </Link>
 
-        <p>{post.content}</p>
+        {/* POST CONTENT */}
+        <div className="ql-snow" >
+          <div className="ql-editor">
+            <div ref={postContent}></div>
+          </div>
+        </div>
 
         <Interactions />
         <div className={classes.interactionsIcons}>
@@ -147,10 +164,10 @@ const PostDetail = () => {
             <img className={classes.shareIcon} src={CommentIcon} alt="" />
             &nbsp;&nbsp;{post.commentsCount}
           </span>
-          <span>
+          {/* <span>
             <img className={classes.shareIcon} src={BookmarkEmpty} alt="" />
             &nbsp;&nbsp;Save
-          </span>
+          </span> */}
         </div>
 
         <hr></hr>

@@ -3203,13 +3203,18 @@ export const PostsApiFetchParamCreator = function (configuration?: Configuration
         /**
          * 
          * @param {string} postID 
+         * @param {boolean} getAuthor 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        postsControllerGetPostByID(postID: string, options: any = {}): FetchArgs {
+        postsControllerGetPostByID(postID: string, getAuthor: boolean, options: any = {}): FetchArgs {
             // verify required parameter 'postID' is not null or undefined
             if (postID === null || postID === undefined) {
                 throw new RequiredError('postID','Required parameter postID was null or undefined when calling postsControllerGetPostByID.');
+            }
+            // verify required parameter 'getAuthor' is not null or undefined
+            if (getAuthor === null || getAuthor === undefined) {
+                throw new RequiredError('getAuthor','Required parameter getAuthor was null or undefined when calling postsControllerGetPostByID.');
             }
             const localVarPath = `/api/posts/byID/{postID}`
                 .replace(`{${"postID"}}`, encodeURIComponent(String(postID)));
@@ -3217,6 +3222,10 @@ export const PostsApiFetchParamCreator = function (configuration?: Configuration
             const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            if (getAuthor !== undefined) {
+                localVarQueryParameter['get-author'] = getAuthor;
+            }
 
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
             // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
@@ -3518,11 +3527,12 @@ export const PostsApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @param {string} postID 
+         * @param {boolean} getAuthor 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        postsControllerGetPostByID(postID: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<GetPostDetailsSuccessDto> {
-            const localVarFetchArgs = PostsApiFetchParamCreator(configuration).postsControllerGetPostByID(postID, options);
+        postsControllerGetPostByID(postID: string, getAuthor: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<GetPostDetailsSuccessDto> {
+            const localVarFetchArgs = PostsApiFetchParamCreator(configuration).postsControllerGetPostByID(postID, getAuthor, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -3694,11 +3704,12 @@ export const PostsApiFactory = function (configuration?: Configuration, fetch?: 
         /**
          * 
          * @param {string} postID 
+         * @param {boolean} getAuthor 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        postsControllerGetPostByID(postID: string, options?: any) {
-            return PostsApiFp(configuration).postsControllerGetPostByID(postID, options)(fetch, basePath);
+        postsControllerGetPostByID(postID: string, getAuthor: boolean, options?: any) {
+            return PostsApiFp(configuration).postsControllerGetPostByID(postID, getAuthor, options)(fetch, basePath);
         },
         /**
          * 
@@ -3803,12 +3814,13 @@ export class PostsApi extends BaseAPI {
     /**
      * 
      * @param {string} postID 
+     * @param {boolean} getAuthor 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof PostsApi
      */
-    public postsControllerGetPostByID(postID: string, options?: any) {
-        return PostsApiFp(this.configuration).postsControllerGetPostByID(postID, options)(this.fetch, this.basePath);
+    public postsControllerGetPostByID(postID: string, getAuthor: boolean, options?: any) {
+        return PostsApiFp(this.configuration).postsControllerGetPostByID(postID, getAuthor, options)(this.fetch, this.basePath);
     }
 
     /**

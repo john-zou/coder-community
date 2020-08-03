@@ -72,7 +72,10 @@ export const fetchPostBySlug = createAsyncThunk(
 
 export const fetchPostByID = createAsyncThunk(
   'fetchPostByID',
-  ({ id, getAuthor }: { id: string, getAuthor: boolean }) => new PostsApi().postsControllerGetPostByID(id, getAuthor)
+  ({ id, getAuthor }: { id: string, getAuthor: boolean }) => {
+    console.log(id, getAuthor);
+    return new PostsApi().postsControllerGetPostByID(id, getAuthor)
+  }
 )
 
 export const fetchPostsByUserID = createAsyncThunk(

@@ -1,5 +1,5 @@
 import { makeStyles } from "@material-ui/core/styles";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
@@ -20,6 +20,7 @@ import { fetchPostByID } from "../../reducers/postsSlice";
 import { Snackbar } from "@material-ui/core";
 import IconButton from "@material-ui/core/IconButton/IconButton";
 import CloseIcon from '@material-ui/icons/Close';
+import moment from "moment";
 
 const useStyles = makeStyles({
   root: {
@@ -105,6 +106,8 @@ const Card = ({ postID }: Props) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const [snackBarOpen, setSnackBarOpen] = useState(false);
+  const previewContent = useRef(null);
+  const [changeCount, setChangeCount] = useState(0)
 
   const post = useSelector<RootState, Post>(
     (state) => state.posts.entities[postID]
@@ -140,12 +143,25 @@ const Card = ({ postID }: Props) => {
     // checkPostHasBeenSaved(postID)
   }, [postID])
 
-  if (!post) {
+  console.log("Card.tsx Render. author:  ", author);
+  console.log("Card.tsx Render ", post?.title);
+  console.log("Card.tsx Render ", post?.title, ". snackbar: ", snackBarOpen);
+
+  useEffect(() => {
+    if (post) {
+      setChangeCount(prev => prev += 1)
+      console.log("Setting previewContent innerHTML: ", post.previewContent)
+      if (changeCount === 0) {
+        previewContent.current.innerHTML += post.previewContent
+      }
+    }
+  }, [post])
+
+  if (!post || !author) {
     return <Loading />
   }
 
-  console.log("Card.tsx Render ", post.title);
-  console.log("Card.tsx Render ", post.title, ". snackbar: ", snackBarOpen);
+
 
   const handleSavePostToggle = () => {
     console.log("onClick save post", post.title);
@@ -187,7 +203,7 @@ const Card = ({ postID }: Props) => {
               </Link>
             </span>
           </p>
-          <p style={{ marginTop: "-0.8em" }}>{post.createdAt}</p>
+          <p style={{ marginTop: "-0.8em" }}>{moment(post.createdAt).format("lll")}</p>
         </div>
       </div>
 
@@ -198,7 +214,13 @@ const Card = ({ postID }: Props) => {
           alt=""
         />
         <div>
-          <p style={{ marginLeft: "2em" }}>{post.previewContent}</p>
+          {/* PREVIEW CONTENT */}
+          <div className="ql-snow" >
+            <div className="ql-editor">
+              <p style={{ marginLeft: "2em" }} ref={previewContent}></p>
+            </div>
+          </div>
+
           <div className={classes.readSave}>
             <Link to={`/post/${post.slug}`} className={classes.link}>
               <h4

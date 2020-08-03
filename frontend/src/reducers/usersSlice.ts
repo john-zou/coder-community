@@ -1,5 +1,5 @@
 import { createEntityAdapter, createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
-import { fetchTrendingPosts, fetchPostBySlug } from "./postsSlice";
+import { fetchTrendingPosts, fetchPostBySlug, fetchPostByID } from "./postsSlice";
 import { User } from "../store/types";
 import {
   GetInitialDataDto,
@@ -52,6 +52,15 @@ export const usersSlice = createSlice({
       action.payload.users.forEach(user => state.usernameToID[user.userID] = user._id);
     },
     [fetchPostBySlug.fulfilled.type]: (state, action: PayloadAction<GetPostDetailsSuccessDto>) => {
+      if (action.payload.author) {
+        usersAdapter.upsertOne(state, action.payload.author);
+
+        // Update username to ObjectID map
+        state.usernameToID[action.payload.author.userID] = action.payload.author._id;
+      }
+    },
+    [fetchPostByID.fulfilled.type]: (state, action: PayloadAction<GetPostDetailsSuccessDto>) => {
+      console.log(action.payload);
       if (action.payload.author) {
         usersAdapter.upsertOne(state, action.payload.author);
 

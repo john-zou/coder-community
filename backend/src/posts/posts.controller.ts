@@ -133,7 +133,7 @@ export class PostsController {
   }
 
   @Get('byID/:postID')
-  async getPostByID(@Param('postID') postID: string, getAuthor?: boolean): Promise<GetPostDetailsSuccessDto> {
+  async getPostByID(@Param('postID') postID: string, @Query('get-author') getAuthor?: boolean): Promise<GetPostDetailsSuccessDto> {
     const post = await this.postsService.getPostByID(postID);
     if (getAuthor) {
       const author = await this.userService.findUserById(post.author);

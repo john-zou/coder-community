@@ -7,14 +7,17 @@ const useStyles = makeStyles({
   cptag: {
     display: "flex",
     flexDirection: "column",
-    height: "50vh",
+    // height: "20em",
     width: "40vw",
     backgroundColor: "white",
-    boxShadow: "3px 3px #F2F2F2",
-    marginBottom: "1em",
+    boxShadow: "8px 8px 16px #d4d4d4, -8px -8px 16px #f5f5f5",
     borderRadius: "5px",
     paddingLeft: "1.5em",
     paddingRight: "1.5em",
+    paddingTop: "1em",
+    paddingBottom: "2em",
+    marginBottom: "1em",
+    marginTop: "1em"
   },
   h4: {
     marginBottom: "0.5em",
