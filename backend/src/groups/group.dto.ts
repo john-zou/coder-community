@@ -1,4 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
+import { UserDto } from '../user/dto/user.dto';
+import { PostDto } from '../posts/dto/posts.dto';
 
 //CREATE GROUP
 //request
@@ -58,10 +60,17 @@ export class GroupDto {
   users: string[];
   posts: string[];
   videos: string[];
-  createdAt: string;
-  updatedAt: string;
+  createdAt: string | number;
+  updatedAt: string | number;
 }
 
 export class GetGroupsSuccessDto {
   groups: GroupDto[]
+}
+
+export class GetGroupMembersAndPostsDto {
+  groupID: string;
+  admins: UserDto[];
+  users: UserDto[];
+  posts: PostDto[];
 }

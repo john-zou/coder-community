@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../reducers/rootReducer";
 import { CurrentLoggedInUser } from "../../store/types";
@@ -27,6 +27,7 @@ export const HeightSpace = styled.div<{ height: string }>`
 export function OwnProfile() {
   const user = useSelector<RootState, CurrentLoggedInUser>(state => state.user);
   const src = user.profileBanner || DefaultImg;
+  const [followingFollowerView, setFollowingFollowerView] = useState(false);
 
   return (
     <>
@@ -34,9 +35,9 @@ export function OwnProfile() {
       <HeightSpace height="26px" />
       <Container>
         <FlexSpace flex={1} />
-        <TradingCard user={user} isCurrentUser />
+        <TradingCard user={user} isCurrentUser setFollowingFollowerView={setFollowingFollowerView} />
         <WidthSpace width="47px" />
-        <OwnPostsBoard user={user} />
+        <OwnPostsBoard user={user} followingFollowerView={followingFollowerView} />
         <FlexSpace flex={3} />
       </Container>
     </>

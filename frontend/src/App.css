@@ -1,5 +1,5 @@
 h3 {
- font-weight: 600; 
+ font-weight: 600;
 }
 
 .fileContainer {
@@ -23,4 +23,12 @@ h3 {
 .textBlock:hover {
   cursor: pointer;
   background-color: #F7F7F7;
+}
+
+.MuiPaper-root {
+  background-color: '' !important;
+}
+
+.PrivateTabIndicator-colorSecondary-16 {
+  background-color: #5D67E9 !important;
 }

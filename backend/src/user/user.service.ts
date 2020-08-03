@@ -22,6 +22,15 @@ type ExtraGitHubUserInfo = {
 @Injectable()
 export class UserService {
 
+  async getFollowingFollowersOfUser(userObjectID: string): Promise<GetUsersSuccessDto> {
+    const user = await UserModel.findById(userObjectID)
+
+    const following = (await this.findUsersByIds(convertToStrArr(user.following))).users
+    const followers = (await this.findUsersByIds(convertToStrArr(user.followers))).users
+
+    return { users: followers.concat(following) }
+  }
+
   async addFollower(follower: string, personBeingFollowed: string): Promise<boolean> {
     await UserModel.updateOne({ _id: personBeingFollowed }, {
       $push: {
@@ -85,7 +94,7 @@ export class UserService {
   }
 
   async findUserByUsername(username: string): Promise<UserDto> {
-    const foundUser = await UserModel.findOne({userID: username});
+    const foundUser = await UserModel.findOne({ userID: username });
     if (!foundUser) {
       throw new NotFoundException();
     }
@@ -100,6 +109,7 @@ export class UserService {
     await UserModel.updateOne({ _id: userObjectID }, { profilePic: url });
   }
 
+  //save and unsave post
   async savePost(userObjectID: string, postID: string): Promise<void> {
     const user = await UserModel.findById(userObjectID);
     if (!user) {
@@ -110,13 +120,20 @@ export class UserService {
       throw new NotFoundException();
     }
     const postAlreadyExists = user.savedPosts.find(savedPostID => savedPostID.toString() === postID);
-    if (postAlreadyExists) {
-      throw new HttpException("User already saved this post!", 400);
-    }
+    // const postAlreadySaved = user.savedPosts.find(savedPostID => savedPostID.toString() === postID);
+
+    // if (postAlreadyExists) {
+    //   throw new HttpException("User already saved this post!", 400);
+    // }
 
     // Add to saved posts
-    user.savedPosts.push(post);
-    await user.save();
+    if (!postAlreadyExists) {
+      user.savedPosts.push(post);
+      await user.save();
+    } else {
+      await UserModel.updateOne({ _id: user._id }, { $pull: { savedPosts: new ObjectId(post._id) } });
+      await user.save();
+    }
   }
 
   // To get the authors of the trending posts
@@ -192,6 +209,6 @@ export class UserService {
     if (Array.isArray(update.tags)) {
       cleanUpdate.tags = update.tags;
     }
-    await UserModel.updateOne({_id: userID}, <any>cleanUpdate);
+    await UserModel.updateOne({ _id: userID }, <any>cleanUpdate);
   }
 }

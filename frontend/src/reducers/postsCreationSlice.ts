@@ -1,6 +1,6 @@
-import {CreatePostBodyDto, PostsApi, UpdatePostBodyDto} from '../api/api';
-import {Post, Tag} from "../store/types";
-import {createEntityAdapter, createSlice, createAsyncThunk, PayloadAction} from "@reduxjs/toolkit";
+import { CreatePostBodyDto, PostsApi, UpdatePostBodyDto } from '../api/api';
+import { Post, Tag } from "../store/types";
+import { createEntityAdapter, createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 
 /*
 export const submitPost = createdPost => {
@@ -20,7 +20,7 @@ export const submitPost = createdPost => {
             },
             body: JSON.stringify({
                 newPost,
-                // user: {_id: "5f07dd25be9a5c6510208dce"} // curUser._id }
+                // user: {_id: "5f07dd25be9a5c65102 slug = urlSlug(createdPost.title);08dce"} // curUser._id }
             }),
         }).then((response) => {
             return response.json();
@@ -39,7 +39,7 @@ export const updatePost = createdPost => {
         tags: createdPost.tags,
         featuredImg: ''
     }
-    // const slug = urlSlug(createdPost.title);
+    // const
     console.log(createdPost.slug);
     return dispatch => {
         return fetch(`http://localhost:3001/api/posts/${createdPost.slug}`, {
@@ -60,9 +60,11 @@ export const updatePost = createdPost => {
 export const submitPost = createAsyncThunk(
   'submitPost',
   async (createdPost: CreatePostBodyDto & { author: string }) => {
+
     // console.log("SLICE::SUBMITPOST");
     const createPostSuccessDto = await new PostsApi().postsControllerCreatePost(createdPost);
     const {_id, slug} = createPostSuccessDto;
+
     const post: Post = {
       featuredImg: createdPost.featuredImg,
       likes: 0,
@@ -89,5 +91,6 @@ export const updatePost = createAsyncThunk(
     // console.log(slug);
     const {_id, slug: newSlug} = await new PostsApi().postsControllerUpdatePostBySlug(update, slug);
     return {_id, slug: newSlug, oldSlug: slug, updated: update};
+    // return { update, _id, slug: newSlug, oldSlug: slug };
   }
 );

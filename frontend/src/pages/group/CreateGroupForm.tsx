@@ -81,6 +81,7 @@ export const CreateGroupForm = ({ handleClose }) => {
 
   const handleProfilePicChange = picture => {
     // picture is an array containing 1 file
+    console.log(picture)
     setProfilePic(picture[0])
   };
 
@@ -93,6 +94,7 @@ export const CreateGroupForm = ({ handleClose }) => {
     // upload profile pic
     if (profilePicFile) {
       // TODO: show loading while uploading
+      console.log(profilePicFile)
       profilePic = await uploadPublicAsset(profilePicFile);
     }
 

@@ -1,5 +1,5 @@
 import { makeStyles } from "@material-ui/core/styles";
-import React, {useEffect} from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
@@ -13,10 +13,14 @@ import { Post } from "../../store/types";
 import { User } from "../../store/types";
 import { Tag } from "../../store/types";
 import { Dictionary } from "@reduxjs/toolkit";
-import { savePost } from "../../reducers/userSlice";
+import { toggleSavePost } from "../../reducers/userSlice";
 import { useLikePost } from "../../hooks/useLikePost";
 import { Loading } from "../common/Loading";
-import {fetchPostByID} from "../../reducers/postsSlice";
+import { fetchPostByID } from "../../reducers/postsSlice";
+import { Snackbar } from "@material-ui/core";
+import IconButton from "@material-ui/core/IconButton/IconButton";
+import CloseIcon from '@material-ui/icons/Close';
+import moment from "moment";
 
 const useStyles = makeStyles({
   root: {
@@ -25,11 +29,18 @@ const useStyles = makeStyles({
     flexDirection: "column",
     width: "40vw",
     backgroundColor: "white",
-    boxShadow: "3px 3px #F2F2F2",
+    // boxShadow: "3px 3px #F2F2F2",
     marginBottom: "1em",
+    marginTop: "3em",
+    marginLeft: "3em",
+    marginRight: "3em",
     borderRadius: "5px",
     paddingLeft: "1.5em",
     paddingRight: "1.5em",
+    boxShadow: "8px 8px 16px #d4d4d4, -8px -8px 16px #f5f5f5",
+    "&:hover": {
+      boxShadow: "8px 8px 16px #dcdcdc, -8px -8px 16px #dcdcdc",
+    },
   },
   account: {
     display: "flex",
@@ -95,6 +106,9 @@ const Card = ({ postID }: Props) => {
   // console.log("HOME::CARD");
   const classes = useStyles();
   const dispatch = useDispatch();
+  const [snackBarOpen, setSnackBarOpen] = useState(false);
+  const previewContent = useRef(null);
+  const [changeCount, setChangeCount] = useState(0)
 
   const post = useSelector<RootState, Post>(
     (state) => {
@@ -112,15 +126,52 @@ const Card = ({ postID }: Props) => {
   const tags = useSelector<RootState, Dictionary<Tag>>(
     (state) => state.tags.entities
   );
+  const user = useSelector<RootState, User>(state => state.user)
+
+  const checkSavedPost = () => {
+    return user.savedPosts.includes(postID)
+  }
+  const [postAlreadySaved, setPostAlreadySaved] = useState(checkSavedPost());
+
+  const toggleSave = () => {
+    setSnackBarOpen(true);
+    setPostAlreadySaved(prev => {
+      return !prev
+    })
+  }
 
   useEffect(() => {
     if (!post) {
-      dispatch(fetchPostByID({id: postID, getAuthor: !author}));
+      dispatch(fetchPostByID({ id: postID, getAuthor: !author }));
     }
-  }, [])
+    // checkPostHasBeenSaved(postID)
+  }, [postID])
 
-  if (!post) {
+  // console.log("Card.tsx Render. author:  ", author);
+  // console.log("Card.tsx Render ", post?.title);
+  // console.log("Card.tsx Render ", post?.title, ". snackbar: ", snackBarOpen);
+
+  useEffect(() => {
+    if (post) {
+      setChangeCount(prev => prev += 1)
+      // console.log("Setting previewContent innerHTML: ", post.previewContent)
+      if (changeCount === 0) {
+        previewContent.current.innerHTML += post.previewContent
+      }
+    }
+  }, [post])
+
+  if (!post || !author) {
     return <Loading />
+  }
+
+
+
+  const handleSavePostToggle = () => {
+    console.log("onClick save post", post.title);
+    dispatch(toggleSavePost({ postID: post._id }));
+    console.log("setting snackbar open to true");
+    toggleSave()
   }
 
   return (
@@ -156,7 +207,7 @@ const Card = ({ postID }: Props) => {
               </Link>
             </span>
           </p>
-          <p style={{ marginTop: "-0.8em" }}>{post.createdAt}</p>
+          <p style={{ marginTop: "-0.8em" }}>{moment(post.createdAt).format("lll")}</p>
         </div>
       </div>
 
@@ -167,15 +218,15 @@ const Card = ({ postID }: Props) => {
           alt=""
         />
         <div>
-          <p style={{ marginLeft: "2em" }}>{post.previewContent}</p>
+          {/* PREVIEW CONTENT */}
+          <div className="ql-snow" >
+            <div className="ql-editor">
+              <p style={{ marginLeft: "2em" }} ref={previewContent}></p>
+            </div>
+          </div>
+
           <div className={classes.readSave}>
-            <Link
-              to={`/post/${post._id}`}
-              className={classes.link}
-              onClick={() => {
-                handleViewPost(post, dispatch);
-              }}
-            >
+            <Link to={`/post/${post.slug}`} className={classes.link}>
               <h4
                 style={{
                   marginRight: "2em",
@@ -189,11 +240,10 @@ const Card = ({ postID }: Props) => {
 
             <h4
               style={{ color: "#5D67E9", cursor: "pointer" }}
-              onClick={() => {
-                dispatch(savePost({ postID: post._id }));
-              }}
+              onClick={handleSavePostToggle}
             >
-              Save for later
+              {postAlreadySaved ? `Unsave post` : `Save for later`}
+
             </h4>
           </div>
         </div>
@@ -220,6 +270,30 @@ const Card = ({ postID }: Props) => {
           <p>&nbsp;{post.commentsCount}</p>
         </div>
       </div>
+
+      <Snackbar
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left',
+        }}
+        open={snackBarOpen}
+        autoHideDuration={3000}
+        onClose={() => {
+          console.log("onCloseSnackbar ", post.title);
+          setSnackBarOpen(false)
+        }}
+        message={postAlreadySaved ? "Post has been saved!" : "Post has been unsaved"}
+        action={
+          <>
+            <IconButton size="small" aria-label="close" color="inherit" onClick={() => {
+              console.log("onCloseSnackbar IconButton ", post.title);
+              setSnackBarOpen(false)
+            }}>
+              <CloseIcon fontSize="small" />
+            </IconButton>
+          </>
+        }
+      />
     </div>
   );
 };

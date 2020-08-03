@@ -21,6 +21,9 @@ import { UserModule } from './user/user.module';
 import { VideoModule } from './video/video.module';
 import { SearchModule } from './search/search.module';
 import { CommentsGateway } from './comments/comments.gateway';
+import { DiscussionsController } from './discussions/discussions.controller';
+import { DiscussionsModule } from './discussions/discussions.module';
+import { QuestionsModule } from './questions/questions.module';
 
 @Module({
   imports: [
@@ -29,6 +32,7 @@ import { CommentsGateway } from './comments/comments.gateway';
     TagsModule,
     PostsModule,
     CommentsModule,
+    DiscussionsModule,
     VideoModule,
     GroupsModule,
     StorageModule,
@@ -37,6 +41,7 @@ import { CommentsGateway } from './comments/comments.gateway';
     ConversationsModule,
     AttachmentsModule,
     VideoModule,
+    QuestionsModule,
 
     // Special modules
     AuthModule,
@@ -48,6 +53,11 @@ import { CommentsGateway } from './comments/comments.gateway';
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', PublicUserContentDir),
       serveRoot: PublicUserContentServeRoot,
+    }),
+
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, "..", "build"), // for react
+      serveRoot: "/",
     }),
 
     // Module for dev convenience -- remove when deploying

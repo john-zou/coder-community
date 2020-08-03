@@ -3,9 +3,12 @@ import styled from '@emotion/styled';
 import { User } from "../../store/types";
 import { useFollow, UseFollowHook } from "../../hooks/useFollow";
 import { Loading } from "../common/Loading";
+import { useDispatch } from "react-redux";
+import { getFollowingFollowersOfUser } from "../../reducers/usersSlice";
+import { AppDispatch } from "../../store";
 
 export const TradingCardContainer = styled.div`
-  height: 350px;
+  height: 450px;
   width: 288px;
   background-color: white;
   border-radius: 20px;
@@ -103,8 +106,9 @@ export const TradingCardButton = styled.button`
 
 // https://www.figma.com/file/ehowTfq9OAMUdMf3Qbngi0/Programmers-Social-Network?node-id=50%3A0
 // Can be adapted to work for groups as well, need to change props
-export function TradingCard({ user, isCurrentUser, followHook }: { user: User, isCurrentUser?: boolean, followHook?: UseFollowHook }) {
+export function TradingCard({ user, isCurrentUser, followHook, setFollowingFollowerView }: { user: User, isCurrentUser?: boolean, followHook?: UseFollowHook, setFollowingFollowerView?: React.Dispatch<React.SetStateAction<boolean>> }) {
 
+  const dispatch = useDispatch<AppDispatch>();
   // TODO: Change follow button depending on follow relationship
   function button() {
     if (isCurrentUser) {
@@ -136,18 +140,50 @@ export function TradingCard({ user, isCurrentUser, followHook }: { user: User, i
     <FollowersAndPostsCountContainer>
       <SpaceAround />
       <FollowersCountContainer>
-        <BigBoldNumber>
-          {user.followers.length}
-        </BigBoldNumber>
-        {user.followers.length !== 1 ? "followers" : "follower"}
-            </FollowersCountContainer>
+        <div onClick={() => {
+          dispatch(getFollowingFollowersOfUser())
+          setFollowingFollowerView && setFollowingFollowerView(true)
+        }}>
+          <BigBoldNumber>
+            {user.followers?.length}
+          </BigBoldNumber>
+          {user.followers?.length !== 1 ? "followers" : "follower"}
+        </div>
+
+        <div style={{ height: "1em" }} ></div>
+
+
+        <div onClick={() => setFollowingFollowerView && setFollowingFollowerView(false)}>
+          <BigBoldNumber>
+            {user.posts?.length}
+          </BigBoldNumber>
+          posts
+          </div>
+
+      </FollowersCountContainer>
       <SpaceBetweenFollowersAndPosts />
       <PostsCountContainer>
-        <BigBoldNumber>
-          {user.posts.length}
-        </BigBoldNumber>
-                posts
-            </PostsCountContainer>
+
+        <div onClick={() => {
+          dispatch(getFollowingFollowersOfUser())
+          setFollowingFollowerView && setFollowingFollowerView(true)
+        }}>
+          <BigBoldNumber>
+            {user.following?.length}
+          </BigBoldNumber>
+        following
+          </div>
+
+        <div style={{ height: "1em" }} ></div>
+
+        <div onClick={() => setFollowingFollowerView && setFollowingFollowerView(false)}>
+          <BigBoldNumber>
+            {user.savedPosts?.length}
+          </BigBoldNumber>
+          saved
+          </div>
+
+      </PostsCountContainer>
       <SpaceAround />
     </FollowersAndPostsCountContainer>
     <SpaceAround />
