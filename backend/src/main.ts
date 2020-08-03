@@ -9,6 +9,7 @@ import { AppModule } from './app.module';
 import { initializeMongo } from './mongoModels';
 import { Secrets } from './secrets';
 import { initializeStorageDirectories } from './storage/initializeStorageDirectories';
+import { GlobalRedirectForReact } from './GlobalRedirectForReact';
 
 
 async function bootstrap() {
@@ -19,11 +20,14 @@ async function bootstrap() {
 
   const app = await NestFactory.create(AppModule);
 
+  app.useGlobalFilters(new GlobalRedirectForReact());
+
   // CORS -- change origin when deploying
   app.enableCors(
     { origin: 'http://localhost:3000' }
   )
   app.setGlobalPrefix('api');
+
 
   const options = new DocumentBuilder()
     .setTitle('Coder Community')

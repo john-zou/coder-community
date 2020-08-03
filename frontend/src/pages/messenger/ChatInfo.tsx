@@ -7,13 +7,15 @@ import Avatar from "../common/Avatar";
 import styled from '@emotion/styled';
 import { HeadingText } from "./SideBar";
 import { ChatHeader } from "./ChatArea";
+import moment from "moment";
 
 const ChatInfoContainer = styled.div`
   display: flex;
   flex-direction: column;
   width: 20%;
   height: 92vh;
-  box-shadow: 1px 1px 2px 4px #F5F5F5;
+  // box-shadow: 1px 1px 2px 4px #F5F5F5;
+  // background-color: white;
 `;
 
 export const H2 = styled.h2`
@@ -34,13 +36,13 @@ export const ChatInfo = () => {
   //replace with people in the conversation
   const users = useSelector<RootState, Dictionary<User>>(state => state.users.entities);
 
-  return (!currentConversation? <></> :
+  return (!currentConversation ? <></> :
     <ChatInfoContainer>
       <ChatInfoHeader>
         <div style={{ paddingLeft: "30px" }}>
           {isGroupConversation ? <H2>Group info</H2> : <H2>Chat info</H2>}
-           {/*<p>{currentConversation.createdAt}</p>*/}
-          <span>Created Jul 17, 2020</span>
+          {/*<p>{currentConversation.createdAt}</p>*/}
+          <span>Created {moment(currentConversation.createdAt).format("ll")}</span>
         </div>
       </ChatInfoHeader>
 

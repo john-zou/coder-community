@@ -48,6 +48,13 @@ export class UserController {
 
   @ApiBearerAuth()
   @Personal()
+  @Get('followingFollowers')
+  getFollowingFollowersOfUser(@UserObjectID() userObjectID: string): Promise<GetUsersSuccessDto> {
+    return this.userService.getFollowingFollowersOfUser(userObjectID);
+  }
+
+  @ApiBearerAuth()
+  @Personal()
   @Put('addFollowing/:id')
   //used to add to user's following
   async addFollowing(@UserObjectID() userObjectID: string, @Param('id') id: string): Promise<boolean> {

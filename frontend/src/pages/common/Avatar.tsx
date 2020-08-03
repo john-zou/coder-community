@@ -34,7 +34,7 @@ const useStyles = makeStyles({
 });
 
 const TitleText = styled.span<{ isPost: boolean, isText: boolean, titleSrc?: string }>`
-  cursor: ${({titleSrc}) => titleSrc ? "pointer" : "default"};
+  cursor: ${({ titleSrc }) => titleSrc ? "pointer" : "default"};
   font-weight: bold;
   color: ${({ isPost, isText }) => isPost ? "#5D67E9" : isText ? "black" : "#5DCBAF"}
 `;
@@ -55,7 +55,15 @@ export const SideButton = styled.span <{ buttonIsClicked: boolean }>`
   cursor: pointer;
 `
 
-const Avatar = ({ small, pic, title, titleSrc, subtitle, extraText, extraTextOnClick, isPost, isButton, isText, subtitleIsDate }: { pic: string, title?: string, subtitle?: string, subtitleIsDate?: boolean, extraText?: string, isPost?: boolean, isButton?: boolean, isText?: boolean, titleSrc?: string, extraTextOnClick?: any, small?: boolean }) => {
+export const SubTitle = styled.p<{ subtitleIsDate: boolean, boldSub: boolean }>`
+  margin-top: ${({ subtitleIsDate }) => subtitleIsDate ? "-1.1em" : "-0.8em"};
+  fontSize: ${({ subtitleIsDate }) => subtitleIsDate ? "13px" : "15px"};
+  color: ${({ subtitleIsDate }) => subtitleIsDate ? "gray" : "black"};
+  font-weight: ${({ boldSub }) => boldSub ? "bold" : "400"};
+  cursor: ${({ boldSub }) => boldSub ? "pointer" : ""};
+`;
+
+const Avatar = ({ small, pic, title, titleSrc, subtitle, extraText, extraTextOnClick, boldSub, isPost, isButton, isText, subtitleIsDate }: { pic: string, title?: string, subtitle?: string, boldSub?: boolean, subtitleIsDate?: boolean, extraText?: string, isPost?: boolean, isButton?: boolean, isText?: boolean, titleSrc?: string, extraTextOnClick?: any, small?: boolean }) => {
   const classes = useStyles();
   const [buttonIsClicked, setButtonIsClicked] = useState(false);
   const history = useHistory();
@@ -64,14 +72,14 @@ const Avatar = ({ small, pic, title, titleSrc, subtitle, extraText, extraTextOnC
       <img className={small ? classes.smallAccountImg : classes.accountImg} src={pic} alt="avatar" />
       <div className={classes.nameTime}>
         <p>
-          <TitleText isPost={isPost} isText={isText} onClick={titleSrc && (() => {history.push(titleSrc)})} titleSrc={titleSrc}>
+          <TitleText isPost={isPost} isText={isText} onClick={titleSrc && (() => { history.push(titleSrc) })} titleSrc={titleSrc}>
             {title}&nbsp;&nbsp;&nbsp;
           </TitleText>
           {!isButton && <ExtraText onClick={extraTextOnClick}>{extraText}</ExtraText>}
           {isButton && <SideButton buttonIsClicked={buttonIsClicked} onClick={() => setButtonIsClicked((prevState) => !prevState)}>{extraText}</SideButton>}
           {/* {isButton && buttonIsClicked && <SideButtonClicked>{extraText}</SideButtonClicked>} */}
         </p>
-        <p style={{ marginTop: subtitleIsDate? "-1.1em" : "-0.8em", fontSize: subtitleIsDate ? "13px" : "15px", color: subtitleIsDate ? "gray" : "black" }}>{subtitle}</p>
+        <SubTitle subtitleIsDate={subtitleIsDate} boldSub={boldSub}>{subtitle}</SubTitle>
       </div>
     </div>
   );

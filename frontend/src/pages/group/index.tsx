@@ -20,15 +20,16 @@ const GroupContainer = styled.div`
   flex-direction: column;
   justify-content: flex-start;
   background-color: white;
-
+  border-radius: 5px;
+  box-shadow: 8px 8px 16px #d4d4d4,
+              -8px -8px 16px #f5f5f5;
 `;
 const Header = styled.div`
   display: flex;
   flex-direction: row;
   padding-left: 30px;
   padding-right: 30px;
-  padding-top: 10
-  px;
+  padding-top: 10px;
   border-bottom: solid 1px lightgray;
 `;
 
@@ -57,7 +58,7 @@ const GroupCard = ({ currentGroup, isUserAMember }: { currentGroup: Group, isUse
   return <div>
     <div style={{ display: "flex", flexDirection: "row" }}>
 
-      <Link to={`/group/${currentGroup._id}`} style={{ textDecoration: "none" }} onClick={() => dispatch(selectGroup({ groupID: currentGroup._id }))}>
+      <Link to={`/group/${currentGroup._id}`} style={{ textDecoration: "none" }}>
         <Avatar pic={currentGroup.profilePic} title={currentGroup.name} subtitle={currentGroup.description} extraText="" />
       </Link>
 

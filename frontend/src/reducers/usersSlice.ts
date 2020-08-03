@@ -1,5 +1,5 @@
 import { createEntityAdapter, createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
-import { fetchTrendingPosts, fetchPostBySlug } from "./postsSlice";
+import { fetchTrendingPosts, fetchPostBySlug, fetchPostByID } from "./postsSlice";
 import { User } from "../store/types";
 import {
   GetInitialDataDto,
@@ -7,12 +7,13 @@ import {
   GetPostDetailsSuccessDto,
   UserApi,
   GetUsersSuccessDto,
-  UserDto
+  UserDto, GetGroupMembersAndPostsDto
 } from "../api";
-import { leaveGroup, joinGroup } from "./groupsSlice";
+import { leaveGroup, joinGroup, fetchGroupMembersAndPosts } from "./groupsSlice";
 import _ from "lodash";
-import {getCommentsByPostIDSuccess} from "./commentsSlice";
-import {GetCommentsServerToClientDto} from "../ws-dto/comments/dto/getCommentsByPostID.ws.dto";
+import { getCommentsByPostIDSuccess } from "./commentsSlice";
+import { GetCommentsServerToClientDto } from "../ws-dto/comments/dto/getCommentsByPostID.ws.dto";
+import { follow, unfollow, UserIDPayload } from "./userSlice";
 
 const api = new UserApi();
 
@@ -27,6 +28,13 @@ export const fetchUsersByIDs = createAsyncThunk('fetchUsersByIDs', async (IDs: s
 export const fetchUserByUsername = createAsyncThunk('fetchUserByUsername', async (username: string) => {
   return await api.userControllerGetUserByUsername(username);
 })
+
+export const getFollowingFollowersOfUser = createAsyncThunk(
+  'getFollowingFollowersOfUser',
+  async () => {
+    return await api.userControllerGetFollowingFollowersOfUser()
+  }
+)
 
 //https://redux-toolkit.js.org/api/createSlice
 export const usersSlice = createSlice({
@@ -44,6 +52,15 @@ export const usersSlice = createSlice({
       action.payload.users.forEach(user => state.usernameToID[user.userID] = user._id);
     },
     [fetchPostBySlug.fulfilled.type]: (state, action: PayloadAction<GetPostDetailsSuccessDto>) => {
+      if (action.payload.author) {
+        usersAdapter.upsertOne(state, action.payload.author);
+
+        // Update username to ObjectID map
+        state.usernameToID[action.payload.author.userID] = action.payload.author._id;
+      }
+    },
+    [fetchPostByID.fulfilled.type]: (state, action: PayloadAction<GetPostDetailsSuccessDto>) => {
+      console.log(action.payload);
       if (action.payload.author) {
         usersAdapter.upsertOne(state, action.payload.author);
 
@@ -76,6 +93,21 @@ export const usersSlice = createSlice({
     },
     [getCommentsByPostIDSuccess.type]: (state, action: PayloadAction<GetCommentsServerToClientDto>) => {
       usersAdapter.upsertMany(state, action.payload.authors);
+    },
+    [getFollowingFollowersOfUser.fulfilled.type]: (state, action: PayloadAction<GetUsersSuccessDto>) => {
+      usersAdapter.upsertMany(state, action.payload.users);
+    },
+    [follow.type]: (state, action: PayloadAction<UserIDPayload>) => {
+      const otherID = action.payload.otherUserID;
+      state.entities[otherID].followers.push(action.payload.currentUserID);
+    },
+    [unfollow.type]: (state, action: PayloadAction<UserIDPayload>) => {
+      const otherID = action.payload.otherUserID;
+      _.pull(state.entities[otherID].followers, action.payload.currentUserID)
+    },
+    [fetchGroupMembersAndPosts.fulfilled.type]: (state, action: PayloadAction<GetGroupMembersAndPostsDto>) => {
+      usersAdapter.upsertMany(state, action.payload.admins)
+      usersAdapter.upsertMany(state, action.payload.users)
     }
   }
 })

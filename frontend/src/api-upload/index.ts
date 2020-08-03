@@ -1,5 +1,5 @@
-import {UploadSuccess} from "../api";
-import {JwtLocalStorageKey} from "../constants";
+import { UploadSuccess } from "../api";
+import { BackEndBaseUri, JwtLocalStorageKey } from "../constants";
 
 // These functions are manually written because the generated version in `frontend/src/api` don't work for file upload
 // For example usage, see `frontend/src/pages/group/CreateGroupForm.tsx` around line 100
@@ -59,8 +59,7 @@ async function uploadHelper(file: File | File[], endpoint: string): Promise<stri
   }
   const data = new FormData();
   data.append('file', file);
-  const result: UploadSuccess = await fetch(`http://localhost:3001/api/upload/${endpoint}`, {
-  // const result: UploadSuccess = await fetch(`/api/upload/${endpoint}`, {
+  const result: UploadSuccess = await fetch(BackEndBaseUri + `api/upload/${endpoint}`, {
     headers: {
       'Authorization': 'Bearer ' + localStorage.getItem(JwtLocalStorageKey),
     },

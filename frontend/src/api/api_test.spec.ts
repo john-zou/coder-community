@@ -86,6 +86,26 @@ describe("DevApi", () => {
   })
 })
 
+describe("DiscussionsApi", () => {
+  let instance: api.DiscussionsApi
+  beforeEach(function() {
+    instance = new api.DiscussionsApi(config)
+  });
+
+  test("discussionsControllerCreateDiscussion", () => {
+    const body: api.CreateDiscussionDto = undefined
+    return expect(instance.discussionsControllerCreateDiscussion(body, {})).resolves.toBe(null)
+  })
+  test("discussionsControllerGetDiscussionById", () => {
+    const id: string = "id_example"
+    return expect(instance.discussionsControllerGetDiscussionById(id, {})).resolves.toBe(null)
+  })
+  test("discussionsControllerGetDiscussionsByQuestionID", () => {
+    const id: string = "id_example"
+    return expect(instance.discussionsControllerGetDiscussionsByQuestionID(id, {})).resolves.toBe(null)
+  })
+})
+
 describe("GroupsApi", () => {
   let instance: api.GroupsApi
   beforeEach(function() {
@@ -98,6 +118,10 @@ describe("GroupsApi", () => {
   })
   test("groupsControllerGetGroups", () => {
     return expect(instance.groupsControllerGetGroups({})).resolves.toBe(null)
+  })
+  test("groupsControllerGetMembersAndPosts", () => {
+    const groupID: string = "groupID_example"
+    return expect(instance.groupsControllerGetMembersAndPosts(groupID, {})).resolves.toBe(null)
   })
   test("groupsControllerGetPrivateGroup", () => {
     const privateId: string = "privateId_example"
@@ -150,12 +174,17 @@ describe("PostsApi", () => {
   })
   test("postsControllerGetPostByID", () => {
     const postID: string = "postID_example"
-    return expect(instance.postsControllerGetPostByID(postID, {})).resolves.toBe(null)
+    const getAuthor: boolean = true
+    return expect(instance.postsControllerGetPostByID(postID, getAuthor, {})).resolves.toBe(null)
   })
   test("postsControllerGetPostBySlug", () => {
     const slug: string = "slug_example"
     const getAuthor: boolean = true
     return expect(instance.postsControllerGetPostBySlug(slug, getAuthor, {})).resolves.toBe(null)
+  })
+  test("postsControllerGetPostsByUserID", () => {
+    const userID: string = "userID_example"
+    return expect(instance.postsControllerGetPostsByUserID(userID, {})).resolves.toBe(null)
   })
   test("postsControllerIncrementView", () => {
     const postID: string = "postID_example"
@@ -180,6 +209,17 @@ describe("PostsApi", () => {
     const startIdx: number = 1.2
     const excludePostIDs: api.any = undefined
     return expect(instance.tagsControllerGetPostsByTag(tagID, requestedCount, startIdx, excludePostIDs, {})).resolves.toBe(null)
+  })
+})
+
+describe("QuestionsApi", () => {
+  let instance: api.QuestionsApi
+  beforeEach(function() {
+    instance = new api.QuestionsApi(config)
+  });
+
+  test("questionsControllerGetQuestions", () => {
+    return expect(instance.questionsControllerGetQuestions({})).resolves.toBe(null)
   })
 })
 
@@ -247,6 +287,9 @@ describe("UserApi", () => {
   test("userControllerEditProfile", () => {
     const body: api.UpdateProfileReqDto = undefined
     return expect(instance.userControllerEditProfile(body, {})).resolves.toBe(null)
+  })
+  test("userControllerGetFollowingFollowersOfUser", () => {
+    return expect(instance.userControllerGetFollowingFollowersOfUser({})).resolves.toBe(null)
   })
   test("userControllerGetUser", () => {
     return expect(instance.userControllerGetUser({})).resolves.toBe(null)

@@ -1,11 +1,11 @@
-import {makeStyles} from '@material-ui/core/styles';
-import React, {useEffect, useState} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
-import {Redirect, useParams} from 'react-router-dom';
-import {PostDetailParams} from '../../App';
+import { makeStyles } from '@material-ui/core/styles';
+import React, { useEffect, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link, Redirect, useParams } from 'react-router-dom';
+import { PostDetailParams } from '../../App';
 import Avatar from '../common/Avatar';
-import {Loading} from '../common/Loading';
-import {NotFoundError} from '../common/NotFoundError';
+import { Loading } from '../common/Loading';
+import { NotFoundError } from '../common/NotFoundError';
 import NewComment from './NewComment';
 import UpdateButton from './UpdateButton';
 import {RootState} from '../../reducers/rootReducer';
@@ -13,8 +13,8 @@ import {fetchPostBySlug} from '../../reducers/postsSlice';
 import {CurrentLoggedInUser, Post, Tag, User} from '../../store/types';
 import {AppDispatch} from '../../store';
 import defaultPostFeaturedImage from "../../assets/defaultPostFeaturedImage.jpg";
-import {PostsApi} from "../../api";
-import {useLikePost} from "../../hooks/useLikePost";
+import { PostsApi } from "../../api";
+import { useLikePost } from "../../hooks/useLikePost";
 import CommentIcon from "../../icons/commentIcon.svg";
 import HeartIcon from "../../icons/heartIcon.svg";
 import HeartIconRed from "../../icons/heartIconRed.svg";
@@ -23,6 +23,7 @@ import {Comments} from "./Comments";
 import TagP from "./TagPanel";
 import {Dictionary} from "@reduxjs/toolkit";
 import DeletePostButton from "./DeletePostButton";
+import moment from 'moment';
 
 const useStyles = makeStyles({
   root: {
@@ -60,26 +61,28 @@ const Interactions = () => {
 }
 
 const PostDetail = () => {
-  // console.log("POSTDETAIL::INDEX");
+  console.log("POSTDETAIL::INDEX");
   const {slug} = useParams<PostDetailParams>(); //get the url param to render the appropriate post
   const classes = useStyles();
   const dispatch = useDispatch<AppDispatch>();
   const currentUser = useSelector<RootState, CurrentLoggedInUser>(state => state.user);
-
+  const postContent = useRef(null);
   const {post, author} = useSelector<RootState, { post: Post, author: User }>(state => {
+
     const postID = state.posts.slugToID[slug];
     if (!postID) {
-      return {post: null, author: null};
+      return { post: null, author: null };
     }
 
     const post = state.posts.entities[postID];
     // console.log(state.posts.entities);
     // console.log(post);
     const author = state.users.entities[post.author];
-    return {post, author};
+    return { post, author };
   });
-  // console.log(post);
-  const {postIsLikedByUser, handleToggleLike} = useLikePost(post?._id);
+
+  const { postIsLikedByUser, handleToggleLike } = useLikePost(post?._id);
+  const [changeCount, setChangeCount] = useState(0)
 
 
   // fetch tags
@@ -102,28 +105,37 @@ const PostDetail = () => {
     featuredImg = post.featuredImg;
   }
 
+
   useEffect(() => {
     if (slug == null || slug === "") {
       return;
     }
     if (!post?.content) {
       // automatically increments view count in PostService
-      dispatch(fetchPostBySlug({slug, getAuthor: !author})).catch(setError);
+      dispatch(fetchPostBySlug({ slug, getAuthor: !author })).catch(setError);
     } else {
       // increment view count if don't need to fetch the post
       new PostsApi().postsControllerIncrementView(post._id).then(() => console.log("Already had post. Incremented view count.")).catch(console.log);
     }
+
   }, []);
+
+  useEffect(() => {
+    if (post) {
+      postContent.current.innerHTML += post.content
+    }
+  }, [post?.content])
+
   if (slug == null || slug === "") {
-    return <Redirect to="/"/>
+    return <Redirect to="/" />
   }
 
   if (!post?.content || !author) {
-    return <Loading/>
+    return <Loading />
   }
 
   if (error) {
-    return <NotFoundError/> // TODO: add something for server error
+    return <NotFoundError /> // TODO: add something for server error
   }
   // post has item with content
   // const likedByUser = isLoggedIn && post.likedByUser;
@@ -133,33 +145,44 @@ const PostDetail = () => {
       <div className={classes.postDetail}>
         <img
           src={featuredImg}
-          style={{height: "20em", objectFit: "cover", width: "100%"}} alt="featured"
+          style={{ height: "20em", objectFit: "cover", width: "100%" }} alt="featured"
         />
+
+        {/* POST TITLE */}
         <h1>{post.title}</h1>
 
-        <Avatar pic={author.profilePic} title={author.userID} subtitle={post.createdAt} isPost={true}
-                extraText="follow" isButton={true}></Avatar>
+        <Link to={`/user/${author.userID}`} style={{ textDecoration: "none" }}>
+          <Avatar pic={author.profilePic} title={author.userID} subtitle={moment(post.createdAt).format('lll')} isPost={true}></Avatar>
+        </Link>
 
-        <TagP tags={tagsArr}/>
-        <p>{post.content}</p>
 
-        <Interactions/>
+        {/*/>
+        <p>{post.content}</p>*/}
+        {/* POST CONTENT */}
+        <div className="ql-snow" >
+          <TagP tags={tagsArr} />
+          <div className="ql-editor">
+            <div ref={postContent}></div>
+          </div>
+        </div>
+
+        <Interactions />
         <div className={classes.interactionsIcons}>
           <span>
             <img className={classes.heartIcon} src={postIsLikedByUser ? HeartIconRed : HeartIcon} alt=""
-                 onClick={() => {
-                   handleToggleLike()
-                   ;
-                 }}/>&nbsp;&nbsp;{post.likes}
+              onClick={() => {
+                handleToggleLike()
+                  ;
+              }} />&nbsp;&nbsp;{post.likes}
           </span>
           <span>
-            <img className={classes.shareIcon} src={CommentIcon} alt=""/>
+            <img className={classes.shareIcon} src={CommentIcon} alt="" />
             &nbsp;&nbsp;{post.commentsCount}
           </span>
-          <span>
-            <img className={classes.shareIcon} src={BookmarkEmpty} alt=""/>
+          {/* <span>
+            <img className={classes.shareIcon} src={BookmarkEmpty} alt="" />
             &nbsp;&nbsp;Save
-          </span>
+          </span> */}
         </div>
 
         <hr></hr>
@@ -170,7 +193,6 @@ const PostDetail = () => {
         {canUpdate && <UpdateButton slug={slug}/>}
         <div style={{height: "20px"}}/>
         {canUpdate && <DeletePostButton postID={post?._id}/>}
-
       </div>
     </div>
   );

@@ -1,22 +1,25 @@
-import {createAsyncThunk, createEntityAdapter, createSlice, PayloadAction} from "@reduxjs/toolkit";
+import { createAsyncThunk, createEntityAdapter, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
+  GetGroupMembersAndPostsDto,
   GetInitialDataDto,
   GetInitialDataLoggedInDto,
   GetPostDetailsSuccessDto,
   GetPostsByTagDto,
+  GetPostsSuccessDto,
   PostsApi,
   TrendingApi,
   UpdatePostBodyDto,
   UpdatePostSuccessDto
 } from "../api";
-import {RootState} from "./rootReducer";
-import {Post, User} from "../store/types";
-import {createCommentSuccess, getCommentsByPostIDSuccess} from "./commentsSlice";
-import {GetCommentsServerToClientDto} from "../ws-dto/comments/dto/getCommentsByPostID.ws.dto";
-import {CreateCommentServerToClientDto} from "../ws-dto/comments/dto/createComment.ws.dto";
-import {PostIDPayload, toggleLikePost, userSlice} from './userSlice';
-import {submitPost, updatePost} from "./postsCreationSlice";
+import { RootState } from "./rootReducer";
+import { Post, User } from "../store/types";
+import { createCommentSuccess, getCommentsByPostIDSuccess } from "./commentsSlice";
+import { GetCommentsServerToClientDto } from "../ws-dto/comments/dto/getCommentsByPostID.ws.dto";
+import { CreateCommentServerToClientDto } from "../ws-dto/comments/dto/createComment.ws.dto";
+import { PostIDPayload, toggleLikePost, userSlice } from './userSlice';
+import { submitPost, updatePost } from "./postsCreationSlice";
 import _ from "lodash";
+import { fetchGroupMembersAndPosts } from "./groupsSlice";
 
 
 
@@ -27,7 +30,7 @@ const postsAdapter = createEntityAdapter<Post>({
 //https://redux-toolkit.js.org/api/createAsyncThunk
 export const fetchTrendingPosts = createAsyncThunk(
   'fetchTrendingPosts',
-  async ({fetchCount}: { fetchCount: number }, {getState, rejectWithValue}) => {
+  async ({ fetchCount }: { fetchCount: number }, { getState, rejectWithValue }) => {
     const api = new TrendingApi();
     let initialData: GetInitialDataLoggedInDto | GetInitialDataDto;
     const isLoggedIn = (getState() as RootState).isLoggedIn;
@@ -53,7 +56,7 @@ export const fetchTrendingPosts = createAsyncThunk(
 // The backend endpoint can also take optional parameters for excluded post IDs and startIdx
 export const fetchPostsByTag = createAsyncThunk(
   'fetchPostsByTag',
-  async ({tagID, startIdx}: { tagID: string, startIdx: number }, {rejectWithValue}) => {
+  async ({ tagID, startIdx }: { tagID: string, startIdx: number }, { rejectWithValue }) => {
     let payload: GetPostsByTagDto;
     try {
       console.log("REDUCER::POSTSLICE::FETCHPOSTBYTAG");
@@ -70,12 +73,20 @@ export const fetchPostsByTag = createAsyncThunk(
 
 export const fetchPostBySlug = createAsyncThunk(
   'fetchPostBySlug',
-  ({slug, getAuthor}: { slug: string, getAuthor: boolean }) => new PostsApi().postsControllerGetPostBySlug(slug, getAuthor)
+  ({ slug, getAuthor }: { slug: string, getAuthor: boolean }) => new PostsApi().postsControllerGetPostBySlug(slug, getAuthor)
 )
 
 export const fetchPostByID = createAsyncThunk(
   'fetchPostByID',
-  ({id, getAuthor}: { id: string, getAuthor: boolean }) => new PostsApi().postsControllerGetPostByID(id, getAuthor)
+  ({ id, getAuthor }: { id: string, getAuthor: boolean }) => {
+    console.log(id, getAuthor);
+    return new PostsApi().postsControllerGetPostByID(id, getAuthor)
+  }
+)
+
+export const fetchPostsByUserID = createAsyncThunk(
+  'fetchPostsByUserID',
+  ({ userID }: { userID: string }) => new PostsApi().postsControllerGetPostsByUserID(userID)
 )
 
 //https://redux-toolkit.js.org/api/createSlice
@@ -87,7 +98,8 @@ export const postsSlice = createSlice({
     slugToID: Record<string, string>,
     trendingPostFetchCount: number,
     fetchedComments: Record<string, boolean>,
-    hasMorePosts: boolean
+    hasMorePosts: boolean,
+    updating: boolean,
   }>({ //extends EntityState
     trendingPosts: [],
     trendingPostsSet: {},
@@ -95,6 +107,7 @@ export const postsSlice = createSlice({
     trendingPostFetchCount: 0,
     fetchedComments: {},
     hasMorePosts: true,//only for trending posts (of all tags)
+    updating: false
   }),//also has ids[] and entities{}
   reducers: {
     deletePost: (state, action) => {
@@ -153,6 +166,9 @@ export const postsSlice = createSlice({
       console.log(state);
       console.log(state.slugToID);
     },
+    [updatePost.pending.type]: (state) => {
+      state.updating = true
+    },
     [updatePost.fulfilled.type]: (state, action: PayloadAction<UpdatePostSuccessDto & UpdatePostBodyDto>) => {
       state.slugToID[action.payload.slug] = state.slugToID[action.payload.oldSlug];
 
@@ -162,7 +178,9 @@ export const postsSlice = createSlice({
       postsAdapter.updateOne(state, {
             id: action.payload._id,
             changes: action.payload.updated
+            // changes: action.payload // master
       });
+      state.updating = false
       console.log("** UPDATE DONE **");
     },
     [getCommentsByPostIDSuccess.type]: (state, action: PayloadAction<GetCommentsServerToClientDto>) => {
@@ -172,6 +190,12 @@ export const postsSlice = createSlice({
       if (action.payload.comment.commentRoot === 'post') {
         state.entities[action.payload.comment.parentPost].comments.push(action.payload.comment._id);
       }
+    },
+    [fetchPostsByUserID.fulfilled.type]: (state, action: PayloadAction<GetPostsSuccessDto>) => {
+      postsAdapter.addMany(state, action.payload.posts)
+    },
+    [fetchGroupMembersAndPosts.fulfilled.type]: (state, action: PayloadAction<GetGroupMembersAndPostsDto>) => {
+      postsAdapter.upsertMany(state, action.payload.posts)
     }
   }
 })
