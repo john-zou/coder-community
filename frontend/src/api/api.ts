@@ -610,12 +610,6 @@ export interface GetPostDetailsSuccessDto {
 export interface GetPostsByTagDto {
     /**
      * 
-     * @type {number}
-     * @memberof GetPostsByTagDto
-     */
-    cursor: number;
-    /**
-     * 
      * @type {string}
      * @memberof GetPostsByTagDto
      */
@@ -626,6 +620,12 @@ export interface GetPostsByTagDto {
      * @memberof GetPostsByTagDto
      */
     posts: Array<PostDto>;
+    /**
+     * 
+     * @type {Array<UserDto>}
+     * @memberof GetPostsByTagDto
+     */
+    authors: Array<UserDto>;
 }
 /**
  * 
@@ -819,6 +819,51 @@ export interface LoginSuccess {
 /**
  * 
  * @export
+ * @interface MakeTagBodyDto
+ */
+export interface MakeTagBodyDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof MakeTagBodyDto
+     */
+    tagName: string;
+}
+/**
+ * 
+ * @export
+ * @interface MakeTagSuccessDto
+ */
+export interface MakeTagSuccessDto {
+    /**
+     * 
+     * @type {MakeTagSuccessDtoTag}
+     * @memberof MakeTagSuccessDto
+     */
+    tag: MakeTagSuccessDtoTag;
+}
+/**
+ * 
+ * @export
+ * @interface MakeTagSuccessDtoTag
+ */
+export interface MakeTagSuccessDtoTag {
+    /**
+     * 
+     * @type {string}
+     * @memberof MakeTagSuccessDtoTag
+     */
+    id?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof MakeTagSuccessDtoTag
+     */
+    name?: string;
+}
+/**
+ * 
+ * @export
  * @interface MessageDto
  */
 export interface MessageDto {
@@ -955,13 +1000,13 @@ export interface PostDto {
      * @type {string}
      * @memberof PostDto
      */
-    previewContent?: string;
+    previewContent: string;
     /**
      * 
      * @type {string}
      * @memberof PostDto
      */
-    content?: string;
+    content: string;
     /**
      * 
      * @type {Array<string>}
@@ -1004,6 +1049,12 @@ export interface PostDto {
      * @memberof PostDto
      */
     createdAt: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PostDto
+     */
+    updatedAt: string;
     /**
      * 
      * @type {string}
@@ -1938,6 +1989,37 @@ export const DevApiFetchParamCreator = function (configuration?: Configuration) 
         },
         /**
          * 
+         * @param {MakeTagBodyDto} body 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        devControllerMakeTag(body: MakeTagBodyDto, options: any = {}): FetchArgs {
+            // verify required parameter 'body' is not null or undefined
+            if (body === null || body === undefined) {
+                throw new RequiredError('body','Required parameter body was null or undefined when calling devControllerMakeTag.');
+            }
+            const localVarPath = `/api/dev/tags`;
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'POST' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+            const needsSerialization = (<any>"MakeTagBodyDto" !== "string") || localVarRequestOptions.headers['Content-Type'] === 'application/json';
+            localVarRequestOptions.body =  needsSerialization ? JSON.stringify(body || {}) : (body || "");
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -2061,6 +2143,24 @@ export const DevApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {MakeTagBodyDto} body 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        devControllerMakeTag(body: MakeTagBodyDto, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<MakeTagSuccessDto> {
+            const localVarFetchArgs = DevApiFetchParamCreator(configuration).devControllerMakeTag(body, options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -2138,6 +2238,15 @@ export const DevApiFactory = function (configuration?: Configuration, fetch?: Fe
         },
         /**
          * 
+         * @param {MakeTagBodyDto} body 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        devControllerMakeTag(body: MakeTagBodyDto, options?: any) {
+            return DevApiFp(configuration).devControllerMakeTag(body, options)(fetch, basePath);
+        },
+        /**
+         * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -2202,6 +2311,17 @@ export class DevApi extends BaseAPI {
      */
     public devControllerLoginDev(options?: any) {
         return DevApiFp(this.configuration).devControllerLoginDev(options)(this.fetch, this.basePath);
+    }
+
+    /**
+     * 
+     * @param {MakeTagBodyDto} body 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DevApi
+     */
+    public devControllerMakeTag(body: MakeTagBodyDto, options?: any) {
+        return DevApiFp(this.configuration).devControllerMakeTag(body, options)(this.fetch, this.basePath);
     }
 
     /**
@@ -3436,13 +3556,11 @@ export const PostsApiFetchParamCreator = function (configuration?: Configuration
         /**
          * 
          * @param {string} tagID The ObjectID of the tag
-         * @param {number} [requestedCount] How many posts to fetch
-         * @param {number} [startIdx] What index to start at, e.g. if startIdx &#x3D; 5, then the 5 posts (0th, 1st, 2nd, 3rd, 4th) of this tag will not be fetched
-         * @param {any} [excludePostIDs] An object that works like a set of Post ObjectIDs to exclude
+         * @param {number} [fetchCount] How many posts to fetch
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        tagsControllerGetPostsByTag(tagID: string, requestedCount?: number, startIdx?: number, excludePostIDs?: any, options: any = {}): FetchArgs {
+        tagsControllerGetPostsByTag(tagID: string, fetchCount?: number, options: any = {}): FetchArgs {
             // verify required parameter 'tagID' is not null or undefined
             if (tagID === null || tagID === undefined) {
                 throw new RequiredError('tagID','Required parameter tagID was null or undefined when calling tagsControllerGetPostsByTag.');
@@ -3457,16 +3575,8 @@ export const PostsApiFetchParamCreator = function (configuration?: Configuration
                 localVarQueryParameter['tagID'] = tagID;
             }
 
-            if (requestedCount !== undefined) {
-                localVarQueryParameter['requestedCount'] = requestedCount;
-            }
-
-            if (startIdx !== undefined) {
-                localVarQueryParameter['startIdx'] = startIdx;
-            }
-
-            if (excludePostIDs !== undefined) {
-                localVarQueryParameter['excludePostIDs'] = excludePostIDs;
+            if (fetchCount !== undefined) {
+                localVarQueryParameter['fetchCount'] = fetchCount;
             }
 
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
@@ -3656,14 +3766,12 @@ export const PostsApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @param {string} tagID The ObjectID of the tag
-         * @param {number} [requestedCount] How many posts to fetch
-         * @param {number} [startIdx] What index to start at, e.g. if startIdx &#x3D; 5, then the 5 posts (0th, 1st, 2nd, 3rd, 4th) of this tag will not be fetched
-         * @param {any} [excludePostIDs] An object that works like a set of Post ObjectIDs to exclude
+         * @param {number} [fetchCount] How many posts to fetch
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        tagsControllerGetPostsByTag(tagID: string, requestedCount?: number, startIdx?: number, excludePostIDs?: any, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<GetPostsByTagDto> {
-            const localVarFetchArgs = PostsApiFetchParamCreator(configuration).tagsControllerGetPostsByTag(tagID, requestedCount, startIdx, excludePostIDs, options);
+        tagsControllerGetPostsByTag(tagID: string, fetchCount?: number, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<GetPostsByTagDto> {
+            const localVarFetchArgs = PostsApiFetchParamCreator(configuration).tagsControllerGetPostsByTag(tagID, fetchCount, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -3770,14 +3878,12 @@ export const PostsApiFactory = function (configuration?: Configuration, fetch?: 
         /**
          * 
          * @param {string} tagID The ObjectID of the tag
-         * @param {number} [requestedCount] How many posts to fetch
-         * @param {number} [startIdx] What index to start at, e.g. if startIdx &#x3D; 5, then the 5 posts (0th, 1st, 2nd, 3rd, 4th) of this tag will not be fetched
-         * @param {any} [excludePostIDs] An object that works like a set of Post ObjectIDs to exclude
+         * @param {number} [fetchCount] How many posts to fetch
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        tagsControllerGetPostsByTag(tagID: string, requestedCount?: number, startIdx?: number, excludePostIDs?: any, options?: any) {
-            return PostsApiFp(configuration).tagsControllerGetPostsByTag(tagID, requestedCount, startIdx, excludePostIDs, options)(fetch, basePath);
+        tagsControllerGetPostsByTag(tagID: string, fetchCount?: number, options?: any) {
+            return PostsApiFp(configuration).tagsControllerGetPostsByTag(tagID, fetchCount, options)(fetch, basePath);
         },
     };
 };
@@ -3894,15 +4000,13 @@ export class PostsApi extends BaseAPI {
     /**
      * 
      * @param {string} tagID The ObjectID of the tag
-     * @param {number} [requestedCount] How many posts to fetch
-     * @param {number} [startIdx] What index to start at, e.g. if startIdx &#x3D; 5, then the 5 posts (0th, 1st, 2nd, 3rd, 4th) of this tag will not be fetched
-     * @param {any} [excludePostIDs] An object that works like a set of Post ObjectIDs to exclude
+     * @param {number} [fetchCount] How many posts to fetch
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof PostsApi
      */
-    public tagsControllerGetPostsByTag(tagID: string, requestedCount?: number, startIdx?: number, excludePostIDs?: any, options?: any) {
-        return PostsApiFp(this.configuration).tagsControllerGetPostsByTag(tagID, requestedCount, startIdx, excludePostIDs, options)(this.fetch, this.basePath);
+    public tagsControllerGetPostsByTag(tagID: string, fetchCount?: number, options?: any) {
+        return PostsApiFp(this.configuration).tagsControllerGetPostsByTag(tagID, fetchCount, options)(this.fetch, this.basePath);
     }
 
 }

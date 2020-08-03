@@ -10,6 +10,8 @@ import { UserService } from '../user/user.service';
 import { CreateCustomUser } from './dev.dto';
 import { Personal } from '../auth/guards/personal.decorator';
 import { UserObjectID } from '../user/user-object-id.decorator';
+import { MakeTagBodyDto, MakeTagSuccessDto } from '../tags/tag.dto';
+import { TagsService } from '../tags/tags.service';
 
 @ApiTags('Dev')
 @Controller('dev')
@@ -18,6 +20,7 @@ export class DevController {
     private readonly authService: AuthService,
     private readonly userService: UserService,
     private readonly postsService: PostsService,
+    private readonly tagsService: TagsService,
   ) { }
 
   @Get('marco')
@@ -87,5 +90,10 @@ export class DevController {
       throw new HttpException("Invalid Object ID :(", 400);
     }
     return this.authService.signCoderCommunityJwt(_id);
+  }
+
+  @Post('tags')
+  makeTag(@Body() {tagName}: MakeTagBodyDto): Promise<MakeTagSuccessDto> {
+    return this.tagsService.makeTag(tagName);
   }
 }

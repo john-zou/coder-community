@@ -128,6 +128,7 @@ const PostDetail = () => {
 
   // post has item with content
   // const likedByUser = isLoggedIn && post.likedByUser;
+  const dateSubtitleInAvatar = ((typeof post.createdAt) === "string") ? post.createdAt : moment(post.createdAt).format('lll');
 
   return (
     <div className={classes.root}>
@@ -141,7 +142,7 @@ const PostDetail = () => {
         <h1>{post.title}</h1>
 
         <Link to={`/user/${author.userID}`} style={{ textDecoration: "none" }}>
-          <Avatar pic={author.profilePic} title={author.userID} subtitle={moment(post.createdAt).format('lll')} isPost={true}></Avatar>
+          <Avatar pic={author.profilePic} title={author.userID} subtitle={dateSubtitleInAvatar} isPost={true}></Avatar>
         </Link>
 
         {/* POST CONTENT */}
