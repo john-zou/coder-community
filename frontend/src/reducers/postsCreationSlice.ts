@@ -60,7 +60,6 @@ export const updatePost = createdPost => {
 export const submitPost = createAsyncThunk(
   'submitPost',
   async (createdPost: CreatePostBodyDto & { author: string }) => {
-    // console.log("SLICE::SUBMITPOST");
     const createPostSuccessDto = await new PostsApi().postsControllerCreatePost(createdPost);
     const {_id, slug} = createPostSuccessDto;
     const post: Post = {
@@ -84,9 +83,6 @@ export const submitPost = createAsyncThunk(
 export const updatePost = createAsyncThunk(
   'updatePost',
   async ({update, slug}: { update: UpdatePostBodyDto, slug: string }) => {
-    // console.log("SLICE::UPDATEPOST");
-    // console.log(update);
-    // console.log(slug);
     const {_id, slug: newSlug} = await new PostsApi().postsControllerUpdatePostBySlug(update, slug);
     return {_id, slug: newSlug, oldSlug: slug, updated: update };
   }

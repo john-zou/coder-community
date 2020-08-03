@@ -20,8 +20,8 @@ export class TagsService {
     const postIDs = new Array<string>(requestedCount);
     console.log(tag.posts);
     console.log(startIdx, tag.posts.length, requestedCount);
-    // for (let i = startIdx, destIdx = 0; i < tag.posts.length && destIdx < requestedCount; ++i, ++startIdx) {
-    for (let i = 0, destIdx = 0; i < tag.posts.length && destIdx < requestedCount; ++i, ++startIdx) {
+    for (let i = startIdx, destIdx = 0; i < tag.posts.length && destIdx < requestedCount; ++i, ++startIdx) {
+    // for (let i = 0, destIdx = 0; i < tag.posts.length && destIdx < requestedCount; ++i, ++startIdx) {
       console.log(i);
       const postID = tag.posts[i].toString();
       if (!(excludePostIDs && excludePostIDs[postID])) {
