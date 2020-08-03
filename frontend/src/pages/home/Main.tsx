@@ -19,8 +19,7 @@ const Main = () => {
     }
   );
   const dispatch: AppDispatch = useDispatch();
-  // let items = trendingPosts;
-  let items: string[] = [];
+  let items = trendingPosts;
   const currFetchCount: number = useSelector<RootState, number>(state => state.posts.trendingPostFetchCount);
   const hasMoreTrendingPosts: boolean = useSelector<RootState, boolean>(state => state.posts.hasMorePosts);
 
@@ -40,6 +39,7 @@ const Main = () => {
     hasMore = hasMorePostsInTags[currentTagID];
   }
 
+  console.log(2);
   const handleTabChange = (newIdx: number) => {
     console.log("HANDLE::TABCHANGE");
     console.log(tabIndex);
@@ -75,6 +75,7 @@ const Main = () => {
     }).catch(err => console.log(err));
   }
 
+  console.log(3);
   const fetchMoreData = () => {
     console.log("FETCH MORE DATA");
     console.log(tabIndex);
@@ -101,6 +102,8 @@ const Main = () => {
     }
   }
 
+  console.log(4);
+  console.log(items);
   return (
     <>
       <div style={{
