@@ -1,17 +1,19 @@
-import { Controller, Get, Query } from '@nestjs/common';
+import { Controller, Get, Logger, Query, UsePipes, ValidationPipe } from '@nestjs/common';
 import { TagsService } from './tags.service';
 import { GetPostsByTagDto } from '../posts/dto/posts.dto';
 import { GetPostsByTagQueryParams } from './tag.dto';
 import { ApiTags } from '@nestjs/swagger';
+import { GetInitialDataDto } from '../trending/initialData.dto';
 
 @Controller('tags')
 export class TagsController {
   constructor(private readonly tagsService: TagsService) { }
 
+  @UsePipes(new ValidationPipe({ transform: true })) //turn string into specified @Query() type
   @ApiTags('Posts')
   @Get('posts')
-  getPostsByTag(@Query() q: GetPostsByTagQueryParams): Promise<GetPostsByTagDto> {
-    console.log("TAGS::CONTROLLER");
-    return this.tagsService.getPostsByTag(q.tagID, q.requestedCount, q.startIdx, q.excludePostIDs);
+  getPostsByTag(@Query() { tagID, fetchCount }: GetPostsByTagQueryParams): Promise<GetPostsByTagDto> {
+    Logger.log(`getPostsByTag. tagID = ${tagID}, fetchCount = ${fetchCount}`, "TagsController");
+    return this.tagsService.getPostsByTag(tagID, fetchCount);
   }
 }

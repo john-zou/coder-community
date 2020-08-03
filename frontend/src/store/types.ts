@@ -72,7 +72,9 @@ export type PostsCreation = {
 export type Tag = {
   _id: string,
   name: string,
-  postsSet: Record<string, boolean>, // posts that have this tag, that Redux is aware of
+  posts: string[], // These are kept only for the purpose of the infinite scroll, in the order received from the back end
+  fetchCount: number,
+  gotAllPostsFromBackend: boolean,
 };
 
 export type User = {

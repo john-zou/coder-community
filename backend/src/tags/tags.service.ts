@@ -1,41 +1,62 @@
-
-import { PostModel } from '../mongoModels';
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { PostModel, TagModel, UserModel } from '../mongoModels';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { TagsDto } from './tags.dto';
-import { TagModel } from '../mongoModels';
 import { GetPostsByTagDto } from '../posts/dto/posts.dto';
-import { convertPostDocumentToPostDto } from '../util/helperFunctions';
+import { convertPostDocumentToPostDto, convertUserToUserDto } from '../util/helperFunctions';
+import { MakeTagSuccessDto } from './tag.dto';
 // import { convertToStrArr } from '../util/helperFunctions';
+
+const PostsFetchedAtATime = 5;
 
 @Injectable()
 export class TagsService {
-  async getPostsByTag(tagID: string, requestedCount = 5, startIdx = 0, excludePostIDs?: Record<string, boolean>): Promise<GetPostsByTagDto> {
+  async getPostsByTag(tagID: string, fetchCount: number): Promise<GetPostsByTagDto> {
     const tag = await TagModel.findById(tagID);
     if (!tag) {
       throw new NotFoundException();
     }
 
-    const postIDs = new Array<string>(requestedCount);
-    for (let i = startIdx, destIdx = 0; i < tag.posts.length && destIdx < requestedCount; ++i, ++startIdx) {
+    const postIDs = new Array<string>(PostsFetchedAtATime);
+    // Get the most recent posts first
+    for (let i = tag.posts.length - (fetchCount * PostsFetchedAtATime) - 1, count = 0; i >= 0 && count < PostsFetchedAtATime; --i, ++count) {
       const postID = tag.posts[i].toString();
-      if (!(excludePostIDs && excludePostIDs[postID])) {
-        postIDs[destIdx++] = postID;
-      }
+      postIDs.push(postID);
+    }
+    const postDocuments = await PostModel.find({ _id: { $in: postIDs } });
+
+    if (postDocuments.length === 0) {
+      throw new NotFoundException();
     }
 
-    const postDocuments = await PostModel.find({ _id: { $in: postIDs}});
-
-    console.log(postDocuments.length);
-    console.log(postDocuments);
-
     const postDtos = postDocuments.map(convertPostDocumentToPostDto);
+    const authorIDs = postDtos.map(post => post.author.toString());
+
+    const authorDocuments = await UserModel.find({ _id: { $in: authorIDs } });
+    const authorDtos = authorDocuments.map(convertUserToUserDto);
 
     return {
-      cursor: startIdx,
       tagID,
-      posts: postDtos
+      posts: postDtos,
+      authors: authorDtos,
     };
   }
+
+  async makeTag(tagName: string): Promise<MakeTagSuccessDto> {
+    if (await TagModel.exists({ name: tagName })) {
+      throw new BadRequestException('Tag Name already exists');
+    }
+
+    const tag = new TagModel({ name: tagName, posts: [] });
+    await tag.save();
+
+    return {
+      tag: {
+        name: tagName,
+        _id: tag._id.toString(),
+      },
+    };
+  }
+
 
   // TODO: multiple tags, low priority
   // async getPostByTags

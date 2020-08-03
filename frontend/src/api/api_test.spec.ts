@@ -78,6 +78,10 @@ describe("DevApi", () => {
   test("devControllerLoginDev", () => {
     return expect(instance.devControllerLoginDev({})).resolves.toBe(null)
   })
+  test("devControllerMakeTag", () => {
+    const body: api.MakeTagBodyDto = undefined
+    return expect(instance.devControllerMakeTag(body, {})).resolves.toBe(null)
+  })
   test("devControllerMarco", () => {
     return expect(instance.devControllerMarco({})).resolves.toBe(null)
   })
@@ -205,10 +209,8 @@ describe("PostsApi", () => {
   })
   test("tagsControllerGetPostsByTag", () => {
     const tagID: string = "tagID_example"
-    const requestedCount: number = 1.2
-    const startIdx: number = 1.2
-    const excludePostIDs: api.any = undefined
-    return expect(instance.tagsControllerGetPostsByTag(tagID, requestedCount, startIdx, excludePostIDs, {})).resolves.toBe(null)
+    const fetchCount: number = 1.2
+    return expect(instance.tagsControllerGetPostsByTag(tagID, fetchCount, {})).resolves.toBe(null)
   })
 })
 

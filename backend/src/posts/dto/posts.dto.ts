@@ -7,12 +7,13 @@ import { UserDto } from "../../user/dto/user.dto";
 import { ApiPropertyOptional } from '@nestjs/swagger';
 
 //response
+// This has the content always, for simplicity
 export class PostDto {
   _id: string;
   author: string;
   title: string;
-  previewContent?: string;
-  content?: string;
+  previewContent: string;
+  content: string;
   tags: string[];
   featuredImg: string;
   likes: number;
@@ -20,6 +21,7 @@ export class PostDto {
   commentsCount: number;
   views: number;
   createdAt: string;
+  updatedAt: string;
   slug: string;
   group?: string;
 }
@@ -28,6 +30,7 @@ export class GetPostsSuccessDto {
   posts: PostDto[]
 }
 
+// unused
 export class PostWithDetails {
   _id: string;
   author: string;
@@ -75,9 +78,9 @@ export class UpdatePostSuccessDto {
 
 // Response
 export class GetPostsByTagDto {
-  cursor: number; // so the front end knows what index they are at for retrieving posts by this tag
   tagID: string;
   posts: PostDto[];
+  authors: UserDto[];
 }
 
 // Update Request
