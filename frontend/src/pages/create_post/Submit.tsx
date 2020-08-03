@@ -58,7 +58,7 @@ export default function Submit(params: { editorRef, tags, img, title }) {
     history.push("/home")
   }
 
-  const onSubmit = async (params, author, dispatch, history) => {
+  const onSubmit = async (params, author, dispatch, history, group?) => {
     // console.log(newPost);
     let featuredImg: string;
     if (params.img) {
@@ -73,6 +73,7 @@ export default function Submit(params: { editorRef, tags, img, title }) {
       tags: params.tags,
       featuredImg,
       author: author,
+      group
     }
     // Handle update differently
     if (params.isUpdate) {
