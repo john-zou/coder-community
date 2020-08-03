@@ -156,10 +156,11 @@ const PostDetail = () => {
         </Link>
 
 
-        {/*<TagP tags={tagsArr}/>
+        {/*/>
         <p>{post.content}</p>*/}
         {/* POST CONTENT */}
         <div className="ql-snow" >
+          <TagP tags={tagsArr} />
           <div className="ql-editor">
             <div ref={postContent}></div>
           </div>

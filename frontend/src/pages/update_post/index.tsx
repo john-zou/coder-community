@@ -32,14 +32,10 @@ const useStyles = makeStyles({
 });
 
 export default function UpdatePost() {
-<<<<<<< HEAD
+
   console.log("UPDATEPOST::INDEX");
   const {slug} = useParams<{ slug: string }>();
-=======
-  // console.log("UPDATEPOST::INDEX");
-  const { slug } = useParams<{ slug: string }>();
-  // console.log("slug: ", slug)
->>>>>>> refs/remotes/origin/master
+
   const classes = useStyles();
   const dispatch = useDispatch<AppDispatch>();
 
@@ -52,7 +48,7 @@ export default function UpdatePost() {
       return { post: null };
     }
     const post = state.posts.entities[postID];
-    return { post };
+    return { post }
   })
   console.log(post);
 
