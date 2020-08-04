@@ -1,5 +1,5 @@
 import { createEntityAdapter, createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
-import { fetchTrendingPosts, fetchPostBySlug, fetchPostByID } from "./postsSlice";
+import { fetchTrendingPosts, fetchPostBySlug, fetchPostByID, fetchPostsByTag } from "./postsSlice";
 import { User } from "../store/types";
 import {
   GetInitialDataDto,
@@ -7,7 +7,7 @@ import {
   GetPostDetailsSuccessDto,
   UserApi,
   GetUsersSuccessDto,
-  UserDto, GetGroupMembersAndPostsDto
+  UserDto, GetGroupMembersAndPostsDto, GetPostsByTagDto
 } from "../api";
 import { leaveGroup, joinGroup, fetchGroupMembersAndPosts } from "./groupsSlice";
 import _ from "lodash";
@@ -50,6 +50,12 @@ export const usersSlice = createSlice({
       usersAdapter.addMany(state, action.payload.users) //add users (trending posts' authors) to ids and entities
       // Update username to ObjectID map
       action.payload.users.forEach(user => state.usernameToID[user.userID] = user._id);
+    },
+    [fetchPostsByTag.fulfilled.type]: (state, action: PayloadAction<GetPostsByTagDto>) => {
+      usersAdapter.upsertMany(state, action.payload.authors);
+      action.payload.authors.forEach(author => {
+        state.usernameToID[author.userID] = author._id;
+      })
     },
     [fetchPostBySlug.fulfilled.type]: (state, action: PayloadAction<GetPostDetailsSuccessDto>) => {
       if (action.payload.author) {

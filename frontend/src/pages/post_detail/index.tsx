@@ -94,6 +94,7 @@ const PostDetail = () => {
     featuredImg = post.featuredImg;
   }
 
+
   useEffect(() => {
     dispatch(fetchGroups())
   })
@@ -132,6 +133,7 @@ const PostDetail = () => {
 
   // post has item with content
   // const likedByUser = isLoggedIn && post.likedByUser;
+  const dateSubtitleInAvatar = ((typeof post.createdAt) === "string") ? post.createdAt : moment(post.createdAt).format('lll');
 
   return (
     <div className={classes.root}>

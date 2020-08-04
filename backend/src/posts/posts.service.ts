@@ -12,7 +12,6 @@ import { User } from '../user/user.schema';
 import {
   CreatePostBodyDto,
   CreatePostSuccessDto,
-  GetPostDetailsSuccessDto,
   GetPostsSuccessDto,
   PostDto,
   PostWithDetails, UpdatePostBodyDto,
@@ -88,7 +87,7 @@ export class PostsService {
   async getPostByID(postID: string): Promise<PostWithDetails> {
     const post = await PostModel.findById(postID);
     if (post) {
-      return convertPostDocumentToPostDetailDto(post);
+      return convertPostDocumentToPostDto(post);
     } else {
       throw new NotFoundException();
     }
@@ -99,7 +98,7 @@ export class PostsService {
     if (post) {
       ++post.views;
       post.save(); // purposefully not awaiting
-      return convertPostDocumentToPostDetailDto(post);
+      return convertPostDocumentToPostDto(post);
     } else {
       throw new NotFoundException();
     }
@@ -339,7 +338,7 @@ export class PostsService {
 
   async findPostsByIDs(ids: string[]): Promise<GetPostsSuccessDto> {
     const foundPosts = await PostModel.find({ _id: { $in: ids } })
-    return { posts: foundPosts.map(post => convertPostDocumentToPostDetailDto(post)) }
+    return { posts: foundPosts.map(post => convertPostDocumentToPostDto(post)) }
   }
 
   async getPostsByUserID(userID: string): Promise<GetPostsSuccessDto> {

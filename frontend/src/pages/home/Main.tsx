@@ -22,7 +22,6 @@ const Main = () => {
 
   const [tabIndex, setTabIndex] = React.useState(0);
   const tags = useSelector<RootState, Dictionary<Tag>>(state => state.tags.entities);
-  const hasMorePostsInTags = useSelector<RootState, Record<string, boolean>>(state => state.tags.hasMorePostsInTags);
   const tagsArr = Object.values(tags);
   const currentTag = tagsArr[tabIndex - 1];
   const currentTagID = currentTag?._id;
@@ -31,24 +30,30 @@ const Main = () => {
   if (tabIndex === 0) {
     hasMore = hasMoreTrendingPosts;
   } else {
-    hasMore = hasMorePostsInTags[currentTagID];
+    hasMore = !tags[currentTagID].gotAllPostsFromBackend;
   }
 
   const handleTabChange = (newIdx: number) => {
+    console.log("Handle tab change to tab #", newIdx);
     setTabIndex(newIdx);
     // if new index is 0 (All - trending posts)
     if (newIdx === 0) {
       setItems(trendingPosts);
       return;
     }
+
     const currentTag = tagsArr[newIdx - 1];
-    console.log(currentTag);
-    // switch to a tag
-    setItems(Object.keys(currentTag.postsSet));
-    const startIdx = items.length; // communicate to back end which ones to skip
-    const tagID = currentTagID;
-    dispatch(fetchPostsByTag({ tagID, startIdx })).then(unwrapResult).then(res => {
-      setItems(prev => prev.concat(res.posts.map(post => post._id)))
+    console.log("Switching to tag:", currentTag.name);
+    console.log("posts: ", currentTag.posts);
+    setItems(currentTag.posts);
+    const tagID = currentTag._id;
+    if (tags[tagID].gotAllPostsFromBackend) {
+      return;
+    }
+
+    dispatch(fetchPostsByTag({ tagID }))
+      .then(unwrapResult).then(res => {
+      setItems(tags[tagID].posts.concat(res.posts.map(post => post._id)));
     }).catch(err => console.log(err));
   }
 
@@ -56,17 +61,17 @@ const Main = () => {
     if (tabIndex === 0) {
       if (hasMoreTrendingPosts) {
         dispatch(fetchTrendingPosts({ fetchCount: currFetchCount })).then(unwrapResult).then(res => {
-          setItems(prev => prev.concat(res.posts.map(post => post._id)))
+          setItems(prev => prev.concat(res.posts.map(post => post._id)));
         }).catch(err => console.log(err));
       } else {
         return;
       }
     }
 
-    const startIdx = items.length; // communicate to back end which ones to skip
     const tagID = currentTagID;
-    if (hasMorePostsInTags[tagID]) {
-      dispatch(fetchPostsByTag({ tagID, startIdx })).then(unwrapResult).then(res => {
+    if (hasMore) {
+      dispatch(fetchPostsByTag({ tagID }))
+        .then(unwrapResult).then(res => {
         setItems(prev => prev.concat(res.posts.map(post => post._id)))
       }).catch(err => console.log(err));
     }
@@ -89,9 +94,9 @@ const Main = () => {
                   <b>You've seen it all!</b>
                 </p>
               }>
-            {items.map((_id, idx) => (
-                <Card postID={_id} key={idx} />
-            ))}
+            {items.map((_id) => {
+              return <Card postID={_id} key={_id} />
+            })}
           </InfiniteScroll>
         </div>
       </>
