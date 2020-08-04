@@ -69,7 +69,7 @@ export type HNPost = {
   url?: string,
   // comments?: string[],
   // commentsCount?: number,
-  createdAt: string,
+  createdAt: number,
 };
 
 export type PostsCreation = {

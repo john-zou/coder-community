@@ -4,11 +4,13 @@ import { HNPost } from "../store/types";
 
 const hnPostsAdapter = createEntityAdapter<HNPost>();
 
-export const fetchHackerNewsPosts = createAsyncThunk('fetchHackerNewsPosts', async () => {
-  const res = await new PostsApi().postsControllerGetHackerNewsPosts()
-  console.log(res)
-  return res
-})
+export const fetchHackerNewsPosts = createAsyncThunk(
+  'fetchHackerNewsPosts',
+  async ({ fetchCount }: { fetchCount: number }) => {
+    const res = await new PostsApi().postsControllerGetHackerNewsPosts(fetchCount)
+    console.log(res)
+    return res
+  })
 
 export const hnPostsSlice = createSlice({
   name: 'hnposts',
@@ -21,9 +23,12 @@ export const hnPostsSlice = createSlice({
   }),
   reducers: {},
   extraReducers: {
+    [fetchHackerNewsPosts.pending.type]: (state, action: PayloadAction<any>) => {
+      state.hnPostsFetchCount++;
+    },
     [fetchHackerNewsPosts.fulfilled.type]: (state, action: PayloadAction<any>) => {
-      console.log("before upsert");
-      console.log(action.payload);
+      // console.log("before upsert");
+      // console.log(action.payload);
       try {
         hnPostsAdapter.upsertMany(state, action.payload)
       } catch (err) {
@@ -31,6 +36,9 @@ export const hnPostsSlice = createSlice({
       }
       console.log("after upsert");
 
+    },
+    [fetchHackerNewsPosts.rejected.type]: (state, action: PayloadAction<any>) => {
+      state.hasMoreHnPosts = false;
     }
   }
 })

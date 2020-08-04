@@ -1,6 +1,7 @@
 import { Dictionary, unwrapResult } from "@reduxjs/toolkit";
 import moment from "moment";
 import React, { useEffect, useState } from "react"
+import InfiniteScroll from "react-infinite-scroll-component";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchHackerNewsPosts } from "../../reducers/hnPostsSlice";
 import { RootState } from "../../reducers/rootReducer";
@@ -18,10 +19,14 @@ export const HackerNewsTab = () => {
   const [error, setError] = useState(null);
 
   const hnPosts = useSelector<RootState, Dictionary<HNPost>>(state => state.hnPosts.entities)
+  const currFetchCount: number = useSelector<RootState, number>(state => state.hnPosts.hnPostsFetchCount);
+  const hasMoreHnPosts: boolean = useSelector<RootState, boolean>(state => state.hnPosts.hasMoreHnPosts);
+  const [items, setItems] = useState(Object.values(hnPosts));
 
+  //initially fetch 20 posts
   useEffect(() => {
     setLoading(true);
-    dispatch(fetchHackerNewsPosts()).then(unwrapResult).then(() => {
+    dispatch(fetchHackerNewsPosts({ fetchCount: currFetchCount })).then(unwrapResult).then(() => {
       setLoading(false);
     }).catch(err => {
       setLoading(false);
@@ -36,23 +41,39 @@ export const HackerNewsTab = () => {
     return <ErrorPage error={error} />
   }
 
+  const fetchMoreData = () => {
+    dispatch(fetchHackerNewsPosts({ fetchCount: currFetchCount })).then(unwrapResult).then(res => {
+      setItems(prev => prev.concat(res))
+    }).catch(err => console.log(err));
+  }
+
   return (
     <>
-      {/* <GroupContainer> */}
       <Header>
         <h2>Hacker News Top Stories</h2>
       </Header>
-      {/* </GroupContainer> */}
       <hr style={{ color: "black" }}></hr>
-      {/* <GroupContent> */}
+
 
       {Object.values(hnPosts).map(post => (
         <SmallCardContainer>
-          <Avatar title={post.title} extraText={post.author} titleOutSrc={post.url}></Avatar>
+          <Avatar title={post.title} extraText={`${moment(post.createdAt * 1000).calendar()} by ${post.author}`} titleOutSrc={post.url} isPost={true}></Avatar>
         </SmallCardContainer>
       ))}
 
-      {/* </GroupContent> */}
+      <InfiniteScroll
+        dataLength={items.length} //This is important field to render the next data
+        next={fetchMoreData}
+        hasMore={hasMoreHnPosts}
+        // key={tabIndex.toString()}
+        loader={<Loading />}
+      >
+        {items.map((post, idx) => (
+          <SmallCardContainer>
+            <Avatar title={post.title} extraText={`${moment(post.createdAt * 1000).calendar()} by ${post.author}`} titleOutSrc={post.url} isPost={true}></Avatar>
+          </SmallCardContainer>
+        ))}
+      </InfiniteScroll>
     </>
   )
 }

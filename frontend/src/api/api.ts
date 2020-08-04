@@ -3202,15 +3202,24 @@ export const PostsApiFetchParamCreator = function (configuration?: Configuration
         },
         /**
          * 
+         * @param {number} fetchCount 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        postsControllerGetHackerNewsPosts(options: any = {}): FetchArgs {
+        postsControllerGetHackerNewsPosts(fetchCount: number, options: any = {}): FetchArgs {
+            // verify required parameter 'fetchCount' is not null or undefined
+            if (fetchCount === null || fetchCount === undefined) {
+                throw new RequiredError('fetchCount','Required parameter fetchCount was null or undefined when calling postsControllerGetHackerNewsPosts.');
+            }
             const localVarPath = `/api/posts/hackernews`;
             const localVarUrlObj = url.parse(localVarPath, true);
             const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            if (fetchCount !== undefined) {
+                localVarQueryParameter['fetchCount'] = fetchCount;
+            }
 
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
             // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
@@ -3548,11 +3557,12 @@ export const PostsApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {number} fetchCount 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        postsControllerGetHackerNewsPosts(options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<any> {
-            const localVarFetchArgs = PostsApiFetchParamCreator(configuration).postsControllerGetHackerNewsPosts(options);
+        postsControllerGetHackerNewsPosts(fetchCount: number, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<any> {
+            const localVarFetchArgs = PostsApiFetchParamCreator(configuration).postsControllerGetHackerNewsPosts(fetchCount, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -3742,11 +3752,12 @@ export const PostsApiFactory = function (configuration?: Configuration, fetch?: 
         },
         /**
          * 
+         * @param {number} fetchCount 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        postsControllerGetHackerNewsPosts(options?: any) {
-            return PostsApiFp(configuration).postsControllerGetHackerNewsPosts(options)(fetch, basePath);
+        postsControllerGetHackerNewsPosts(fetchCount: number, options?: any) {
+            return PostsApiFp(configuration).postsControllerGetHackerNewsPosts(fetchCount, options)(fetch, basePath);
         },
         /**
          * 
@@ -3860,12 +3871,13 @@ export class PostsApi extends BaseAPI {
 
     /**
      * 
+     * @param {number} fetchCount 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof PostsApi
      */
-    public postsControllerGetHackerNewsPosts(options?: any) {
-        return PostsApiFp(this.configuration).postsControllerGetHackerNewsPosts(options)(this.fetch, this.basePath);
+    public postsControllerGetHackerNewsPosts(fetchCount: number, options?: any) {
+        return PostsApiFp(this.configuration).postsControllerGetHackerNewsPosts(fetchCount, options)(this.fetch, this.basePath);
     }
 
     /**

@@ -122,11 +122,9 @@ export class PostsController {
   }
 
   @Get('hackernews')
-  async getHackerNewsPosts(): Promise<any> {
+  async getHackerNewsPosts(@Query('fetchCount') fetchCount: number): Promise<any> {
     this.logger.log("getHackerNewsPosts");
-    // return "hello";
-
-    return this.postsService.getHackerNewsPosts()
+    return this.postsService.getHackerNewsPosts(fetchCount)
   }
 
   @Get('byID/:postID')

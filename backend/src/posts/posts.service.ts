@@ -266,7 +266,7 @@ export class PostsService {
       url: data.url,
       // tags: data.tag_list,
       // featuredImg: data.cover_image,
-      createdAt: new Date(data.time),
+      createdAt: data.time,
       // likes: data.public_reactions_count,
       // comments: data.comments_count,
       // comments,
@@ -274,15 +274,14 @@ export class PostsService {
     }
   }
 
-  async getHackerNewsPosts(): Promise<any[]> {
+  async getHackerNewsPosts(fetchCount: number): Promise<any[]> {
+    const start: number = 10 * fetchCount;
+    const end: number = start + 10;
     const res = await this.httpService.get(HackerNewsTopStories).toPromise()
     const allTopStoriesIDs = await res.data
-    const first5IDs = allTopStoriesIDs.slice(0, 5) //get a list of ids
-    Logger.log('line 281', "getHackerNewsPosts")
-    Logger.log(first5IDs, "getHackerNewsPosts")
+    const postIDs = allTopStoriesIDs.slice(start, end) //get a list of ids
 
-    console.log("line 281", first5IDs)
-    return await Promise.all(first5IDs.map(async (postID) => {
+    return await Promise.all(postIDs.map(async (postID) => {
       const singleArticle = await this.httpService.get(`https://hacker-news.firebaseio.com/v0/item/${postID}.json?print=pretty`).toPromise()
       return this.convertHNToPost(singleArticle.data)
     }));
