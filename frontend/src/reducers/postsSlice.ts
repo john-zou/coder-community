@@ -56,12 +56,14 @@ export const fetchTrendingPosts = createAsyncThunk(
 // The backend endpoint can also take optional parameters for excluded post IDs and startIdx
 export const fetchPostsByTag = createAsyncThunk(
   'fetchPostsByTag',
-  async ({ tagID, startIdx }: { tagID: string, startIdx: number }, { rejectWithValue }) => {
+  async ({ tagID }: { tagID: string }, { getState, rejectWithValue }) => {
+    const fetchCount = (getState() as RootState).tags.entities[tagID].fetchCount;
     let payload: GetPostsByTagDto;
     try {
       console.log("REDUCER::POSTSLICE::FETCHPOSTBYTAG");
       console.log(tagID);
-      payload = await new PostsApi().tagsControllerGetPostsByTag(tagID, undefined, startIdx);
+      // payload = await new PostsApi().tagsControllerGetPostsByTag(tagID, undefined, startIdx);
+      payload = await new PostsApi().tagsControllerGetPostsByTag(tagID, fetchCount);
       console.log(payload);
     } catch (err) {
       return rejectWithValue(tagID);
@@ -79,7 +81,6 @@ export const fetchPostBySlug = createAsyncThunk(
 export const fetchPostByID = createAsyncThunk(
   'fetchPostByID',
   ({ id, getAuthor }: { id: string, getAuthor: boolean }) => {
-    console.log(id, getAuthor);
     return new PostsApi().postsControllerGetPostByID(id, getAuthor)
   }
 )

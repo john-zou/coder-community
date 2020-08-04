@@ -1,15 +1,15 @@
-import {GroupModel, PostModel, TagModel, UserModel} from '../mongoModels';
-import {BadRequestException, HttpService, Injectable, NotFoundException} from '@nestjs/common';
-import {Ref} from '@typegoose/typegoose';
-import {ObjectID, ObjectId} from 'mongodb';
+import { GroupModel, PostModel, TagModel, UserModel } from '../mongoModels';
+import { BadRequestException, HttpService, Injectable, NotFoundException } from '@nestjs/common';
+import { Ref } from '@typegoose/typegoose';
+import { ObjectID, ObjectId } from 'mongodb';
 import {
     convertPostDocumentToPostDetailDto,
     convertPostDocumentToPostDto,
     convertToStrArr,
 } from '../util/helperFunctions';
 import * as urlSlug from 'url-slug';
-import {User} from '../user/user.schema';
-import {Post} from '../posts/post.schema';
+import { User } from '../user/user.schema';
+import { Post } from '../posts/post.schema';
 import {
     CreatePostBodyDto,
     CreatePostSuccessDto,
@@ -18,7 +18,8 @@ import {
     PostWithDetails, UpdatePostBodyDto,
     UpdatePostSuccessDto,
 } from './dto/posts.dto';
-import {TrendingGateway} from '../trending/trending.gateway';
+import { TrendingGateway } from '../trending/trending.gateway';
+
 
 // Unused -- can use later for different feature
 type DevToArticle = {
@@ -68,24 +69,23 @@ const previewContentLength = 100;
 
 @Injectable()
 export class PostsService {
-    constructor(private readonly httpService: HttpService) {
-    }
+    constructor(private readonly httpService: HttpService) { }
 
     async getPostByID(postID: string): Promise<PostWithDetails> {
         const post = await PostModel.findById(postID);
         if (post) {
-            return convertPostDocumentToPostDetailDto(post);
+            return convertPostDocumentToPostDto(post);
         } else {
             throw new NotFoundException();
         }
     }
 
     async getPostBySlug(slug: string): Promise<PostWithDetails> {
-        const post = await PostModel.findOne({slug});
+        const post = await PostModel.findOne({ slug });
         if (post) {
             ++post.views;
             post.save(); // purposefully not awaiting
-            return convertPostDocumentToPostDetailDto(post);
+            return convertPostDocumentToPostDto(post);
         } else {
             throw new NotFoundException();
         }
@@ -98,7 +98,7 @@ export class PostsService {
         let slug = urlSlug(body.title);
         // console.log("POSTS::SERVICE");
         // TODO: optimize with model.collection.find() / limit() / size()
-        if (await PostModel.findOne({slug})) {
+        if (await PostModel.findOne({ slug })) {
             slug = undefined;
         }
 
@@ -138,22 +138,79 @@ export class PostsService {
         // Add post to tags
         const tags = newPost.tags;
         if (tags.length > 0) {
-            const expressions = tags.map(tagID => ({_id: tagID}));
-            await TagModel.updateMany({$or: expressions}, {$push: {posts: newPost._id}});
+            const expressions = tags.map(tagID => ({ _id: tagID }));
+            await TagModel.updateMany({ $or: expressions }, { $push: { posts: newPost._id } });
         }
 
         // TODO: Add post to group (if post created for group)
         if (body.group) {
             const foundGroup = await GroupModel.findById(body.group)
             await GroupModel.updateOne(foundGroup, {
-                $push: {posts: newPost._id}
+                $push: { posts: newPost._id }
             })
         }
         return {
             _id: newPost._id,
             slug,
         };
+    }
 
+    // add post to posts array of tag in newTags
+    // remove post from posts array of all other tags
+    async updateTagPosts(newTags: Set<string>, postID: string, post: Ref<Post>) {
+        const tags = await TagModel.find();
+        for (const tag of tags) {
+            if (!newTags.has(tag._id.toString())) {
+                // find index of current post in posts array of current tag
+                // if present, remove post from posts array
+                tag.posts.push(post);
+                const index = tag.posts.indexOf(tag.posts[tag.posts.length - 1], 0);
+                if (index != tag.posts.length - 1 && index != -1)
+                    tag.posts.splice(index, 1);
+                tag.posts.splice(tag.posts.length - 1, 1);
+            } else {
+                tag.posts.push(post);
+            }
+            tag.save();
+        }
+    }
+
+    async updatePostBySlug(update: UpdatePostBodyDto, slug: string): Promise<UpdatePostSuccessDto> {
+        // 1. Find post
+        const post = await PostModel.findOne({ slug });
+        if (!post) {
+            throw new NotFoundException();
+        }
+
+        if (update.title) {
+            post.title = update.title;
+            let newSlug = urlSlug(update.title);
+            const existingPostWithSlug = await PostModel.findOne({ newSlug });
+            if (existingPostWithSlug) {
+                newSlug = post._id;
+            }
+            post.slug = newSlug;
+        }
+
+        if (update.content) {
+            post.content = update.content;
+            post.previewContent = post.content.substring(0, previewContentLength);
+        }
+
+        if (update.featuredImg) {
+            post.featuredImg = update.featuredImg;
+        }
+
+        if (Array.isArray(update.tags)) {
+            post.tags = update.tags.map(tag => new ObjectId(tag));
+            const tagSet = new Set(update.tags);
+            this.updateTagPosts(tagSet, post._id, post);
+        }
+
+        await post.save();
+        // console.log("POST::SERVICE");
+        // console.log(post.slug);
+        return { _id: post._id, slug: post.slug };
     }
 
     isLikedByUser(likes: Ref<User, ObjectID>[], userObjectID: string): boolean {
@@ -184,7 +241,7 @@ export class PostsService {
             if (post.views > 0) {
                 likeToViewRatio = post.likes / post.views;
             }
-            likesToViewsRatios.push({[post._id.toString()]: likeToViewRatio});
+            likesToViewsRatios.push({ [post._id.toString()]: likeToViewRatio });
         })
         likesToViewsRatios.sort((ratio1, ratio2) => ratio2[Object.keys(ratio2)[0]] - ratio1[Object.keys(ratio1)[0]]);
 
@@ -246,95 +303,26 @@ export class PostsService {
     }
 
     async deletePostByPostID(postID: string, userID: string): Promise<void> {
-        const postExists = await PostModel.exists({_id: postID, author: new ObjectID(userID)});
+        const postExists = await PostModel.exists({ _id: postID, author: new ObjectID(userID) });
         if (!postExists) {
             throw new BadRequestException("Post not found");
         }
 
-        await PostModel.deleteOne({_id: postID});
-        await UserModel.updateOne({_id: userID}, {$pull: {posts: new ObjectID(postID)}});
+        await PostModel.deleteOne({ _id: postID });
+        await UserModel.updateOne({ _id: userID }, { $pull: { posts: new ObjectID(postID) } });
     }
 
     async findPostsByIDs(ids: string[]): Promise<GetPostsSuccessDto> {
-        const foundPosts = await PostModel.find({_id: {$in: ids}})
-        return {posts: foundPosts.map(post => convertPostDocumentToPostDetailDto(post))}
+        const foundPosts = await PostModel.find({ _id: { $in: ids } })
+        return { posts: foundPosts.map(post => convertPostDocumentToPostDto(post)) }
     }
 
     async getPostsByUserID(userID: string): Promise<GetPostsSuccessDto> {
         const foundUser = await UserModel.findById(userID)
-        const postsByUser = await PostModel.find({author: foundUser._id})
+        const postsByUser = await PostModel.find({ author: foundUser._id })
 
         const postIDs = postsByUser.map((post) => post._id.toString())
         console.log(postIDs)
         return this.findPostsByIDs(postIDs)
-    }
-
-    // add post to posts array of tag in newTags
-    // remove post from posts array of all other tags
-    async updateTagPosts(newTags: Set<string>, postID: string, post: Ref<Post>) {
-        // console.log("POSTSERVICE::UPDATETAGPOST");
-        const tags = await TagModel.find();
-        // console.log(newTags);
-        // console.log(tags);
-        for (const tag of tags) {
-            if (!newTags.has(tag._id.toString())) {
-                // find index of current post in posts array of current tag
-                // if present, remove post from posts array
-                tag.posts.push(post);
-                const index = tag.posts.indexOf(tag.posts[tag.posts.length - 1], 0);
-                if (index != tag.posts.length - 1 && index != -1)
-                    tag.posts.splice(index, 1);
-                tag.posts.splice(tag.posts.length - 1, 1);
-                // const index = tag.posts.indexOf(post, 0);
-                // const index = tag.posts.findIndex((cpost) => {
-                //     console.log(cpost);
-                //     console.log(post);
-                //     return cpost == post;
-                // });
-                // console.log(index);
-                // if (index > -1) {
-                //     tag.posts.splice(index, 1);
-                // }
-            } else {
-                tag.posts.push(post);
-            }
-            tag.save();
-        }
-    }
-
-    async updatePostBySlug(update: UpdatePostBodyDto, slug: string): Promise<UpdatePostSuccessDto> {
-        // 1. Find post
-        const post = await PostModel.findOne({slug});
-        if (!post) {
-            throw new NotFoundException();
-        }
-
-        if (update.title) {
-            post.title = update.title;
-            let newSlug = urlSlug(update.title);
-            const existingPostWithSlug = await PostModel.findOne({newSlug});
-            if (existingPostWithSlug) {
-                newSlug = post._id;
-            }
-            post.slug = newSlug;
-        }
-
-        if (update.content) {
-            post.content = update.content;
-            post.previewContent = post.content.substring(0, previewContentLength);
-        }
-
-        if (update.featuredImg) {
-            post.featuredImg = update.featuredImg;
-        }
-
-        if (Array.isArray(update.tags)) {
-            post.tags = update.tags.map(tag => new ObjectId(tag));
-            const tagSet = new Set(update.tags);
-            this.updateTagPosts(tagSet, post._id, post);
-        }
-
-        await post.save();
-        return {_id: post._id, slug: post.slug};
     }
 }

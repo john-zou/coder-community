@@ -173,6 +173,8 @@ const Card = ({ postID }: Props) => {
     toggleSave()
   }
 
+  const timeString = typeof post.createdAt === "string" ? post.createdAt : moment(post.createdAt).format("lll");
+
   return (
     <div className={classes.root}>
       <div className={classes.account}>
@@ -206,7 +208,7 @@ const Card = ({ postID }: Props) => {
               </Link>
             </span>
           </p>
-          <p style={{ marginTop: "-0.8em" }}>{moment(post.createdAt).format("lll")}</p>
+          <p style={{ marginTop: "-0.8em" }}>{timeString}</p>
         </div>
       </div>
 

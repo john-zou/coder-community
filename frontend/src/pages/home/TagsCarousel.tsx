@@ -38,10 +38,7 @@ export const TagsCarousel = ({ value, setValue }) => {
   const tagsArr = [null].concat(Object.values(tags));
 
   const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
-    console.log(newValue);
-    console.log(value);
     setValue(newValue);
-    console.log(value);
   };
 
   return (

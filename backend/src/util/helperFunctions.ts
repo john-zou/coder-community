@@ -50,6 +50,7 @@ export const convertPostDocumentToPostDto = (post: DocumentType<Post>): PostDto 
     content: post.content,
     tags: convertToStrArr(post.tags),
     createdAt,
+    updatedAt: post.updatedAt.toString(), // Not very useful as it updates upon view increment
     featuredImg: post.featuredImg,
     likes: post.likes,
     views: post.views,
@@ -58,6 +59,7 @@ export const convertPostDocumentToPostDto = (post: DocumentType<Post>): PostDto 
   }
 }
 
+// Unused
 export const convertPostDocumentToPostDetailDto = (post: DocumentType<Post>): PostWithDetails => {
   return {
     _id: post._id,
