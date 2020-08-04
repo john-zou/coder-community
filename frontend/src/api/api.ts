@@ -3322,6 +3322,37 @@ export const PostsApiFetchParamCreator = function (configuration?: Configuration
         },
         /**
          * 
+         * @param {number} fetchCount 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        postsControllerGetHackerNewsPosts(fetchCount: number, options: any = {}): FetchArgs {
+            // verify required parameter 'fetchCount' is not null or undefined
+            if (fetchCount === null || fetchCount === undefined) {
+                throw new RequiredError('fetchCount','Required parameter fetchCount was null or undefined when calling postsControllerGetHackerNewsPosts.');
+            }
+            const localVarPath = `/api/posts/hackernews`;
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (fetchCount !== undefined) {
+                localVarQueryParameter['fetchCount'] = fetchCount;
+            }
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {string} postID 
          * @param {boolean} getAuthor 
          * @param {*} [options] Override http request option.
@@ -3636,6 +3667,24 @@ export const PostsApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {number} fetchCount 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        postsControllerGetHackerNewsPosts(fetchCount: number, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<any> {
+            const localVarFetchArgs = PostsApiFetchParamCreator(configuration).postsControllerGetHackerNewsPosts(fetchCount, options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * 
          * @param {string} postID 
          * @param {boolean} getAuthor 
          * @param {*} [options] Override http request option.
@@ -3811,6 +3860,15 @@ export const PostsApiFactory = function (configuration?: Configuration, fetch?: 
         },
         /**
          * 
+         * @param {number} fetchCount 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        postsControllerGetHackerNewsPosts(fetchCount: number, options?: any) {
+            return PostsApiFp(configuration).postsControllerGetHackerNewsPosts(fetchCount, options)(fetch, basePath);
+        },
+        /**
+         * 
          * @param {string} postID 
          * @param {boolean} getAuthor 
          * @param {*} [options] Override http request option.
@@ -3915,6 +3973,17 @@ export class PostsApi extends BaseAPI {
      */
     public postsControllerDeletePostByPostID(postID: string, options?: any) {
         return PostsApiFp(this.configuration).postsControllerDeletePostByPostID(postID, options)(this.fetch, this.basePath);
+    }
+
+    /**
+     * 
+     * @param {number} fetchCount 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof PostsApi
+     */
+    public postsControllerGetHackerNewsPosts(fetchCount: number, options?: any) {
+        return PostsApiFp(this.configuration).postsControllerGetHackerNewsPosts(fetchCount, options)(this.fetch, this.basePath);
     }
 
     /**

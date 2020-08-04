@@ -33,8 +33,8 @@ const useStyles = makeStyles({
   },
 });
 
-const TitleText = styled.span<{ isPost: boolean, isText: boolean, titleSrc?: string }>`
-  cursor: ${({ titleSrc }) => titleSrc ? "pointer" : "default"};
+const TitleText = styled.span<{ isPost: boolean, isText: boolean, titleSrc?: string, titleOutSrc?: string }>`
+  cursor: ${({ titleSrc, titleOutSrc }) => titleSrc || titleOutSrc ? "pointer" : "default"};
   font-weight: bold;
   color: ${({ isPost, isText }) => isPost ? "#5D67E9" : isText ? "black" : "#5DCBAF"}
 `;
@@ -63,16 +63,25 @@ export const SubTitle = styled.p<{ subtitleIsDate: boolean, boldSub: boolean }>`
   cursor: ${({ boldSub }) => boldSub ? "pointer" : ""};
 `;
 
-const Avatar = ({ small, pic, title, titleSrc, subtitle, extraText, extraTextOnClick, boldSub, isPost, isButton, isText, subtitleIsDate }: { pic: string, title?: string, subtitle?: string, boldSub?: boolean, subtitleIsDate?: boolean, extraText?: string, isPost?: boolean, isButton?: boolean, isText?: boolean, titleSrc?: string, extraTextOnClick?: any, small?: boolean }) => {
+const Avatar = ({ small, pic, title, titleSrc, subtitle, extraText, extraTextOnClick, boldSub, isPost, isButton, isText, subtitleIsDate, titleOutSrc }: { titleOutSrc?: string, pic?: string, title?: string, subtitle?: string, boldSub?: boolean, subtitleIsDate?: boolean, extraText?: string, isPost?: boolean, isButton?: boolean, isText?: boolean, titleSrc?: string, extraTextOnClick?: any, small?: boolean }) => {
   const classes = useStyles();
   const [buttonIsClicked, setButtonIsClicked] = useState(false);
   const history = useHistory();
   return (
     <div className={classes.account}>
-      <img className={small ? classes.smallAccountImg : classes.accountImg} src={pic} alt="avatar" />
+      {pic && <img className={small ? classes.smallAccountImg : classes.accountImg} src={pic} alt="avatar" />}
       <div className={classes.nameTime}>
         <p>
-          <TitleText isPost={isPost} isText={isText} onClick={titleSrc && (() => { history.push(titleSrc) })} titleSrc={titleSrc}>
+          <TitleText isPost={isPost} isText={isText}
+            onClick={() => {
+              if (titleSrc) {
+                history.push(titleSrc)
+              }
+              if (titleOutSrc) {
+                window.location.href = titleOutSrc
+              }
+            }}
+            titleSrc={titleSrc} titleOutSrc={titleOutSrc}>
             {title}&nbsp;&nbsp;&nbsp;
           </TitleText>
           {!isButton && <ExtraText onClick={extraTextOnClick}>{extraText}</ExtraText>}

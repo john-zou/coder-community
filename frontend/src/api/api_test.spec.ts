@@ -176,6 +176,10 @@ describe("PostsApi", () => {
     const postID: string = "postID_example"
     return expect(instance.postsControllerDeletePostByPostID(postID, {})).resolves.toBe(null)
   })
+  test("postsControllerGetHackerNewsPosts", () => {
+    const fetchCount: number = 1.2
+    return expect(instance.postsControllerGetHackerNewsPosts(fetchCount, {})).resolves.toBe(null)
+  })
   test("postsControllerGetPostByID", () => {
     const postID: string = "postID_example"
     const getAuthor: boolean = true

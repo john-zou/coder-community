@@ -1,5 +1,5 @@
 import { GroupModel, PostModel, TagModel, UserModel } from '../mongoModels';
-import { BadRequestException, HttpService, Injectable, NotFoundException, Post } from '@nestjs/common';
+import { BadRequestException, HttpService, Injectable, Logger, NotFoundException, Post } from '@nestjs/common';
 import { Ref } from '@typegoose/typegoose';
 import { ObjectID, ObjectId } from 'mongodb';
 import {
@@ -18,6 +18,8 @@ import {
   UpdatePostSuccessDto,
 } from './dto/posts.dto';
 import { TrendingGateway } from '../trending/trending.gateway';
+import { AxiosResponse } from 'axios';
+import { Observable } from 'rxjs';
 
 
 // Unused -- can use later for different feature
@@ -61,8 +63,20 @@ type DevToArticle = {
     profile_image_90: 'https://res.cloudinary.com/practicaldev/image/fetch/s--8tTU-XkZ--/c_fill,f_auto,fl_progressive,h_90,q_auto,w_90/https://thepracticaldev.s3.amazonaws.com/uploads/organization/profile_image/1/0213bbaa-d5a1-4d25-9e7a-10c30b455af0.png';
   };
 };
+type HNArticle = {
+  "by": "dhouston",
+  "descendants": 71,
+  "id": 8863,
+  "kids": [8952, 9224, 8917, 8884, 8887, 8943, 8869, 8958, 9005, 9671, 8940, 9067, 8908, 9055, 8865, 8881, 8872, 8873, 8955, 10403, 8903, 8928, 9125, 8998, 8901, 8902, 8907, 8894, 8878, 8870, 8980, 8934, 8876],
+  "score": 111,
+  "time": 1175714200,
+  "title": "My YC app: Dropbox - Throw away your USB drive",
+  "type": "story",
+  "url": "http://www.getdropbox.com/u/2/screencast.html"
+}
 const DevToApiKey = 'QG7J1McHHMV7UZ9jwDTeZFHf';
 const DevToApiUrlArticles = 'https://dev.to/api/articles/'; //retrieve a list of articles (with no content)
+const HackerNewsTopStories = 'https://hacker-news.firebaseio.com/v0/topstories.json?print=pretty'
 
 const previewContentLength = 100;
 
@@ -125,6 +139,7 @@ export class PostsService {
     if (!slug) {
       // set _id as slug (if slug is already taken)
       // TODO: create a better slug than just the id if taken
+      slug = newPost._id;
       newPost.slug = newPost._id;
       await newPost.save();
     }
@@ -144,8 +159,9 @@ export class PostsService {
     // TODO: Add post to group (if post created for group)
     if (body.group) {
       const foundGroup = await GroupModel.findById(body.group)
-      await GroupModel.updateOne(foundGroup, {
-        $push: { posts: newPost._id }
+      console.log("CREATING POST FOR GROUP ", foundGroup._id)
+      await GroupModel.updateOne({ _id: foundGroup._id }, {
+        $push: { posts: new newPost._id }
       })
     }
     return {
@@ -237,6 +253,37 @@ export class PostsService {
     //   return postsByFollowing.map(post => convertPostDocumentToPostDto(post));
     // }
     return foundPosts.map(post => convertPostDocumentToPostDto(post));
+  }
+
+
+  private async convertHNToPost(data: HNArticle): Promise<any> {
+    return {
+      id: data.id.toString(),
+      author: data.by,
+      // authorImg: data.user.profile_image,
+      title: data.title,
+      url: data.url,
+      // tags: data.tag_list,
+      // featuredImg: data.cover_image,
+      createdAt: data.time,
+      // likes: data.public_reactions_count,
+      // comments: data.comments_count,
+      // comments,
+      // likedByUser: false,
+    }
+  }
+
+  async getHackerNewsPosts(fetchCount: number): Promise<any[]> {
+    const start: number = 10 * fetchCount;
+    const end: number = start + 10;
+    const res = await this.httpService.get(HackerNewsTopStories).toPromise()
+    const allTopStoriesIDs = await res.data
+    const postIDs = allTopStoriesIDs.slice(start, end) //get a list of ids
+
+    return await Promise.all(postIDs.map(async (postID) => {
+      const singleArticle = await this.httpService.get(`https://hacker-news.firebaseio.com/v0/item/${postID}.json?print=pretty`).toPromise()
+      return this.convertHNToPost(singleArticle.data)
+    }));
   }
 
   // Unused -- can use later for different feature

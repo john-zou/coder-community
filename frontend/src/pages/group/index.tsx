@@ -13,7 +13,7 @@ import PurpleButton from "../common/PurpleButton";
 import { CreateGroupModal } from "./CreateGroupModal";
 import { Link } from "react-router-dom";
 
-const GroupContainer = styled.div`
+export const GroupContainer = styled.div`
   width: 40%;
   height: 100%;
   display: flex;
@@ -24,7 +24,7 @@ const GroupContainer = styled.div`
   box-shadow: 8px 8px 16px #d4d4d4,
               -8px -8px 16px #f5f5f5;
 `;
-const Header = styled.div`
+export const Header = styled.div`
   display: flex;
   flex-direction: row;
   padding-left: 30px;
@@ -33,7 +33,7 @@ const Header = styled.div`
   border-bottom: solid 1px lightgray;
 `;
 
-const GroupContent = styled.div`
+export const GroupContent = styled.div`
   display: flex;
   flex-direction: column;
   padding-left: 30px;
