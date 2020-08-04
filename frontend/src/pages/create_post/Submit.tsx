@@ -18,6 +18,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import FormControl from '@material-ui/core/FormControl';
 import { fetchGroups } from "../../reducers/groupsSlice";
+import "./PostContent.css"
 
 const useStyles = makeStyles({
   operation: {
@@ -124,29 +125,23 @@ export default function Submit(params: { editorRef, tags, img, title }) {
       }}> */}
 
       {/* SUBMIT BUTTON */}
-      {/* <form onSubmit={() => onSubmit(params, curUser, dispatch, history)}> */}
-      <FormControl variant="outlined" className={classes.formControl} >
-        <InputLabel>Submit</InputLabel>
-        <Select
-          // labelId="demo-simple-select-outlined-label"
-          // id="demo-simple-select-outlined"
-          value={submitDest}
+      <div className="submitCreatePost">
+        <FormControl variant="outlined" className={classes.formControl}>
+          <InputLabel>Submit</InputLabel>
+          <Select
+            value={submitDest}
+          >
+            <MenuItem value={10} onClick={(event) => {
+              onSubmit(params, curUser, dispatch, history)
+            }}>Post to my profile</MenuItem>
 
-          label="Post to"
-        >
-
-          <MenuItem value={10} onClick={(event) => {
-            onSubmit(params, curUser, dispatch, history)
-          }}>Post to my profile</MenuItem>
-
-          <p style={{ textAlign: "center" }}>Post to my group</p>
-          {userGroups.map(group => (
-            <MenuItem value={group.name} onClick={() => handleSubmitSelect(group._id)}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{group.name}</MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-      {/* </form> */}
-
+            <p style={{ textAlign: "center" }}>Post to my group</p>
+            {userGroups.map(group => (
+              <MenuItem value={group.name} onClick={() => handleSubmitSelect(group._id)}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{group.name}</MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </div>
     </div>
   );
 }

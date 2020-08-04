@@ -83,8 +83,8 @@ const LeftSideBar = () => {
           history.push("/home/hackernews")
         }}>Hacker News</h3>
 
-        <h3>Posts</h3>
-        <h3>Videos</h3>
+        {/* <h3>Posts</h3>
+        <h3>Videos</h3> */}
 
         <h3 onClick={() => {
           history.push("/home/groups");
