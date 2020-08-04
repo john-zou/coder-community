@@ -79,7 +79,10 @@ const LeftSideBar = () => {
             <h3>Messages</h3>
           </Link>
         }
-        <h3>Hacker News</h3>
+        <h3 onClick={() => {
+          history.push("/home/hackernews")
+        }}>Hacker News</h3>
+
         <h3>Posts</h3>
         <h3>Videos</h3>
 

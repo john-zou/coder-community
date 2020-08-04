@@ -121,17 +121,12 @@ export class PostsController {
     return this.postsService.createPost(author, createPostDto);
   }
 
+  @Get('hackernews')
+  async getHackerNewsPosts(): Promise<any> {
+    this.logger.log("getHackerNewsPosts");
+    // return "hello";
 
-  @Get(':slug')
-  @UsePipes(new ValidationPipe({ transform: true }))
-  async getPostBySlug(@Param('slug') slug: string, @Query('get-author') getAuthor?: boolean): Promise<GetPostDetailsSuccessDto> {
-    const post = await this.postsService.getPostBySlug(slug);
-    if (getAuthor) {
-      const author = await this.userService.findUserById(post.author);
-      return { post, author };
-    } else {
-      return { post };
-    }
+    return this.postsService.getHackerNewsPosts()
   }
 
   @Get('byID/:postID')
@@ -145,6 +140,29 @@ export class PostsController {
     }
   }
 
+  @Get('byUser/:userID')
+  async getPostsByUserID(@Param('userID') userID: string): Promise<GetPostsSuccessDto> {
+    return this.postsService.getPostsByUserID(userID)
+  }
+
+  @Personal()
+  @Delete(':postID')
+  async deletePostByPostID(@Param('postID') postID: string, @UserObjectID() userID: string): Promise<void> {
+    await this.postsService.deletePostByPostID(postID, userID);
+  }
+
+
+  @Get(':slug')
+  @UsePipes(new ValidationPipe({ transform: true }))
+  async getPostBySlug(@Param('slug') slug: string, @Query('get-author') getAuthor?: boolean): Promise<GetPostDetailsSuccessDto> {
+    const post = await this.postsService.getPostBySlug(slug);
+    if (getAuthor) {
+      const author = await this.userService.findUserById(post.author);
+      return { post, author };
+    } else {
+      return { post };
+    }
+  }
 
   @ApiBody({
     type: UpdatePostBodyDto,
@@ -156,16 +174,5 @@ export class PostsController {
     // console.log(slug);
     // console.log(update);
     return this.postsService.updatePostBySlug(update, slug);
-  }
-
-  @Personal()
-  @Delete(':postID')
-  async deletePostByPostID(@Param('postID') postID: string, @UserObjectID() userID: string): Promise<void> {
-    await this.postsService.deletePostByPostID(postID, userID);
-  }
-
-  @Get('byUser/:userID')
-  async getPostsByUserID(@Param('userID') userID: string): Promise<GetPostsSuccessDto> {
-    return this.postsService.getPostsByUserID(userID)
   }
 }

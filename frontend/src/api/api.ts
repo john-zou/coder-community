@@ -3202,6 +3202,28 @@ export const PostsApiFetchParamCreator = function (configuration?: Configuration
         },
         /**
          * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        postsControllerGetHackerNewsPosts(options: any = {}): FetchArgs {
+            const localVarPath = `/api/posts/hackernews`;
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {string} postID 
          * @param {boolean} getAuthor 
          * @param {*} [options] Override http request option.
@@ -3526,6 +3548,23 @@ export const PostsApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        postsControllerGetHackerNewsPosts(options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<any> {
+            const localVarFetchArgs = PostsApiFetchParamCreator(configuration).postsControllerGetHackerNewsPosts(options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * 
          * @param {string} postID 
          * @param {boolean} getAuthor 
          * @param {*} [options] Override http request option.
@@ -3703,6 +3742,14 @@ export const PostsApiFactory = function (configuration?: Configuration, fetch?: 
         },
         /**
          * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        postsControllerGetHackerNewsPosts(options?: any) {
+            return PostsApiFp(configuration).postsControllerGetHackerNewsPosts(options)(fetch, basePath);
+        },
+        /**
+         * 
          * @param {string} postID 
          * @param {boolean} getAuthor 
          * @param {*} [options] Override http request option.
@@ -3809,6 +3856,16 @@ export class PostsApi extends BaseAPI {
      */
     public postsControllerDeletePostByPostID(postID: string, options?: any) {
         return PostsApiFp(this.configuration).postsControllerDeletePostByPostID(postID, options)(this.fetch, this.basePath);
+    }
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof PostsApi
+     */
+    public postsControllerGetHackerNewsPosts(options?: any) {
+        return PostsApiFp(this.configuration).postsControllerGetHackerNewsPosts(options)(this.fetch, this.basePath);
     }
 
     /**
