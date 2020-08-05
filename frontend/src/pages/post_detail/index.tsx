@@ -118,7 +118,7 @@ const PostDetail = () => {
     if (post) {
       postContent.current.innerHTML += post.content
     }
-  }, [post])
+  }, [post?.content])
 
   if (slug == null || slug === "") {
     return <Redirect to="/" />
