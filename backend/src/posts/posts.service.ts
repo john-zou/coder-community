@@ -1,5 +1,5 @@
 import {GroupModel, PostModel, TagModel, UserModel} from '../mongoModels';
-import {BadRequestException, HttpService, Injectable, Logger, NotFoundException, Post} from '@nestjs/common';
+import {BadRequestException, HttpService, Injectable, Logger, NotFoundException} from '@nestjs/common';
 import {Ref} from '@typegoose/typegoose';
 import {ObjectID, ObjectId} from 'mongodb';
 import {
@@ -9,6 +9,7 @@ import {
 } from '../util/helperFunctions';
 import * as urlSlug from 'url-slug';
 import {User} from '../user/user.schema';
+import {Post} from '../posts/post.schema';
 import {
     CreatePostBodyDto,
     CreatePostSuccessDto,
