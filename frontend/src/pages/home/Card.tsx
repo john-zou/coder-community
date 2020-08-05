@@ -108,7 +108,7 @@ const Card = ({ postID }: Props) => {
   const dispatch = useDispatch();
   const [snackBarOpen, setSnackBarOpen] = useState(false);
   const previewContent = useRef(null);
-  const [changeCount, setChangeCount] = useState(0)
+  // const [changeCount, setChangeCount] = useState(0)
 
   const post = useSelector<RootState, Post>(
     (state) => state.posts.entities[postID]
@@ -159,14 +159,14 @@ const Card = ({ postID }: Props) => {
   // console.log("Card.tsx Render ", post?.title, ". snackbar: ", snackBarOpen);
 
   useEffect(() => {
-    if (post) {
-      setChangeCount(prev => prev += 1)
+    if (post && post.content) {
+      // setChangeCount(prev => prev += 1)
       // console.log("Setting previewContent innerHTML: ", post.previewContent)
-      if (changeCount === 0) {
-        previewContent.current.innerHTML += post.previewContent
-      }
+      // if (changeCount === 0) {
+      previewContent.current.innerHTML += post.previewContent
+      // }
     }
-  }, [post])
+  }, [post?.content])
 
   if (!post || !author || !groups) {
     return <Loading />
@@ -263,7 +263,7 @@ const Card = ({ postID }: Props) => {
       <div className={classes.interactions}>
         {post.tags.length > 0 && post.tags.map((_id) => (
           <p key={_id} className={classes.tagText}>
-            {/*}#{tags[_id].name}&nbsp;*/}
+            #{tags[_id].name}&nbsp;
           </p>
         ))}
         <div style={{ display: "flex", flex: 1 }}></div>

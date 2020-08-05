@@ -1,4 +1,4 @@
-import { HttpException, Injectable, NotFoundException } from '@nestjs/common';
+import { HttpException, Injectable, Logger, NotFoundException } from '@nestjs/common';
 
 import { PostModel, UserModel } from '../mongoModels';
 import { PostDto } from '../posts/dto/posts.dto';
@@ -9,6 +9,7 @@ import { ObjectId } from 'mongodb';
 import { userInfo } from 'os';
 import { Model } from 'mongoose';
 import { DocumentType } from '@typegoose/typegoose';
+import * as _ from "lodash";
 
 /**
  * typed like in UserSchema
@@ -138,11 +139,18 @@ export class UserService {
 
   // To get the authors of the trending posts
   async getAuthors(posts: PostDto[]): Promise<UserDto[]> {
-    console.log("USER::SERVICE::GET AUTHORS")
     const result: UserDto[] = [];
     for (const post of posts) {
       // console.log(post);
       const foundUser = await UserModel.findById(post.author);
+      if (!foundUser) {
+        Logger.log(`post.author: ${post.author} could not be found. Deleting post.`, "UserService::getAuthors");
+        // Do not send this post to the front end
+        _.pull(posts, post);
+        // Delete this post
+        await PostModel.deleteOne({ _id: post._id });
+        continue;
+      }
       // console.log(foundUser);
       result.push({
         _id: foundUser._id,

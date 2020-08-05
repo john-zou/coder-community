@@ -72,6 +72,7 @@ export const submitPost = createAsyncThunk(
       _id: _id,
       slug: slug,
       author: createdPost.author,
+      previewContent: createdPost.content.substr(0, 100),
       comments: [],
       commentsCount: 0,
       content: createdPost.content,

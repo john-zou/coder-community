@@ -60,6 +60,7 @@ const Interactions = () => {
 }
 
 const PostDetail = () => {
+  console.log("post detail...")
   const { slug } = useParams<PostDetailParams>(); //get the url param to render the appropriate post
   const classes = useStyles();
   const dispatch = useDispatch<AppDispatch>();
@@ -78,7 +79,7 @@ const PostDetail = () => {
   });
 
   const { postIsLikedByUser, handleToggleLike } = useLikePost(post?._id);
-  const [changeCount, setChangeCount] = useState(0)
+  // const [changeCount, setChangeCount] = useState(0)
 
   let canUpdate = false; // if the current user is the author, show an 'update post' button
   if (author !== null) {
@@ -95,9 +96,9 @@ const PostDetail = () => {
   }
 
 
-  useEffect(() => {
-    dispatch(fetchGroups())
-  })
+  // useEffect(() => {
+  //   dispatch(fetchGroups())
+  // }, [])
 
   useEffect(() => {
     if (slug == null || slug === "") {
@@ -147,7 +148,7 @@ const PostDetail = () => {
         <h1>{post.title}</h1>
 
         <Link to={`/user/${author.userID}`} style={{ textDecoration: "none" }}>
-          <Avatar pic={author.profilePic} title={author.userID} subtitle={moment(post.createdAt).format('lll')} isPost={true}></Avatar>
+          <Avatar pic={author.profilePic} title={author.userID} subtitle={dateSubtitleInAvatar} isPost={true}></Avatar>
         </Link>
 
         {/* POST CONTENT */}
@@ -170,10 +171,10 @@ const PostDetail = () => {
             <img className={classes.shareIcon} src={CommentIcon} alt="" />
             &nbsp;&nbsp;{post.commentsCount}
           </span>
-          {/* <span>
+          <span>
             <img className={classes.shareIcon} src={BookmarkEmpty} alt="" />
             &nbsp;&nbsp;Save
-          </span> */}
+          </span>
         </div>
 
         <hr></hr>
@@ -184,7 +185,7 @@ const PostDetail = () => {
         <div style={{ height: "20px" }} />
         {canUpdate && <DeletePostButton postID={post?._id} />}
       </div>
-    </div>
+    </div >
   );
 };
 
