@@ -24,7 +24,7 @@ const useStyles = makeStyles({
   savePostSection: {
     display: "flex",
     flexDirection: "column",
-    height: "50vh",
+    height: "90vh",
     overflowY: "scroll",
   },
   savePostText: {
@@ -84,7 +84,7 @@ export default function RightSideBar() {
           ))}
         </div>
 
-        <p className={classes.savePostText}># WHO TO FOLLOW</p>
+        {/* <p className={classes.savePostText}># WHO TO FOLLOW</p> */}
         <ScrollUpButton />
       </div>}
 

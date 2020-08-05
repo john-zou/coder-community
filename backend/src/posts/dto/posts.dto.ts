@@ -30,7 +30,6 @@ export class GetPostsSuccessDto {
   posts: PostDto[]
 }
 
-// unused
 export class PostWithDetails {
   _id: string;
   author: string;

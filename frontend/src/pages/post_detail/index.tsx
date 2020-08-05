@@ -24,6 +24,7 @@ import TagP from "./TagPanel";
 import {Dictionary} from "@reduxjs/toolkit";
 import DeletePostButton from "./DeletePostButton";
 import moment from 'moment';
+import { fetchGroups } from '../../reducers/groupsSlice';
 
 const useStyles = makeStyles({
   root: {
@@ -107,6 +108,10 @@ const PostDetail = () => {
 
 
   useEffect(() => {
+    dispatch(fetchGroups())
+  })
+
+  useEffect(() => {
     if (slug == null || slug === "") {
       return;
     }
@@ -153,7 +158,7 @@ const PostDetail = () => {
         <h1>{post.title}</h1>
 
         <Link to={`/user/${author.userID}`} style={{ textDecoration: "none" }}>
-          <Avatar pic={author.profilePic} title={author.userID} subtitle={dateSubtitleInAvatar} isPost={true}></Avatar>
+          <Avatar pic={author.profilePic} title={author.userID} subtitle={moment(post.createdAt).format('lll')} isPost={true}></Avatar>
         </Link>
 
 

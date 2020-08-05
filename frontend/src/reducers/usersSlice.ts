@@ -1,5 +1,5 @@
 import { createEntityAdapter, createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
-import {fetchTrendingPosts, fetchPostBySlug, fetchPostByID, fetchPostsByTag} from "./postsSlice";
+import { fetchTrendingPosts, fetchPostBySlug, fetchPostByID, fetchPostsByTag } from "./postsSlice";
 import { User } from "../store/types";
 import {
   GetInitialDataDto,

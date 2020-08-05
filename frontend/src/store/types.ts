@@ -62,6 +62,16 @@ export type Post = {
   group?: string,
 };
 
+export type HNPost = {
+  id: string,
+  author?: string,
+  title?: string,
+  url?: string,
+  // comments?: string[],
+  // commentsCount?: number,
+  createdAt: number,
+};
+
 export type PostsCreation = {
   _id: string,
   title: string,

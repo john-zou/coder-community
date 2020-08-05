@@ -75,7 +75,8 @@ export const submitPost = createAsyncThunk(
       comments: [],
       commentsCount: 0,
       content: createdPost.content,
-      createdAt: Date.now().toString()
+      createdAt: Date.now().toString(),
+      group: createdPost.group
     }
     return post;
   }

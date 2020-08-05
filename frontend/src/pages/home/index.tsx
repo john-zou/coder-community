@@ -5,6 +5,7 @@ import Main from './Main';
 import RightSideBar from './RightSideBar';
 import GroupTab from '../group';
 import { Route, Switch, useRouteMatch } from 'react-router-dom';
+import { HackerNewsTab } from './HackerNewsTab';
 
 const useStyles = makeStyles({
   home: {
@@ -35,6 +36,9 @@ export default function Home() {
       <LeftSideBar />
       <div className={classes.main}>
         <Switch>
+          <Route path={`${path}/hackernews`}>
+            <HackerNewsTab />
+          </Route>
           <Route path={`${path}/groups`}>
             <GroupTab />
           </Route>

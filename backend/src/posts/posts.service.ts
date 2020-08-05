@@ -1,15 +1,14 @@
-import { GroupModel, PostModel, TagModel, UserModel } from '../mongoModels';
-import { BadRequestException, HttpService, Injectable, NotFoundException } from '@nestjs/common';
-import { Ref } from '@typegoose/typegoose';
-import { ObjectID, ObjectId } from 'mongodb';
+import {GroupModel, PostModel, TagModel, UserModel} from '../mongoModels';
+import {BadRequestException, HttpService, Injectable, Logger, NotFoundException, Post} from '@nestjs/common';
+import {Ref} from '@typegoose/typegoose';
+import {ObjectID, ObjectId} from 'mongodb';
 import {
     convertPostDocumentToPostDetailDto,
     convertPostDocumentToPostDto,
     convertToStrArr,
 } from '../util/helperFunctions';
 import * as urlSlug from 'url-slug';
-import { User } from '../user/user.schema';
-import { Post } from '../posts/post.schema';
+import {User} from '../user/user.schema';
 import {
     CreatePostBodyDto,
     CreatePostSuccessDto,
@@ -18,7 +17,9 @@ import {
     PostWithDetails, UpdatePostBodyDto,
     UpdatePostSuccessDto,
 } from './dto/posts.dto';
-import { TrendingGateway } from '../trending/trending.gateway';
+import {TrendingGateway} from '../trending/trending.gateway';
+import {AxiosResponse} from 'axios';
+import {Observable} from 'rxjs';
 
 
 // Unused -- can use later for different feature
@@ -62,14 +63,27 @@ type DevToArticle = {
         profile_image_90: 'https://res.cloudinary.com/practicaldev/image/fetch/s--8tTU-XkZ--/c_fill,f_auto,fl_progressive,h_90,q_auto,w_90/https://thepracticaldev.s3.amazonaws.com/uploads/organization/profile_image/1/0213bbaa-d5a1-4d25-9e7a-10c30b455af0.png';
     };
 };
+type HNArticle = {
+    "by": "dhouston",
+    "descendants": 71,
+    "id": 8863,
+    "kids": [8952, 9224, 8917, 8884, 8887, 8943, 8869, 8958, 9005, 9671, 8940, 9067, 8908, 9055, 8865, 8881, 8872, 8873, 8955, 10403, 8903, 8928, 9125, 8998, 8901, 8902, 8907, 8894, 8878, 8870, 8980, 8934, 8876],
+    "score": 111,
+    "time": 1175714200,
+    "title": "My YC app: Dropbox - Throw away your USB drive",
+    "type": "story",
+    "url": "http://www.getdropbox.com/u/2/screencast.html"
+}
 const DevToApiKey = 'QG7J1McHHMV7UZ9jwDTeZFHf';
 const DevToApiUrlArticles = 'https://dev.to/api/articles/'; //retrieve a list of articles (with no content)
+const HackerNewsTopStories = 'https://hacker-news.firebaseio.com/v0/topstories.json?print=pretty'
 
 const previewContentLength = 100;
 
 @Injectable()
 export class PostsService {
-    constructor(private readonly httpService: HttpService) { }
+    constructor(private readonly httpService: HttpService) {
+    }
 
     async getPostByID(postID: string): Promise<PostWithDetails> {
         const post = await PostModel.findById(postID);
@@ -81,7 +95,7 @@ export class PostsService {
     }
 
     async getPostBySlug(slug: string): Promise<PostWithDetails> {
-        const post = await PostModel.findOne({ slug });
+        const post = await PostModel.findOne({slug});
         if (post) {
             ++post.views;
             post.save(); // purposefully not awaiting
@@ -98,7 +112,7 @@ export class PostsService {
         let slug = urlSlug(body.title);
         // console.log("POSTS::SERVICE");
         // TODO: optimize with model.collection.find() / limit() / size()
-        if (await PostModel.findOne({ slug })) {
+        if (await PostModel.findOne({slug})) {
             slug = undefined;
         }
 
@@ -126,6 +140,7 @@ export class PostsService {
         if (!slug) {
             // set _id as slug (if slug is already taken)
             // TODO: create a better slug than just the id if taken
+            slug = newPost._id;
             newPost.slug = newPost._id;
             await newPost.save();
         }
@@ -138,15 +153,16 @@ export class PostsService {
         // Add post to tags
         const tags = newPost.tags;
         if (tags.length > 0) {
-            const expressions = tags.map(tagID => ({ _id: tagID }));
-            await TagModel.updateMany({ $or: expressions }, { $push: { posts: newPost._id } });
+            const expressions = tags.map(tagID => ({_id: tagID}));
+            await TagModel.updateMany({$or: expressions}, {$push: {posts: newPost._id}});
         }
 
         // TODO: Add post to group (if post created for group)
         if (body.group) {
             const foundGroup = await GroupModel.findById(body.group)
-            await GroupModel.updateOne(foundGroup, {
-                $push: { posts: newPost._id }
+            console.log("CREATING POST FOR GROUP ", foundGroup._id)
+            await GroupModel.updateOne({_id: foundGroup._id}, {
+                $push: {posts: new newPost._id}
             })
         }
         return {
@@ -177,7 +193,7 @@ export class PostsService {
 
     async updatePostBySlug(update: UpdatePostBodyDto, slug: string): Promise<UpdatePostSuccessDto> {
         // 1. Find post
-        const post = await PostModel.findOne({ slug });
+        const post = await PostModel.findOne({slug});
         if (!post) {
             throw new NotFoundException();
         }
@@ -185,7 +201,7 @@ export class PostsService {
         if (update.title) {
             post.title = update.title;
             let newSlug = urlSlug(update.title);
-            const existingPostWithSlug = await PostModel.findOne({ newSlug });
+            const existingPostWithSlug = await PostModel.findOne({newSlug});
             if (existingPostWithSlug) {
                 newSlug = post._id;
             }
@@ -210,7 +226,7 @@ export class PostsService {
         await post.save();
         // console.log("POST::SERVICE");
         // console.log(post.slug);
-        return { _id: post._id, slug: post.slug };
+        return {_id: post._id, slug: post.slug};
     }
 
     isLikedByUser(likes: Ref<User, ObjectID>[], userObjectID: string): boolean {
@@ -241,7 +257,7 @@ export class PostsService {
             if (post.views > 0) {
                 likeToViewRatio = post.likes / post.views;
             }
-            likesToViewsRatios.push({ [post._id.toString()]: likeToViewRatio });
+            likesToViewsRatios.push({[post._id.toString()]: likeToViewRatio});
         })
         likesToViewsRatios.sort((ratio1, ratio2) => ratio2[Object.keys(ratio2)[0]] - ratio1[Object.keys(ratio1)[0]]);
 
@@ -260,6 +276,37 @@ export class PostsService {
         //   return postsByFollowing.map(post => convertPostDocumentToPostDto(post));
         // }
         return foundPosts.map(post => convertPostDocumentToPostDto(post));
+    }
+
+
+    private async convertHNToPost(data: HNArticle): Promise<any> {
+        return {
+            id: data.id.toString(),
+            author: data.by,
+            // authorImg: data.user.profile_image,
+            title: data.title,
+            url: data.url,
+            // tags: data.tag_list,
+            // featuredImg: data.cover_image,
+            createdAt: data.time,
+            // likes: data.public_reactions_count,
+            // comments: data.comments_count,
+            // comments,
+            // likedByUser: false,
+        }
+    }
+
+    async getHackerNewsPosts(fetchCount: number): Promise<any[]> {
+        const start: number = 10 * fetchCount;
+        const end: number = start + 10;
+        const res = await this.httpService.get(HackerNewsTopStories).toPromise()
+        const allTopStoriesIDs = await res.data
+        const postIDs = allTopStoriesIDs.slice(start, end) //get a list of ids
+
+        return await Promise.all(postIDs.map(async (postID) => {
+            const singleArticle = await this.httpService.get(`https://hacker-news.firebaseio.com/v0/item/${postID}.json?print=pretty`).toPromise()
+            return this.convertHNToPost(singleArticle.data)
+        }));
     }
 
     // Unused -- can use later for different feature
@@ -303,26 +350,28 @@ export class PostsService {
     }
 
     async deletePostByPostID(postID: string, userID: string): Promise<void> {
-        const postExists = await PostModel.exists({ _id: postID, author: new ObjectID(userID) });
+        const postExists = await PostModel.exists({_id: postID, author: new ObjectID(userID)});
         if (!postExists) {
             throw new BadRequestException("Post not found");
         }
 
-        await PostModel.deleteOne({ _id: postID });
-        await UserModel.updateOne({ _id: userID }, { $pull: { posts: new ObjectID(postID) } });
+        await PostModel.deleteOne({_id: postID});
+        await UserModel.updateOne({_id: userID}, {$pull: {posts: new ObjectID(postID)}});
     }
 
     async findPostsByIDs(ids: string[]): Promise<GetPostsSuccessDto> {
-        const foundPosts = await PostModel.find({ _id: { $in: ids } })
-        return { posts: foundPosts.map(post => convertPostDocumentToPostDto(post)) }
+        const foundPosts = await PostModel.find({_id: {$in: ids}})
+        return {posts: foundPosts.map(post => convertPostDocumentToPostDto(post))}
     }
 
     async getPostsByUserID(userID: string): Promise<GetPostsSuccessDto> {
         const foundUser = await UserModel.findById(userID)
-        const postsByUser = await PostModel.find({ author: foundUser._id })
+        const postsByUser = await PostModel.find({author: foundUser._id})
 
         const postIDs = postsByUser.map((post) => post._id.toString())
         console.log(postIDs)
         return this.findPostsByIDs(postIDs)
     }
+
+
 }
