@@ -108,7 +108,7 @@ const Card = ({ postID }: Props) => {
   const dispatch = useDispatch();
   const [snackBarOpen, setSnackBarOpen] = useState(false);
   const previewContent = useRef(null);
-  const [changeCount, setChangeCount] = useState(0)
+  // const [changeCount, setChangeCount] = useState(0)
 
   const post = useSelector<RootState, Post>(
     (state) => state.posts.entities[postID]
@@ -159,12 +159,12 @@ const Card = ({ postID }: Props) => {
   // console.log("Card.tsx Render ", post?.title, ". snackbar: ", snackBarOpen);
 
   useEffect(() => {
-    if (post) {
-      setChangeCount(prev => prev += 1)
+    if (post && post.content) {
+      // setChangeCount(prev => prev += 1)
       // console.log("Setting previewContent innerHTML: ", post.previewContent)
-      if (changeCount === 0) {
-        previewContent.current.innerHTML += post.previewContent
-      }
+      // if (changeCount === 0) {
+      previewContent.current.innerHTML += post.previewContent
+      // }
     }
   }, [post])
 
