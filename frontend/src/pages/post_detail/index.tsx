@@ -83,7 +83,7 @@ const PostDetail = () => {
   });
 
   const { postIsLikedByUser, handleToggleLike } = useLikePost(post?._id);
-  const [changeCount, setChangeCount] = useState(0)
+  // const [changeCount, setChangeCount] = useState(0)
 
 
   // fetch tags
@@ -107,9 +107,9 @@ const PostDetail = () => {
   }
 
 
-  useEffect(() => {
-    dispatch(fetchGroups())
-  })
+  // useEffect(() => {
+  //   dispatch(fetchGroups())
+  // }, [])
 
   useEffect(() => {
     if (slug == null || slug === "") {
@@ -158,7 +158,7 @@ const PostDetail = () => {
         <h1>{post.title}</h1>
 
         <Link to={`/user/${author.userID}`} style={{ textDecoration: "none" }}>
-          <Avatar pic={author.profilePic} title={author.userID} subtitle={moment(post.createdAt).format('lll')} isPost={true}></Avatar>
+          <Avatar pic={author.profilePic} title={author.userID} subtitle={dateSubtitleInAvatar} isPost={true}></Avatar>
         </Link>
 
 
@@ -185,10 +185,10 @@ const PostDetail = () => {
             <img className={classes.shareIcon} src={CommentIcon} alt="" />
             &nbsp;&nbsp;{post.commentsCount}
           </span>
-          {/* <span>
+          <span>
             <img className={classes.shareIcon} src={BookmarkEmpty} alt="" />
             &nbsp;&nbsp;Save
-          </span> */}
+          </span>
         </div>
 
         <hr></hr>
@@ -200,7 +200,7 @@ const PostDetail = () => {
         <div style={{height: "20px"}}/>
         {canUpdate && <DeletePostButton postID={post?._id}/>}
       </div>
-    </div>
+    </div >
   );
 };
 

@@ -116,7 +116,6 @@ export default function Submit(params: { editorRef, tags, img, title }) {
 
   const handleSubmitSelect = async (groupID) => {
     console.log("handle select", groupID)
-    // setSubmitDest(e.target.value)
     await onSubmit(params, curUser, dispatch, history, groupID)
   }
 
@@ -132,9 +131,6 @@ export default function Submit(params: { editorRef, tags, img, title }) {
         <PurpleButton content="Cancel" />
       </div>
       <div style={{ width: "15px" }}></div>
-      {/* <div onClick={(event) => {
-        onSubmit(params, curUser, dispatch, history);
-      }}> */}
 
       {/* SUBMIT BUTTON */}
       <div className="submitCreatePost">
@@ -149,7 +145,9 @@ export default function Submit(params: { editorRef, tags, img, title }) {
 
             <p style={{ textAlign: "center" }}>Post to my group</p>
             {userGroups.map(group => (
-              <MenuItem value={group.name} onClick={() => handleSubmitSelect(group._id)}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{group.name}</MenuItem>
+              <MenuItem
+                value={group.name}
+                onClick={() => handleSubmitSelect(group._id)}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{group.name}</MenuItem>
             ))}
           </Select>
         </FormControl>

@@ -1,5 +1,6 @@
 import { createAsyncThunk, createEntityAdapter, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
+  CreatePostSuccessDto,
   GetGroupMembersAndPostsDto,
   GetInitialDataDto,
   GetInitialDataLoggedInDto,

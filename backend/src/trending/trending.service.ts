@@ -39,7 +39,6 @@ export class TrendingService {
   async getInitialLoggedInData(fetchCount: number, userObjectID: string): Promise<GetInitialDataLoggedInDto> {
     const posts = await this.postsService.getInitialPosts(fetchCount, userObjectID);
     const users = await this.userService.getAuthors(posts);
-    console.log(users);
     const user = await this.userService.findUserById(userObjectID);
     const tags = await this.tagsService.getTags();
     return {
