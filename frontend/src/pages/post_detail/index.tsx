@@ -112,10 +112,6 @@ const PostDetail = () => {
   }
 
 
-  // useEffect(() => {
-  //   dispatch(fetchGroups())
-  // }, [])
-
   useEffect(() => {
     if (slug == null || slug === "") {
       return;
@@ -202,10 +198,10 @@ const PostDetail = () => {
             <img className={classes.shareIcon} src={CommentIcon} alt="" />
             &nbsp;&nbsp;{post.commentsCount}
           </span>
-          <span>
+          {/* <span>
             <img className={classes.shareIcon} src={BookmarkEmpty} alt="" />
             &nbsp;&nbsp;Save
-          </span>
+          </span> */}
         </div>
 
         <hr></hr>

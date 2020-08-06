@@ -1,14 +1,14 @@
-import React, {useContext, useRef} from "react";
+import React, { useContext, useRef } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 
 import PurpleButton from "../common/PurpleButton";
-import {createCommentPending} from "../../reducers/commentsSlice";
+import { createCommentPending } from "../../reducers/commentsSlice";
 
 import { CreateCommentClientToServerDto } from "../../ws-dto/comments/dto/createComment.ws.dto";
-import {useDispatch, useSelector} from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { SocketContext } from "../../App";
-import {RootState} from "../../reducers/rootReducer";
-import {Loading} from "../common/Loading";
+import { RootState } from "../../reducers/rootReducer";
+import { Loading } from "../common/Loading";
 
 const useStyles = makeStyles({
   root: {
@@ -29,7 +29,7 @@ const useStyles = makeStyles({
   },
 });
 
-const NewComment = ({postID}) => {
+const NewComment = ({ postID }) => {
   const socket = useContext(SocketContext);
   const classes = useStyles();
   const inputRef = useRef(null);
@@ -65,7 +65,7 @@ const NewComment = ({postID}) => {
         ref={inputRef}
       />
       {/*<input className={classes.name} placeholder="Type comment" />*/}
-      <PurpleButton content="Post comment"></PurpleButton>
+      <PurpleButton content="Comment"></PurpleButton>
     </form>
   );
 };

@@ -1,6 +1,7 @@
 import styled from "@emotion/styled";
 import Quill from "quill";
 import React, { useEffect, useRef, useState } from "react";
+import { Post } from "../../store/types";
 import "./PostContent.css"
 
 const PostEditor = styled.div`
@@ -26,16 +27,27 @@ export const PostToolbar = styled.div`
   background-color: white;
   padding-left: 30px;
 `;
-export const PostContent = ({ editorRef, setTitle }: { editorRef: React.MutableRefObject<Quill>, setTitle: React.Dispatch<React.SetStateAction<string>> }) => {
+export const PostContent = ({ editorRef, setTitle, currentPost }: { editorRef: React.MutableRefObject<Quill>, setTitle: React.Dispatch<React.SetStateAction<string>>, currentPost?: Post }) => {
   useEffect(() => {
-    editorRef.current = new Quill('#editor', {
-      modules: {
-        toolbar: '#toolbar'
-      },
-      placeholder: 'Type post content...',
-      theme: 'snow'  // or 'bubble'
-    });
+    if (currentPost) {
+      editorRef.current = new Quill('#editor', {
+        modules: {
+          toolbar: '#toolbar'
+        },
+        theme: 'snow'  // or 'bubble'
+      });
+      editorRef.current.clipboard.dangerouslyPasteHTML(currentPost.content)
+    }
 
+    else {
+      editorRef.current = new Quill('#editor', {
+        modules: {
+          toolbar: '#toolbar'
+        },
+        placeholder: 'Type post content...',
+        theme: 'snow'  // or 'bubble'
+      });
+    }
   }, [])
 
 
@@ -72,12 +84,16 @@ export const PostContent = ({ editorRef, setTitle }: { editorRef: React.MutableR
       </PostToolbar>
 
       <PostTitle>
-        <input placeholder="Title" style={{ outline: "none", border: "none", fontSize: "2em", paddingLeft: "15px", paddingRight: "15px", width: "100%" }} onChange={(e) => {
-          setTitle(e.target.value)
-        }} />
+        <input
+          placeholder={currentPost ? currentPost.title : "Title"}
+          style={{ outline: "none", border: "none", fontSize: "2em", paddingLeft: "15px", paddingRight: "15px", width: "100%" }}
+          onChange={(e) => {
+            setTitle(e.target.value)
+          }} />
       </PostTitle>
       <div className="postcontent">
-        <PostEditor id="editor" style={{ height: "40vh !important" }} onChange={() => { console.log(editorRef.current.getContents()) }} />
+        <PostEditor id="editor"
+          style={{ height: "40vh !important" }} />
       </div>
     </div>)
 }

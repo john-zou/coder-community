@@ -1,15 +1,15 @@
-import React, {useContext, useRef, useState} from "react";
+import React, { useContext, useRef, useState } from "react";
 import styled from "@emotion/styled";
-import {RootState} from "../../reducers/rootReducer";
-import {useSelector} from "react-redux";
-import {Comment, CurrentLoggedInUser, User} from "../../store/types";
+import { RootState } from "../../reducers/rootReducer";
+import { useSelector } from "react-redux";
+import { Comment, CurrentLoggedInUser, User } from "../../store/types";
 import Avatar from "../common/Avatar";
 import moment from "moment";
-import {ChildComment} from "./ChildComment";
-import {Modal} from "@material-ui/core";
-import {initializeGitHubOAuth} from "../login/login";
-import {SocketContext} from "../../App";
-import {CreateCommentClientToServerDto, CreateCommentEvent} from "../../ws-dto/comments/dto/createComment.ws.dto";
+import { ChildComment } from "./ChildComment";
+import { Modal } from "@material-ui/core";
+import { initializeGitHubOAuth } from "../login/login";
+import { SocketContext } from "../../App";
+import { CreateCommentClientToServerDto, CreateCommentEvent } from "../../ws-dto/comments/dto/createComment.ws.dto";
 import ReplySvg from "../../assets/reply.svg";
 import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
@@ -53,7 +53,7 @@ type Props = {
   commentID: string;
 }
 
-export function TopLevelComment({commentID}: Props) {
+export function TopLevelComment({ commentID }: Props) {
   const comment = useSelector<RootState, Comment>(state => state.comments.entities[commentID]);
   const author = useSelector<RootState, User>(state => state.users.entities[comment?.author]);
   const [expanded, setExpanded] = useState(false);
@@ -95,30 +95,30 @@ export function TopLevelComment({commentID}: Props) {
   }
 
   return (
-    <div style={{backgroundColor: expanded ? "white" : "inherit", borderRadius: "20px", paddingLeft: "1em", paddingBottom: "1.5em", cursor: "pointer"}}>
+    <div style={{ backgroundColor: expanded ? "white" : "inherit", borderRadius: "20px", paddingLeft: "1em", paddingBottom: "1.5em", cursor: "pointer" }}>
       <TopLevelCommentContainer onClick={() => setExpanded(expanded => !expanded)}>
         <Avatar pic={author.profilePic}
-                title={author.userID} titleSrc={`/user/${author.userID}`}
-                subtitle={moment(comment.createdAt).calendar()}
-                subtitleIsDate
-                extraText="Reply"
-                extraTextOnClick={handleClickReply}
+          title={author.userID} titleSrc={`/user/${author.userID}`}
+          subtitle={moment(comment.createdAt).calendar()}
+          subtitleIsDate
+          extraText="Reply"
+          extraTextOnClick={handleClickReply}
         ></Avatar>
 
       </TopLevelCommentContainer>
       <CommentContent>{comment.content}</CommentContent>
       {expanded && (<ChildCommentsContainer>
-        {comment.replies.map(reply => <ChildComment commentID={reply}></ChildComment>)}
+        {comment.replies?.map(reply => <ChildComment commentID={reply}></ChildComment>)}
       </ChildCommentsContainer>)}
 
       <Modal open={openReplyModal} onClose={() => setOpenReplyModal(false)} closeAfterTransition
-             BackdropComponent={Backdrop} BackdropProps={{timeout: 500}}>
+        BackdropComponent={Backdrop} BackdropProps={{ timeout: 500 }}>
         <Fade in={openReplyModal}>
           <CreateCommentReplyContainer>
-            <img height={80} src={ReplySvg} alt="Reply"/>
+            <img height={80} src={ReplySvg} alt="Reply" />
             <CreateCommentInfo>Reply to {author.userID}</CreateCommentInfo>
             <form onSubmit={createCommentReply}>
-              <CreateCommentReplyInput ref={replyInputRef} placeholder="Type comment"/>
+              <CreateCommentReplyInput ref={replyInputRef} placeholder="Type comment" />
             </form>
           </CreateCommentReplyContainer>
         </Fade>

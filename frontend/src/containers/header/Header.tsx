@@ -104,7 +104,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Header(props) {
   const ListItemDiv = styled.div`
-  margin-top: 17px;
+  margin-top: 10px;
   margin-right: 0.7em;
   cursor: pointer;
 `;

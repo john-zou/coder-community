@@ -24,8 +24,9 @@ const useStyles = makeStyles({
   savePostSection: {
     display: "flex",
     flexDirection: "column",
-    height: "90vh",
+    height: "60vh",
     overflowY: "scroll",
+    overflowX: "hidden",
   },
   savePostText: {
     marginBottom: "-1px",

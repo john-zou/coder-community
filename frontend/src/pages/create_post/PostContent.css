@@ -4,17 +4,34 @@
 
 .ql-container.ql-snow {
   max-height: 50%;
-  /* height: 50vh; */
   border: none !important;
 }
 .postcontent .ql-editor {
   height: 30vh;
 }
 
-/* .submitCreatePost .MuiFormControl-root {
+.submitCreatePost .MuiFormControl-root {
   background-color: #5D67E9 !important;
-  border: none;
+  padding-right: -15px !important;
+  border-radius: 10px;
+  /* border: none; */
 }
 .submitCreatePost .MuiFormLabel-root {
   color: white !important;
-} */
+  padding-bottom: 10px !important;
+  margin-top: -5px !important;
+  margin-left: 15px !important;
+  font-size: 15px;
+}
+.submitCreatePost .MuiOutlinedInput-notchedOutline {
+  border: none !important;
+  align-items: center;
+}
+.submitUpdatePost {
+  padding-left: 10px;
+}
+
+.submitCreatePost .MuiSelect-root {
+  margin-top: -10px !important;
+  margin-bottom: -7px !important;
+}

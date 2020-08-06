@@ -246,7 +246,7 @@ const Card = ({ postID }: Props) => {
                   textDecoration: "none",
                 }}
               >
-                Read more
+                View post
               </h4>
             </Link>
 
