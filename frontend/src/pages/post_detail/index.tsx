@@ -76,8 +76,11 @@ const PostDetail = () => {
     }
 
     const post = state.posts.entities[postID];
-    // console.log(state.posts.entities);
-    // console.log(post);
+    console.log(state.posts.entities);
+    console.log(post);
+    console.log(state.users.entities);
+    console.log(post.author);
+    console.log(state.users.entities[post.author]);
     const author = state.users.entities[post.author];
     return { post, author };
   });
@@ -93,6 +96,8 @@ const PostDetail = () => {
   })
 
   let canUpdate = false; // if the current user is the author, show an 'update post' button
+  console.log(currentUser);
+  console.log(author);
   if (author !== null) {
     canUpdate = currentUser !== null && currentUser._id === author._id;
   }
