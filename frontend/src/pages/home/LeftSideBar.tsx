@@ -71,9 +71,9 @@ const LeftSideBar = () => {
         </div>
       }
       <div className={classes.groupLinks}>
-        <Link to={`/daily-challenge`} className={classes.link}>
+        {/* <Link to={`/daily-challenge`} className={classes.link}>
           <h3>Daily Challenge</h3>
-        </Link>
+        </Link> */}
         {isLoggedIn &&
           <Link to={`/messages`} className={classes.link}>
             <h3>Messages</h3>
@@ -89,8 +89,6 @@ const LeftSideBar = () => {
         <h3 onClick={() => {
           history.push("/home/groups");
         }}>Groups</h3>
-
-        {/* <FilterPost /> */}
       </div>
     </div>
   );

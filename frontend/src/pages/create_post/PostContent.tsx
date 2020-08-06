@@ -13,7 +13,6 @@ const PostEditor = styled.div`
 const PostTitle = styled.div`
   display: flex;
   align-items: center;
-  // justify-content: center;
   height: 8vh;
   width: 42vw;
   background-color: white;
@@ -73,12 +72,12 @@ export const PostContent = ({ editorRef, setTitle }: { editorRef: React.MutableR
       </PostToolbar>
 
       <PostTitle>
-        <input placeholder="Title" style={{ outline: "none", border: "none", fontSize: "2em", paddingLeft: "15px" }} onChange={(e) => {
+        <input placeholder="Title" style={{ outline: "none", border: "none", fontSize: "2em", paddingLeft: "15px", paddingRight: "15px", width: "100%" }} onChange={(e) => {
           setTitle(e.target.value)
         }} />
       </PostTitle>
       <div className="postcontent">
-        <PostEditor id="editor" style={{ height: "40vh !important" }} />
+        <PostEditor id="editor" style={{ height: "40vh !important" }} onChange={() => { console.log(editorRef.current.getContents()) }} />
       </div>
     </div>)
 }

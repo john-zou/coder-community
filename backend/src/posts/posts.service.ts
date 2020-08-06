@@ -290,6 +290,7 @@ export class PostsService {
       }
     }
 
+    // need to fetch more if user has less than 5 posts left
     if (fetchOffset < maxOffset) {
       const limit = maxOffset - fetchOffset
       const skip = fetchOffset - postsByUserCount
@@ -298,6 +299,7 @@ export class PostsService {
       trendingPostDocs.forEach(post => postDocuments.push(post))
     }
 
+    //if there is no posts left
     if (postDocuments.length === 0) {
       Logger.log("returning 404 because postDocuments.length is 0", "getInitialPosts")
       throw new NotFoundException()

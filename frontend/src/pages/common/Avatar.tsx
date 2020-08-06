@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import styled from "@emotion/styled";
 import { useHistory } from "react-router-dom";
@@ -63,10 +63,18 @@ export const SubTitle = styled.p<{ subtitleIsDate: boolean, boldSub: boolean }>`
   cursor: ${({ boldSub }) => boldSub ? "pointer" : ""};
 `;
 
-const Avatar = ({ small, pic, title, titleSrc, subtitle, extraText, extraTextOnClick, boldSub, isPost, isButton, isText, subtitleIsDate, titleOutSrc }: { titleOutSrc?: string, pic?: string, title?: string, subtitle?: string, boldSub?: boolean, subtitleIsDate?: boolean, extraText?: string, isPost?: boolean, isButton?: boolean, isText?: boolean, titleSrc?: string, extraTextOnClick?: any, small?: boolean }) => {
+const Avatar = ({ small, pic, title, titleSrc, subtitle, extraText, extraTextOnClick, boldSub, isPost, isButton, isText, subtitleIsDate, titleOutSrc, previewContent }: { titleOutSrc?: string, pic?: string, title?: string, subtitle?: string, boldSub?: boolean, subtitleIsDate?: boolean, extraText?: string, isPost?: boolean, isButton?: boolean, isText?: boolean, titleSrc?: string, extraTextOnClick?: any, small?: boolean, previewContent?: boolean }) => {
   const classes = useStyles();
   const [buttonIsClicked, setButtonIsClicked] = useState(false);
   const history = useHistory();
+  const previewContentRef = useRef(null)
+
+  useEffect(() => {
+    if (previewContent && previewContentRef.current) {
+      previewContentRef.current.innerHTML += subtitle
+    }
+  }, [subtitle])
+
   return (
     <div className={classes.account}>
       {pic && <img className={small ? classes.smallAccountImg : classes.accountImg} src={pic} alt="avatar" />}
@@ -88,7 +96,16 @@ const Avatar = ({ small, pic, title, titleSrc, subtitle, extraText, extraTextOnC
           {isButton && <SideButton buttonIsClicked={buttonIsClicked} onClick={() => setButtonIsClicked((prevState) => !prevState)}>{extraText}</SideButton>}
           {/* {isButton && buttonIsClicked && <SideButtonClicked>{extraText}</SideButtonClicked>} */}
         </p>
-        <SubTitle subtitleIsDate={subtitleIsDate} boldSub={boldSub}>{subtitle}</SubTitle>
+        {previewContent ?
+          <div style={{ marginTop: "-1.1em", fontSize: "15px", marginLeft: "-1em" }}>
+            <div className="ql-snow" >
+              <div className="ql-editor">
+                <p ref={previewContentRef}></p>
+              </div>
+            </div>
+          </div> :
+          <SubTitle subtitleIsDate={subtitleIsDate} boldSub={boldSub}>{subtitle}</SubTitle>
+        }
       </div>
     </div>
   );
