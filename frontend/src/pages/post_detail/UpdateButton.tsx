@@ -9,7 +9,7 @@ function UpdateButton(params) {
     console.log("POSTDETAIL::UPDATE");
     console.log(params);
     // console.log(params.slug);
-    history.push(`/update-post/${params.params}`);
+    history.push(`/update-post/${params.slug}`);
   }
   return (<PurpleButton handleClick={handleClick} content={"Update Post"}></PurpleButton>);
 }

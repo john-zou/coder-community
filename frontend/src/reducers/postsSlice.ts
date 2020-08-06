@@ -40,7 +40,10 @@ export const fetchTrendingPosts = createAsyncThunk(
       if (isLoggedIn) {
         initialData = await api.trendingControllerGetTrendingLoggedIn(fetchCount);
       } else {
+        console.log("REDUCER::POSTSLICE");
+        console.log(fetchCount);
         initialData = await api.trendingControllerGetTrending(fetchCount);
+        console.log(initialData);
       }
     } catch (err) {
       console.log("Got err from fetchTrendingPosts api call", err);
@@ -58,7 +61,11 @@ export const fetchPostsByTag = createAsyncThunk(
     const fetchCount = (getState() as RootState).tags.entities[tagID].fetchCount;
     let payload: GetPostsByTagDto;
     try {
+      console.log("REDUCER::POSTSLICE::FETCHPOSTBYTAG");
+      console.log(tagID);
+      // payload = await new PostsApi().tagsControllerGetPostsByTag(tagID, undefined, startIdx);
       payload = await new PostsApi().tagsControllerGetPostsByTag(tagID, fetchCount);
+      console.log(payload);
     } catch (err) {
       return rejectWithValue(tagID);
     }
@@ -153,20 +160,27 @@ export const postsSlice = createSlice({
 
     // Create and update post:
     [submitPost.fulfilled.type]: (state, action: PayloadAction<Post>) => {
+      console.log("POSTSLICE::CREATEPOST");
       const newPost = action.payload;
+      state.slugToID[action.payload.slug] = newPost._id;
       postsAdapter.addOne(state, newPost);
+      console.log(newPost);
+      console.log(state);
+      console.log(state.slugToID);
     },
     [updatePost.pending.type]: (state) => {
       state.updating = true
     },
     [updatePost.fulfilled.type]: (state, action: PayloadAction<UpdatePostSuccessDto & UpdatePostBodyDto>) => {
       state.slugToID[action.payload.slug] = state.slugToID[action.payload.oldSlug];
+
       console.log("POSTSLICE::UPDATEPOST");
-      console.log(action.payload);
+      console.log(action.payload.updated);
       // state.slugToID.delete(action.payload.slug);
       postsAdapter.updateOne(state, {
-        id: action.payload._id,
-        changes: action.payload
+            id: action.payload._id,
+            changes: action.payload.updated
+            // changes: action.payload // master
       });
       state.updating = false
       console.log("** UPDATE DONE **");

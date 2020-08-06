@@ -8,10 +8,10 @@ import { Loading } from '../common/Loading';
 import { NotFoundError } from '../common/NotFoundError';
 import NewComment from './NewComment';
 import UpdateButton from './UpdateButton';
-import { RootState } from '../../reducers/rootReducer';
-import { fetchPostBySlug } from '../../reducers/postsSlice';
-import { CurrentLoggedInUser, Post, User } from '../../store/types';
-import { AppDispatch } from '../../store';
+import {RootState} from '../../reducers/rootReducer';
+import {fetchPostBySlug} from '../../reducers/postsSlice';
+import {CurrentLoggedInUser, Post, Tag, User} from '../../store/types';
+import {AppDispatch} from '../../store';
 import defaultPostFeaturedImage from "../../assets/defaultPostFeaturedImage.jpg";
 import { PostsApi } from "../../api";
 import { useLikePost } from "../../hooks/useLikePost";
@@ -19,7 +19,9 @@ import CommentIcon from "../../icons/commentIcon.svg";
 import HeartIcon from "../../icons/heartIcon.svg";
 import HeartIconRed from "../../icons/heartIconRed.svg";
 import BookmarkEmpty from "../../icons/bookmarkEmpty.svg";
-import { Comments } from "./Comments";
+import {Comments} from "./Comments";
+import TagP from "./TagPanel";
+import {Dictionary} from "@reduxjs/toolkit";
 import DeletePostButton from "./DeletePostButton";
 import moment from 'moment';
 import { fetchGroups } from '../../reducers/groupsSlice';
@@ -60,26 +62,35 @@ const Interactions = () => {
 }
 
 const PostDetail = () => {
-  console.log("post detail...")
-  const { slug } = useParams<PostDetailParams>(); //get the url param to render the appropriate post
+  console.log("POSTDETAIL::INDEX");
+  const {slug} = useParams<PostDetailParams>(); //get the url param to render the appropriate post
   const classes = useStyles();
   const dispatch = useDispatch<AppDispatch>();
   const currentUser = useSelector<RootState, CurrentLoggedInUser>(state => state.user);
   const postContent = useRef(null);
-  // const postID = useSelector<RootState, string>(state => state.posts.currentPost)
-  // const slugtoid = useSelector<RootState, Record<string, string>>(state => state.posts.slugToID);
-  const { post, author } = useSelector<RootState, { post: Post, author: User }>(state => {
+  const {post, author} = useSelector<RootState, { post: Post, author: User }>(state => {
+
     const postID = state.posts.slugToID[slug];
     if (!postID) {
       return { post: null, author: null };
     }
+
     const post = state.posts.entities[postID];
+    // console.log(state.posts.entities);
+    // console.log(post);
     const author = state.users.entities[post.author];
     return { post, author };
   });
 
   const { postIsLikedByUser, handleToggleLike } = useLikePost(post?._id);
   // const [changeCount, setChangeCount] = useState(0)
+
+
+  // fetch tags
+  const tags = useSelector<RootState, Dictionary<Tag>>(state => state.tags.entities);
+  const tagsArr = post.tags.map(tag => {
+    return tags[tag].name;
+  })
 
   let canUpdate = false; // if the current user is the author, show an 'update post' button
   if (author !== null) {
@@ -131,7 +142,6 @@ const PostDetail = () => {
   if (error) {
     return <NotFoundError /> // TODO: add something for server error
   }
-
   // post has item with content
   // const likedByUser = isLoggedIn && post.likedByUser;
   const dateSubtitleInAvatar = ((typeof post.createdAt) === "string") ? post.createdAt : moment(post.createdAt).format('lll');
@@ -151,8 +161,12 @@ const PostDetail = () => {
           <Avatar pic={author.profilePic} title={author.userID} subtitle={dateSubtitleInAvatar} isPost={true}></Avatar>
         </Link>
 
+
+        {/*/>
+        <p>{post.content}</p>*/}
         {/* POST CONTENT */}
         <div className="ql-snow" >
+          <TagP tags={tagsArr} />
           <div className="ql-editor">
             <div ref={postContent}></div>
           </div>
@@ -180,10 +194,11 @@ const PostDetail = () => {
         <hr></hr>
         <Comments postID={post._id}></Comments>
         <NewComment postID={post._id}></NewComment>
-        <div style={{ height: "20px" }} />
-        {canUpdate && <UpdateButton params={slug} />}
-        <div style={{ height: "20px" }} />
-        {canUpdate && <DeletePostButton postID={post?._id} />}
+
+        <div style={{height: "20px"}}/>
+        {canUpdate && <UpdateButton slug={slug}/>}
+        <div style={{height: "20px"}}/>
+        {canUpdate && <DeletePostButton postID={post?._id}/>}
       </div>
     </div >
   );

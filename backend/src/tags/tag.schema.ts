@@ -8,5 +8,6 @@ export class Tag extends TimeStamps {
 
   @prop({ ref: 'Post' })
   posts: Ref<Post>[];
+  // posts: [string];
 }
 

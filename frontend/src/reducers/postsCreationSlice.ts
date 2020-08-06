@@ -60,9 +60,9 @@ export const updatePost = createdPost => {
 export const submitPost = createAsyncThunk(
   'submitPost',
   async (createdPost: CreatePostBodyDto & { author: string }) => {
-    // console.log(createdPost.title + " " + createdPost.content);
     const createPostSuccessDto = await new PostsApi().postsControllerCreatePost(createdPost);
-    const { _id, slug } = createPostSuccessDto;
+    const {_id, slug} = createPostSuccessDto;
+
     const post: Post = {
       featuredImg: createdPost.featuredImg,
       likes: 0,
@@ -85,10 +85,8 @@ export const submitPost = createAsyncThunk(
 
 export const updatePost = createAsyncThunk(
   'updatePost',
-  async ({ update, slug }: { update: UpdatePostBodyDto, slug: string }) => {
-    console.log(update);
-    console.log(slug);
-    const { _id, slug: newSlug } = await new PostsApi().postsControllerUpdatePostBySlug(update, slug);
-    return { update, _id, slug: newSlug, oldSlug: slug };
+  async ({update, slug}: { update: UpdatePostBodyDto, slug: string }) => {
+    const {_id, slug: newSlug} = await new PostsApi().postsControllerUpdatePostBySlug(update, slug);
+    return {_id, slug: newSlug, oldSlug: slug, updated: update };
   }
 );

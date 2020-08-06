@@ -46,29 +46,13 @@ const useStyles = makeStyles({
 
 export default function TagPanel(params) {
   const classes = useStyles();
-  const alltags = []; // useState<RootState, >()
+  const alltags = [];
 
-  console.log("CREATEPOST::TAGPANEL");
-  console.log(params.allTagsArr);
+  // console.log("CREATEPOST::TAGPANEL");
+  // console.log(params.allTagsArr);
   return (
     <div className={classes.cptag}>
-      <form id="tagform">
-        {/*<h4 className={classes.h4}>Add tags</h4>
-        <hr className={classes.display}></hr>
-        <ul className={classes.tags}>
-          <Tag />
-        </ul>*/}
-        <AddMultiple label="Add Tags" options={params.allTagsArr} setItems={params.setPostTags} panelWidth={"40vw"} />
-        {/*<input
-          className={classes.input}
-          onChange={_onChange}
-          placeholder="Type here"
-        ></input> */}
-        {/*<br></br>*/}
-      </form>
-      {/*<ul id="tags" onClick={_onDel}>
-        {alltags}
-      </ul>*/}
+      <AddMultiple label="Add Tags" options={params.allTagsArr} setItems={params.setPostTags} panelWidth={"40vw"} />
     </div>
   );
 }

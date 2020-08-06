@@ -32,10 +32,11 @@ const onCancel = (params, dispatch) => {
 
 
 export default function Submit(params) {
-  // console.log("UPDATEPOST::SUBMIT");
+  console.log("UPDATEPOST::SUBMIT");
   const classes = useStyles();
   const dispatch = useDispatch<AppDispatch>();
   const history = useHistory();
+  const previewContentLength = 100;
   const updating = useSelector<RootState, boolean>(state => state.posts.updating)
 
   // const createdPost = useSelector<RootState, PostsCreation>(state => state.postsCreation);
@@ -54,18 +55,19 @@ export default function Submit(params) {
       title: params.title,
       content: params.content,
       tags: params.tags,
-      featuredImg,
+      featuredImg: featuredImg,
       author: curUser._id,
+      previewContent: params.content.substring(0, previewContentLength),
     }
     // Handle update differently
     if (params.isUpdate) {
       setLoading(true)
       dispatch(updatePost({ update: newPost, slug: params.isUpdate })).then(unwrapResult).then(
         dto => {
-          // console.log("UPDATEPOST::SUBMIT::onsubmit");
-          // console.log(dto.slug);
-          // console.log(dto);
-          // console.log(params.tags);
+          console.log("UPDATEPOST::SUBMIT::onsubmit");
+          console.log(dto.slug);
+          console.log(dto);
+          console.log(params.tags);
           setLoading(false)
           if (!updating) {
             history.push(`/post/${dto.slug}`);

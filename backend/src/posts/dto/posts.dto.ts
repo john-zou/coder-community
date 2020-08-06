@@ -72,7 +72,8 @@ export class CreatePostSuccessDto {
 export class UpdatePostSuccessDto {
   _id: string;
   slug: string;
-  oldSlug?: string
+  oldSlug?: string;
+  updated?: any
 }
 
 // Response

@@ -111,7 +111,10 @@ const Card = ({ postID }: Props) => {
   // const [changeCount, setChangeCount] = useState(0)
 
   const post = useSelector<RootState, Post>(
-    (state) => state.posts.entities[postID]
+    (state) => {
+      // console.log(state.posts.entities);
+      return state.posts.entities[postID];
+    }
   );
 
 

@@ -13,6 +13,7 @@ export class TrendingController {
   @UsePipes(new ValidationPipe({ transform: true })) //turn string into specified @Query() type
   @Get('fetchCount')
   getTrending(@Query('fetchCount') fetchCount: number): Promise<GetInitialDataDto> {
+    console.log("TRENDING::CONTROLLER");
     Logger.log("Getting more trending posts!", "TrendingController");
     return this.trendingService.getInitialData(fetchCount);
   }

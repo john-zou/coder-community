@@ -55,6 +55,17 @@ export default function Submit(params: { editorRef, tags, img, title }) {
     })
   }, [])
 
+
+    // const onSubmit = async (params, author, dispatch, history) => {
+    //     // console.log(newPost);
+    //     let featuredImg: string;
+    //     if (params.img) {
+    //       // console.log("CREATEPOST::SUBMIT");
+    //       // console.log(params.img);
+    //       // console.log(author);
+    //         featuredImg = await uploadPublicAsset(params.img);
+    //     }
+
   const onCancel = () => {
     history.push("/home")
   }
@@ -67,7 +78,6 @@ export default function Submit(params: { editorRef, tags, img, title }) {
     }
 
     const editor: Quill = params.editorRef.current;
-
     const newPost = {
       title: params.title,
       content: editor.root.innerHTML,
@@ -85,6 +95,7 @@ export default function Submit(params: { editorRef, tags, img, title }) {
           setLoading(false)
           history.push(`/post/${dto.slug}`)
         }
+
       ).catch(error => {
         console.log(error);
         setError(error);
@@ -97,6 +108,7 @@ export default function Submit(params: { editorRef, tags, img, title }) {
           console.log("CREATEPOST::SUBMIT");
           console.log(dto);
           history.push(`/post/${dto.slug}`)
+
         }
       );
     }
