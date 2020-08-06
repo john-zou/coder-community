@@ -163,9 +163,6 @@ const Card = ({ postID }: Props) => {
 
   useEffect(() => {
     if (post && post.content) {
-      // setChangeCount(prev => prev += 1)
-      // console.log("Setting previewContent innerHTML: ", post.previewContent)
-      // if (changeCount === 0) {
       previewContent.current.innerHTML += post.previewContent
       // }
     }
@@ -226,11 +223,11 @@ const Card = ({ postID }: Props) => {
       </div>
 
       <div className={classes.imgTitle}>
-        <img
+        {post.featuredImg && <img
           src={post.featuredImg}
           style={{ marginTop: "10px", width: "200px", height: "200px", objectFit: "cover" }}
           alt=""
-        />
+        />}
         <div>
           {/* PREVIEW CONTENT */}
           <div className="ql-snow" >
@@ -243,12 +240,13 @@ const Card = ({ postID }: Props) => {
             <Link to={`/post/${post.slug}`} className={classes.link}>
               <h4
                 style={{
+                  marginLeft: "1em",
                   marginRight: "2em",
                   color: "#5D67E9",
                   textDecoration: "none",
                 }}
               >
-                Read more
+                View post
               </h4>
             </Link>
 

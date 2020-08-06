@@ -4,6 +4,7 @@ import { ApiTags } from '@nestjs/swagger';
 import { GetInitialDataDto, GetInitialDataLoggedInDto } from './initialData.dto';
 import { Personal } from '../auth/guards/personal.decorator';
 import { UserObjectID } from '../user/user-object-id.decorator';
+import { GetPopularPostsSuccessDto, PostDto } from '../posts/dto/posts.dto';
 
 @ApiTags('Trending')
 @Controller('trending')
@@ -24,5 +25,10 @@ export class TrendingController {
   getTrendingLoggedIn(@Query('fetchCount') fetchCount: number, @UserObjectID() userObjectID: string): Promise<GetInitialDataLoggedInDto> {
     Logger.log(`Getting more trending posts!, fetchCount: ${fetchCount}`, "TrendingController");
     return this.trendingService.getInitialLoggedInData(fetchCount, userObjectID);
+  }
+
+  @Get('popularPosts')
+  getPopularPosts(): Promise<GetPopularPostsSuccessDto> {
+    return this.trendingService.getPopularPosts()
   }
 }

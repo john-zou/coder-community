@@ -11,12 +11,10 @@ const PostsFetchedAtATime = 5;
 @Injectable()
 export class TagsService {
   async getPostsByTag(tagID: string, fetchCount: number): Promise<GetPostsByTagDto> {
-    console.log("TAGS::SERVICE");
     const tag = await TagModel.findById(tagID);
     if (!tag) {
       throw new NotFoundException();
     }
-    console.log(tag);
 
     const postIDs = new Array<string>(PostsFetchedAtATime);
     // Get the most recent posts first

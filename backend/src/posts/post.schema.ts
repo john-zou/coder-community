@@ -8,7 +8,8 @@ import { User } from '../user/user.schema';
 
 // https://docs.mongodb.com/manual/tutorial/control-results-of-text-search/
 // https://typegoose.github.io/typegoose/docs/decorators/indexes/
-@index({title: 'text', content: 'text'}, {weights: {title: 5, content: 1}})
+@index({ title: 'text', content: 'text' }, { weights: { title: 5, content: 1 } })
+@index({ score: -1 })
 export class Post extends TimeStamps {//mapped to MongoDb collection 'posts"
   @prop({ ref: 'User' })
   author: Ref<User>;
@@ -28,9 +29,6 @@ export class Post extends TimeStamps {//mapped to MongoDb collection 'posts"
   @prop({ ref: 'Tag' })
   tags: Ref<Tag>[]; // This is automatically initialized as empty array
 
-  // @prop()
-  // tags: string[];
-
   @prop()
   featuredImg: string;
 
@@ -42,6 +40,9 @@ export class Post extends TimeStamps {//mapped to MongoDb collection 'posts"
 
   @prop()
   views: number;
+
+  @prop()
+  score: number;
 
   @prop({ ref: 'Group' })
   group: Ref<Group>;

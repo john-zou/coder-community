@@ -12,6 +12,7 @@ import { Personal } from '../auth/guards/personal.decorator';
 import { UserObjectID } from '../user/user-object-id.decorator';
 import { MakeTagBodyDto, MakeTagSuccessDto } from '../tags/tag.dto';
 import { TagsService } from '../tags/tags.service';
+import { PostModel } from '../mongoModels';
 
 @ApiTags('Dev')
 @Controller('dev')
@@ -22,6 +23,15 @@ export class DevController {
     private readonly postsService: PostsService,
     private readonly tagsService: TagsService,
   ) { }
+
+  @Get('update-scores')
+  async updateAllPostScores(): Promise<string> {
+    const posts = await PostModel.find();
+    for (const post of posts) {
+      await this.postsService.updateScore(post);
+    }
+    return "all done!"
+  }
 
   @Get('marco')
   marco(): { polo: boolean } {
@@ -93,7 +103,7 @@ export class DevController {
   }
 
   @Post('tags')
-  makeTag(@Body() {tagName}: MakeTagBodyDto): Promise<MakeTagSuccessDto> {
+  makeTag(@Body() { tagName }: MakeTagBodyDto): Promise<MakeTagSuccessDto> {
     return this.tagsService.makeTag(tagName);
   }
 }

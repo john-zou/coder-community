@@ -6,14 +6,17 @@ const useStyles = makeStyles({
   cptag: {
     display: "flex",
     flexDirection: "column",
-    height: "50vh",
+    // height: "50vh",
     width: "40vw",
     backgroundColor: "white",
-    boxShadow: "3px 3px #F2F2F2",
-    marginBottom: "1em",
+    boxShadow: "8px 8px 16px #d4d4d4, -8px -8px 16px #f5f5f5",
     borderRadius: "5px",
     paddingLeft: "1.5em",
     paddingRight: "1.5em",
+    paddingTop: "1em",
+    paddingBottom: "2em",
+    marginBottom: "1em",
+    marginTop: "1em"
   },
   h4: {
     marginBottom: "0.5em",
@@ -47,10 +50,10 @@ export default function TagPanel(params) {
   // console.log(params.allTagsArr);
   // console.log(params.oldTagsID);
   return (
-      <div className={classes.cptag}>
-        <form id="tagform">
-          <AddMultiple label="Add Tags" options={params.allTagsArr} defaultValID={params.oldTagsID} setItems={params.setPostTags} panelWidth={"40vw"} />
-        </form>
-      </div>
+    <div className={classes.cptag}>
+      <form id="tagform">
+        <AddMultiple label="Add Tags" options={params.allTagsArr} defaultValID={params.oldTagsID} setItems={params.setPostTags} panelWidth={"40vw"} />
+      </form>
+    </div>
   );
 }

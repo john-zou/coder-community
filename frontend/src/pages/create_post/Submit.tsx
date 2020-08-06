@@ -24,6 +24,7 @@ const useStyles = makeStyles({
   operation: {
     display: "flex",
     flexDirection: "row",
+    alignItems: "center",
     flex: 0,
     marginTop: "20px",
   },
@@ -36,7 +37,7 @@ const useStyles = makeStyles({
   },
 });
 
-export default function Submit(params: { editorRef, tags, img, title }) {
+export default function Submit(params: { editorRef, tags, img, title, isUpdate?}) {
   const classes = useStyles();
   const dispatch = useDispatch<AppDispatch>();
   const history = useHistory();
@@ -51,20 +52,9 @@ export default function Submit(params: { editorRef, tags, img, title }) {
 
   useEffect(() => {
     dispatch(fetchGroups()).then(unwrapResult).then(() => {
-      //console.log(groups)
     })
   }, [])
 
-
-    // const onSubmit = async (params, author, dispatch, history) => {
-    //     // console.log(newPost);
-    //     let featuredImg: string;
-    //     if (params.img) {
-    //       // console.log("CREATEPOST::SUBMIT");
-    //       // console.log(params.img);
-    //       // console.log(author);
-    //         featuredImg = await uploadPublicAsset(params.img);
-    //     }
 
   const onCancel = () => {
     history.push("/home")
@@ -83,7 +73,7 @@ export default function Submit(params: { editorRef, tags, img, title }) {
       content: editor.root.innerHTML,
       tags: params.tags,
       featuredImg,
-      author: author,
+      author: author._id,
       group
     }
     // Handle update differently
@@ -105,8 +95,6 @@ export default function Submit(params: { editorRef, tags, img, title }) {
       // Create new post
       dispatch(submitPost(newPost)).then(unwrapResult).then(
         dto => {
-          console.log("CREATEPOST::SUBMIT");
-          console.log(dto);
           history.push(`/post/${dto.slug}`)
 
         }
@@ -115,7 +103,6 @@ export default function Submit(params: { editorRef, tags, img, title }) {
   }
 
   const handleSubmitSelect = async (groupID) => {
-    console.log("handle select", groupID)
     await onSubmit(params, curUser, dispatch, history, groupID)
   }
 
@@ -135,24 +122,31 @@ export default function Submit(params: { editorRef, tags, img, title }) {
       {/* SUBMIT BUTTON */}
       <div className="submitCreatePost">
         <FormControl variant="outlined" className={classes.formControl}>
-          <InputLabel>Submit</InputLabel>
-          <Select
-            value={submitDest}
-          >
-            <MenuItem value={10} onClick={(event) => {
-              onSubmit(params, curUser, dispatch, history)
-            }}>Post to my profile</MenuItem>
+          {params.isUpdate ? <div className="submitUpdatePost"><PurpleButton content="Update Post"
+            handleClick={() => onSubmit(params, curUser, dispatch, history)} /> </div> :
+            <>
+              <InputLabel style={{ height: "100%" }}>Submit</InputLabel>
+              <Select
+                value={submitDest}
+              >
+                <MenuItem value={10} onClick={(event) => {
+                  onSubmit(params, curUser, dispatch, history)
+                }}>Post to my profile</MenuItem>
 
-            <p style={{ textAlign: "center" }}>Post to my group</p>
-            {userGroups.map(group => (
-              <MenuItem
-                value={group.name}
-                onClick={() => handleSubmitSelect(group._id)}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{group.name}</MenuItem>
-            ))}
-          </Select>
+                <p style={{ textAlign: "center" }}>Post to my group</p>
+                {userGroups.map(group => (
+                  <MenuItem
+                    value={group.name}
+                    onClick={() => handleSubmitSelect(group._id)}>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{group.name}
+                  </MenuItem>
+                ))}
+              </Select>
+            </>
+          }
         </FormControl>
       </div>
-    </div>
+    </div >
   );
 }
 

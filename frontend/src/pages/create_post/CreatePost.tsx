@@ -45,10 +45,6 @@ export default function CreatePost() {
   const allTagsArr = Object.values(allTags);
   const editorRef = useRef<Quill>(null); //content
   const [title, setTitle] = useState('')
-  // console.log("CREATEPOST::INDEX");
-  // console.log(allTags);
-  // console.log(allTagsArr);
-  console.log(title);
 
   return (
     <div className={classes.createPost}>

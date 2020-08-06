@@ -64,10 +64,6 @@ export default function Submit(params) {
       setLoading(true)
       dispatch(updatePost({ update: newPost, slug: params.isUpdate })).then(unwrapResult).then(
         dto => {
-          console.log("UPDATEPOST::SUBMIT::onsubmit");
-          console.log(dto.slug);
-          console.log(dto);
-          console.log(params.tags);
           setLoading(false)
           if (!updating) {
             history.push(`/post/${dto.slug}`);

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Redirect, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../store";
@@ -13,9 +13,11 @@ import { NotLoggedInError } from "../common/NotLoggedInError";
 import ImgP from "../create_post/ImgPanel";
 import TextP from "../create_post/TextPanel";
 import TagP from "./TagPanel";
-import Submit from "./Submit";
 import { makeStyles } from "@material-ui/core/styles";
 import { Dictionary, unwrapResult } from "@reduxjs/toolkit";
+import { PostContent } from "../create_post/PostContent";
+import Quill from "quill";
+import Submit from "../create_post/Submit";
 
 const useStyles = makeStyles({
   createPost: {
@@ -29,12 +31,13 @@ const useStyles = makeStyles({
     alignItems: "center",
     // overflowY: "scroll",
   }
+
 });
 
 export default function UpdatePost() {
 
   console.log("UPDATEPOST::INDEX");
-  const {slug} = useParams<{ slug: string }>();
+  const { slug } = useParams<{ slug: string }>();
 
   const classes = useStyles();
   const dispatch = useDispatch<AppDispatch>();
@@ -50,14 +53,12 @@ export default function UpdatePost() {
     const post = state.posts.entities[postID];
     return { post }
   })
-  console.log(post);
 
-  console.log(post._id, "post called: ", post.title);
   // fetch tags
   const tags = useSelector<RootState, Dictionary<Tag>>(state => state.tags.entities);
   const tagsArray = Object.values(tags);
   let oldTagsIDArr = []
-  if (post.tags && post.tags.length > 0) {
+  if (post && post.tags && post.tags.length > 0) {
     const oldTagsSet = new Set(post.tags);
     for (let i = 0; i < tagsArray.length; i++) {
       if (oldTagsSet.has(tagsArray[i]._id))
@@ -70,6 +71,7 @@ export default function UpdatePost() {
   const [postTags, setPostTags] = useState(post?.tags);
   const [featuredImg, setImg] = useState(post?.featuredImg);
   const [error, setError] = useState(null);
+  const editorRef = useRef<Quill>(null); //content
 
   useEffect(() => {
     if (slug == null || slug === "") {
@@ -110,9 +112,10 @@ export default function UpdatePost() {
   return (
     <div className={classes.createPost}>
       <ImgP setImg={setImg} />
-      <TextP setTitle={setTitle} setContent={setContent} title={post?.title} content={post?.content} />
+      {/* <TextP setTitle={setTitle} setContent={setContent} title={post?.title} content={post?.content} /> */}
+      <PostContent editorRef={editorRef} setTitle={setTitle} currentPost={post} />
       <TagP setPostTags={setPostTags} allTagsArr={allTagsArr} oldTagsID={oldTagsIDArr} />
-      <Submit title={title} content={content} tags={postTags} img={featuredImg} isUpdate={post?.slug} />
+      <Submit title={title} editorRef={editorRef} tags={postTags} img={featuredImg} isUpdate={post?.slug} />
     </div>
   );
 }

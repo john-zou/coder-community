@@ -1,19 +1,20 @@
 import styled from "@emotion/styled";
 import Quill from "quill";
 import React, { useEffect, useRef, useState } from "react";
+import { Post } from "../../store/types";
 import "./PostContent.css"
 
 const PostEditor = styled.div`
   max-height: 50%;
   height: 30vh;
-  width: 42vw;
+  width: 43vw;
   background-color: white;
   padding: 0;
+  border-radius: 5px;
 `
 const PostTitle = styled.div`
   display: flex;
   align-items: center;
-  // justify-content: center;
   height: 8vh;
   width: 42vw;
   background-color: white;
@@ -26,23 +27,36 @@ export const PostToolbar = styled.div`
   align-items: center;
   background-color: white;
   padding-left: 30px;
+  border: none;
 `;
-export const PostContent = ({ editorRef, setTitle }: { editorRef: React.MutableRefObject<Quill>, setTitle: React.Dispatch<React.SetStateAction<string>> }) => {
+export const PostContent = ({ editorRef, setTitle, currentPost }: { editorRef: React.MutableRefObject<Quill>, setTitle: React.Dispatch<React.SetStateAction<string>>, currentPost?: Post }) => {
   useEffect(() => {
-    editorRef.current = new Quill('#editor', {
-      modules: {
-        toolbar: '#toolbar'
-      },
-      placeholder: 'Type post content...',
-      theme: 'snow'  // or 'bubble'
-    });
+    if (currentPost) {
+      editorRef.current = new Quill('#editor', {
+        modules: {
+          toolbar: '#toolbar'
+        },
+        theme: 'snow'  // or 'bubble'
+      });
+      editorRef.current.clipboard.dangerouslyPasteHTML(currentPost.content)
+    }
 
+    else {
+      editorRef.current = new Quill('#editor', {
+        modules: {
+          toolbar: '#toolbar'
+        },
+        placeholder: 'Type post content...',
+        theme: 'snow'  // or 'bubble'
+      });
+    }
   }, [])
 
 
   return (
-    <div style={{ boxShadow: "8px 8px 16px #d4d4d4, -8px -8px 16px #f5f5f5", backgroundColor: "white" }}>
-      <PostToolbar id="toolbar">
+    <div className="createPostContent"
+      style={{ boxShadow: "8px 8px 16px #d4d4d4, -8px -8px 16px #f5f5f5", backgroundColor: "white", borderRadius: "5px" }}>
+      <PostToolbar id="toolbar" >
         <select className="ql-header">
           <option value="1"></option>
           <option value="2"></option>
@@ -73,12 +87,16 @@ export const PostContent = ({ editorRef, setTitle }: { editorRef: React.MutableR
       </PostToolbar>
 
       <PostTitle>
-        <input placeholder="Title" style={{ outline: "none", border: "none", fontSize: "2em", paddingLeft: "15px" }} onChange={(e) => {
-          setTitle(e.target.value)
-        }} />
+        <input
+          placeholder={currentPost ? currentPost.title : "Title"}
+          style={{ outline: "none", border: "none", fontSize: "2em", paddingLeft: "15px", paddingRight: "15px", width: "100%" }}
+          onChange={(e) => {
+            setTitle(e.target.value)
+          }} />
       </PostTitle>
       <div className="postcontent">
-        <PostEditor id="editor" style={{ height: "40vh !important" }} />
+        <PostEditor id="editor"
+          style={{ height: "40vh !important" }} />
       </div>
     </div>)
 }
