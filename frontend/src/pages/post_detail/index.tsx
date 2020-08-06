@@ -76,15 +76,10 @@ const PostDetail = () => {
     }
 
     const post = state.posts.entities[postID];
-    // console.log(state.posts.entities);
-    // console.log(post);
     const author = state.users.entities[post.author];
     return { post, author };
   });
-
   const { postIsLikedByUser, handleToggleLike } = useLikePost(post?._id);
-  // const [changeCount, setChangeCount] = useState(0)
-
 
   // fetch tags
   const tags = useSelector<RootState, Dictionary<Tag>>(state => state.tags.entities);
@@ -93,6 +88,8 @@ const PostDetail = () => {
   })
 
   let canUpdate = false; // if the current user is the author, show an 'update post' button
+  console.log(currentUser);
+  console.log(author);
   if (author !== null) {
     canUpdate = currentUser !== null && currentUser._id === author._id;
   }
