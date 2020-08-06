@@ -76,18 +76,10 @@ const PostDetail = () => {
     }
 
     const post = state.posts.entities[postID];
-    console.log(state.posts.entities);
-    console.log(post);
-    console.log(state.users.entities);
-    console.log(post.author);
-    console.log(state.users.entities[post.author]);
     const author = state.users.entities[post.author];
     return { post, author };
   });
-
   const { postIsLikedByUser, handleToggleLike } = useLikePost(post?._id);
-  // const [changeCount, setChangeCount] = useState(0)
-
 
   // fetch tags
   const tags = useSelector<RootState, Dictionary<Tag>>(state => state.tags.entities);

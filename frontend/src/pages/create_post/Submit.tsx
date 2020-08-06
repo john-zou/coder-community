@@ -83,7 +83,7 @@ export default function Submit(params: { editorRef, tags, img, title }) {
       content: editor.root.innerHTML,
       tags: params.tags,
       featuredImg,
-      author: author,
+      author: author._id,
       group
     }
     // Handle update differently

@@ -164,9 +164,9 @@ export const postsSlice = createSlice({
       const newPost = action.payload;
       state.slugToID[action.payload.slug] = newPost._id;
       postsAdapter.addOne(state, newPost);
-      console.log(newPost);
-      console.log(state);
-      console.log(state.slugToID);
+      // console.log(newPost);
+      // console.log(state);
+      // console.log(state.slugToID);
     },
     [updatePost.pending.type]: (state) => {
       state.updating = true
@@ -174,8 +174,8 @@ export const postsSlice = createSlice({
     [updatePost.fulfilled.type]: (state, action: PayloadAction<UpdatePostSuccessDto & UpdatePostBodyDto>) => {
       state.slugToID[action.payload.slug] = state.slugToID[action.payload.oldSlug];
 
-      console.log("POSTSLICE::UPDATEPOST");
-      console.log(action.payload.updated);
+      // console.log("POSTSLICE::UPDATEPOST");
+      // console.log(action.payload.updated);
       // state.slugToID.delete(action.payload.slug);
       postsAdapter.updateOne(state, {
             id: action.payload._id,
@@ -183,7 +183,6 @@ export const postsSlice = createSlice({
             // changes: action.payload // master
       });
       state.updating = false
-      console.log("** UPDATE DONE **");
     },
     [getCommentsByPostIDSuccess.type]: (state, action: PayloadAction<GetCommentsServerToClientDto>) => {
       state.fetchedComments[action.payload.postID] = true;
