@@ -7,9 +7,10 @@ import "./PostContent.css"
 const PostEditor = styled.div`
   max-height: 50%;
   height: 30vh;
-  width: 42vw;
+  width: 43vw;
   background-color: white;
   padding: 0;
+  border-radius: 5px;
 `
 const PostTitle = styled.div`
   display: flex;
@@ -26,6 +27,7 @@ export const PostToolbar = styled.div`
   align-items: center;
   background-color: white;
   padding-left: 30px;
+  border: none;
 `;
 export const PostContent = ({ editorRef, setTitle, currentPost }: { editorRef: React.MutableRefObject<Quill>, setTitle: React.Dispatch<React.SetStateAction<string>>, currentPost?: Post }) => {
   useEffect(() => {
@@ -52,8 +54,9 @@ export const PostContent = ({ editorRef, setTitle, currentPost }: { editorRef: R
 
 
   return (
-    <div style={{ boxShadow: "8px 8px 16px #d4d4d4, -8px -8px 16px #f5f5f5", backgroundColor: "white" }}>
-      <PostToolbar id="toolbar">
+    <div className="createPostContent"
+      style={{ boxShadow: "8px 8px 16px #d4d4d4, -8px -8px 16px #f5f5f5", backgroundColor: "white", borderRadius: "5px" }}>
+      <PostToolbar id="toolbar" >
         <select className="ql-header">
           <option value="1"></option>
           <option value="2"></option>

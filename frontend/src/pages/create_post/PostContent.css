@@ -1,13 +1,23 @@
-.ql-editor.ql-blank::before {
+.createPostContent .ql-editor.ql-blank::before {
   font-style: unset !important;
 }
 
-.ql-container.ql-snow {
+.createPostContent .ql-container.ql-snow {
   max-height: 50%;
   border: none !important;
+
 }
-.postcontent .ql-editor {
+.createPostContent .postcontent .ql-editor {
   height: 30vh;
+}
+
+.createPostContent .ql-toolbar.ql-snow {
+  border-left: none !important;
+  border-right: none !important;
+  border-top: none !important;
+  border-bottom: 1px solid #ccc;
+  margin-left: 10px;
+  /* justify-content: center; */
 }
 
 .submitCreatePost .MuiFormControl-root {
