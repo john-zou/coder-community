@@ -18,7 +18,7 @@ import { Experimental } from "./pages/experimental/Experimental";
 import { LoginGitHub } from "./pages/login/LoginGitHub";
 import { AppDispatch } from "./store";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchTrendingPosts } from "./reducers/postsSlice";
+import { fetchPopularPosts, fetchTrendingPosts } from "./reducers/postsSlice";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { Loading } from "./pages/common/Loading";
 import ErrorPage from "./pages/common/ErrorPage";
@@ -114,6 +114,20 @@ export default function App() {
   useEffect(() => {
     setLoading(true);
     dispatch(fetchTrendingPosts({ fetchCount: 0 }))
+      .then(unwrapResult).then( //must set dispatch to any to use .then
+        () => {
+          setLoading(false)
+        }
+      ).catch(error => {
+        console.log(error);
+        setError(error);
+        setLoading(false);
+      });
+  }, [isLoggedIn]);
+
+  useEffect(() => {
+    setLoading(true);
+    dispatch(fetchPopularPosts())
       .then(unwrapResult).then( //must set dispatch to any to use .then
         () => {
           setLoading(false)

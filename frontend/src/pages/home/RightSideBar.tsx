@@ -55,8 +55,8 @@ export default function RightSideBar() {
   isLoggedIn = true;
   */
   const isLoggedIn = useSelector<RootState, boolean>((state) => state.isLoggedIn);
-  const trendingPosts = useSelector<RootState, string[]>(
-    (state) => state.posts.trendingPosts
+  const popularPosts = useSelector<RootState, string[]>(
+    (state) => state.posts.popularPosts
   );
 
   const posts = useSelector<RootState, Dictionary<Post>>(
@@ -70,7 +70,7 @@ export default function RightSideBar() {
       {isLoggedIn && <div>
         <p className={classes.savePostText}># POPULAR</p>
         <div className={classes.savePostSection}>
-          {trendingPosts.map((_id, idx) => (
+          {popularPosts.map((_id, idx) => (
             <div key={idx}>
               <Avatar pic={users[posts[_id].author].profilePic}
                 title={posts[_id].title}

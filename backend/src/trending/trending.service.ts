@@ -4,6 +4,7 @@ import { Personal } from '../auth/guards/personal.decorator';
 import { PostsService } from '../posts/posts.service';
 import { UserService } from '../user/user.service';
 import { TagsService } from '../tags/tags.service';
+import { GetPopularPostsSuccessDto, PostDto } from '../posts/dto/posts.dto';
 
 @Personal()
 @Injectable()
@@ -46,6 +47,15 @@ export class TrendingService {
       users,
       user,
       tags
+    }
+  }
+
+  async getPopularPosts(): Promise<GetPopularPostsSuccessDto> {
+    const posts = await this.postsService.getPopularPosts()
+    const users = await this.userService.getAuthors(posts);
+    return {
+      posts,
+      users
     }
   }
 }

@@ -88,6 +88,9 @@ describe("DevApi", () => {
   test("devControllerMarcoPersonal", () => {
     return expect(instance.devControllerMarcoPersonal({})).resolves.toBe(null)
   })
+  test("devControllerUpdateAllPostScores", () => {
+    return expect(instance.devControllerUpdateAllPostScores({})).resolves.toBe(null)
+  })
 })
 
 describe("DiscussionsApi", () => {
@@ -247,6 +250,9 @@ describe("TrendingApi", () => {
     instance = new api.TrendingApi(config)
   });
 
+  test("trendingControllerGetPopularPosts", () => {
+    return expect(instance.trendingControllerGetPopularPosts({})).resolves.toBe(null)
+  })
   test("trendingControllerGetTrending", () => {
     const fetchCount: number = 1.2
     return expect(instance.trendingControllerGetTrending(fetchCount, {})).resolves.toBe(null)

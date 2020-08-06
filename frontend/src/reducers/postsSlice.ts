@@ -4,9 +4,11 @@ import {
   GetGroupMembersAndPostsDto,
   GetInitialDataDto,
   GetInitialDataLoggedInDto,
+  GetPopularPostsSuccessDto,
   GetPostDetailsSuccessDto,
   GetPostsByTagDto,
   GetPostsSuccessDto,
+  PostDto,
   PostsApi,
   TrendingApi,
   UpdatePostBodyDto,
@@ -54,6 +56,14 @@ export const fetchTrendingPosts = createAsyncThunk(
   }
 );
 
+export const fetchPopularPosts = createAsyncThunk(
+  'fetchPopularPosts',
+  async () => {
+    const api = new TrendingApi();
+    return await api.trendingControllerGetPopularPosts()
+  }
+);
+
 // The backend endpoint can also take optional parameters for excluded post IDs and startIdx
 export const fetchPostsByTag = createAsyncThunk(
   'fetchPostsByTag',
@@ -97,6 +107,7 @@ export const postsSlice = createSlice({
   initialState: postsAdapter.getInitialState<{
     trendingPosts: string[],
     trendingPostsSet: Record<string, boolean>,
+    popularPosts: string[],
     slugToID: Record<string, string>,
     trendingPostFetchCount: number,
     fetchedComments: Record<string, boolean>,
@@ -105,6 +116,7 @@ export const postsSlice = createSlice({
   }>({ //extends EntityState
     trendingPosts: [],
     trendingPostsSet: {},
+    popularPosts: [],
     slugToID: {},
     trendingPostFetchCount: 0,
     fetchedComments: {},
@@ -119,6 +131,12 @@ export const postsSlice = createSlice({
     }
   },
   extraReducers: {
+    [fetchPopularPosts.fulfilled.type]: (state, action: PayloadAction<GetPopularPostsSuccessDto>) => {
+      action.payload.posts.forEach(post => {
+        state.popularPosts.push(post._id);
+      })
+      postsAdapter.upsertMany(state, action.payload.posts)
+    },
     [fetchTrendingPosts.pending.type]: (state, action: PayloadAction<GetInitialDataDto | GetInitialDataLoggedInDto>) => {
       state.trendingPostFetchCount++;
     },
@@ -178,9 +196,9 @@ export const postsSlice = createSlice({
       console.log(action.payload.updated);
       // state.slugToID.delete(action.payload.slug);
       postsAdapter.updateOne(state, {
-            id: action.payload._id,
-            changes: action.payload.updated
-            // changes: action.payload // master
+        id: action.payload._id,
+        changes: action.payload.updated
+        // changes: action.payload // master
       });
       state.updating = false
       console.log("** UPDATE DONE **");

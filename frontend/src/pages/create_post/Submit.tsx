@@ -56,15 +56,15 @@ export default function Submit(params: { editorRef, tags, img, title }) {
   }, [])
 
 
-    // const onSubmit = async (params, author, dispatch, history) => {
-    //     // console.log(newPost);
-    //     let featuredImg: string;
-    //     if (params.img) {
-    //       // console.log("CREATEPOST::SUBMIT");
-    //       // console.log(params.img);
-    //       // console.log(author);
-    //         featuredImg = await uploadPublicAsset(params.img);
-    //     }
+  // const onSubmit = async (params, author, dispatch, history) => {
+  //     // console.log(newPost);
+  //     let featuredImg: string;
+  //     if (params.img) {
+  //       // console.log("CREATEPOST::SUBMIT");
+  //       // console.log(params.img);
+  //       // console.log(author);
+  //         featuredImg = await uploadPublicAsset(params.img);
+  //     }
 
   const onCancel = () => {
     history.push("/home")
@@ -83,7 +83,7 @@ export default function Submit(params: { editorRef, tags, img, title }) {
       content: editor.root.innerHTML,
       tags: params.tags,
       featuredImg,
-      author: author,
+      author: author._id,
       group
     }
     // Handle update differently

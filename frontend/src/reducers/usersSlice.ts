@@ -1,5 +1,5 @@
 import { createEntityAdapter, createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
-import { fetchTrendingPosts, fetchPostBySlug, fetchPostByID, fetchPostsByTag } from "./postsSlice";
+import { fetchTrendingPosts, fetchPostBySlug, fetchPostByID, fetchPostsByTag, fetchPopularPosts } from "./postsSlice";
 import { User } from "../store/types";
 import {
   GetInitialDataDto,
@@ -7,7 +7,7 @@ import {
   GetPostDetailsSuccessDto,
   UserApi,
   GetUsersSuccessDto,
-  UserDto, GetGroupMembersAndPostsDto, GetPostsByTagDto
+  UserDto, GetGroupMembersAndPostsDto, GetPostsByTagDto, PostDto, GetPopularPostsSuccessDto
 } from "../api";
 import { leaveGroup, joinGroup, fetchGroupMembersAndPosts } from "./groupsSlice";
 import _ from "lodash";
@@ -47,8 +47,16 @@ export const usersSlice = createSlice({
   },
   extraReducers: {
     [fetchTrendingPosts.fulfilled.type]: (state, action: PayloadAction<GetInitialDataDto | GetInitialDataLoggedInDto>) => {
-      usersAdapter.addMany(state, action.payload.users) //add users (trending posts' authors) to ids and entities
+      usersAdapter.upsertMany(state, action.payload.users) //add users (trending posts' authors) to ids and entities
+      const loggedInUser = (action.payload as GetInitialDataLoggedInDto).user
+      if (loggedInUser) {
+        usersAdapter.upsertOne(state, loggedInUser)
+      }
       // Update username to ObjectID map
+      action.payload.users.forEach(user => state.usernameToID[user.userID] = user._id);
+    },
+    [fetchPopularPosts.fulfilled.type]: (state, action: PayloadAction<GetPopularPostsSuccessDto>) => {
+      usersAdapter.upsertMany(state, action.payload.users)
       action.payload.users.forEach(user => state.usernameToID[user.userID] = user._id);
     },
     [fetchPostsByTag.fulfilled.type]: (state, action: PayloadAction<GetPostsByTagDto>) => {

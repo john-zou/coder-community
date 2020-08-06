@@ -41,6 +41,10 @@ export class PostsController {
   @Put('increment-view/:postID')
   async incrementView(@Param('postID') postID: string): Promise<void> {
     await PostModel.updateOne({ _id: postID }, { $inc: { views: 1 } });
+    const post = await PostModel.findById(postID);
+    if (post) {
+      this.postsService.updateScore(post);
+    }
   }
 
   @ApiBearerAuth()
@@ -71,7 +75,7 @@ export class PostsController {
     await user.save();
     this.logger.log('User likedPosts updated.');
     ++post.likes;
-    await post.save();
+    await this.postsService.updateScore(post)
     this.logger.log('Post likes incremented.');
   }
 
@@ -103,7 +107,7 @@ export class PostsController {
 
     this.logger.log('User likedPosts updated.');
     --post.likes;
-    await post.save();
+    await this.postsService.updateScore(post);
     this.logger.log('Post likes decremented.');
   }
 

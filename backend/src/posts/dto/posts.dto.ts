@@ -30,6 +30,12 @@ export class GetPostsSuccessDto {
   posts: PostDto[]
 }
 
+export class GetPopularPostsSuccessDto {
+  posts: PostDto[];
+  users: UserDto[];
+}
+
+
 export class PostWithDetails {
   _id: string;
   author: string;
