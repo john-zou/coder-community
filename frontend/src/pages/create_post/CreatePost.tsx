@@ -49,7 +49,6 @@ export default function CreatePost() {
   return (
     <div className={classes.createPost}>
       <ImgP setImg={setImg} />
-      {/* <TextP setTitle={setTitle} setContent={setContent}/> */}
       <PostContent editorRef={editorRef} setTitle={setTitle} />
       <TagP setPostTags={setPostTags} allTagsArr={allTagsArr} />
       <Submit title={title} editorRef={editorRef} tags={postTags} img={featuredImg} />

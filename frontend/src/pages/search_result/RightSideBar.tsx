@@ -1,7 +1,5 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-// import { useDispatch, useSelector } from "react-redux";
-// import { RootState, SavedPost, CurrentViewedPost, Tag } from "../../initialData";
 import TagCard from "./TagCard";
 
 const useStyles = makeStyles({
@@ -9,7 +7,6 @@ const useStyles = makeStyles({
     width: "20vw",
     display: "flex",
     flexDirection: "column",
-    // height: "100%",
     cursor: "pointer",
     paddingLeft: "2em",
     paddingTop: "5vh",
@@ -41,15 +38,6 @@ const useStyles = makeStyles({
 
 export default function RightSideBar() {
   const classes = useStyles();
-  // const dispatch = useDispatch();
-  // const currViewedPost = useSelector<RootState, CurrentViewedPost>(
-  //   (state) => state.currentViewedPost
-  // );
-  // const savedPosts = useSelector<RootState, SavedPost[]>(
-  //   (state) => state.savedPosts
-  // );
-
-  // const tags = useSelector<RootState, Tag[]>((state) => state.tags);
 
   return (
     <div className={classes.rightbar}>

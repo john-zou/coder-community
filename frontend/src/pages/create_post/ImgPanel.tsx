@@ -22,7 +22,6 @@ const useStyles = makeStyles({
     outline: "none",
     borderRadius: "5px",
     margin: "2em auto",
-    // width: "100%",
     height: "7vh",
     backgroundColor: "#F2F2F2",
     '&:hover': {

@@ -14,7 +14,6 @@ export const fetchGroups = createAsyncThunk(
   'fetchGroups',
   async (_, { getState }) => {
     const groups: GetGroupsSuccessDto = await api.groupsControllerGetGroups();
-    // console.log(groups);
     return groups;
   }
 )

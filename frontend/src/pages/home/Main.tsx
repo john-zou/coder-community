@@ -1,14 +1,14 @@
-import React, {useState} from 'react';
-import {useSelector, useDispatch} from 'react-redux';
+import React, { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import Card from './Card';
-import {RootState} from '../../reducers/rootReducer';
+import { RootState } from '../../reducers/rootReducer';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import {Loading} from '../common/Loading';
-import {fetchPostsByTag, fetchTrendingPosts} from '../../reducers/postsSlice';
-import {AppDispatch} from '../../store';
-import {Dictionary, unwrapResult} from '@reduxjs/toolkit';
-import {TagsCarousel} from './TagsCarousel';
-import {Tag} from '../../store/types';
+import { Loading } from '../common/Loading';
+import { fetchPostsByTag, fetchTrendingPosts } from '../../reducers/postsSlice';
+import { AppDispatch } from '../../store';
+import { Dictionary, unwrapResult } from '@reduxjs/toolkit';
+import { TagsCarousel } from './TagsCarousel';
+import { Tag } from '../../store/types';
 
 //parent: Home
 const Main = () => {
@@ -81,8 +81,8 @@ const Main = () => {
     dispatch(fetchPostsByTag({ tagID }))
       .then(unwrapResult).then(res => {
         console.log(res);
-      setItems(tags[tagID].posts.concat(res.posts.map(post => post._id)));
-    }).catch(err => console.log(err));
+        setItems(tags[tagID].posts.concat(res.posts.map(post => post._id)));
+      }).catch(err => console.log(err));
   }
 
   const fetchMoreData = () => {
@@ -91,8 +91,7 @@ const Main = () => {
     console.log(items);
     if (tabIndex === 0) {
       if (hasMoreTrendingPosts) {
-        // !!!BUG When fetchCount = 1, get 404 error!!!
-        dispatch(fetchTrendingPosts({fetchCount: currFetchCount})).then(unwrapResult).then(res => {
+        dispatch(fetchTrendingPosts({ fetchCount: currFetchCount })).then(unwrapResult).then(res => {
           setItems(prev => prev.concat(res.posts.map(post => post._id)))
         }).catch(err => console.log(err));
       } else {
@@ -104,34 +103,34 @@ const Main = () => {
     if (hasMore) {
       dispatch(fetchPostsByTag({ tagID }))
         .then(unwrapResult).then(res => {
-        setItems(prev => prev.concat(res.posts.map(post => post._id)))
-      }).catch(err => console.log(err));
+          setItems(prev => prev.concat(res.posts.map(post => post._id)))
+        }).catch(err => console.log(err));
     }
   }
 
   return (
-      <>
-        <div style={{ display: "flex", position: "fixed", justifyContent: "center", width: "50%", zIndex: 10, marginTop: "-40px" }}>
-          <TagsCarousel value={tabIndex} setValue={handleTabChange} />
-        </div>
-        <div style={{ marginTop: "50px" }}>
-          <InfiniteScroll
-              dataLength={items.length} //This is important field to render the next data
-              next={fetchMoreData}
-              hasMore={hasMore}
-              key={tabIndex.toString()}
-              loader={<Loading />}
-              endMessage={
-                <p style={{ textAlign: 'center' }}>
-                  <b>You've seen it all!</b>
-                </p>
-              }>
-            {items.map((_id) => {
-              return <Card postID={_id} key={_id} />
-            })}
-          </InfiniteScroll>
-        </div>
-      </>
+    <>
+      <div style={{ display: "flex", position: "fixed", justifyContent: "center", width: "50%", zIndex: 10, marginTop: "-40px" }}>
+        <TagsCarousel value={tabIndex} setValue={handleTabChange} />
+      </div>
+      <div style={{ marginTop: "50px" }}>
+        <InfiniteScroll
+          dataLength={items.length} //This is important field to render the next data
+          next={fetchMoreData}
+          hasMore={hasMore}
+          key={tabIndex.toString()}
+          loader={<Loading />}
+          endMessage={
+            <p style={{ textAlign: 'center' }}>
+              <b>You've seen it all!</b>
+            </p>
+          }>
+          {items.map((_id) => {
+            return <Card postID={_id} key={_id} />
+          })}
+        </InfiniteScroll>
+      </div>
+    </>
   );
 };
 export default Main;

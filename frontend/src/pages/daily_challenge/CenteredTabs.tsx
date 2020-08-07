@@ -24,22 +24,17 @@ export default function CenteredTabs() {
 
   return (
     <>
-      {/* <Paper className={classes.root}> */}
       <Tabs
         value={value}
         onChange={handleChange}
-        // indicatorColor="primary"
         textColor="primary"
         centered
         style={{ marginTop: "-8px" }}
       >
         <Tab label="Problem" />
-        {/* <Tab label="Discussions" /> */}
       </Tabs>
-      {/* </Paper> */}
 
       {!value && <QuestionTab />}
-      {/* {!!value && <DiscussionTab />} */}
     </>
   );
 }

@@ -3,7 +3,6 @@ import "./App.css";
 import React, { useEffect, useRef, useState } from "react";
 import * as monacoEditor from "monaco-editor";
 import { BrowserRouter as Router, Redirect, Route, Switch } from "react-router-dom";
-// import Footer from "./containers/footer/Footer";
 import Header from "./containers/header/Header";
 import CreatePost from "./pages/create_post/CreatePost";
 import UpdatePost from "./pages/update_post";
@@ -82,14 +81,10 @@ export default function App() {
   const remoteCursorManagerRef = useRef<RemoteCursorManager>(null);
   const editorContentManagerRef = useRef<EditorContentManager>(null);
 
-  console.log("App.tsx render");
   useEffect(() => {
     console.log("App.tsx useEffect (creating new socket)");
     socket.current = io(BackEndBaseUriForWs);
     socket.current.on('connection', () => {
-      console.log(`Connected to ${BackEndBaseUriForWs}: ` + socket.current.connected); // true
-      console.log('Authenticating...'); // true
-      // Send server the JWT so it can authenticate the user
       socket.current.emit('authenticate', { jwt: localStorage.getItem(JwtLocalStorageKey) });
     });
 
@@ -97,7 +92,7 @@ export default function App() {
     socket.current.on('authenticate', () => {
       console.log("Auth passed! emitting getcConversationsAndUsers...");
       // Upon receiving this event, can now ask for everything else
-      socket.current.emit('getConversationsAndUsers', {}); // an empty object is required for auth
+      socket.current.emit('getConversationsAndUsers', {});
     });
 
     socket.current.on('getConversationsAndUsers', (data: any) => {
@@ -128,7 +123,7 @@ export default function App() {
     });
 
     socket.current.on(GetCommentsByPostIDEvent, (response: GetCommentsServerToClientDto) => {
-      dispatch(getCommentsByPostIDSuccess(response)); // TODO
+      dispatch(getCommentsByPostIDSuccess(response));
     });
 
     socket.current.on(CreateCommentEvent, (response: any) => {//listen for the incoming response(s) from 'newMessage' event
@@ -170,7 +165,7 @@ export default function App() {
   useEffect(() => {
     setLoading(true);
     dispatch(fetchTrendingPosts({ fetchCount: 0 }))
-      .then(unwrapResult).then( //must set dispatch to any to use .then
+      .then(unwrapResult).then(
         () => {
           setLoading(false)
         }
@@ -184,7 +179,7 @@ export default function App() {
   useEffect(() => {
     setLoading(true);
     dispatch(fetchPopularPosts())
-      .then(unwrapResult).then( //must set dispatch to any to use .then
+      .then(unwrapResult).then(
         () => {
           setLoading(false)
         }
@@ -211,10 +206,6 @@ export default function App() {
             <Router>
               <Header></Header>
               <Switch>
-                {/*Under construction*/}
-                {/*<Route path="/daily-challenge/:roomID">*/}
-                {/*  <DailyChallenge />*/}
-                {/*</Route>*/}
                 <Route path={"/code-together/:roomID"}>
                   <CodeTogether />
                 </Route>

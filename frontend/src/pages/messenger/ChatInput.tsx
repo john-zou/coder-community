@@ -45,7 +45,6 @@ export const ChatInput = ({ newMessageSelectedUserIDs }: { newMessageSelectedUse
   const dispatch = useDispatch();
 
   const handleSend = useRef(null);
-  // console.log("ChatInput render... newMessageSelectedUserIDs", newMessageSelectedUserIDs);
 
   useEffect(() => {
     handleSend.current = () => {
@@ -91,7 +90,6 @@ export const ChatInput = ({ newMessageSelectedUserIDs }: { newMessageSelectedUse
       const createMessageBodyDto: CreateMessageBodyDto = {
         userID,
         conversationID,
-        // text: editor.current.getText(),
         text,
         createdAt: Date.now(),
       }

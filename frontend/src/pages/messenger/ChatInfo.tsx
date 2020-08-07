@@ -1,6 +1,6 @@
 import { Dictionary } from "@reduxjs/toolkit";
-import React, {useContext} from "react";
-import {useDispatch, useSelector} from "react-redux";
+import React, { useContext } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../reducers/rootReducer";
 import { Conversation, User } from "../../store/types";
 import Avatar from "../common/Avatar";
@@ -8,13 +8,13 @@ import styled from '@emotion/styled';
 import { HeadingText } from "./SideBar";
 import { ChatHeader } from "./ChatArea";
 import moment from "moment";
-import {FlexSpace} from "../view_profile/OwnProfile";
+import { FlexSpace } from "../view_profile/OwnProfile";
 import CodeTogetherSvg from "../../assets/code_together.svg";
-import {SocketContext} from "../../App";
-import {createMessagePending} from "../../reducers/messagesSlice";
-import {AppDispatch} from "../../store";
-import {CreateMessageBodyDto} from "../../api";
-import {BackEndBaseUri} from "../../constants";
+import { SocketContext } from "../../App";
+import { createMessagePending } from "../../reducers/messagesSlice";
+import { AppDispatch } from "../../store";
+import { CreateMessageBodyDto } from "../../api";
+import { BackEndBaseUri } from "../../constants";
 import { v4 as uuidv4 } from 'uuid';
 import PurpleButton from "../common/PurpleButton";
 
@@ -24,8 +24,6 @@ const ChatInfoContainer = styled.div`
   flex-direction: column;
   width: 20%;
   height: 92vh;
-  // box-shadow: 1px 1px 2px 4px #F5F5F5;
-  // background-color: white;
 `;
 
 export const H2 = styled.h2`
@@ -67,12 +65,10 @@ export const ChatInfo = () => {
       <ChatInfoHeader>
         <div style={{ paddingLeft: "30px" }}>
           {isGroupConversation ? <H2>Group info</H2> : <H2>Chat info</H2>}
-          {/*<p>{currentConversation.createdAt}</p>*/}
           <span>Created {moment(currentConversation.createdAt).format("ll")}</span>
         </div>
       </ChatInfoHeader>
 
-      {/* <hr></hr> */}
       <div style={{ paddingLeft: "30px", paddingTop: "10px" }}>
         <HeadingText>PEOPLE</HeadingText>
         {currentConversation.users.map((uID) => (
@@ -81,11 +77,11 @@ export const ChatInfo = () => {
       </div>
       <FlexSpace />
       <div>
-        <img src={CodeTogetherSvg} alt="code together" width="60%" style={{paddingLeft: "20%", paddingBottom: "4vh"}}/>
-        <div style={{paddingBottom: "4vh", display: "flex"}}>
-          <FlexSpace/>
+        <img src={CodeTogetherSvg} alt="code together" width="60%" style={{ paddingLeft: "20%", paddingBottom: "4vh" }} />
+        <div style={{ paddingBottom: "4vh", display: "flex" }}>
+          <FlexSpace />
           <PurpleButton handleClick={handleCodeCollabClick} content={"Make Code Collaboration Room"} fitContent />
-          <FlexSpace/>
+          <FlexSpace />
         </div>
       </div>
     </ChatInfoContainer >

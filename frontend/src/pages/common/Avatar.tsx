@@ -94,7 +94,6 @@ const Avatar = ({ small, pic, title, titleSrc, subtitle, extraText, extraTextOnC
           </TitleText>
           {!isButton && <ExtraText onClick={extraTextOnClick}>{extraText}</ExtraText>}
           {isButton && <SideButton buttonIsClicked={buttonIsClicked} onClick={() => setButtonIsClicked((prevState) => !prevState)}>{extraText}</SideButton>}
-          {/* {isButton && buttonIsClicked && <SideButtonClicked>{extraText}</SideButtonClicked>} */}
         </p>
         {previewContent ?
           <div style={{ marginTop: "-1.1em", fontSize: "15px", marginLeft: "-1em" }}>

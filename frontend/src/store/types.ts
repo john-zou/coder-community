@@ -52,12 +52,11 @@ export type Post = {
   content?: string,
   tags: string[],
   featuredImg: string,
-  likes: number, // Renamed from likesCount to match updated MongoDB schema
+  likes: number,
   comments: string[],
   commentsCount: number,
   views: number,
   createdAt: string,
-  // likedByUser: boolean, // Removed for simplicity. use state.user.likedPosts instead.
   slug: string,
   group?: string,
 };
@@ -67,8 +66,6 @@ export type HNPost = {
   author?: string,
   title?: string,
   url?: string,
-  // comments?: string[],
-  // commentsCount?: number,
   createdAt: number,
 };
 
@@ -76,13 +73,13 @@ export type PostsCreation = {
   _id: string,
   title: string,
   content: string,
-  tags: any[] // [Record<string, Loadable<Tag>>]
+  tags: any[]
 };
 
 export type Tag = {
   _id: string,
   name: string,
-  posts: string[], // These are kept only for the purpose of the infinite scroll, in the order received from the back end
+  posts: string[],
   fetchCount: number,
   gotAllPostsFromBackend: boolean,
 };
@@ -95,7 +92,7 @@ export type User = {
   profilePic?: string,
   profileBanner?: string,
   status?: string,
-  followers?: string[],//list of ids
+  followers?: string[],
   following?: string[],
   groups?: string[],
   posts?: string[],
@@ -106,18 +103,6 @@ export type User = {
   createdAt?: string,
   updatedAt?: string,
 };
-
-// export type Video = {
-//   _id: string,
-//   author: string,
-//   name: string,
-//   description: string,
-//   likesCount: number,
-//   commentsCount: number,
-//   comments: string[],
-//   createdAt: string,
-//   updatedAt: string,
-// };
 
 export interface CurrentLoggedInUser extends User {
   likedPostsSet: Record<string, boolean>;

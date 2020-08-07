@@ -65,7 +65,6 @@ export const HackerNewsTab = () => {
         dataLength={items.length} //This is important field to render the next data
         next={fetchMoreData}
         hasMore={hasMoreHnPosts}
-        // key={tabIndex.toString()}
         loader={<Loading />}
       >
         {items.map((post, idx) => (

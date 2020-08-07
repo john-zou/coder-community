@@ -1,9 +1,6 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { useDispatch } from 'react-redux';
-// import { createTitle, createContent } from '../../actions/postsCreation';
-// import { createTitle, createContent } from '../../reducers/postsCreationSlice';
-// import { RootState, Post } from '../../initialData';
 
 const useStyles = makeStyles({
   cptext: {
@@ -48,17 +45,6 @@ const useStyles = makeStyles({
   },
 });
 
-/*
-const updateContent = (event, dispatch) => {
-  dispatch(createContent(event.target.value));
-}
-
-const updateTitle = (event, dispatch) => {
-  // alert(event.target.value);
-  dispatch(createTitle(event.target.value));
-}
- */
-
 export default function TextPanel(param) {
   const { title, content } = param;
   const classes = useStyles();
@@ -66,7 +52,6 @@ export default function TextPanel(param) {
     <div className={classes.cptext}>
       <form>
         <input className={classes.cptitle} type="text" placeholder={title || "Title"} onChange={(event) => {
-          // updateTitle(event, dispatch);
           param.setTitle(event.target.value);
         }}>
         </input>

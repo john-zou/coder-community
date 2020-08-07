@@ -76,8 +76,6 @@ const PostDetail = () => {
     }
 
     const post = state.posts.entities[postID];
-    // console.log(state.posts.entities);
-    // console.log(post);
     let author: User;
     if (post?.author === currentUser?._id) {
       author = currentUser
@@ -88,8 +86,6 @@ const PostDetail = () => {
   });
 
   const { postIsLikedByUser, handleToggleLike } = useLikePost(post?._id);
-  // const [changeCount, setChangeCount] = useState(0)
-
 
   // fetch tags
   const tags = useSelector<RootState, Dictionary<Tag>>(state => state.tags.entities);
@@ -141,80 +137,74 @@ const PostDetail = () => {
   }
 
   if (error) {
-    return <NotFoundError /> // TODO: add something for server error
-  }
-  // post has item with content
-  // const likedByUser = isLoggedIn && post.likedByUser;
-  let dateSubtitleInAvatar: string;
-  if (typeof post.createdAt === "string") {
-    const parsedInt = parseInt(post.createdAt);
-    if (isNaN(parsedInt) || parsedInt < 10000) {
-      // It may already be a human readable string
-      dateSubtitleInAvatar = post.createdAt;
+    return <NotFoundError />
+    // post has item with content
+    let dateSubtitleInAvatar: string;
+    if (typeof post.createdAt === "string") {
+      const parsedInt = parseInt(post.createdAt);
+      if (isNaN(parsedInt) || parsedInt < 10000) {
+        // It may already be a human readable string
+        dateSubtitleInAvatar = post.createdAt;
+      } else {
+        // it is a unix millis cast to a string
+        dateSubtitleInAvatar = moment(new Date(parseInt(post.createdAt))).calendar()
+      }
     } else {
-      // it is a unix millis cast to a string
-      dateSubtitleInAvatar = moment(new Date(parseInt(post.createdAt))).calendar()
+      dateSubtitleInAvatar = moment(post.createdAt).calendar()
     }
-  } else {
-    dateSubtitleInAvatar = moment(post.createdAt).calendar()
-  }
 
-  return (
-    <div className={classes.root}>
-      <div className={classes.postDetail}>
-        <img
-          src={featuredImg}
-          style={{ height: "20em", objectFit: "cover", width: "100%" }} alt="featured"
-        />
+    return (
+      <div className={classes.root}>
+        <div className={classes.postDetail}>
+          <img
+            src={featuredImg}
+            style={{ height: "20em", objectFit: "cover", width: "100%" }} alt="featured"
+          />
 
-        {/* POST TITLE */}
-        <h1>{post.title}</h1>
+          {/* POST TITLE */}
+          <h1>{post.title}</h1>
 
-        <Link to={`/user/${author.userID}`} style={{ textDecoration: "none" }}>
-          <Avatar pic={author.profilePic} title={author.userID} subtitle={dateSubtitleInAvatar} isPost={true}></Avatar>
-        </Link>
+          <Link to={`/user/${author.userID}`} style={{ textDecoration: "none" }}>
+            <Avatar pic={author.profilePic} title={author.userID} subtitle={dateSubtitleInAvatar} isPost={true}></Avatar>
+          </Link>
 
 
-        {/*/>
+          {/*/>
         <p>{post.content}</p>*/}
-        {/* POST CONTENT */}
-        <div className="ql-snow" >
-          <TagP tags={tagsArr} />
-          <div className="ql-editor">
-            <div ref={postContent}></div>
+          {/* POST CONTENT */}
+          <div className="ql-snow" >
+            <TagP tags={tagsArr} />
+            <div className="ql-editor">
+              <div ref={postContent}></div>
+            </div>
           </div>
-        </div>
 
-        <Interactions />
-        <div className={classes.interactionsIcons}>
-          <span>
-            <img className={classes.heartIcon} src={postIsLikedByUser ? HeartIconRed : HeartIcon} alt=""
-              onClick={() => {
-                handleToggleLike()
-                  ;
-              }} />&nbsp;&nbsp;{post.likes}
-          </span>
-          <span>
-            <img className={classes.shareIcon} src={CommentIcon} alt="" />
+          <Interactions />
+          <div className={classes.interactionsIcons}>
+            <span>
+              <img className={classes.heartIcon} src={postIsLikedByUser ? HeartIconRed : HeartIcon} alt=""
+                onClick={() => {
+                  handleToggleLike()
+                    ;
+                }} />&nbsp;&nbsp;{post.likes}
+            </span>
+            <span>
+              <img className={classes.shareIcon} src={CommentIcon} alt="" />
             &nbsp;&nbsp;{post.commentsCount}
-          </span>
-          {/* <span>
-            <img className={classes.shareIcon} src={BookmarkEmpty} alt="" />
-            &nbsp;&nbsp;Save
-          </span> */}
+            </span>
+          </div>
+
+          <hr></hr>
+          <Comments postID={post._id}></Comments>
+          <NewComment postID={post._id}></NewComment>
+
+          <div style={{ height: "20px" }} />
+          {canUpdate && <UpdateButton slug={slug} />}
+          <div style={{ height: "20px" }} />
+          {canUpdate && <DeletePostButton postID={post?._id} />}
         </div>
+      </div >
+    );
+  };
 
-        <hr></hr>
-        <Comments postID={post._id}></Comments>
-        <NewComment postID={post._id}></NewComment>
-
-        <div style={{ height: "20px" }} />
-        {canUpdate && <UpdateButton slug={slug} />}
-        <div style={{ height: "20px" }} />
-        {canUpdate && <DeletePostButton postID={post?._id} />}
-      </div>
-    </div >
-  );
-};
-
-export default PostDetail;
+  export default PostDetail;

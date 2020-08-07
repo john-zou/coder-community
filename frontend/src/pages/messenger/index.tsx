@@ -18,14 +18,11 @@ export const ChatContainer = styled.div`
 `;
 
 export const Messenger = () => {
-  // const userID = useSelector<RootState, string>(state => state.user._id);
-  // const dispatch = useDispatch();
-
   return (
-      <ChatContainer>
-        <SideBar />
-        <ChatArea />
-        <ChatInfo />
-      </ChatContainer>
+    <ChatContainer>
+      <SideBar />
+      <ChatArea />
+      <ChatInfo />
+    </ChatContainer>
   )
 }

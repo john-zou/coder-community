@@ -45,10 +45,7 @@ const useStyles = makeStyles({
 
 export default function TagPanel(params) {
   const classes = useStyles();
-  const alltags = []; // useState<RootState, >()
-  // console.log("UPDATEPOST::TAGPANEL");
-  // console.log(params.allTagsArr);
-  // console.log(params.oldTagsID);
+  const alltags = [];
   return (
     <div className={classes.cptag}>
       <form id="tagform">

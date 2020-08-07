@@ -41,11 +41,6 @@ export const NewDiscussion = () => {
       return;
     }
     const content = inputRef.current.value.trim();
-    // const newDiscussion: CreateDiscussionDto = {
-    //   question,
-    //   title,
-    //   content
-    // };
   }
 
   return (
@@ -55,7 +50,6 @@ export const NewDiscussion = () => {
         placeholder="Type discussion"
         ref={inputRef}
       />
-      {/*<input className={classes.name} placeholder="Type comment" />*/}
       <PurpleButton content="Post"></PurpleButton>
     </form>
   );

@@ -93,7 +93,6 @@ export const CreateGroupForm = ({ handleClose }) => {
     let profileBanner: string;
     // upload profile pic
     if (profilePicFile) {
-      // TODO: show loading while uploading
       console.log(profilePicFile)
       profilePic = await uploadPublicAsset(profilePicFile);
     }
@@ -125,10 +124,8 @@ export const CreateGroupForm = ({ handleClose }) => {
     <>
       {creatingGroupLoading ? <Loading /> :
         <form onSubmit={handleSubmit}>
-          {/* https://github.com/jakehartnell/react-images-upload#readme */}
           <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
             <ImageUploader
-              // {...props}
               buttonText='Upload cover photo'
               withPreview={true}
               withIcon={true}
@@ -138,9 +135,7 @@ export const CreateGroupForm = ({ handleClose }) => {
               singleImage={true}
               buttonStyles={{ backgroundColor: "#6a6a6a" }}
             />
-            {/* <div style={{ width: "20px" }}></div> */}
             <ImageUploader
-              // {...props}
               buttonText='Upload profile pic'
               withPreview={true}
               withIcon={false}

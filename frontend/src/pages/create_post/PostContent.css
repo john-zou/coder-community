@@ -17,14 +17,12 @@
   border-top: none !important;
   border-bottom: 1px solid #ccc;
   margin-left: 10px;
-  /* justify-content: center; */
 }
 
 .submitCreatePost .MuiFormControl-root {
   background-color: #5D67E9 !important;
   padding-right: -15px !important;
   border-radius: 10px;
-  /* border: none; */
 }
 .submitCreatePost .MuiFormLabel-root {
   color: white !important;

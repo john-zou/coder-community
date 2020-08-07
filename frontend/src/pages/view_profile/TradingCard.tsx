@@ -109,7 +109,6 @@ export const TradingCardButton = styled.button`
 export function TradingCard({ user, isCurrentUser, followHook, setFollowingFollowerView }: { user: User, isCurrentUser?: boolean, followHook?: UseFollowHook, setFollowingFollowerView?: React.Dispatch<React.SetStateAction<boolean>> }) {
 
   const dispatch = useDispatch<AppDispatch>();
-  // TODO: Change follow button depending on follow relationship
   function button() {
     if (isCurrentUser) {
       return (<TradingCardButton onClick={() => console.log("edit profile button clicked!")}>Edit

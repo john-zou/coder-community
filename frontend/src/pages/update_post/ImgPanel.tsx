@@ -33,34 +33,21 @@ const useStyles = makeStyles({
 });
 
 const _onImgUpload = (event) => {
-	/*
-	event.preventDefault();
-	alert(this.url);
-	this.props.setImg(this.url);
-	*/
 }
 
 const _onChange = (event) => {
-	/*
-	this.url = event.target.value;
-	*/
 }
 
 const _omImgRm = (event) => {
-	/*
-	event.preventDefault();
-	this.url = '';
-	this.props.setImg('');
-	*/
 }
-    
+
 export default function ImgPanel(params) {
   const classes = useStyles();
 
   return (
     <div className={classes.root}>
       <form onSubmit={_onImgUpload}>
-      	<button className={classes.button} onClick={_onImgUpload}>Upload Photos</button>
+        <button className={classes.button} onClick={_onImgUpload}>Upload Photos</button>
       </form>
     </div>
   );

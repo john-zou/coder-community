@@ -30,7 +30,6 @@ const useStyles = makeStyles({
     flexDirection: "column",
     width: "40vw",
     backgroundColor: "white",
-    // boxShadow: "3px 3px #F2F2F2",
     marginBottom: "1em",
     marginTop: "3em",
     marginLeft: "3em",
@@ -94,8 +93,6 @@ const useStyles = makeStyles({
 });
 
 export const handleViewPost = (post, dispatch) => {
-  // use history.push instead -John
-  // dispatch(viewPost(post));
 };
 
 type Props = {
@@ -108,11 +105,9 @@ const Card = ({ postID }: Props) => {
   const dispatch = useDispatch();
   const [snackBarOpen, setSnackBarOpen] = useState(false);
   const previewContent = useRef(null);
-  // const [changeCount, setChangeCount] = useState(0)
 
   const post = useSelector<RootState, Post>(
     (state) => {
-      // console.log(state.posts.entities);
       return state.posts.entities[postID];
     }
   );
@@ -154,17 +149,11 @@ const Card = ({ postID }: Props) => {
     if (!post) {
       dispatch(fetchPostByID({ id: postID, getAuthor: !author }));
     }
-    // checkPostHasBeenSaved(postID)
   }, [postID])
-
-  // console.log("Card.tsx Render. author:  ", author);
-  // console.log("Card.tsx Render ", post?.title);
-  // console.log("Card.tsx Render ", post?.title, ". snackbar: ", snackBarOpen);
 
   useEffect(() => {
     if (post && post.content) {
       previewContent.current.innerHTML += post.previewContent
-      // }
     }
   }, [post?.content])
 

@@ -75,10 +75,6 @@ const LeftSideBar = () => {
         </div>
       }
       <div className={classes.groupLinks}>
-        {/* Under Construction */}
-        {/*<Link to={`/daily-challenge/${dailyChallengeUuid}`} className={classes.link}>*/}
-        {/*  <h3>Daily Challenge</h3>*/}
-        {/*</Link>*/}
         <Link to={`/code-together/${codeTogetherUuid}`} className={classes.link}>
           <h3>Code Together</h3>
         </Link>

@@ -23,13 +23,11 @@ const useStyles = makeStyles({
   createPost: {
     paddingTop: "7vh",
     paddingBottom: "7vh",
-    // paddingTop: "3em",
     display: "flex",
     flex: 1,
     flexDirection: "column",
     height: "110vh",
     alignItems: "center",
-    // overflowY: "scroll",
   }
 });
 
@@ -42,21 +40,13 @@ export default function CreateVideoPost() {
   const allTags = useSelector<RootState, Dictionary<Tag>>(state => state.tags.entities);
   const allTagsArr = Object.values(allTags);
 
-  // function submitVideo() {
-  // const
-  // }
-
   return (
     <div className={classes.createPost}>
-      {/*<VideoP setUrl={setUrl}/>*/}
       <VideoP />
       <TextP setTitle={setTitle} setContent={setContent} />
-      {/* <TagP setTags={setTags} /> */}
       <TagsContainer>
         <AddMultiple label="Add Tags" options={allTagsArr} setItems={setPostTags} />
       </TagsContainer>
-      {/*<button onClick={submitVideo}/>*/}
-      {/*<Submit title={title} content={content} tags={postTags} img={featuredImg} />*/}
       <Submit title={title} content={content} tags={postTags} />
     </div>
   );

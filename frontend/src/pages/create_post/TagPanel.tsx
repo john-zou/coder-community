@@ -48,8 +48,6 @@ export default function TagPanel(params) {
   const classes = useStyles();
   const alltags = [];
 
-  // console.log("CREATEPOST::TAGPANEL");
-  // console.log(params.allTagsArr);
   return (
     <div className={classes.cptag}>
       <AddMultiple label="Add Tags" options={params.allTagsArr} setItems={params.setPostTags} panelWidth={"40vw"} />
