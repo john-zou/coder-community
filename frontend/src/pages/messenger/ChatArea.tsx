@@ -87,6 +87,8 @@ export const ChatArea = () => {
       <Loading></Loading>
     )
   }
+  var objDiv = document.getElementById("messagesList");
+  objDiv.scrollTop = objDiv.scrollHeight;
 
   return (
     <ChatAreaContainer>
@@ -96,7 +98,7 @@ export const ChatArea = () => {
 
       {/* all messages sent by the server */}
       {currentConversation &&
-        <div style={{ paddingTop: "20px", overflowY: "scroll" }}>
+        <div className="messagesList" style={{ paddingTop: "20px", overflowY: "scroll" }}>
           {messagesArr.map((msg) => {
             return (
               <div style={{ margin: "10px 40px 10px 40px" }}>
