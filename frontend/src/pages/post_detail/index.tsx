@@ -33,7 +33,6 @@ const useStyles = makeStyles({
   },
   postDetail: {
     paddingTop: "10vh",
-    // paddingBottom: "20vh",
     width: "60vw",
     margin: "0 auto",
   },
@@ -62,7 +61,6 @@ const Interactions = () => {
 }
 
 const PostDetail = () => {
-  console.log("POSTDETAIL::INDEX");
   const { slug } = useParams<PostDetailParams>(); //get the url param to render the appropriate post
   const classes = useStyles();
   const dispatch = useDispatch<AppDispatch>();
@@ -170,7 +168,6 @@ const PostDetail = () => {
 
 
           {/*/>
-        <p>{post.content}</p>*/}
           {/* POST CONTENT */}
           <div className="ql-snow" >
             <TagP tags={tagsArr} />

@@ -36,7 +36,6 @@ export default function CreateVideoPost() {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [postTags, setPostTags] = useState([]);
-  // const [url, setUrl] = useState('');
   const allTags = useSelector<RootState, Dictionary<Tag>>(state => state.tags.entities);
   const allTagsArr = Object.values(allTags);
 

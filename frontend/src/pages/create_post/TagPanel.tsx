@@ -7,7 +7,6 @@ const useStyles = makeStyles({
   cptag: {
     display: "flex",
     flexDirection: "column",
-    // height: "20em",
     width: "40vw",
     backgroundColor: "white",
     boxShadow: "8px 8px 16px #d4d4d4, -8px -8px 16px #f5f5f5",

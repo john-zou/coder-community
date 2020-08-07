@@ -13,7 +13,7 @@ import { CodeParams } from "../../App";
 import { CodeCollab } from "../code_collab_shared/CodeCollab";
 
 const LeftSideContainer = styled.div`
-  padding-top: 9vh;
+  padding-top: 11vh;
   width: 100vw;
   display: flex;
   flex-direction: column;

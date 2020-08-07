@@ -20,7 +20,6 @@ const Main = () => {
   );
   const dispatch: AppDispatch = useDispatch();
   const [items, setItems] = useState(trendingPosts);
-  // let items = trendingPosts;
   const currFetchCount: number = useSelector<RootState, number>(state => state.posts.trendingPostFetchCount);
   const hasMoreTrendingPosts: boolean = useSelector<RootState, boolean>(state => state.posts.hasMorePosts);
 
@@ -40,34 +39,11 @@ const Main = () => {
   const handleTabChange = (newIdx: number) => {
     console.log("Handle tab change to tab #", newIdx);
     setTabIndex(newIdx);
-    // if new index is 0 (All - trending posts)
     if (newIdx === 0) {
       setItems(trendingPosts);
       return;
     }
     const currentTag = tagsArr[newIdx - 1];
-
-    /*
-    // switch to a tag
-    console.log(items);
-    setItems(Object.keys(currentTag.postsSet));
-    // items = Object.keys(currentTag.postsSet);
-    console.log(tagsArr);
-    console.log(currentTag.postsSet);
-    console.log(items);
-
-    // const startIdx = items.length; // communicate to back end which ones to skip
-    const startIdx = Object.keys(currentTag.postsSet).length;
-    console.log(startIdx);
-    const tagID = currentTag._id;
-    // console.log(tagID, currentTag);
-    dispatch(fetchPostsByTag({tagID, startIdx})).then(unwrapResult).then(res => {
-      console.log(res);
-      console.log(items);
-      setItems(prev => prev.concat(res.posts.map(post => post._id)))
-      // items.concat(res.posts.map(post => post._id));
-      console.log(items);
-     */
     console.log("Switching to tag:", currentTag.name);
     console.log("posts: ", currentTag.posts);
     setItems(currentTag.posts);
@@ -86,9 +62,6 @@ const Main = () => {
   }
 
   const fetchMoreData = () => {
-    console.log("FETCH MORE DATA");
-    console.log(tabIndex);
-    console.log(items);
     if (tabIndex === 0) {
       if (hasMoreTrendingPosts) {
         dispatch(fetchTrendingPosts({ fetchCount: currFetchCount })).then(unwrapResult).then(res => {
@@ -115,7 +88,7 @@ const Main = () => {
       </div>
       <div style={{ marginTop: "50px" }}>
         <InfiniteScroll
-          dataLength={items.length} //This is important field to render the next data
+          dataLength={items.length}
           next={fetchMoreData}
           hasMore={hasMore}
           key={tabIndex.toString()}

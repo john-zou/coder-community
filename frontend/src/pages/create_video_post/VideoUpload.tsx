@@ -20,7 +20,6 @@ import PurpleButton from "../common/PurpleButton";
 
 export interface IProps {
   closeOverlay: any;
-  // setUrl:any;
 }
 
 export interface IState {
