@@ -9,6 +9,9 @@ import ErrorPage from "../common/ErrorPage";
 import { Loading } from "../common/Loading";
 import CenteredTabs from "./CenteredTabs";
 import moment from "moment";
+import {useParams} from "react-router-dom";
+import {CodeParams, ViewProfileParams} from "../../App";
+import {CodeCollab} from "../code_collab_shared/CodeCollab";
 
 export const LeftSideContainer = styled.div`
   padding-top: 9vh;
@@ -22,20 +25,14 @@ export const RightSideContainer = styled(LeftSideContainer)`
 `;
 
 export const DailyChallenge = () => {
-  const [code, setCode] = useState('//type your code...');
+  const { roomID } = useParams<CodeParams>();
+
+
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   const dispatch = useDispatch<AppDispatch>();
 
-  const handleChange = (newValue, e) => {
-    console.log('onChange', newValue, e);
-  }
-
-  const editorDidMount = (editor, monaco) => {
-    console.log('editorDidMount', editor);
-    // editor.focus();
-  }
 
   useEffect(() => {
     setLoading(true);
@@ -59,19 +56,7 @@ export const DailyChallenge = () => {
     <>
       <div style={{ display: "flex", flexDirection: "row" }} >
         <LeftSideContainer style={{ fontFamily: 'Courier New' }}>
-          <MonacoEditor
-            width="50vw"
-            height="90vh"
-            language="typescript"
-            theme="vs-dark"
-            value={code}
-            options={
-              {
-                fontFamily: "Roboto"
-              }
-            }
-            editorDidMount={editorDidMount}
-          />
+          <CodeCollab roomID={roomID}/>
         </LeftSideContainer>
 
         <RightSideContainer>

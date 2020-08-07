@@ -13,6 +13,7 @@ import { UserObjectID } from '../user/user-object-id.decorator';
 import { MakeTagBodyDto, MakeTagSuccessDto } from '../tags/tag.dto';
 import { TagsService } from '../tags/tags.service';
 import { PostModel } from '../mongoModels';
+import {MessageGateway} from "../messages/message.gateway";
 
 @ApiTags('Dev')
 @Controller('dev')
@@ -22,7 +23,13 @@ export class DevController {
     private readonly userService: UserService,
     private readonly postsService: PostsService,
     private readonly tagsService: TagsService,
+    private readonly messageGateway: MessageGateway
   ) { }
+
+  @Get('code-in-code-collab-rooms')
+  async getCodeFromRooms(): Promise<string> {
+    return JSON.stringify(this.messageGateway.roomIDToCode);
+  }
 
   @Get('update-scores')
   async updateAllPostScores(): Promise<string> {
