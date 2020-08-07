@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useEffect, useRef, useState} from "react";
 import styled from '@emotion/styled';
 import { useSelector } from "react-redux";
 import { RootState } from "../../reducers/rootReducer";
@@ -80,6 +80,15 @@ export const ChatArea = () => {
     }
   });
 
+  const messagesRef = useRef(null)
+
+  // Scroll to the bottom automatically when there is a new message
+  useEffect(() => {
+    if (messagesRef.current) {
+      messagesRef.current.scrollTop = messagesRef.current.scrollHeight
+    }
+  }, [messages])
+
   const pendingMessages = useSelector<RootState, PendingMessage[]>(state => state.messages.pendingMessages);
   const pendingMessagesFromCurrConversation = pendingMessages.filter((msg) => msg.conversationID === currentConversationID);
 
@@ -100,7 +109,7 @@ export const ChatArea = () => {
 
       {/* all messages sent by the server */}
       {currentConversation &&
-        <div style={{ paddingTop: "20px", overflowY: "scroll" }}>
+        <div ref={messagesRef} style={{ paddingTop: "20px", overflowY: "scroll" }}>
           {messagesArr.map((msg) => {
             return (
               <div style={{ margin: "10px 40px 10px 40px" }}>

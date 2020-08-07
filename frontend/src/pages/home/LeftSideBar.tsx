@@ -75,9 +75,10 @@ const LeftSideBar = () => {
         </div>
       }
       <div className={classes.groupLinks}>
-        <Link to={`/daily-challenge/${dailyChallengeUuid}`} className={classes.link}>
-          <h3>Daily Challenge</h3>
-        </Link>
+        {/* Under Construction */}
+        {/*<Link to={`/daily-challenge/${dailyChallengeUuid}`} className={classes.link}>*/}
+        {/*  <h3>Daily Challenge</h3>*/}
+        {/*</Link>*/}
         <Link to={`/code-together/${codeTogetherUuid}`} className={classes.link}>
           <h3>Code Together</h3>
         </Link>
@@ -89,9 +90,6 @@ const LeftSideBar = () => {
         <h3 onClick={() => {
           history.push("/home/hackernews")
         }}>Hacker News</h3>
-
-        {/* <h3>Posts</h3>
-        <h3>Videos</h3> */}
 
         <h3 onClick={() => {
           history.push("/home/groups");
