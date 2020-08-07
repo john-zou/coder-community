@@ -9,9 +9,9 @@ import ErrorPage from "../common/ErrorPage";
 import { Loading } from "../common/Loading";
 import CenteredTabs from "./CenteredTabs";
 import moment from "moment";
-import {useParams} from "react-router-dom";
-import {CodeParams, ViewProfileParams} from "../../App";
-import {CodeCollab} from "../code_collab_shared/CodeCollab";
+import { useParams } from "react-router-dom";
+import { CodeParams, ViewProfileParams } from "../../App";
+import { CodeCollab } from "../code_collab_shared/CodeCollab";
 
 export const LeftSideContainer = styled.div`
   padding-top: 9vh;
@@ -26,13 +26,9 @@ export const RightSideContainer = styled(LeftSideContainer)`
 
 export const DailyChallenge = () => {
   const { roomID } = useParams<CodeParams>();
-
-
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
   const dispatch = useDispatch<AppDispatch>();
-
 
   useEffect(() => {
     setLoading(true);
@@ -56,7 +52,7 @@ export const DailyChallenge = () => {
     <>
       <div style={{ display: "flex", flexDirection: "row" }} >
         <LeftSideContainer style={{ fontFamily: 'Courier New' }}>
-          <CodeCollab roomID={roomID}/>
+          <CodeCollab roomID={roomID} />
         </LeftSideContainer>
 
         <RightSideContainer>

@@ -14,6 +14,7 @@ import "../../App.css";
 import moment from "moment";
 import { NewConversation } from "./NewConversation";
 import { Loading } from "../common/Loading";
+import PurpleButton from "../common/PurpleButton";
 
 const ChatAreaContainer = styled.div`
   display: flex;
@@ -37,6 +38,7 @@ const GroupChatHeader = ({ conversation }: { conversation: Conversation }) => {
         <span>{conversation.users.length} members&nbsp;&nbsp;&nbsp;&nbsp;</span>
         <span>+ Add member</span>
       </div>
+
     </ChatHeader >)
 }
 
@@ -49,12 +51,14 @@ const DirectChatHeader = ({ currentConversation }) => {
   const otherUser: User = users[otherUserID];
   return (
     <ChatHeader>
+
       <div style={{ paddingLeft: "30px", display: "flex", flexDirection: "row", alignItems: "center" }}>
         <div style={{ display: "flex", flexDirection: "column", marginLeft: "20px" }}>
           <H2>{otherUser.name}</H2>
           <p>ViewProfile</p>
         </div>
       </div>
+      <div style={{ flex: 1 }}></div>
     </ChatHeader>)
 }
 

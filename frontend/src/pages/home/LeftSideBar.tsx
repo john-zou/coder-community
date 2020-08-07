@@ -1,5 +1,5 @@
 import { makeStyles } from '@material-ui/core/styles';
-import React, {useMemo} from 'react';
+import React, { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
 import { RootState } from '../../reducers/rootReducer';
@@ -75,7 +75,7 @@ const LeftSideBar = () => {
         </div>
       }
       <div className={classes.groupLinks}>
-         <Link to={`/daily-challenge/${dailyChallengeUuid}`} className={classes.link}>
+        <Link to={`/daily-challenge/${dailyChallengeUuid}`} className={classes.link}>
           <h3>Daily Challenge</h3>
         </Link>
         <Link to={`/code-together/${codeTogetherUuid}`} className={classes.link}>

@@ -1,21 +1,21 @@
-import React, {useCallback, useContext, useRef, useState} from "react";
-import MonacoEditor, {Monaco} from "@monaco-editor/react";
-import {EditorContentManagerContext, Editor, EditorContext, RemoteCursorManagerContext, SocketContext} from "../../App";
+import React, { useCallback, useContext, useRef, useState } from "react";
+import MonacoEditor, { Monaco } from "@monaco-editor/react";
+import { EditorContentManagerContext, Editor, EditorContext, RemoteCursorManagerContext, SocketContext } from "../../App";
 import * as monacoEditor from "monaco-editor";
-import {useSelector} from "react-redux";
-import {RootState} from "../../reducers/rootReducer";
-import {CurrentLoggedInUser} from "../../store/types";
+import { useSelector } from "react-redux";
+import { RootState } from "../../reducers/rootReducer";
+import { CurrentLoggedInUser } from "../../store/types";
 import {
   CCEditorDeleteEvent, CCEditorInsertEvent,
   CCMousePositionChangeDto,
   CCMousePositionChangeEvent,
   JoinCCEvent
 } from "../../ws-dto/messages/code-collab.ws.dto";
-import {EditorContentManager, RemoteCursorManager} from "@convergencelabs/monaco-collab-ext";
+import { EditorContentManager, RemoteCursorManager } from "@convergencelabs/monaco-collab-ext";
 import "@convergencelabs/monaco-collab-ext/css/monaco-collab-ext.css";
-import { throttle} from "lodash";
+import { throttle } from "lodash";
 
-export function CodeCollab({roomID}: { roomID: string }) {
+export function CodeCollab({ roomID, collab }: { roomID: string, collab?: boolean }) {
   const user = useSelector<RootState, CurrentLoggedInUser>(state => state.user)
   const username = user?.userID || "Anonymouse"
   const socketRef = useContext(SocketContext);
@@ -26,7 +26,7 @@ export function CodeCollab({roomID}: { roomID: string }) {
   const throttledEdit = useRef(throttle((dto) => socketRef.current.emit(CCCodeUpdateEvent, dto), 500))
   // @ts-ignore
   const throttledCursorPositionChange = useRef(throttle((dto) => socketRef.current.emit(CCMousePositionChangeEvent, dto)
-  , 300))
+    , 300))
 
   const handleChange = (newValue, e) => {
     console.log('onChange', newValue, e);
@@ -35,10 +35,10 @@ export function CodeCollab({roomID}: { roomID: string }) {
   const handleEditorDidMount = (_, editor: Editor) => {
     editorRef.current = editor;
 
-    socketRef.current.emit(JoinCCEvent, {roomID})
+    socketRef.current.emit(JoinCCEvent, { roomID })
 
     socketRef.current.on('connection', () => {
-      socketRef.current.emit(JoinCCEvent, {roomID})
+      socketRef.current.emit(JoinCCEvent, { roomID })
     })
 
     remoteCursorManagerRef.current = new RemoteCursorManager({
@@ -50,14 +50,14 @@ export function CodeCollab({roomID}: { roomID: string }) {
     editorContentManagerRef.current = new EditorContentManager({
       editor,
       onInsert: (index, text) => {
-        socketRef.current.emit(CCEditorInsertEvent, {roomID, index, text})
+        socketRef.current.emit(CCEditorInsertEvent, { roomID, index, text })
       },
       onReplace: (index, length, text) => {
-        socketRef.current.emit(CCEditorDeleteEvent, {roomID, index, length})
-        socketRef.current.emit(CCEditorInsertEvent, {roomID, index, text})
+        socketRef.current.emit(CCEditorDeleteEvent, { roomID, index, length })
+        socketRef.current.emit(CCEditorInsertEvent, { roomID, index, text })
       },
       onDelete: (index, length) => {
-        socketRef.current.emit(CCEditorDeleteEvent, {roomID, index, length})
+        socketRef.current.emit(CCEditorDeleteEvent, { roomID, index, length })
       }
     })
 
@@ -74,11 +74,8 @@ export function CodeCollab({roomID}: { roomID: string }) {
 
   return (
     <>
-      <button disabled={!!editorRef.current}>
-        Press to listen editor changes (see console)
-      </button>
       <MonacoEditor
-        width="50vw"
+        width={collab ? "100vw" : "50vw"}
         height="90vh"
         theme="vs-dark"
         language={"javascript"}
