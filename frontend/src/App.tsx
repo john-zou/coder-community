@@ -211,9 +211,10 @@ export default function App() {
             <Router>
               <Header></Header>
               <Switch>
-                <Route path="/daily-challenge/:roomID">
-                  <DailyChallenge />
-                </Route>
+                {/*Under construction*/}
+                {/*<Route path="/daily-challenge/:roomID">*/}
+                {/*  <DailyChallenge />*/}
+                {/*</Route>*/}
                 <Route path={"/code-together/:roomID"}>
                   <CodeTogether />
                 </Route>
@@ -242,7 +243,6 @@ export default function App() {
                   <SearchPage />
                 </Route>
                 <Route path="/result">
-                  {/*Unused*/}
                   <SearchResult />
                 </Route>
                 <Route path="/video_management">
@@ -267,7 +267,6 @@ export default function App() {
                   <Redirect to="/home"></Redirect>
                 </Route>
               </Switch>
-              {/* <Footer></Footer> */}
             </Router>
           </EditorContentManagerContext.Provider>
         </RemoteCursorManagerContext.Provider>

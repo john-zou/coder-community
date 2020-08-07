@@ -4,8 +4,6 @@ const useStyles = makeStyles({
   root: {
     backgroundColor: "#5D67E9",
     color: "white",
-    width: "7em",
-    // height: "2em",
     border: "none",
     borderRadius: "10px",
     fontSize: "15px",
@@ -17,8 +15,8 @@ const useStyles = makeStyles({
   },
 });
 
-const PurpleButton = ({ handleClick, params, content }: { handleClick?: (params) => any, params?: any, content: string }) => {
+const PurpleButton = ({ handleClick, params, content, fitContent}: { handleClick?: (params) => any, params?: any, content: string, fitContent?: boolean }) => {
   const classes = useStyles();
-  return <button onClick={handleClick} className={classes.root}>{content}</button>;
+  return <button onClick={handleClick} className={classes.root} style={{width: fitContent ? "fit-content" : "7em"}}>{content}</button>;
 };
 export default PurpleButton;
