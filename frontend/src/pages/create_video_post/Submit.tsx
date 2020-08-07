@@ -3,7 +3,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { useDispatch, useSelector } from 'react-redux';
 import { User } from "../../store/types";
 import { RootState } from "../../reducers/rootReducer";
-import {submitPost, updatePost} from "../../reducers/postsCreationSlice";
+import { submitPost, updatePost } from "../../reducers/postsCreationSlice";
 import { AppDispatch } from "../../store";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { useHistory } from "react-router-dom";
@@ -34,18 +34,10 @@ export default function Submit(params) {
   const classes = useStyles();
   const dispatch = useDispatch<AppDispatch>();
   const history = useHistory();
-  // const createdPost = useSelector<RootState, PostsCreation>(state => state.postsCreation);
   const curUser = useSelector<RootState, User>(state => state.user);
 
   const onSubmit = async (params, author, dispatch, history) => {
-    // console.log(newPost);
-
-      // let featuredVideo: string;  //Mina
-      // if (params.video) {
-      //     featuredVideo = await uploadPublicAsset(params.video);
-      // }
-
-      const newPost = {
+    const newPost = {
       title: params.title,
       content: params.content,
       tags: params.tags,
@@ -54,17 +46,17 @@ export default function Submit(params) {
     }
     // Handle update differently
     if (params.isUpdate) {
-      dispatch(updatePost({update: newPost, slug: params.isUpdate})).then(unwrapResult).then(
-          dto => {
-            history.push(`/post/${dto.slug}`)
-          }
+      dispatch(updatePost({ update: newPost, slug: params.isUpdate })).then(unwrapResult).then(
+        dto => {
+          history.push(`/post/${dto.slug}`)
+        }
       );
     } else {
       // Create new post
       dispatch(submitPost(newPost)).then(unwrapResult).then(
-          dto => {
-            history.push(`/post/${dto.slug}`)
-          }
+        dto => {
+          history.push(`/post/${dto.slug}`)
+        }
       );
     }
 

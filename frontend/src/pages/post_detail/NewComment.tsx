@@ -44,9 +44,7 @@ const NewComment = ({ postID }) => {
     const content = inputRef.current.value.trim();
     const newCommentDto: CreateCommentClientToServerDto = {
       content,
-      // parentComment?: string;
       parentPost: postID,
-      // parentVideo?: string;
       commentRoot: "post",
     };
     socket.current.emit('createComment', newCommentDto);
@@ -64,7 +62,6 @@ const NewComment = ({ postID }) => {
         placeholder="Type comment"
         ref={inputRef}
       />
-      {/*<input className={classes.name} placeholder="Type comment" />*/}
       <PurpleButton content="Comment"></PurpleButton>
     </form>
   );

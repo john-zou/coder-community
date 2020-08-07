@@ -76,7 +76,6 @@ export default function RightSideBar() {
           ))}
         </div>
 
-        {/* <p className={classes.savePostText}># WHO TO FOLLOW</p> */}
         <ScrollUpButton />
       </div>}
 

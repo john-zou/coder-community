@@ -1,7 +1,3 @@
-// export function videos(state = {}, action) {
-//   return state;
-// }
-
 import { PayloadAction } from '@reduxjs/toolkit';
 import { PostsApi, VideoApi, GetAllVideosDto, VideoDto } from './../api/api';
 import { Video } from './../store/types';
@@ -27,8 +23,6 @@ export const createVideo = createAsyncThunk(
     return await new VideoApi().videoControllerCreateVideo(videoDto);
   }
 )
-
-// dispatch(createVideo(video))
 
 export const videosSlice = createSlice({
   name: 'video',

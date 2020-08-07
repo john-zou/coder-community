@@ -27,8 +27,6 @@ export const hnPostsSlice = createSlice({
       state.hnPostsFetchCount++;
     },
     [fetchHackerNewsPosts.fulfilled.type]: (state, action: PayloadAction<any>) => {
-      // console.log("before upsert");
-      // console.log(action.payload);
       try {
         hnPostsAdapter.upsertMany(state, action.payload)
       } catch (err) {

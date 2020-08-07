@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from '@emotion/styled';
 import { useSelector } from "react-redux";
 import { RootState } from "../../reducers/rootReducer";
@@ -43,7 +43,6 @@ const GroupChatHeader = ({ conversation }: { conversation: Conversation }) => {
 }
 
 const DirectChatHeader = ({ currentConversation }) => {
-  // const user = useSelector<RootState, CurrentLoggedInUser>(state => state.user);
   const userID = useSelector<RootState, string>(state => state.user._id);
 
   const users = useSelector<RootState, Dictionary<User>>(state => state.users.entities);

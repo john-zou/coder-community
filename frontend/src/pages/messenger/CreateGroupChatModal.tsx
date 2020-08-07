@@ -67,11 +67,7 @@ export const GroupConversations = ({ setOpen }: { setOpen: any }) => {
   const dispatch = useDispatch();
 
   const handleSelectConversation = (conversationID) => {
-    // console.log(conversationID);
     dispatch(selectConversation({ conversationID }));
-
-    // console.log(conversationID);
-    //fetch messages in current conversation
     dispatch(fetchMessagesInConversation({ conversationID }));
   }
   return (<>
@@ -84,7 +80,6 @@ export const GroupConversations = ({ setOpen }: { setOpen: any }) => {
         return (
           <p style={{ fontWeight: "bold", color: "#333333" }}
             onClick={() => handleSelectConversation(group._id)}>#{group.name}</p>)
-
       })}
     </div>
   </>)

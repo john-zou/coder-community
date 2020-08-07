@@ -27,7 +27,6 @@ const onCancel = (params, dispatch) => {
     tags: params.tags,
     featuredImg: params.img,
   }
-  // console.log("SUBMIT" + newPost);
 }
 
 
@@ -39,12 +38,9 @@ export default function Submit(params) {
   const previewContentLength = 100;
   const updating = useSelector<RootState, boolean>(state => state.posts.updating)
 
-  // const createdPost = useSelector<RootState, PostsCreation>(state => state.postsCreation);
   const curUser = useSelector<RootState, User>(state => state.user);
   const [loading, setLoading] = useState(false)
-  // const onSubmit = async (params, author, dispatch, history) => {
   const onSubmit = async () => {
-    console.log("UPDATEPOST::INDEX::ONSUBMIT");
     let featuredImg: string;
     if (params.img) {
       featuredImg = await uploadPublicAsset(params.img);
@@ -75,8 +71,6 @@ export default function Submit(params) {
       dispatch(submitPost(newPost))
         .then(unwrapResult)
         .then(dto => {
-          // console.log("UPDATEPOST::SUBMIT::onSubmit");
-          // console.log(dto.slug);
           history.push(`/post/${dto.slug}`)
         });
     }
@@ -93,9 +87,6 @@ export default function Submit(params) {
         <PurpleButton content="Cancel" />
       </div>
       <div style={{ width: "15px" }}></div>
-      {/*<button onClick={(event) => {
-        onSubmit(params, curUser, dispatch, history);
-      }}>*/}
       <PurpleButton content="Submit" handleClick={onSubmit} />
     </div>
   );

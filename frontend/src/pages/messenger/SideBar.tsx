@@ -38,11 +38,7 @@ const DirectMessages = () => {
   const usersMap = useSelector<RootState, Dictionary<User>>(state => state.users.entities);
 
   const handleSelectConversation = (conversationID) => {
-    // console.log(conversationID);
     dispatch(selectConversation({ conversationID }));
-
-    // console.log(conversationID);
-    //fetch messages in current conversation
     dispatch(fetchMessagesInConversation({ conversationID }));
   }
 
@@ -70,12 +66,8 @@ const DirectMessages = () => {
 }
 
 export const SideBar = () => {
-  // const users = useSelector<RootState, Dictionary<User>>(state => state.users.entities);
-  //replace these groups with group chat later
-
   return (
     <SideBarContainer>
-      {/* <SearchBar></SearchBar> */}
       <div style={{ paddingLeft: "30px", paddingRight: "30px", marginTop: "20%" }}>
 
         <DirectMessages></DirectMessages>

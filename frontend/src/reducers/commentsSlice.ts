@@ -11,7 +11,7 @@ export const commentsSlice = createSlice({
   name: "comments",
   initialState: commentsAdapter.getInitialState<{ isLoading: boolean }>({
     isLoading: false,
-  }),//also has ids[] and entities{}
+  }),
   reducers: {
     getCommentsByPostIDSuccess: (state, action: PayloadAction<GetCommentsServerToClientDto>) => {
       commentsAdapter.upsertMany(state, action.payload.comments);

@@ -52,7 +52,6 @@ export default function TextPanel(params) {
     <div className={classes.cptext}>
       <form>
         <input className={classes.cptitle} type="text" placeholder={params.title} onChange={(event) => {
-          // updateTitle(event, dispatch);
           params.setTitle(event.target.value);
         }}>
         </input>

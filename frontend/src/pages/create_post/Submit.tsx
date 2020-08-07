@@ -11,7 +11,6 @@ import PurpleButton from "../common/PurpleButton";
 import { uploadPublicAsset } from "../../api-upload";
 import { Loading } from "../common/Loading";
 import ErrorPage from "../common/ErrorPage";
-// import { SubmitButton } from "./SubmitButton";
 import Quill from "quill";
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -41,7 +40,6 @@ export default function Submit(params: { editorRef, tags, img, title, isUpdate?}
   const classes = useStyles();
   const dispatch = useDispatch<AppDispatch>();
   const history = useHistory();
-  // const createdPost = useSelector<RootState, PostsCreation>(state => state.postsCreation);
   const curUser = useSelector<RootState, User>(state => state.user);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -61,7 +59,6 @@ export default function Submit(params: { editorRef, tags, img, title, isUpdate?}
   }
 
   const onSubmit = async (params, author, dispatch, history, group?) => {
-    // console.log(newPost);
     let featuredImg: string;
     if (params.img) {
       featuredImg = await uploadPublicAsset(params.img);

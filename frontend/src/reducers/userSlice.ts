@@ -40,7 +40,6 @@ export const updateProfile = createAsyncThunk(
 export const getUserForViewProfile = (userName) => createAsyncThunk(
   'getUserForViewProfile',
   async () => {
-    // Use fetchUserByUsername from usersSlice instead.
   }
 )
 

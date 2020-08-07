@@ -52,7 +52,7 @@ export const fetchTrendingPosts = createAsyncThunk(
       return rejectWithValue(null);
     }
 
-    return initialData; //{users[], posts[], tags[]}
+    return initialData;
   }
 );
 
@@ -71,11 +71,7 @@ export const fetchPostsByTag = createAsyncThunk(
     const fetchCount = (getState() as RootState).tags.entities[tagID].fetchCount;
     let payload: GetPostsByTagDto;
     try {
-      console.log("REDUCER::POSTSLICE::FETCHPOSTBYTAG");
-      console.log(tagID);
-      // payload = await new PostsApi().tagsControllerGetPostsByTag(tagID, undefined, startIdx);
       payload = await new PostsApi().tagsControllerGetPostsByTag(tagID, fetchCount);
-      console.log(payload);
     } catch (err) {
       return rejectWithValue(tagID);
     }
@@ -122,7 +118,7 @@ export const postsSlice = createSlice({
     fetchedComments: {},
     hasMorePosts: true,//only for trending posts (of all tags)
     updating: false
-  }),//also has ids[] and entities{}
+  }),
   reducers: {
     deletePost: (state, action) => {
       postsAdapter.removeOne(state, action.payload.postID);
@@ -148,7 +144,7 @@ export const postsSlice = createSlice({
           state.trendingPosts.push(post._id);
         }
       })
-      postsAdapter.upsertMany(state, action.payload.posts) //add posts to ids and entities
+      postsAdapter.upsertMany(state, action.payload.posts)
     },
     [fetchTrendingPosts.rejected.type]: (state, action) => {
       state.hasMorePosts = false;
@@ -194,11 +190,9 @@ export const postsSlice = createSlice({
 
       console.log("POSTSLICE::UPDATEPOST");
       console.log(action.payload.updated);
-      // state.slugToID.delete(action.payload.slug);
       postsAdapter.updateOne(state, {
         id: action.payload._id,
         changes: action.payload.updated
-        // changes: action.payload // master
       });
       state.updating = false
       console.log("** UPDATE DONE **");

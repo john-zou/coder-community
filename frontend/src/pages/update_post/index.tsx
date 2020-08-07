@@ -23,13 +23,11 @@ const useStyles = makeStyles({
   createPost: {
     paddingTop: "7vh",
     paddingBottom: "7vh",
-    // paddingTop: "3em",
     display: "flex",
     flex: 1,
     flexDirection: "column",
     height: "110vh",
     alignItems: "center",
-    // overflowY: "scroll",
   }
 
 });
@@ -101,7 +99,6 @@ export default function UpdatePost() {
     return <NotFoundError />
   }
 
-  // console.log("UPDATEPOST::INDEX");
   if (!user) {
     return <NotLoggedInError />
   }
@@ -112,7 +109,6 @@ export default function UpdatePost() {
   return (
     <div className={classes.createPost}>
       <ImgP setImg={setImg} />
-      {/* <TextP setTitle={setTitle} setContent={setContent} title={post?.title} content={post?.content} /> */}
       <PostContent editorRef={editorRef} setTitle={setTitle} currentPost={post} />
       <TagP setPostTags={setPostTags} allTagsArr={allTagsArr} oldTagsID={oldTagsIDArr} />
       <Submit title={title} editorRef={editorRef} tags={postTags} img={featuredImg} isUpdate={post?.slug} />

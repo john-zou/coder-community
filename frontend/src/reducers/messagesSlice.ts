@@ -28,7 +28,7 @@ export const messagesSlice = createSlice({
     isTyping: false,
     isError: null,
     pendingMessages: []
-  }),//also has ids[] and entities{}
+  }),
   reducers: {
     createMessagePending: (state, action: PayloadAction<CreateMessageBodyDto>) => {
       state.isSending = true;

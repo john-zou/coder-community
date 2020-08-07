@@ -27,7 +27,7 @@ const useStyles = makeStyles({
     outline: "none",
     background: "white",
     '&:hover': {
-       backgroundColor: "#F2F2F2",
+      backgroundColor: "#F2F2F2",
     },
     width: "100%",
     height: "2em",
@@ -41,18 +41,16 @@ const useStyles = makeStyles({
 });
 
 const _onChange = (event) => {
-      this.cur = event.target.value;
-      // this.props.load(event.target.value);
+  this.cur = event.target.value;
 }
 
 const _onSubmit = (event) => {
-        event.preventDefault();
-        // this.props.store('MESS_ADD', this.props.input);
-    this.props.setTag(this.cur);
+  event.preventDefault();
+  this.props.setTag(this.cur);
 }
 
 const _onDel = (event) => {
-      
+
 }
 
 export default function PeoplePanel() {
@@ -60,16 +58,16 @@ export default function PeoplePanel() {
   const alltags = [];
   return (
     <div className={classes.cppeople}>
-    	 <form id="peopleform">
-            <h4 className={classes.h4}>Add people</h4>
-    	    <hr className={classes.display}></hr>
-            <ul className={classes.people}>
-	        <Person/>
-	    </ul>
-	    <input className={classes.input} onChange={_onChange} placeholder="Type here"></input>
-	    <br></br>
-	    <button onClick={_onSubmit}>Submit</button>
-          </form>
+      <form id="peopleform">
+        <h4 className={classes.h4}>Add people</h4>
+        <hr className={classes.display}></hr>
+        <ul className={classes.people}>
+          <Person />
+        </ul>
+        <input className={classes.input} onChange={_onChange} placeholder="Type here"></input>
+        <br></br>
+        <button onClick={_onSubmit}>Submit</button>
+      </form>
     </div>
   );
 }
