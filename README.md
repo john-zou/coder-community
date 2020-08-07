@@ -2,7 +2,37 @@
 
 ### _Coder Community is a social platform for software developers of all levels. On Coder Community, you can join and grow with a community and read and write articles, post and watch videos, join and create groups, live chat, and undertake coding challenges together._
 
-# Final Progress Report
+## Goals, Revisited:
+
+### **3-5 minimal requirements**
+
+- Login and authentication system (Done)
+- Allow users to upload videos, pics, create, delete, update posts (Done)
+- Create, join and leave groups (Done)
+- Like and unlike posts (Done)
+
+### **3-7 standard requirements**
+
+- View posts by popularity (trending) and by tag (Done)
+- Search system (Done)
+- Following/followers system (Done)
+- Comment system (Done)
+- Let user have a "saved posts" reading list (Done)
+
+
+### **2-3 stretch requirements**
+
+- Real time messaging (Done)
+- Code collaboration (Done)
+
+## Units 1-5 technologies
+- Unit 1: We use HTML, CSS, JS
+- Unit 2: We use React and Redux (with Redux Toolkit)
+- Unit 3: We use MongoDB for storing everything except for images (file storage instead) and code collab code (not stored), using Mongoose and Typegoose
+- Unit 4: We use Node and Express for the back end (with NestJS framework)
+- Unit 5: We have deployed the app on AWS EC2 with Docker at http://ec2-13-229-215-75.ap-southeast-1.compute.amazonaws.com/
+
+## **Above and Beyond**
 
 ## **Code Together**: real time code collaboration
 ### From a DM chat or group chat, a code collaboration room can be created and an invitation link automatically sent to those in the chat
@@ -17,9 +47,13 @@
 
 ---
 
-- We've also greatly increased the efficiency of retrieving trending posts through a combination of using a MongoDB index and pagination.
+## Major accomplishment: real time messaging (using websockets)
 
-## **Future Goals**
+![image](https://user-images.githubusercontent.com/61474884/88451384-335e4680-ce0b-11ea-87dc-727b307c87f1.png)
+
+
+
+## **Next Steps**
 - Improvements to be made:
   - A final major feature: extend **Code Together** to collaborative daily code challenges, with code execution and testing done by a standalone service, such as [DMOJ](https://github.com/DMOJ/online-judge)
   - Responsive layout: make every page mobile-friendly

@@ -38,7 +38,6 @@ const useStyles = makeStyles((theme) => ({
     width: drawerWidth
   },
   menuButton: {
-    // marginRight: theme.spacing(2),
     [theme.breakpoints.up("sm")]: {
       display: "none",
     },
@@ -46,18 +45,12 @@ const useStyles = makeStyles((theme) => ({
     drawerPaper: {
       width: drawerWidth,
     },
-
-    // boxShadow: "5px 2px 5px #cccccc",
   },
   search: {
     borderRadius: theme.shape.borderRadius,
     backgroundColor: "#FAFAFA",
     paddingTop: "10px",
     paddingBottom: "10px",
-    // "&:hover": {
-    //   backgroundColor: fade(theme.palette.common.white, 0.25),
-    // },
-
     marginRight: "auto",
     width: "100%",
     [theme.breakpoints.up("sm")]: {
@@ -177,22 +170,6 @@ export default function Header(props) {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      <MenuItem>
-        <IconButton aria-label="show 2 new messages" color="inherit">
-          <Badge badgeContent={2} color="secondary">
-            <MessageIcon />
-          </Badge>
-        </IconButton>
-        <p>Messages</p>
-      </MenuItem>
-      <MenuItem>
-        <IconButton aria-label="show 1 new notifications" color="inherit">
-          <Badge badgeContent={1} color="secondary">
-            <NotificationsIcon />
-          </Badge>
-        </IconButton>
-        <p>Notifications</p>
-      </MenuItem>
       <MenuItem onClick={handleProfileMenuOpen}>
         <IconButton
           aria-label="account of current user"
@@ -224,7 +201,7 @@ export default function Header(props) {
           >
             <MenuIcon />
           </IconButton>
-          <img src={Logo} style={{ width: "5em" }} alt="" />
+          <img onClick={() => { window.location.href = "/" }} src={Logo} style={{ width: "5em" }} alt="logo" />
           <div className={classes.search}>
             <div className={classes.searchIcon}>
               <SearchIcon />
@@ -269,16 +246,6 @@ export default function Header(props) {
 
           {isLoggedIn &&
             <div className={classes.sectionDesktop}>
-              <IconButton aria-label="show 2 new messages" color="inherit">
-                <Badge badgeContent={2} color="secondary">
-                  <MessageIcon />
-                </Badge>
-              </IconButton>
-              <IconButton aria-label="show 1 new notifications" color="inherit">
-                <Badge badgeContent={1} color="secondary">
-                  <NotificationsIcon />
-                </Badge>
-              </IconButton>
               <IconButton
                 edge="end"
                 aria-label="account of current user"

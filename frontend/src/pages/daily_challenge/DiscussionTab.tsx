@@ -12,8 +12,6 @@ import { Loading } from "../common/Loading";
 import styled from "@emotion/styled";
 import PurpleButton from "../common/PurpleButton";
 import { NewDiscussion } from "./NewDiscussion";
-// import "../../App.css";
-
 export const SmallCardContainer = styled.div`
   display: flex;
   flex-direction: column;

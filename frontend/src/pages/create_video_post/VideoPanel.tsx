@@ -20,7 +20,6 @@ const _onVideoUpload = (event) => {
 }
 
 export interface IProps {
-  // setUrl: any;
 }
 
 export interface IState {

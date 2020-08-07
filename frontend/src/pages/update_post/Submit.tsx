@@ -31,7 +31,6 @@ const onCancel = (params, dispatch) => {
 
 
 export default function Submit(params) {
-  console.log("UPDATEPOST::SUBMIT");
   const classes = useStyles();
   const dispatch = useDispatch<AppDispatch>();
   const history = useHistory();

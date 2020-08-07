@@ -26,7 +26,6 @@ const onCancel = (params, dispatch) => {
     tags: params.tags,
     featuredImg: params.img,
   }
-  console.log("SUBMIT" + newPost);
 }
 
 

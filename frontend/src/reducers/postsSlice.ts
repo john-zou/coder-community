@@ -187,15 +187,11 @@ export const postsSlice = createSlice({
     },
     [updatePost.fulfilled.type]: (state, action: PayloadAction<UpdatePostSuccessDto & UpdatePostBodyDto>) => {
       state.slugToID[action.payload.slug] = state.slugToID[action.payload.oldSlug];
-
-      console.log("POSTSLICE::UPDATEPOST");
-      console.log(action.payload.updated);
       postsAdapter.updateOne(state, {
         id: action.payload._id,
         changes: action.payload.updated
       });
       state.updating = false
-      console.log("** UPDATE DONE **");
     },
     [getCommentsByPostIDSuccess.type]: (state, action: PayloadAction<GetCommentsServerToClientDto>) => {
       state.fetchedComments[action.payload.postID] = true;
