@@ -7,28 +7,25 @@ import { fetchQuestions } from "../../reducers/questionsSlice";
 import { AppDispatch } from "../../store";
 import ErrorPage from "../common/ErrorPage";
 import { Loading } from "../common/Loading";
-import CenteredTabs from "./CenteredTabs";
 import moment from "moment";
 import { useParams } from "react-router-dom";
-import { CodeParams, ViewProfileParams } from "../../App";
+import { CodeParams } from "../../App";
 import { CodeCollab } from "../code_collab_shared/CodeCollab";
 
-export const LeftSideContainer = styled.div`
+const LeftSideContainer = styled.div`
   padding-top: 9vh;
-  width: 50vw;
+  width: 100vw;
   display: flex;
   flex-direction: column;
 `;
 
-export const RightSideContainer = styled(LeftSideContainer)`
-  align-items: center;
-`;
-
-export const DailyChallenge = () => {
+export const CodeTogether = () => {
   const { roomID } = useParams<CodeParams>();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
   const dispatch = useDispatch<AppDispatch>();
+
 
   useEffect(() => {
     setLoading(true);
@@ -52,13 +49,8 @@ export const DailyChallenge = () => {
     <>
       <div style={{ display: "flex", flexDirection: "row" }} >
         <LeftSideContainer style={{ fontFamily: 'Courier New' }}>
-          <CodeCollab roomID={roomID} />
+          <CodeCollab roomID={roomID} collab={true} />
         </LeftSideContainer>
-
-        <RightSideContainer>
-          <h2>Daily Coding Challenge {moment().format("MMM Do")}</h2>
-          <CenteredTabs />
-        </RightSideContainer>
 
       </div>
     </>

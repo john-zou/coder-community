@@ -10,6 +10,8 @@ import Avatar from "../common/Avatar";
 import ErrorPage from "../common/ErrorPage";
 import { Loading } from "../common/Loading";
 import styled from "@emotion/styled";
+import PurpleButton from "../common/PurpleButton";
+import { NewDiscussion } from "./NewDiscussion";
 // import "../../App.css";
 
 export const SmallCardContainer = styled.div`
@@ -74,18 +76,19 @@ export const DiscussionTab = () => {
 
   return (
     <div style={{ display: "flex", flexDirection: "column" }}>
-      {/* <SearchBar /> */}
+
       {Object.values(discussions).map((discussion) => (
         <>
           <SmallCardContainer onClick={() => handleExpand(discussion._id)}>
-
-            <Avatar pic={users[discussion.author].profilePic} title={users[discussion.author].name} subtitle={discussion.title} boldSub={true} />
+            <Avatar pic={users[discussion.author]?.profilePic} title={users[discussion.author]?.name} subtitle={discussion.title} boldSub={true} />
             {(!selectedDiscussion || selectedDiscussion !== discussion._id) ? <></> : <p style={{ marginTop: "-1px" }}>{discussion.content}</p>}
-
           </SmallCardContainer>
         </>
       )
       )}
+
+      <NewDiscussion></NewDiscussion>
+      <PurpleButton content="Post discussion"></PurpleButton>
     </div >
   )
 }

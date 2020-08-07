@@ -34,12 +34,12 @@ export default function CenteredTabs() {
         style={{ marginTop: "-8px" }}
       >
         <Tab label="Problem" />
-        <Tab label="Discussions" />
+        {/* <Tab label="Discussions" /> */}
       </Tabs>
       {/* </Paper> */}
 
       {!value && <QuestionTab />}
-      {!!value && <DiscussionTab />}
+      {/* {!!value && <DiscussionTab />} */}
     </>
   );
 }

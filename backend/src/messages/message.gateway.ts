@@ -20,6 +20,16 @@ import { ConversationsService } from '../conversations/conversations.service';
 import { UserObjectID } from '../user/user-object-id.decorator';
 import { NewConversationClientToServerDto, NewConversationServerToClientDto } from './messenger.ws.dto';
 import { UserWsAuthGuard } from '../auth/guards/user-ws.guard';
+import {
+  CCEditorDeleteDto,
+  CCEditorDeleteEvent,
+  CCEditorInsertDto,
+  CCEditorInsertEvent,
+  CCMousePositionChangeDto,
+  CCMousePositionChangeEvent, DefaultCode,
+  JoinCCClientToServerDto,
+  JoinCCEvent, JoinCCServerToClientDto
+} from "./code-collab.ws.dto";
 
 @WebSocketGateway() //by default server already serves at 3001
 export class MessageGateway implements OnGatewayConnection, OnGatewayDisconnect {//gateway===controller
@@ -28,10 +38,10 @@ export class MessageGateway implements OnGatewayConnection, OnGatewayDisconnect 
 
   private readonly mapUserIDToClientID: Record<string, Set<Socket>> = {};
   private readonly mapClientIDToUserID: Record<string, string> = {};
+  readonly roomIDToCode: Record<string, string> = {}
 
   constructor(private readonly messagesService: MessagesService, private readonly conversationsService: ConversationsService) { }
   private logger = new Logger('MessageGateway');
-
 
   handleConnection(client: Socket): void {
     this.logger.log(`Client connected: ID ${client.id}`);
@@ -42,6 +52,64 @@ export class MessageGateway implements OnGatewayConnection, OnGatewayDisconnect 
     const userID = this.mapClientIDToUserID[client.id];
     if (this.mapClientIDToUserID[userID]) {
       this.mapUserIDToClientID[userID].delete(client);
+    }
+  }
+
+  @SubscribeMessage(CCMousePositionChangeEvent)
+  onMousePositionChangeEvent(@MessageBody() dto: CCMousePositionChangeDto, @ConnectedSocket() client: Socket): void {
+    const room = dto.roomID
+    // notify other people in the room
+    client.to(room).emit(CCMousePositionChangeEvent, dto)
+  }
+
+  @SubscribeMessage(CCEditorInsertEvent)
+  onCCEditorInsertEvent(@MessageBody() dto: CCEditorInsertDto, @ConnectedSocket() client: Socket): void {
+    const room = dto.roomID
+
+    // Two corner cases
+    if (dto.text === DefaultCode) {
+      return
+    }
+    if (dto.text === this.roomIDToCode[room]) {
+      return
+    }
+
+    const oldCode = this.roomIDToCode[room]
+    this.roomIDToCode[room] = oldCode.slice(0, dto.index) + dto.text + oldCode.slice(dto.index)
+
+    client.to(room).emit(CCEditorInsertEvent, dto)
+  }
+
+  @SubscribeMessage(CCEditorDeleteEvent)
+  onCCEditorDeleteEvent(@MessageBody() dto: CCEditorDeleteDto, @ConnectedSocket() client: Socket): void {
+    const room = dto.roomID
+
+    const oldCode = this.roomIDToCode[room]
+    this.roomIDToCode[room] = oldCode.slice(0, dto.index) + oldCode.slice(dto.index + dto.length)
+
+    client.to(room).emit(CCEditorDeleteEvent, dto)
+  }
+
+  @SubscribeMessage(JoinCCEvent)
+  onJoinCC(@MessageBody() dto: JoinCCClientToServerDto, @ConnectedSocket() client: Socket): WsResponse<JoinCCServerToClientDto> {
+    const room = dto.roomID
+    client.join(room)
+
+    if (this.roomIDToCode[room]) {
+      return {
+        event: JoinCCEvent,
+        data: {
+          code: this.roomIDToCode[room]
+        }
+      }
+    } else {
+      this.roomIDToCode[room] = DefaultCode
+      return {
+        event: JoinCCEvent,
+        data: {
+          code: this.roomIDToCode[room]
+        }
+      }
     }
   }
 
@@ -145,7 +213,6 @@ export class MessageGateway implements OnGatewayConnection, OnGatewayDisconnect 
     }, userID);
 
     for (const user of conversation.users) {
-
       if (this.mapUserIDToClientID[user]) {
         for (const socket of this.mapUserIDToClientID[user]) {
           socket.join(conversation._id);
