@@ -38,6 +38,7 @@ package-lock.json
 
 #.env will be used for secrets
 .env
+.env.local
 
 # generated API client zip
 /scripts/generated-api-client.zip
@@ -52,6 +53,7 @@ private/*
 private/**/*
 !private/README.md
 
+build
 docs
 docs-cn
 typedoc
