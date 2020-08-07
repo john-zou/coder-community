@@ -138,73 +138,75 @@ const PostDetail = () => {
 
   if (error) {
     return <NotFoundError />
-    // post has item with content
-    let dateSubtitleInAvatar: string;
-    if (typeof post.createdAt === "string") {
-      const parsedInt = parseInt(post.createdAt);
-      if (isNaN(parsedInt) || parsedInt < 10000) {
-        // It may already be a human readable string
-        dateSubtitleInAvatar = post.createdAt;
-      } else {
-        // it is a unix millis cast to a string
-        dateSubtitleInAvatar = moment(new Date(parseInt(post.createdAt))).calendar()
-      }
+  }
+
+  // post has item with content
+  let dateSubtitleInAvatar: string;
+  if (typeof post.createdAt === "string") {
+    const parsedInt = parseInt(post.createdAt);
+    if (isNaN(parsedInt) || parsedInt < 10000) {
+      // It may already be a human readable string
+      dateSubtitleInAvatar = post.createdAt;
     } else {
-      dateSubtitleInAvatar = moment(post.createdAt).calendar()
+      // it is a unix millis cast to a string
+      dateSubtitleInAvatar = moment(new Date(parseInt(post.createdAt))).calendar()
     }
+  } else {
+    dateSubtitleInAvatar = moment(post.createdAt).calendar()
+  }
 
-    return (
-      <div className={classes.root}>
-        <div className={classes.postDetail}>
-          <img
-            src={featuredImg}
-            style={{ height: "20em", objectFit: "cover", width: "100%" }} alt="featured"
-          />
+  return (
+    <div className={classes.root}>
+      <div className={classes.postDetail}>
+        <img
+          src={featuredImg}
+          style={{ height: "20em", objectFit: "cover", width: "100%" }} alt="featured"
+        />
 
-          {/* POST TITLE */}
-          <h1>{post.title}</h1>
+        {/* POST TITLE */}
+        <h1>{post.title}</h1>
 
-          <Link to={`/user/${author.userID}`} style={{ textDecoration: "none" }}>
-            <Avatar pic={author.profilePic} title={author.userID} subtitle={dateSubtitleInAvatar} isPost={true}></Avatar>
-          </Link>
+        <Link to={`/user/${author.userID}`} style={{ textDecoration: "none" }}>
+          <Avatar pic={author.profilePic} title={author.userID} subtitle={dateSubtitleInAvatar} isPost={true}></Avatar>
+        </Link>
 
 
-          {/*/>
+        {/*/>
         <p>{post.content}</p>*/}
-          {/* POST CONTENT */}
-          <div className="ql-snow" >
-            <TagP tags={tagsArr} />
-            <div className="ql-editor">
-              <div ref={postContent}></div>
-            </div>
+        {/* POST CONTENT */}
+        <div className="ql-snow" >
+          <TagP tags={tagsArr} />
+          <div className="ql-editor">
+            <div ref={postContent}></div>
           </div>
-
-          <Interactions />
-          <div className={classes.interactionsIcons}>
-            <span>
-              <img className={classes.heartIcon} src={postIsLikedByUser ? HeartIconRed : HeartIcon} alt=""
-                onClick={() => {
-                  handleToggleLike()
-                    ;
-                }} />&nbsp;&nbsp;{post.likes}
-            </span>
-            <span>
-              <img className={classes.shareIcon} src={CommentIcon} alt="" />
-            &nbsp;&nbsp;{post.commentsCount}
-            </span>
-          </div>
-
-          <hr></hr>
-          <Comments postID={post._id}></Comments>
-          <NewComment postID={post._id}></NewComment>
-
-          <div style={{ height: "20px" }} />
-          {canUpdate && <UpdateButton slug={slug} />}
-          <div style={{ height: "20px" }} />
-          {canUpdate && <DeletePostButton postID={post?._id} />}
         </div>
-      </div >
-    );
-  };
 
-  export default PostDetail;
+        <Interactions />
+        <div className={classes.interactionsIcons}>
+          <span>
+            <img className={classes.heartIcon} src={postIsLikedByUser ? HeartIconRed : HeartIcon} alt=""
+              onClick={() => {
+                handleToggleLike()
+                  ;
+              }} />&nbsp;&nbsp;{post.likes}
+          </span>
+          <span>
+            <img className={classes.shareIcon} src={CommentIcon} alt="" />
+            &nbsp;&nbsp;{post.commentsCount}
+          </span>
+        </div>
+
+        <hr></hr>
+        <Comments postID={post._id}></Comments>
+        <NewComment postID={post._id}></NewComment>
+
+        <div style={{ height: "20px" }} />
+        {canUpdate && <UpdateButton slug={slug} />}
+        <div style={{ height: "20px" }} />
+        {canUpdate && <DeletePostButton postID={post?._id} />}
+      </div>
+    </div >
+  );
+};
+
+export default PostDetail;
