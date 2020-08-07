@@ -11,6 +11,7 @@ import {useDispatch} from "react-redux";
 import {Loading} from "../common/Loading";
 import { deletePost } from "../../reducers/postsSlice";
 import {PostsApi} from "../../api";
+import {BackEndBaseUri} from "../../constants";
 
 function DeletePostButton({postID}: { postID: string }) {
   const history = useHistory();
@@ -30,7 +31,7 @@ function DeletePostButton({postID}: { postID: string }) {
     new PostsApi().postsControllerDeletePostByPostID(postID).then(() => {console.log('Confirmed optimistic post deletion from backend!')})
       .catch(console.log);
     dispatch(deletePost({postID}));
-    setTimeout(() => {window.location.href = process.env.PUBLIC_URL}, 1000)
+    setTimeout(() => {window.location.href = "/"}, 1000)
   }
 
   if (!postID) {
