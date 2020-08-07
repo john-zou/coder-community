@@ -1,6 +1,6 @@
-import { UseGuards } from '@nestjs/common';
-import { UserWsAuthGuard } from './user-ws.guard';
+import {UseGuards} from '@nestjs/common';
+import {UserWsAuthGuard} from './user-ws.guard';
 
 export function PersonalWs(): MethodDecorator & ClassDecorator {
-  return UseGuards(UserWsAuthGuard);
+    return UseGuards(UserWsAuthGuard);
 }

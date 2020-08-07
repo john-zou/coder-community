@@ -1,9 +1,10 @@
-import { Module } from '@nestjs/common';
-import { DiscussionsController } from './discussions.controller';
-import { DiscussionsService } from './discussions.service';
+import {Module} from '@nestjs/common';
+import {DiscussionsController} from './discussions.controller';
+import {DiscussionsService} from './discussions.service';
 
 @Module({
-  controllers: [DiscussionsController],
-  providers: [DiscussionsService]
+    controllers: [DiscussionsController],
+    providers: [DiscussionsService]
 })
-export class DiscussionsModule { }
+export class DiscussionsModule {
+}

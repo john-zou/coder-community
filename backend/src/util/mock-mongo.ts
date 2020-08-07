@@ -2,7 +2,6 @@ require("dotenv").config();
 import { disconnectMongo, initializeMongo } from '../mongoModels';
 import { Secrets } from '../secrets';
 
-
 let started = false;
 
 /**

@@ -1,25 +1,25 @@
-import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
+import {ApiProperty, ApiPropertyOptional} from "@nestjs/swagger";
 
 export class GetPostsByTagQueryParams {
-  @ApiProperty({
-    description: "The ObjectID of the tag"
-  })
-  tagID: string;
-  
-  @ApiPropertyOptional({
-    description: "How many posts to fetch",
-    default: 5
-  })
-  fetchCount: number;
+    @ApiProperty({
+        description: "The ObjectID of the tag"
+    })
+    tagID: string;
+
+    @ApiPropertyOptional({
+        description: "How many posts to fetch",
+        default: 5
+    })
+    fetchCount: number;
 }
 
 export class MakeTagBodyDto {
-  tagName: string;
+    tagName: string;
 }
 
 export class MakeTagSuccessDto {
-  tag: {
-    _id: string;
-    name: string;
-  }
+    tag: {
+        _id: string;
+        name: string;
+    }
 }

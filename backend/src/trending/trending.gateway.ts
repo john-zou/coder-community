@@ -1,15 +1,15 @@
-import { Logger } from "@nestjs/common";
-import { OnGatewayConnection, WebSocketGateway, WebSocketServer } from "@nestjs/websockets";
-import { Server, Socket } from "socket.io";
+import {Logger} from "@nestjs/common";
+import {OnGatewayConnection, WebSocketGateway, WebSocketServer} from "@nestjs/websockets";
+import {Server, Socket} from "socket.io";
 
 @WebSocketGateway() //by default server already serves at 3001
 export class TrendingGateway implements OnGatewayConnection {
-  @WebSocketServer()
-  wss: Server;
+    @WebSocketServer()
+    wss: Server;
 
-  private logger = new Logger('TrendingGateway');
+    private logger = new Logger('TrendingGateway');
 
-  handleConnection(client: Socket): void {
-    this.logger.log(`Client connected: ID ${client.id}`);
-  }
+    handleConnection(client: Socket): void {
+        this.logger.log(`Client connected: ID ${client.id}`);
+    }
 }

@@ -2,9 +2,9 @@ export const DeleteCommentEvent = "deleteComment";
 export const DeleteCommentInvalidUserErrorString = "Cannot delete comment -- user is not the author";
 
 export class DeleteCommentClientToServerDto {
-  commentID: string;
+    commentID: string;
 }
 
 export class DeleteCommentServerToClientDto {
-  deleted: boolean;
+    deleted: boolean;
 }

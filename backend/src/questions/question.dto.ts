@@ -1,10 +1,10 @@
 export class QuestionDto {
-  _id: string;
-  title: string;
-  content: string;
-  solution: string;
+    _id: string;
+    title: string;
+    content: string;
+    solution: string;
 }
 
 export class GetQuestionsSuccessDto {
-  questions: QuestionDto[]
+    questions: QuestionDto[]
 }

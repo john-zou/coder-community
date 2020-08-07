@@ -1,5 +1,5 @@
-import { Post } from "src/posts/post.schema";
+import {Post} from "src/posts/post.schema";
 
 export class SearchResultDto {
-  posts: Post[];
+    posts: Post[];
 }

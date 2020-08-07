@@ -22,7 +22,7 @@ async function bootstrap() {
 
   app.useGlobalFilters(new GlobalRedirectForReact());
 
-  // CORS -- change origin when deploying
+  // CORS
   app.enableCors(
     { origin: 'http://localhost:3000' }
   )
@@ -32,8 +32,8 @@ async function bootstrap() {
   const options = new DocumentBuilder()
     .setTitle('Coder Community')
     .setDescription('The Coder Community API description')
-    .setVersion('0.0.2')
-    .addServer('http://localhost:3001')
+    .setVersion('0.0.3')
+    .addServer('http://ec2-13-229-215-75.ap-southeast-1.compute.amazonaws.com')
     .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, options);

@@ -1,7 +1,8 @@
-import { Module } from '@nestjs/common';
-import { CommentsGateway } from './comments.gateway';
+import {Module} from '@nestjs/common';
+import {CommentsGateway} from './comments.gateway';
 
 @Module({
-  providers: [CommentsGateway]
+    providers: [CommentsGateway]
 })
-export class CommentsModule {}
+export class CommentsModule {
+}

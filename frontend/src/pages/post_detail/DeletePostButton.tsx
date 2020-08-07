@@ -30,7 +30,7 @@ function DeletePostButton({postID}: { postID: string }) {
     new PostsApi().postsControllerDeletePostByPostID(postID).then(() => {console.log('Confirmed optimistic post deletion from backend!')})
       .catch(console.log);
     dispatch(deletePost({postID}));
-    history.push('/');
+    setTimeout(() => {window.location.href = process.env.PUBLIC_URL}, 1000)
   }
 
   if (!postID) {

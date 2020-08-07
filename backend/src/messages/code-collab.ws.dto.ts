@@ -8,14 +8,17 @@ export class CCMousePositionChangeDto {
 }
 
 export const JoinCCEvent = "code-collab-join";
+
 export class JoinCCServerToClientDto {
     code: string;
 }
+
 export class JoinCCClientToServerDto {
     roomID: string;
 }
 
 export const CCEditorInsertEvent = "code-collab-editor-insert";
+
 export class CCEditorInsertDto {
     roomID: string;
     index: number;
@@ -23,6 +26,7 @@ export class CCEditorInsertDto {
 }
 
 export const CCEditorDeleteEvent = "code-collab-editor-delete";
+
 export class CCEditorDeleteDto {
     roomID: string;
     index: number;

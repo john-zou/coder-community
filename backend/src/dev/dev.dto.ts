@@ -1,3 +1,3 @@
 export class CreateCustomUser {
-  userID: string
+    userID: string
 }

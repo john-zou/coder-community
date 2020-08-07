@@ -20,8 +20,6 @@ import { UploadModule } from './upload/upload.module';
 import { UserModule } from './user/user.module';
 import { VideoModule } from './video/video.module';
 import { SearchModule } from './search/search.module';
-import { CommentsGateway } from './comments/comments.gateway';
-import { DiscussionsController } from './discussions/discussions.controller';
 import { DiscussionsModule } from './discussions/discussions.module';
 import { QuestionsModule } from './questions/questions.module';
 
@@ -60,8 +58,7 @@ import { QuestionsModule } from './questions/questions.module';
       serveRoot: "/",
     }),
 
-    // Module for dev convenience -- remove when deploying
-    DevModule,
+    // DevModule, // Commented out for production
   ],
 
   controllers: [AppController],
