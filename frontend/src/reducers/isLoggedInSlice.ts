@@ -12,6 +12,7 @@ export const isLoggedInSlice = createSlice({
       },
       prepare: ({jwt}: {jwt: string}) => {
         localStorage.setItem(JwtLocalStorageKey, jwt);
+
         return {payload: null};
       },
     },

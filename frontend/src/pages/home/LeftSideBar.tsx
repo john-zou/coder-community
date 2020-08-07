@@ -1,11 +1,12 @@
 import { makeStyles } from '@material-ui/core/styles';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
 import { RootState } from '../../reducers/rootReducer';
 import { CurrentLoggedInUser, User } from '../../store/types';
 import { Loading } from '../common/Loading';
 import "../../App.css";
+import { v4 as uuidv4 } from 'uuid';
 
 const useStyles = makeStyles({
   root: {
@@ -50,6 +51,9 @@ const useStyles = makeStyles({
 });
 
 const LeftSideBar = () => {
+  const dailyChallengeUuid = useMemo<string>(() => uuidv4(), []); // randomly generated
+  const codeTogetherUuid = useMemo<string>(() => uuidv4(), []);
+
   const classes = useStyles();
   const user = useSelector<RootState, CurrentLoggedInUser>(state => state.user);
   const isLoggedIn = useSelector<RootState, boolean>(state => state.isLoggedIn);
@@ -71,9 +75,12 @@ const LeftSideBar = () => {
         </div>
       }
       <div className={classes.groupLinks}>
-        {/* <Link to={`/daily-challenge`} className={classes.link}>
+        <Link to={`/daily-challenge/${dailyChallengeUuid}`} className={classes.link}>
           <h3>Daily Challenge</h3>
-        </Link> */}
+        </Link>
+        <Link to={`/code-together/${codeTogetherUuid}`} className={classes.link}>
+          <h3>Code Together</h3>
+        </Link>
         {isLoggedIn &&
           <Link to={`/messages`} className={classes.link}>
             <h3>Messages</h3>

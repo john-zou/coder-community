@@ -1,6 +1,7 @@
 import "./App.css";
 
 import React, { useEffect, useRef, useState } from "react";
+import * as monacoEditor from "monaco-editor";
 import { BrowserRouter as Router, Redirect, Route, Switch } from "react-router-dom";
 // import Footer from "./containers/footer/Footer";
 import Header from "./containers/header/Header";
@@ -34,6 +35,18 @@ import { CreateCommentEvent } from "./ws-dto/comments/dto/createComment.ws.dto";
 import { createCommentSuccess, getCommentsByPostIDSuccess } from "./reducers/commentsSlice";
 import { GetCommentsByPostIDEvent, GetCommentsServerToClientDto } from "./ws-dto/comments/dto/getCommentsByPostID.ws.dto";
 import { DailyChallenge } from "./pages/daily_challenge";
+import { CodeTogether } from "./pages/code_together";
+import {
+  CCEditorDeleteDto,
+  CCEditorDeleteEvent,
+  CCEditorInsertDto,
+  CCEditorInsertEvent,
+  CCMousePositionChangeDto,
+  CCMousePositionChangeEvent,
+  JoinCCEvent,
+  JoinCCServerToClientDto
+} from "./ws-dto/messages/code-collab.ws.dto";
+import { EditorContentManager, RemoteCursorManager } from "@convergencelabs/monaco-collab-ext";
 
 export type ViewProfileParams = {
   username: string;
@@ -43,18 +56,32 @@ export type ViewGroupParams = {
   groupID: string;
 }
 
+export type CodeParams = {
+  roomID: string;
+}
+
 export type PostDetailParams = {
   slug: string;
 };
+
+export type Editor = monacoEditor.editor.IStandaloneCodeEditor
 export const SocketContext = React.createContext<React.MutableRefObject<SocketIOClient.Socket>>(null);
+export const EditorContext = React.createContext<React.MutableRefObject<Editor>>(null)
+export const RemoteCursorManagerContext = React.createContext<React.MutableRefObject<RemoteCursorManager>>(null);
+export const EditorContentManagerContext = React.createContext<React.MutableRefObject<EditorContentManager>>(null);
 
 export default function App() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const cursors = useRef<Record<string, any>>({})
   const isLoggedIn = useSelector<RootState, boolean>(state => state.isLoggedIn);
   const dispatch = useDispatch<AppDispatch>();
 
   const socket = useRef<SocketIOClient.Socket>(null);
+  const editorRef = useRef<Editor>(null);
+  const remoteCursorManagerRef = useRef<RemoteCursorManager>(null);
+  const editorContentManagerRef = useRef<EditorContentManager>(null);
+
   console.log("App.tsx render");
   useEffect(() => {
     console.log("App.tsx useEffect (creating new socket)");
@@ -62,7 +89,7 @@ export default function App() {
     socket.current.on('connection', () => {
       console.log(`Connected to ${BackEndBaseUriForWs}: ` + socket.current.connected); // true
       console.log('Authenticating...'); // true
-      // Send server the JWT so it can authenticate ther user
+      // Send server the JWT so it can authenticate the user
       socket.current.emit('authenticate', { jwt: localStorage.getItem(JwtLocalStorageKey) });
     });
 
@@ -109,6 +136,35 @@ export default function App() {
       dispatch(createCommentSuccess(response));
     });
 
+    socket.current.on(JoinCCEvent, (response: JoinCCServerToClientDto) => {
+      console.log("JoinCCEvent Server to Client: ", response)
+      editorContentManagerRef.current.delete(0, editorRef.current.getValue().length)
+      editorContentManagerRef.current.insert(0, response.code)
+    });
+
+    socket.current.on(CCMousePositionChangeEvent, (response: CCMousePositionChangeDto) => {
+      if (cursors.current[response.username]) {
+        remoteCursorManagerRef.current.setCursorPosition(response.username, {
+          column: response.column,
+          lineNumber: response.lineNumber
+        })
+      } else {
+        const cursor = remoteCursorManagerRef.current.addCursor(response.username, 'purple', response.username);
+        cursors.current[response.username] = cursor
+        cursor.setPosition({ column: response.column, lineNumber: response.lineNumber });
+      }
+    });
+
+    socket.current.on(CCEditorInsertEvent, (response: CCEditorInsertDto) => {
+      console.log("CCEditorInsertEvent, ", response);
+      editorContentManagerRef.current.insert(response.index, response.text)
+    });
+
+    socket.current.on(CCEditorDeleteEvent, (response: CCEditorDeleteDto) => {
+      console.log("CCEditorDeleteEvent, ", response);
+      editorContentManagerRef.current.delete(response.index, response.length)
+    });
+
   }, [])
 
   useEffect(() => {
@@ -149,66 +205,73 @@ export default function App() {
 
   return (
     <SocketContext.Provider value={socket}>
-
-      <Router>
-        <Header></Header>
-        <Switch>
-          <Route path="/daily-challenge">
-            <DailyChallenge />
-          </Route>
-          <Route path="/user/:username">
-            <ViewProfile />
-          </Route>
-          <Route path="/group/:groupID">
-            <ViewGroupProfile />
-          </Route>
-          <Route path="/create-post">
-            <CreatePost />
-          </Route>
-          <Route path="/update-post/:slug">
-            <UpdatePost />
-          </Route>
-          <Route exact path="/post">
-            <Home />
-          </Route>
-          <Route path="/post/:slug">
-            <PostDetail />
-          </Route>
-          <Route path="/messages">
-            <Messenger />
-          </Route>
-          <Route path={"/search"}>
-            <SearchPage />
-          </Route>
-          <Route path="/result">
-            {/*Unused*/}
-            <SearchResult />
-          </Route>
-          <Route path="/video_management">
-            <Upload />
-          </Route>
-          <Route path="/login/github">
-            <LoginGitHub />
-          </Route>
-          <Route path="/login">
-            <DevLogin />
-          </Route>
-          <Route path="/logout">
-            <LogOut></LogOut>
-          </Route>
-          <Route path="/test">
-            <Experimental />
-          </Route>
-          <Route path="/home">
-            <Home />
-          </Route>
-          <Route exact path="/">
-            <Redirect to="/home"></Redirect>
-          </Route>
-        </Switch>
-        {/* <Footer></Footer> */}
-      </Router>
-
+      <EditorContext.Provider value={editorRef}>
+        <RemoteCursorManagerContext.Provider value={remoteCursorManagerRef}>
+          <EditorContentManagerContext.Provider value={editorContentManagerRef}>
+            <Router>
+              <Header></Header>
+              <Switch>
+                <Route path="/daily-challenge/:roomID">
+                  <DailyChallenge />
+                </Route>
+                <Route path={"/code-together/:roomID"}>
+                  <CodeTogether />
+                </Route>
+                <Route path="/user/:username">
+                  <ViewProfile />
+                </Route>
+                <Route path="/group/:groupID">
+                  <ViewGroupProfile />
+                </Route>
+                <Route path="/create-post">
+                  <CreatePost />
+                </Route>
+                <Route path="/update-post/:slug">
+                  <UpdatePost />
+                </Route>
+                <Route exact path="/post">
+                  <Home />
+                </Route>
+                <Route path="/post/:slug">
+                  <PostDetail />
+                </Route>
+                <Route path="/messages">
+                  <Messenger />
+                </Route>
+                <Route path={"/search"}>
+                  <SearchPage />
+                </Route>
+                <Route path="/result">
+                  {/*Unused*/}
+                  <SearchResult />
+                </Route>
+                <Route path="/video_management">
+                  <Upload />
+                </Route>
+                <Route path="/login/github">
+                  <LoginGitHub />
+                </Route>
+                <Route path="/login">
+                  <DevLogin />
+                </Route>
+                <Route path="/logout">
+                  <LogOut></LogOut>
+                </Route>
+                <Route path="/test">
+                  <Experimental />
+                </Route>
+                <Route path="/home">
+                  <Home />
+                </Route>
+                <Route exact path="/">
+                  <Redirect to="/home"></Redirect>
+                </Route>
+              </Switch>
+              {/* <Footer></Footer> */}
+            </Router>
+          </EditorContentManagerContext.Provider>
+        </RemoteCursorManagerContext.Provider>
+      </EditorContext.Provider>
     </SocketContext.Provider>
   );
 }

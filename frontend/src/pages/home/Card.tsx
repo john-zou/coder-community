@@ -139,7 +139,7 @@ const Card = ({ postID }: Props) => {
   const user = useSelector<RootState, User>(state => state.user)
 
   const checkSavedPost = () => {
-    return user.savedPosts.includes(postID)
+    return user?.savedPosts.includes(postID)
   }
   const [postAlreadySaved, setPostAlreadySaved] = useState(checkSavedPost());
 

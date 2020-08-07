@@ -19,7 +19,6 @@ export const NewConversation = ({ setPeople }) => {
       <div style={{ paddingLeft: "30px", display: "flex", flexDirection: "row", alignItems: "center" }}>
         <div style={{ display: "flex", flexDirection: "column", marginLeft: "20px" }}>
           <H2>New message</H2>
-          {/* <p>ViewProfile</p> */}
           <AddMultiple label="To: Select names to send message" options={followingFollowers} imgKey="profilePic" setItems={setPeople}></AddMultiple>
         </div>
       </div>

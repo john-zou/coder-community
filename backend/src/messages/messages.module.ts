@@ -10,6 +10,7 @@ import { UserWsAuthGuard } from '../auth/guards/user-ws.guard';
 @Module({
   imports: [forwardRef(() => ConversationsModule)],
   providers: [MessagesService, MessageGateway, UserWsAuthGuard],
-  controllers: [MessagesController]
+  controllers: [MessagesController],
+  exports: [MessageGateway]
 })
 export class MessagesModule { }
