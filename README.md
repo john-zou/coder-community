@@ -37,6 +37,25 @@
 
 ---
 
+## **Contributions**
+
+- Dara Nguyen:
+  - Contributed massively in every aspect of the project, including most of the visual design
+  - Trending posts (infinite scrolling), live chat, code collaboration, groups, etc
+
+- Yang Yang (Mina):
+  - Header bar, which is responsive
+  - Video upload feature (this feature was merged into the custom post editor which allows embedding of videos)
+
+- Zhuoting Xie (Fred):
+  - Post creation
+  - Post update
+
+- John Zou:
+  - Most of the back end (NestJS, authentication, WebSocket, OpenAPI, scripts to trigger code generation for end-to-end type safety, file upload/storage)
+  - Live chat, code collaboration, comments system, profile, post details page, React Router, etc
+  - Deployment
+  
 ---
 
 ---
