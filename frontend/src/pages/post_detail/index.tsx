@@ -33,7 +33,6 @@ const useStyles = makeStyles({
   },
   postDetail: {
     paddingTop: "10vh",
-    // paddingBottom: "20vh",
     width: "60vw",
     margin: "0 auto",
   },
@@ -170,7 +169,6 @@ const PostDetail = () => {
 
 
           {/*/>
-        <p>{post.content}</p>*/}
           {/* POST CONTENT */}
           <div className="ql-snow" >
             <TagP tags={tagsArr} />

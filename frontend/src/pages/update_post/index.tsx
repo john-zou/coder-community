@@ -33,8 +33,6 @@ const useStyles = makeStyles({
 });
 
 export default function UpdatePost() {
-
-  console.log("UPDATEPOST::INDEX");
   const { slug } = useParams<{ slug: string }>();
 
   const classes = useStyles();

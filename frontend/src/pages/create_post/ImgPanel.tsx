@@ -34,8 +34,6 @@ const useStyles = makeStyles({
 
 export default function ImgPanel({ setImg }) {
   const classes = useStyles();
-  // const [image, setImage] = useState<File>(null);
-
   const handleImageUpload = img => {
     console.log("CREATEPOST::IMGPANEL");
     console.log(img);
