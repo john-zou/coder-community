@@ -61,7 +61,6 @@ const Interactions = () => {
 }
 
 const PostDetail = () => {
-  console.log("POSTDETAIL::INDEX");
   const { slug } = useParams<PostDetailParams>(); //get the url param to render the appropriate post
   const classes = useStyles();
   const dispatch = useDispatch<AppDispatch>();

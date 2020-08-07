@@ -2,6 +2,64 @@
 
 ### _Coder Community is a social platform for software developers of all levels. On Coder Community, you can join and grow with a community and read and write articles, post and watch videos, join and create groups, live chat, and undertake coding challenges together._
 
+# Final Progress Report
+
+## **Code Together**: real time code collaboration
+### From a DM chat or group chat, a code collaboration room can be created and an invitation link automatically sent to those in the chat
+![image](https://user-images.githubusercontent.com/61474884/89673333-07c36d80-d89b-11ea-8597-e68fd0de43a8.png)
+
+### Users in the code collaboration room will see each other's cursors and each other's code edits
+![image](https://user-images.githubusercontent.com/61474884/89673617-815b5b80-d89b-11ea-9971-cfd1df1ee9bb.png)
+
+![image](https://user-images.githubusercontent.com/61474884/89673660-96d08580-d89b-11ea-9dda-eea42ebd2b43.png)
+
+- We implemented this using WebSockets, treating it as a live chat session, where messages are editor actions (cursor position, insert, deletions, replacements), and updating the editor based on other users' "messages". The server maintains a list of code
+
+---
+
+- We've also greatly increased the efficiency of retrieving trending posts through a combination of using a MongoDB index and pagination.
+
+## **Future Goals**
+- Improvements to be made:
+  - A final major feature: extend **Code Together** to collaborative daily code challenges, with code execution and testing done by a standalone service, such as [DMOJ](https://github.com/DMOJ/online-judge)
+  - Responsive layout: make every page mobile-friendly
+  - Expose more of Visual Studio Code's functionality in the code collab editor, such as language options
+  - Use a more robust solution for code collaboration that gracefully handles 'merge conflicts' that can result from poor connectivity etc
+    - We looked into [Convergence server](https://github.com/convergencelabs/convergence-server), but it takes 5GB of RAM to run, which is 4GB over our AWS EC2 memory capacity.
+  - Implement read-states for messages, and create a notifications/new messages system
+
+- Performance / scalability improvements:
+  - GraphQL: we used REST (HTTP endpoints) for the majority of our operations because using Express and REST was one of the requirements of the project. However, as a social network, we would benefit greatly by switching to GraphQL instead, which would also enable us to have more optimized mobile experiences.
+  - Caching:
+    - Front end: currently, we use our Redux store as a cache, only fetching posts that aren't in the store, with invalidation happening only on a page refresh. With a switch to GraphQL, we can use Apollo Client and the more advanced cache that comes with it, making a better user experience
+  - Server-side rendering: as a social network app with many pages / front end routes, we would see much faster loading times by switching from Create React App, which is purely client side rending, to a server side rendernig solution such as NextJS
+
+
+---
+
+## **Contributions**
+
+- Dara Nguyen:
+  - Contributed massively in every aspect of the project, including most of the visual design
+  - Trending posts (infinite scrolling), live chat, code collaboration, groups, etc
+
+- Yang Yang (Mina):
+  - Header bar, which is responsive
+  - Video upload feature (this feature was merged into the custom post editor which allows embedding of videos)
+
+- Zhuoting Xie (Fred):
+  - Post creation
+  - Post update
+
+- John Zou:
+  - Most of the back end (NestJS, authentication, WebSocket, OpenAPI, scripts to trigger code generation for end-to-end type safety, file upload/storage)
+  - Live chat, code collaboration, comments system, profile, post details page, React Router, etc
+  - Deployment
+  
+---
+
+---
+
 # Project Progress 5
 
 ## Major accomplishment: real time messaging (using websockets)
