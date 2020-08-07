@@ -11,9 +11,10 @@ import moment from "moment";
 import { useParams } from "react-router-dom";
 import { CodeParams } from "../../App";
 import { CodeCollab } from "../code_collab_shared/CodeCollab";
+import CodeTogetherSvg from "../../assets/code_together.svg";
 
 const LeftSideContainer = styled.div`
-  padding-top: 9vh;
+  // padding-top: 9vh;
   width: 100vw;
   display: flex;
   flex-direction: column;
@@ -47,7 +48,12 @@ export const CodeTogether = () => {
 
   return (
     <>
-      <div style={{ display: "flex", flexDirection: "row" }} >
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }} >
+        <div style={{ display: "flex", flexDirection: "row" }}>
+          <h2 style={{ paddingTop: "9vh" }}>Code Togher</h2>
+          <img src={CodeTogetherSvg} alt="code together" width="10%" style={{ marginLeft: "10px" }} />
+        </div>
+
         <LeftSideContainer style={{ fontFamily: 'Courier New' }}>
           <CodeCollab roomID={roomID} collab={true} />
         </LeftSideContainer>
