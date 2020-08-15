@@ -12,7 +12,6 @@ import {CodeCollab} from "../code_collab_shared/CodeCollab";
 import CodeTogetherSvg from "../../assets/code_together.svg";
 
 const LeftSideContainer = styled.div`
-  padding-top: 11vh;
   width: 100vw;
   display: flex;
   flex-direction: column;
