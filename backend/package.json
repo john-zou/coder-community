@@ -50,7 +50,7 @@
     "express": "^4.17.1",
     "googleapis": "^52.1.0",
     "lodash": "^4.17.19",
-    "moment": "^2.27.0",
+    "moment": "^2.29.2",
     "mongoose": "^5.9.20",
     "passport": "^0.4.1",
     "passport-jwt": "^4.0.0",
